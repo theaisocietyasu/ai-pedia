@@ -6,3 +6,8 @@ This is a web based learning platform built for AI enthusiasts to visualize how 
 [Updates](https://www.notion.so/theaisociety/Latest-Updates-25e8867868b4800f880acdc07aabf174?source=copy_link)
 
 [New Developer Onboarding](https://www.notion.so/theaisociety/New-Developer-Start-here-25e8867868b480d29c95f68416a13ff8?source=copy_link)
+
+[Workflow](https://www.notion.so/theaisociety/Workflow-2598867868b4803c92c7c3f9a46f3edf?source=copy_link)
+
+[Tech Stack](https://www.notion.so/theaisociety/Tech-Stack-2598867868b4804da4cbefa3a4c441ee?source=copy_link)
+
