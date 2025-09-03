@@ -28,7 +28,8 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="inline-flex items-center justify-center w-20 h-20 rounded-2xl 
-                     gradient-bg mb-12 shadow-2xl shadow-purple/30"
+                     gradient-bg shadow-2xl shadow-purple/30"
+            style={{ marginBottom: '1.3rem' }}
           >
             <Info size={40} className="text-white" />
           </motion.div>
@@ -38,7 +39,8 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-4xl sm:text-5xl font-bold mb-8"
+            className="text-4xl sm:text-5xl font-bold"
+            style={{ marginBottom: '1.2rem' }}
           >
             About <GradientText>The AI Society</GradientText>
           </motion.h1>
@@ -48,7 +50,8 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-lg text-light-gray/80 mb-12"
+            className="text-lg text-light-gray/80"
+            style={{ marginBottom: '1.3rem' }}
           >
             Our story, mission, and the team behind ASU's premier AI learning platform 
             will be shared here soon. Stay tuned!
@@ -59,18 +62,19 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="grid sm:grid-cols-3 gap-6 mb-16"
+            className="grid sm:grid-cols-3 gap-6"
+            style={{ marginBottom: '1.3rem' }}
           >
             {[
               { icon: <Heart size={20} />, label: "Our Passion", value: "AI Education" },
               { icon: <Trophy size={20} />, label: "Our Goal", value: "Empower Students" },
               { icon: <Target size={20} />, label: "Our Vision", value: "AI for Everyone" }
             ].map((item, index) => (
-              <div key={index} className="glass-effect rounded-lg p-6 border border-white/10 text-center">
-                <div className="flex items-center justify-center text-pink mb-2">
+              <div key={index} className="glass-effect rounded-lg border border-white/10 text-center" style={{ padding: '1.5rem', marginTop: '1rem', marginBottom: '1rem' }}>
+                <div className="flex items-center justify-center text-pink" style={{ marginBottom: '0.5rem' }}>
                   {item.icon}
                 </div>
-                <h3 className="text-sm font-medium text-white mb-1">{item.label}</h3>
+                <h3 className="text-sm font-medium text-white" style={{ marginBottom: '0.25rem' }}>{item.label}</h3>
                 <p className="text-xs text-light-gray/60">{item.value}</p>
               </div>
             ))}
@@ -81,7 +85,8 @@ export default function AboutPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="glass-effect rounded-xl p-8 mb-12 border border-pink/20"
+            className="glass-effect rounded-xl border border-pink/20"
+            style={{ padding: '2rem', marginBottom: '2rem' }}
           >
             <p className="text-sm text-light-gray/80 text-center">
               <span className="font-semibold text-white">Coming Soon:</span>
@@ -98,7 +103,8 @@ export default function AboutPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.55 }}
-            className="text-xs text-light-gray/50 mb-12"
+            className="text-xs text-light-gray/50"
+            style={{ marginBottom: '1.3rem' }}
           >
             <p>Page under development • Content team working on this section</p>
           </motion.div>
@@ -115,6 +121,7 @@ export default function AboutPage() {
                 variant="outline"
                 icon={<ArrowLeft size={18} />}
                 iconPosition="left"
+                style={{ padding: '6px 12px', borderRadius: '9999px' }}
               >
                 Back to Home
               </Button>
@@ -125,7 +132,10 @@ export default function AboutPage() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button variant="primary">
+              <Button 
+                variant="primary"
+                style={{ padding: '6px 12px', borderRadius: '9999px' }}
+              >
                 Follow Us on Instagram
               </Button>
             </a>

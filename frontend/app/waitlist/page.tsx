@@ -42,7 +42,8 @@ export default function WaitlistPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="inline-flex items-center justify-center w-20 h-20 rounded-2xl 
-                         gradient-bg mb-12 shadow-2xl shadow-purple/30"
+                         gradient-bg shadow-2xl shadow-purple/30"
+                style={{ marginBottom: '1.3rem' }}
               >
                 <Users size={40} className="text-white" />
               </motion.div>
@@ -52,7 +53,8 @@ export default function WaitlistPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-4xl sm:text-5xl font-bold mb-8"
+                className="text-4xl sm:text-5xl font-bold"
+                style={{ marginBottom: '1.2rem' }}
               >
                 Join the <GradientText>Waitlist</GradientText>
               </motion.h1>
@@ -62,7 +64,8 @@ export default function WaitlistPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="text-lg text-light-gray/80 mb-12"
+                className="text-lg text-light-gray/80"
+                style={{ marginBottom: '1.3rem' }}
               >
                 Be the first to know when we launch our comprehensive AI learning platform. 
                 Get early access and exclusive benefits!
@@ -73,14 +76,15 @@ export default function WaitlistPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="grid sm:grid-cols-3 gap-6 mb-16"
+                className="grid sm:grid-cols-3 gap-6"
+                style={{ marginBottom: '1.3rem' }}
               >
                 {[
                   "Early Access",
                   "Exclusive Content",
                   "Founding Member Status"
                 ].map((benefit, index) => (
-                  <div key={index} className="glass-effect rounded-lg p-5 border border-white/10 text-center">
+                  <div key={index} className="glass-effect rounded-lg border border-white/10 text-center" style={{ padding: '1.25rem', marginTop: '1rem', marginBottom: '1rem' }}>
                     <div className="flex items-center justify-center gap-2">
                       <Sparkles size={16} className="text-purple" />
                       <span className="text-sm font-medium text-white">{benefit}</span>
@@ -95,23 +99,28 @@ export default function WaitlistPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
                 onSubmit={handleSubmit}
-                className="w-full mb-12"
+                className="w-full"
+                style={{ marginBottom: '1.3rem' }}
               >
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex-1 relative">
-                    <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-light-gray/50" />
+                  <div className="flex-1">
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter your email"
                       required
-                      className="w-full pl-10 pr-4 py-3 rounded-lg bg-white/5 border border-white/10 
-                               text-white placeholder-light-gray/50 focus:outline-none 
-                               focus:border-purple transition-colors"
+                      className="w-full text-white placeholder-light-gray/50 focus:outline-none 
+                               focus:border-purple transition-colors bg-white/5 border border-white/10"
+                      style={{ padding: '12px 16px', borderRadius: '9999px', height: '48px' }}
                     />
                   </div>
-                  <Button type="submit" variant="gradient" size="lg">
+                  <Button 
+                    type="submit" 
+                    variant="gradient" 
+                    size="lg"
+                    style={{ padding: '12px 24px', borderRadius: '9999px', height: '48px' }}
+                  >
                     Join Waitlist
                   </Button>
                 </div>
@@ -122,7 +131,8 @@ export default function WaitlistPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.6 }}
-                className="glass-effect rounded-xl p-8 mb-12 border border-purple/20"
+                className="glass-effect rounded-xl border border-purple/20"
+                style={{ padding: '2rem', marginBottom: '1.3rem' }}
               >
                 <p className="text-sm text-light-gray/80 text-center">
                   <span className="font-semibold text-white">Development Note:</span>
@@ -144,6 +154,7 @@ export default function WaitlistPage() {
                     variant="outline"
                     icon={<ArrowLeft size={18} />}
                     iconPosition="left"
+                    style={{ padding: '6px 12px', borderRadius: '9999px' }}
                   >
                     Back to Home
                   </Button>
@@ -160,19 +171,19 @@ export default function WaitlistPage() {
                 className="text-center"
               >
                 <div className="inline-flex items-center justify-center w-20 h-20 rounded-full 
-                             bg-green-500/20 mb-6">
+                             bg-green-500/20" style={{ marginBottom: '1.5rem' }}>
                   <CheckCircle size={40} className="text-green-500" />
                 </div>
                 
-                <h2 className="text-3xl font-bold mb-8">
+                <h2 className="text-3xl font-bold" style={{ marginBottom: '2rem' }}>
                   <GradientText>You're on the list!</GradientText>
                 </h2>
                 
-                <p className="text-light-gray/80 mb-12">
+                <p className="text-light-gray/80" style={{ marginBottom: '3rem' }}>
                   Thanks for joining! We'll notify you at <span className="font-semibold text-white">{email}</span> when we launch.
                 </p>
 
-                <div className="glass-effect rounded-xl p-8 mb-12 border border-green-500/20">
+                <div className="glass-effect rounded-xl border border-green-500/20" style={{ padding: '2rem', marginBottom: '3rem' }}>
                   <p className="text-sm text-light-gray/80 text-center">
                     <span className="font-semibold text-white">What's next?</span>
                     <br />
@@ -183,7 +194,10 @@ export default function WaitlistPage() {
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                   <Link href="/">
-                    <Button variant="primary">
+                    <Button 
+                      variant="primary"
+                      style={{ padding: '6px 12px', borderRadius: '9999px' }}
+                    >
                       Return to Home
                     </Button>
                   </Link>
@@ -194,6 +208,7 @@ export default function WaitlistPage() {
                       setIsSubmitted(false)
                       setEmail("")
                     }}
+                    style={{ padding: '6px 12px', borderRadius: '9999px' }}
                   >
                     Add Another Email
                   </Button>

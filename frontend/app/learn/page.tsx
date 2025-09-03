@@ -28,7 +28,8 @@ export default function LearnPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="inline-flex items-center justify-center w-20 h-20 rounded-2xl 
-                     gradient-bg mb-12 shadow-2xl shadow-purple/30"
+                     gradient-bg shadow-2xl shadow-purple/30"
+            style={{ marginBottom: '2rem' }}
           >
             <BookOpen size={40} className="text-white" />
           </motion.div>
@@ -38,7 +39,8 @@ export default function LearnPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-4xl sm:text-5xl font-bold mb-8"
+            className="text-4xl sm:text-5xl font-bold"
+            style={{ marginBottom: '1.5rem' }}
           >
             <GradientText>Learning Content</GradientText> Coming Soon
           </motion.h1>
@@ -48,7 +50,8 @@ export default function LearnPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-lg text-light-gray/80 mb-12"
+            className="text-lg text-light-gray/80"
+            style={{ marginBottom: '2rem' }}
           >
             Our team is working hard to bring you comprehensive AI learning materials, 
             interactive tutorials, and hands-on projects. Check back soon!
@@ -59,15 +62,16 @@ export default function LearnPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="grid sm:grid-cols-3 gap-6 mb-16"
+            className="grid sm:grid-cols-3 gap-6"
+            style={{ marginBottom: '2rem' }}
           >
             {[
               { icon: <BookOpen size={20} />, label: "50+ Courses", status: "In Development" },
               { icon: <Clock size={20} />, label: "Launch Date", status: "Q1 2025" },
               { icon: <Users size={20} />, label: "Early Access", status: "Available Soon" }
             ].map((item, index) => (
-              <div key={index} className="glass-effect rounded-lg p-6 border border-white/10 text-center">
-                <div className="flex items-center justify-center gap-2 text-purple mb-2">
+              <div key={index} className="glass-effect rounded-lg border border-white/10 text-center" style={{ padding: '1.5rem', marginTop: '1rem', marginBottom: '1rem' }}>
+                <div className="flex items-center justify-center gap-2 text-purple" style={{ marginBottom: '0.5rem' }}>
                   {item.icon}
                   <span className="text-sm font-medium">{item.label}</span>
                 </div>
@@ -81,7 +85,8 @@ export default function LearnPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="glass-effect rounded-xl p-8 mb-12 border border-purple/20"
+            className="glass-effect rounded-xl border border-purple/20"
+            style={{ padding: '2rem', marginBottom: '2rem' }}
           >
             <p className="text-sm text-light-gray/80 text-center">
               <span className="font-semibold text-white">Note from the development team:</span>
@@ -105,13 +110,17 @@ export default function LearnPage() {
                 variant="outline"
                 icon={<ArrowLeft size={18} />}
                 iconPosition="left"
+                style={{ padding: '6px 12px', borderRadius: '9999px' }}
               >
                 Back to Home
               </Button>
             </Link>
 
             <Link href="/waitlist">
-              <Button variant="primary">
+              <Button 
+                variant="primary"
+                style={{ padding: '6px 12px', borderRadius: '9999px' }}
+              >
                 Join the Waitlist
               </Button>
             </Link>
