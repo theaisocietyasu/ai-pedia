@@ -20,19 +20,19 @@ export default function WaitlistPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <main className="min-h-screen relative overflow-hidden">
       {/* background decoration */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-pink/20 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-purple/20 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative container mx-auto px-6 sm:px-8 lg:px-12 py-24">
+      <div className="relative min-h-screen flex items-center justify-center px-6 sm:px-8 lg:px-12">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="max-w-2xl mx-auto text-center"
+          className="w-full max-w-3xl text-center"
         >
           {!isSubmitted ? (
             <>
@@ -42,7 +42,7 @@ export default function WaitlistPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="inline-flex items-center justify-center w-20 h-20 rounded-2xl 
-                         gradient-bg mb-8 shadow-2xl shadow-purple/30"
+                         gradient-bg mb-12 shadow-2xl shadow-purple/30"
               >
                 <Users size={40} className="text-white" />
               </motion.div>
@@ -52,7 +52,7 @@ export default function WaitlistPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-4xl sm:text-5xl font-bold mb-4"
+                className="text-4xl sm:text-5xl font-bold mb-8"
               >
                 Join the <GradientText>Waitlist</GradientText>
               </motion.h1>
@@ -62,7 +62,7 @@ export default function WaitlistPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="text-lg text-light-gray/80 mb-8"
+                className="text-lg text-light-gray/80 mb-12"
               >
                 Be the first to know when we launch our comprehensive AI learning platform. 
                 Get early access and exclusive benefits!
@@ -73,14 +73,14 @@ export default function WaitlistPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="grid sm:grid-cols-3 gap-4 mb-10"
+                className="grid sm:grid-cols-3 gap-6 mb-16"
               >
                 {[
                   "Early Access",
                   "Exclusive Content",
                   "Founding Member Status"
                 ].map((benefit, index) => (
-                  <div key={index} className="glass-effect rounded-lg p-3 border border-white/10">
+                  <div key={index} className="glass-effect rounded-lg p-5 border border-white/10 text-center">
                     <div className="flex items-center justify-center gap-2">
                       <Sparkles size={16} className="text-purple" />
                       <span className="text-sm font-medium text-white">{benefit}</span>
@@ -95,7 +95,7 @@ export default function WaitlistPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
                 onSubmit={handleSubmit}
-                className="max-w-md mx-auto mb-8"
+                className="w-full mb-12"
               >
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex-1 relative">
@@ -122,9 +122,9 @@ export default function WaitlistPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.6 }}
-                className="glass-effect rounded-xl p-6 mb-8 border border-purple/20"
+                className="glass-effect rounded-xl p-8 mb-12 border border-purple/20"
               >
-                <p className="text-sm text-light-gray/80">
+                <p className="text-sm text-light-gray/80 text-center">
                   <span className="font-semibold text-white">Development Note:</span>
                   <br />
                   This waitlist form is currently a placeholder. The backend integration 
@@ -164,16 +164,16 @@ export default function WaitlistPage() {
                   <CheckCircle size={40} className="text-green-500" />
                 </div>
                 
-                <h2 className="text-3xl font-bold mb-4">
+                <h2 className="text-3xl font-bold mb-8">
                   <GradientText>You're on the list!</GradientText>
                 </h2>
                 
-                <p className="text-light-gray/80 mb-8">
+                <p className="text-light-gray/80 mb-12">
                   Thanks for joining! We'll notify you at <span className="font-semibold text-white">{email}</span> when we launch.
                 </p>
 
-                <div className="glass-effect rounded-xl p-6 mb-8 border border-green-500/20">
-                  <p className="text-sm text-light-gray/80">
+                <div className="glass-effect rounded-xl p-8 mb-12 border border-green-500/20">
+                  <p className="text-sm text-light-gray/80 text-center">
                     <span className="font-semibold text-white">What's next?</span>
                     <br />
                     Follow us on social media for updates, sneak peeks, and AI learning tips 

@@ -12,3 +12,4 @@ This is a web based learning platform built for AI enthusiasts to visualize how 
 [Tech Stack](https://www.notion.so/theaisociety/Tech-Stack-2598867868b4804da4cbefa3a4c441ee?source=copy_link)
 
 
+

@@ -21,7 +21,7 @@ export function AudienceSection() {
   }
 
   return (
-    <section id="audience" className="py-32 md:py-40 relative overflow-hidden bg-background">
+    <section id="audience" className="my-48 md:my-56 relative overflow-hidden bg-background">
       {/* background pattern */}
       <div 
         className="absolute inset-0 opacity-5"
@@ -39,12 +39,12 @@ export function AudienceSection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="text-center mb-20 pt-16"
+            className="text-center mb-20 pt-20"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold mb-6">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-8 mt-12">
               Built for <GradientText>AI Enthusiasts</GradientText>
             </h2>
-            <p className="text-lg text-light-gray/80 max-w-3xl mx-auto">
+            <p className="text-lg text-light-gray/80 max-w-3xl mx-auto" style={{ paddingTop: '3rem', paddingBottom: '4rem', textAlign: 'center', marginLeft: '12rem' }}>
               Whether you want to learn the fundamentals or visualize complex algorithms, 
               we've got you covered
             </p>

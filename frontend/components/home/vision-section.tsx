@@ -22,35 +22,33 @@ export function VisionSection() {
   }
 
   return (
-    <section id="vision" className="pt-64 pb-32 relative overflow-hidden bg-background">
+    <section id="vision" className="my-48 md:my-56 relative overflow-hidden bg-background">
       {/* background decoration */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-purple/10 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-pink/5 rounded-full blur-3xl opacity-50" />
       </div>
 
-      <div className="relative w-full flex justify-center items-center px-6 sm:px-8 lg:px-12">
-        <div className="max-w-7xl w-full text-center">
+      <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
+        <div className="w-full text-center">
           {/* section header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="text-center w-full mb-32 pt-20 pb-8"
-            style={{ paddingTop: '5rem', paddingBottom: '2rem' }}
+            className="mb-20 pt-20"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-8 pt-8">
               Our <GradientText>Vision</GradientText> for AI Education
             </h2>
-            <p className="text-lg text-light-gray/80 max-w-4xl mx-auto text-center"
-               style={{ textAlign: 'center', margin: '0 auto', paddingTop: '1rem', paddingBottom: '1rem' }}>
+            <p className="text-lg text-light-gray/80 max-w-3xl mx-auto" style={{ paddingTop: '3rem', paddingBottom: '4rem', textAlign: 'center', marginLeft: '12rem' }}>
               We believe in making AI education accessible, engaging, and impactful for every student
             </p>
           </motion.div>
 
           {/* vision items */}
-          <div className="grid gap-20 md:gap-24 w-full" style={{ paddingLeft: '5rem', paddingRight: '5rem' }}>
+          <div className="grid gap-16 md:gap-20 w-full">
           {visionItems.map((item, index) => (
             <motion.div
               key={item.title}
@@ -74,7 +72,7 @@ export function VisionSection() {
               </div>
 
               {/* content */}
-              <div className="flex-1 text-center md:text-left space-y-8" style={{ paddingLeft: '3rem', paddingRight: '3rem' }}>
+              <div className="flex-1 text-center md:text-left space-y-6 px-4 md:px-8">
                 <h3 className="text-2xl font-bold text-white">
                   {item.title}
                 </h3>

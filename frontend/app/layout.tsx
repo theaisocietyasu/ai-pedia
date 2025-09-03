@@ -71,7 +71,9 @@ export default function RootLayout({
       >
         <Navbar />
         {children}
-        <Footer />
+        <div style={{ marginTop: '8rem' }}>
+          <Footer />
+        </div>
       </body>
     </html>
   );

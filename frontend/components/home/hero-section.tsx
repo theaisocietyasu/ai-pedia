@@ -111,7 +111,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-lg text-light-gray/80 max-w-2xl mx-auto leading-relaxed"
+            className="text-lg text-light-gray/80 max-w-2xl leading-relaxed"
             style={{ marginBottom: '5rem' }}
           >
             {heroContent.description}

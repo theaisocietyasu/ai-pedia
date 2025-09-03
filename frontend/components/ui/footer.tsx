@@ -32,19 +32,12 @@ export function Footer() {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative w-full flex justify-center items-center px-6 sm:px-8 lg:px-12 py-16 md:py-20 lg:py-24"
-           style={{ paddingTop: '5rem', paddingBottom: '2rem' }}>
-        <div className="max-w-7xl w-full mx-auto">
+      <div className="container mx-auto px-6 lg:px-8 max-w-7xl py-20">
+        <div className="w-full">
           {/* main footer content */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16 mb-20">
-          {/* brand section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 mb-16">
+          {/* brand section with social links */}
+          <div className="space-y-6 lg:col-span-1">
             <div className="flex items-center gap-3">
               <img 
                 src="/logo.png" 
@@ -82,16 +75,12 @@ export function Footer() {
                 )
               })}
             </div>
-          </motion.div>
+          </div>
 
           {/* footer sections */}
           {footerSections.map((section, index) => (
-            <motion.div
+            <div
               key={section.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
               className="space-y-6"
             >
               <h3 className="font-semibold text-white">{section.title}</h3>
@@ -120,17 +109,11 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </div>
           ))}
 
           {/* contact section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
+          <div className="space-y-6">
             <h3 className="font-semibold text-white">Get in Touch</h3>
             <div className="space-y-3">
               <a
@@ -163,18 +146,12 @@ export function Footer() {
                 Join Waitlist
               </Link>
             </div>
-          </motion.div>
+          </div>
         </div>
 
 
         {/* bottom section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-light-gray/60 pb-4"
-        >
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-light-gray/60 pb-4">
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
             <p>© {currentYear} {siteConfig.author}. All rights reserved.</p>
             <span className="hidden md:inline">•</span>
@@ -189,7 +166,7 @@ export function Footer() {
           <p className="flex items-center gap-1">
             Built with <Heart size={14} className="text-pink animate-pulse" /> by The AI Society team
           </p>
-        </motion.div>
+        </div>
         </div>
       </div>
     </footer>

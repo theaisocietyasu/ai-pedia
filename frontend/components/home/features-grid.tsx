@@ -25,7 +25,7 @@ export function FeaturesGrid() {
   }
 
   return (
-    <section id="features" className="py-64 relative overflow-hidden bg-background">
+    <section id="features" className="my-48 md:my-56 relative overflow-hidden bg-background">
       {/* animated background */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
@@ -45,28 +45,26 @@ export function FeaturesGrid() {
         />
       </div>
 
-      <div className="relative w-full flex justify-center items-center" style={{ paddingLeft: '5rem', paddingRight: '5rem' }}>
-        <div className="max-w-7xl w-full text-center">
+      <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
+        <div className="w-full text-center">
           {/* section header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
-            className="text-center w-full mb-32 pt-20 pb-8"
-            style={{ paddingTop: '5rem', paddingBottom: '2rem' }}
+            className="mb-20 pt-20"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-12 pt-8">
               Everything You Need to <GradientText>Master AI</GradientText>
             </h2>
-            <p className="text-lg text-light-gray/80 max-w-4xl mx-auto text-center"
-               style={{ textAlign: 'center', margin: '0 auto', paddingTop: '1rem', paddingBottom: '1rem' }}>
+            <p className="text-lg mt-12 mb-16 text-light-gray/80 max-w-3xl mx-auto" style={{ paddingTop: '3rem', paddingBottom: '4rem', textAlign: 'center', marginLeft: '12rem' }}>
               Comprehensive tools and resources designed to accelerate your AI learning journey
             </p>
           </motion.div>
 
           {/* features grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-14 max-w-6xl mx-auto" style={{ paddingLeft: '2rem', paddingRight: '2rem' }}>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 max-w-6xl mx-auto">
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
