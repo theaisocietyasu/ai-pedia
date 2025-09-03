@@ -123,8 +123,7 @@ export const audienceSegments: AudienceSegment[] = [
     benefits: [
       "Interactive algorithm visualizations",
       "Real-time model training demos",
-      "Visual debugging tools",
-      "Intuitive understanding of complex concepts"
+      "Visual debugging tools"
     ]
   }
 ]

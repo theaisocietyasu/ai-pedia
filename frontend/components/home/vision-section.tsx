@@ -48,7 +48,7 @@ export function VisionSection() {
           </motion.div>
 
           {/* vision items */}
-          <div className="grid gap-16 md:gap-20 w-full">
+          <div className="grid gap-16 md:gap-20 w-full" style={{ margin: '0 auto', paddingLeft: '32px', paddingRight: '32px' }}>
           {visionItems.map((item, index) => (
             <motion.div
               key={item.title}
@@ -56,8 +56,8 @@ export function VisionSection() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
               viewport={{ once: true }}
-              className={`flex flex-col md:flex-row gap-8 items-center max-w-5xl mx-auto
-                       ${index % 2 === 1 ? "md:flex-row-reverse" : ""}`}
+              className="flex flex-col gap-8 items-center max-w-5xl mx-auto"
+              style={{ margin: '0 auto', textAlign: 'center' }}
             >
               {/* icon container */}
               <div className="flex-shrink-0">
@@ -72,11 +72,13 @@ export function VisionSection() {
               </div>
 
               {/* content */}
-              <div className="flex-1 text-center md:text-left space-y-6 px-4 md:px-8">
-                <h3 className="text-2xl font-bold text-white">
+              <div className="flex-1 space-y-6" style={{ textAlign: 'center', margin: '0 32px', paddingLeft: '24px', paddingRight: '24px' }}>
+                <h3 className="text-2xl font-bold text-white"
+                    style={{ margin: '0 16px', padding: '8px 12px' }}>
                   {item.title}
                 </h3>
-                <p className="text-light-gray/80 leading-relaxed">
+                <p className="text-light-gray/80 leading-relaxed"
+                   style={{ margin: '0 16px 2rem 16px', padding: '8px 12px' }}>
                   {item.content}
                 </p>
               </div>

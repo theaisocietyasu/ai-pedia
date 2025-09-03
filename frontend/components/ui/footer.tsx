@@ -138,10 +138,11 @@ export function Footer() {
               <h4 className="text-sm font-medium text-white mb-2">Stay Updated</h4>
               <Link
                 href="/waitlist"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg 
+                className="inline-flex items-center gap-2 rounded-lg 
                          bg-gradient-to-r from-purple to-pink text-white text-sm font-medium
                          hover:shadow-lg hover:shadow-purple/30 transition-all duration-300
                          hover:scale-105"
+                style={{ padding: '6px 12px', borderRadius: '9999px' }}
               >
                 Join Waitlist
               </Link>

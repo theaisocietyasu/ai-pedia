@@ -31,7 +31,7 @@ export function AudienceSection() {
         }}
       />
 
-      <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
+      <div className="container mx-auto px-6 lg:px-8 max-w-7xl" style={{ margin: '0 auto', paddingLeft: '32px', paddingRight: '32px' }}>
         <div className="w-full">
           {/* section header */}
           <motion.div
@@ -41,17 +41,18 @@ export function AudienceSection() {
             viewport={{ once: true }}
             className="text-center mb-20 pt-20"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold mb-8 mt-12">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-8 mt-12"
+                style={{ margin: '0 24px 32px 24px' }}>
               Built for <GradientText>AI Enthusiasts</GradientText>
             </h2>
-            <p className="text-lg text-light-gray/80 max-w-3xl mx-auto" style={{ paddingTop: '3rem', paddingBottom: '4rem', textAlign: 'center', marginLeft: '12rem' }}>
+            <p className="text-lg text-light-gray/80 max-w-3xl mx-auto" style={{ paddingTop: '3rem', paddingBottom: '4rem', textAlign: 'center', margin: '0 auto', paddingLeft: '48px', paddingRight: '48px', display: 'block', width: '100%' }}>
               Whether you want to learn the fundamentals or visualize complex algorithms, 
               we've got you covered
             </p>
           </motion.div>
 
           {/* audience segments */}
-          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto" style={{ margin: '0 auto', paddingLeft: '16px', paddingRight: '16px' }}>
           {audienceSegments.map((segment, index) => (
             <motion.div
               key={segment.title}
@@ -66,6 +67,7 @@ export function AudienceSection() {
                 className="h-full glass-effect rounded-2xl p-8 md:p-10 hover:shadow-2xl 
                          hover:shadow-purple/20 transition-all duration-300
                          border border-white/5 hover:border-purple/30 space-y-6"
+                style={{ margin: '0 16px' }}
               >
                 {/* icon */}
                 <div>
@@ -80,10 +82,12 @@ export function AudienceSection() {
                 </div>
 
                 {/* title and description */}
-                <h3 className="text-2xl font-bold text-white">
+                <h3 className="text-2xl font-bold text-white"
+                    style={{ margin: '0 16px', padding: '8px 12px' }}>
                   {segment.title}
                 </h3>
-                <p className="text-light-gray/80">
+                <p className="text-light-gray/80"
+                   style={{ margin: '0 16px', padding: '8px 12px' }}>
                   {segment.description}
                 </p>
 
@@ -105,7 +109,8 @@ export function AudienceSection() {
                                      flex items-center justify-center mt-0.5">
                         <Check size={12} className="text-purple" />
                       </span>
-                      <span className="text-sm text-light-gray/70">
+                      <span className="text-sm text-light-gray/70"
+                            style={{ margin: '0 8px', padding: '4px 8px' }}>
                         {benefit}
                       </span>
                     </motion.li>
@@ -116,22 +121,6 @@ export function AudienceSection() {
           ))}
         </div>
 
-          {/* additional message */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="mt-16 md:mt-20"
-          >
-            <div className="glass-effect rounded-xl p-8 md:p-10 border border-purple/20 max-w-4xl mx-auto">
-              <p className="text-lg text-white/90 text-center">
-                <span className="font-semibold gradient-text">Join thousands of students</span>
-                {" "}who are already learning AI with interactive visualizations and hands-on projects. 
-                Start your journey today and become part of the AI revolution!
-              </p>
-            </div>
-          </motion.div>
         </div>
       </div>
     </section>

@@ -80,20 +80,24 @@ export function FeaturesGrid() {
               >
                 {/* card background with gradient border */}
                 <div 
-                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 
+                  className="absolute rounded-2xl opacity-0 group-hover:opacity-100 
                            transition-opacity duration-500"
                   style={{ 
                     background: feature.gradient,
-                    padding: "1px"
+                    left: '16px',
+                    right: '16px',
+                    top: '0',
+                    bottom: '0'
                   }}
                 >
-                  <div className="w-full h-full rounded-2xl bg-background" />
+                  <div className="absolute inset-[1px] rounded-2xl bg-background" />
                 </div>
 
                 {/* card content */}
-                <div className="relative h-full glass-effect rounded-2xl p-12 md:p-16 mx-2 md:mx-4
+                <div className="relative h-full glass-effect rounded-2xl p-12 md:p-16
                               border border-white/5 group-hover:border-transparent
-                              transition-all duration-300 space-y-8">
+                              transition-all duration-300 space-y-8"
+                     style={{ margin: '0 16px' }}>
                   {/* icon */}
                   <motion.div
                     whileHover={{ scale: 1.1 }}
@@ -106,12 +110,14 @@ export function FeaturesGrid() {
 
                   {/* title */}
                   <h3 className="text-xl font-semibold text-white 
-                               group-hover:gradient-text transition-all duration-300">
+                               group-hover:gradient-text transition-all duration-300"
+                      style={{ padding: '0 8px' }}>
                     {feature.title}
                   </h3>
 
                   {/* description */}
-                  <p className="text-light-gray/70 text-base leading-relaxed">
+                  <p className="text-light-gray/70 text-base leading-relaxed"
+                     style={{ padding: '0 8px' }}>
                     {feature.description}
                   </p>
 

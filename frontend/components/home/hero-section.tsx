@@ -75,11 +75,12 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-6 py-4 rounded-full 
-                     bg-white/5 border border-white/10 mb-12"
+            className="inline-flex items-center gap-2 rounded-full 
+                     bg-white/5 border border-white/10"
+            style={{ padding: '8px 16px', marginBottom: '3rem' }}
           >
             <Sparkles size={16} className="text-purple" />
-            <span className="text-sm text-light-gray">Powered by The AI Society at ASU</span>
+            <span className="text-sm text-light-gray" style={{ margin: '0 4px' }}>Powered by The AI Society at ASU</span>
           </motion.div>
 
           {/* main title */}
@@ -131,6 +132,7 @@ export function HeroSection() {
                 variant="primary"
                 icon={<ArrowRight size={20} />}
                 iconPosition="right"
+                style={{ padding: '6px 12px', borderRadius: '9999px' }}
               >
                 {heroContent.ctaText}
               </Button>
@@ -141,6 +143,7 @@ export function HeroSection() {
                 <Button
                   size="lg"
                   variant="outline"
+                  style={{ padding: '6px 12px', borderRadius: '9999px' }}
                 >
                   {heroContent.secondaryCtaText}
                 </Button>
@@ -150,23 +153,6 @@ export function HeroSection() {
 
         </div>
 
-        {/* scroll indicator */}
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1 }}
-          onClick={scrollToNext}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 
-                   text-light-gray/60 hover:text-white transition-colors"
-          aria-label="Scroll to next section"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <ChevronDown size={32} />
-          </motion.div>
-        </motion.button>
       </div>
     </section>
   )
