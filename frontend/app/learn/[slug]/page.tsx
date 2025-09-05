@@ -1,0 +1,62 @@
+"use client"
+
+import { useParams } from "next/navigation"
+import { categories } from "../page" // categories array from the main learn page
+import { motion } from "framer-motion"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+
+export default function AlgorithmPage() {
+  const { slug } = useParams()
+  
+  const allAlgorithms = categories.flatMap(cat => cat.items)
+  const algorithm = allAlgorithms.find(item => item.slug === slug)
+
+  if (!algorithm) return <p className="text-center mt-20">Algorithm not found.</p>
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center px-6 sm:px-8 lg:px-12 text-center">
+      {/* background decoration */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-pink/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-purple/20 rounded-full blur-3xl" />
+      </div>
+
+      <h1 className="text-4xl font-bold mb-4">{algorithm.name}</h1>
+      <p className="text-lg text-light-gray/80 max-w-2xl">{algorithm.description}</p>
+
+      {/* Text + Image container */}
+      <div className="flex flex-col lg:flex-row items-center justify-center gap-10 p-6 lg:p-10 max-w-6xl">
+        <p className="text-md text-justify leading-relaxed flex-1">
+          {algorithm.body}
+        </p>
+
+        {/* Model GIF */}
+        {algorithm.src && (
+          <img
+            src={algorithm.src}
+            alt={`${algorithm.name} visualization`}
+            className="flex-1 w-full max-w-lg rounded-lg shadow-lg"
+          />
+        )}
+      </div>
+
+      {/* TRY Button */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.6 }}
+        className="mt-6"
+      >
+        <Link href={`/learn/${slug}`}>
+          <Button
+            variant="primary"
+            style={{ padding: "10px 22px", borderRadius: "9999px", cursor: "pointer" }}
+          >
+            Try
+          </Button>
+        </Link>
+      </motion.div>
+    </div>
+  )
+}
