@@ -1,16 +1,16 @@
 "use client"
 
 import { useParams } from "next/navigation"
-import { categories } from "../page" // categories array from the main learn page
+import { categories } from "../../categories" 
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
 export default function AlgorithmPage() {
-  const { slug } = useParams()
-  
+  const { category, model } = useParams()
+  console.log("model is: " + model);
   const allAlgorithms = categories.flatMap(cat => cat.items)
-  const algorithm = allAlgorithms.find(item => item.slug === slug)
+  const algorithm = allAlgorithms.find(item => item.slug === model)
 
   if (!algorithm) return <p className="text-center mt-20">Algorithm not found.</p>
 
@@ -25,7 +25,7 @@ export default function AlgorithmPage() {
       <h1 className="text-4xl font-bold mb-4">{algorithm.name}</h1>
       <p className="text-lg text-light-gray/80 max-w-2xl">{algorithm.description}</p>
 
-      {/* Text + Image container */}
+      {/* Text + GIF container */}
       <div className="flex flex-col lg:flex-row items-center justify-center gap-10 p-6 lg:p-10 max-w-6xl">
         <p className="text-md text-justify leading-relaxed flex-1">
           {algorithm.body}
@@ -48,7 +48,7 @@ export default function AlgorithmPage() {
         transition={{ duration: 0.5, delay: 0.6 }}
         className="mt-6"
       >
-        <Link href={`/learn/${slug}`}>
+        <Link href={`/learn/${category}/${model}`}>
           <Button
             variant="primary"
             style={{ padding: "10px 22px", borderRadius: "9999px", cursor: "pointer" }}
