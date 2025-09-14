@@ -41,6 +41,11 @@ export const navItems: NavItem[] = [
     description: "AI learning resources"
   },
   {
+    name: "Blogs",
+    link: "/blogs",
+    description: "Read our latest articles"
+  },
+  {
     name: "About",
     link: "/about",
     description: "About AI Society"
