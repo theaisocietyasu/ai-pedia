@@ -67,19 +67,19 @@ export default function LearnPage() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="flex flex-col gap-8 w-full items-center"
           >
-            {categories.map((cat, i) => (
+             {Object.entries(categories).map(([key, cat], i) => (
               <motion.div
-                key={cat.title}
+                key={key}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 + i * 0.2 }}
                 className="flex flex-col items-center text-center group w-full max-w-2xl"
               >
-                <Link href={`/learn/${cat.title.toLowerCase().replace(/\s+/g, "-")}`} className="w-full">
+                <Link href={`/learn/${key}`} className="w-full">
                   <h2 className="text-2xl sm:text-3xl font-semibold transition-colors 
                                 group-hover:bg-dark-gray border-1 border-light-gray 
-                                w-full p-5 cursor-pointer">
-                    {cat.title}
+                                w-full p-5 cursor-pointer capitalize">
+                    {key.replace('-', ' ') + " Learning"}
                   </h2>
                 </Link>
                 <div

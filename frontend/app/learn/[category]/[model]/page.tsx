@@ -7,12 +7,12 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
 export default function AlgorithmPage() {
-  const { category, model } = useParams()
-  console.log("model is: " + model);
-  const allAlgorithms = categories.flatMap(cat => cat.items)
-  const algorithm = allAlgorithms.find(item => item.slug === model)
+  const params = useParams()
+  const category = Array.isArray(params.category) ? params.category[0] : params.category
+  const algorithmCategory = category ? categories[category as keyof typeof categories] : undefined
+  const model = algorithmCategory?.models.find(item => item.name.toLowerCase().replace(/\s+/g, "-") === (Array.isArray(params.model) ? params.model[0] : params.model))
 
-  if (!algorithm) return <p className="text-center mt-20">Algorithm not found.</p>
+  if (!model) return <p className="text-center mt-20">Algorithm not found.</p>
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 sm:px-8 lg:px-12 text-center">
@@ -22,20 +22,20 @@ export default function AlgorithmPage() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-purple/20 rounded-full blur-3xl" />
       </div>
 
-      <h1 className="text-4xl font-bold mb-4">{algorithm.name}</h1>
-      <p className="text-lg text-light-gray/80 max-w-2xl">{algorithm.description}</p>
+      <h1 className="text-4xl font-bold mb-4">{model.name}</h1>
+      <p className="text-lg text-light-gray/80 max-w-2xl">{model.description}</p>
 
       {/* Text + GIF container */}
       <div className="flex flex-col lg:flex-row items-center justify-center gap-10 p-6 lg:p-10 max-w-6xl">
         <p className="text-md text-justify leading-relaxed flex-1">
-          {algorithm.body}
+          {model.description}
         </p>
 
         {/* Model GIF */}
-        {algorithm.src && (
+        {model.imgPath && (
           <img
-            src={algorithm.src}
-            alt={`${algorithm.name} visualization`}
+            src={model.imgPath}
+            alt={`${model.name} visualization`}
             className="flex-1 w-full max-w-lg rounded-lg shadow-lg"
           />
         )}
@@ -48,14 +48,14 @@ export default function AlgorithmPage() {
         transition={{ duration: 0.5, delay: 0.6 }}
         className="mt-6"
       >
-        <Link href={`/learn/${category}/${model}`}>
+        {/* <Link href={`/learn/${category}/${model}`}>
           <Button
             variant="primary"
             style={{ padding: "10px 22px", borderRadius: "9999px", cursor: "pointer" }}
           >
             Try
           </Button>
-        </Link>
+        </Link> */}
       </motion.div>
     </div>
   )
