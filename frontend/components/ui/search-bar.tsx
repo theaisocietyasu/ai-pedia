@@ -45,23 +45,25 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
     })
 
     // Add learning categories and algorithms
-    categories.forEach(category => {
+    Object.entries(categories).forEach(([key, category]) => {
+      const categoryTitle = key.charAt(0).toUpperCase() + key.slice(1)
+
       // Add category itself
       data.push({
-        title: category.title,
+        title: categoryTitle,
         description: category.description.substring(0, 100) + "...",
-        path: `/learn/${category.title.toLowerCase().replace(/\s+/g, "-")}`,
+        path: `/learn/${key}`,
         type: "category"
       })
 
       // Add algorithms within each category
-      category.items.forEach(item => {
+      category.models.forEach(model => {
         data.push({
-          title: item.name,
-          description: item.description,
-          path: `/learn/${category.title.toLowerCase().replace(/\s+/g, "-")}/${item.slug}`,
+          title: model.name,
+          description: model.description,
+          path: `/learn/${key}/${model.name.toLowerCase().replace(/\s+/g, "-")}`,
           type: "model",
-          category: category.title
+          category: categoryTitle
         })
       })
     })
