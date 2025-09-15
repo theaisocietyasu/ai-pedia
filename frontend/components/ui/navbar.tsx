@@ -8,6 +8,7 @@ import { Menu, X, ChevronRight, Home, BookOpen, Info, Users } from "lucide-react
 import { navItems } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import type { NavItem } from "@/lib/types"
+import { SearchBar } from "./search-bar"
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -129,8 +130,13 @@ export function Navbar() {
             </Link>
 
             {/* desktop navigation */}
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden md:flex items-center gap-6 flex-1 justify-center">
               {navItems.map((item, index) => renderNavLink(item, index))}
+            </div>
+
+            {/* search bar */}
+            <div className="hidden md:block">
+              <SearchBar />
             </div>
 
             {/* mobile menu button */}
@@ -178,6 +184,11 @@ export function Navbar() {
                   >
                     <X size={24} />
                   </button>
+                </div>
+
+                {/* search bar for mobile */}
+                <div className="p-4 border-b border-white/10">
+                  <SearchBar isMobile onClose={() => setIsMobileMenuOpen(false)} />
                 </div>
 
                 {/* navigation links */}
