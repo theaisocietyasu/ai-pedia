@@ -14,7 +14,7 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden pt-32 pb-16 bg-background">
+    <section className="relative min-h-screen w-full flex items-start justify-center overflow-hidden pt-40 pb-16 bg-background">
       {/* animated background */}
       <div className="absolute inset-0 pointer-events-none">
         {/* gradient orbs */}
@@ -77,7 +77,7 @@ export function HeroSection() {
             transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 rounded-full 
                      bg-white/5 border border-white/10"
-            style={{ padding: '8px 16px', marginBottom: '3rem' }}
+            style={{ padding: '8px 16px', marginBottom: '2rem' }}
           >
             <Sparkles size={16} className="text-purple" />
             <span className="text-sm text-light-gray" style={{ margin: '0 4px' }}>Powered by The AI Society at ASU</span>
@@ -89,7 +89,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-5xl sm:text-6xl md:text-7xl font-bold"
-            style={{ marginBottom: '3.5rem' }}
+            style={{ marginBottom: '2rem' }}
           >
             <GradientText animate={false}>
               {heroContent.title}
@@ -102,7 +102,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-2xl sm:text-3xl font-medium text-light-gray"
-            style={{ marginBottom: '3rem' }}
+            style={{ marginBottom: '1.5rem' }}
           >
             {heroContent.subtitle}
           </motion.p>
@@ -113,7 +113,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
             className="text-lg text-light-gray/80 max-w-2xl leading-relaxed"
-            style={{ marginBottom: '5rem' }}
+            style={{ marginBottom: '3rem' }}
           >
             {heroContent.description}
           </motion.p>
