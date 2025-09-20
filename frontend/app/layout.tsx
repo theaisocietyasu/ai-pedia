@@ -15,21 +15,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Learning Hub | The AI Society at ASU",
+  title: "ML Visualization | The AI Society at ASU",
   description: "Master artificial intelligence through interactive visualizations and hands-on projects. Join ASU's premier AI learning platform powered by The AI Society.",
   keywords: ["AI", "Machine Learning", "Deep Learning", "ASU", "Arizona State University", "The AI Society", "AI Education", "AI Visualization"],
   authors: [{ name: "The AI Society" }],
   openGraph: {
-    title: "AI Learning Hub | The AI Society at ASU",
+    title: "ML Visualization | The AI Society at ASU",
     description: "Master artificial intelligence through interactive visualizations and hands-on projects.",
     url: "https://ailearninghub.com",
-    siteName: "AI Learning Hub",
+    siteName: "ML Visualization",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "AI Learning Hub",
+        alt: "ML Visualization",
       },
     ],
     locale: "en_US",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Learning Hub | The AI Society at ASU",
+    title: "ML Visualization | The AI Society at ASU",
     description: "Master artificial intelligence through interactive visualizations and hands-on projects.",
     images: ["/og-image.png"],
   },

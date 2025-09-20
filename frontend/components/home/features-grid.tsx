@@ -99,24 +99,26 @@ export function FeaturesGrid() {
                               transition-all duration-300 space-y-8"
                      style={{ margin: '0 16px' }}>
                   {/* icon */}
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.5 }}
-                    className="w-14 h-14 rounded-lg flex items-center justify-center"
-                    style={{ background: feature.gradient }}
-                  >
-                    <span className="text-white">{getIcon(feature.icon)}</span>
-                  </motion.div>
+                  <div className="flex justify-center">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.5 }}
+                      className="w-14 h-14 rounded-lg flex items-center justify-center"
+                      style={{ background: feature.gradient }}
+                    >
+                      <span className="text-white">{getIcon(feature.icon)}</span>
+                    </motion.div>
+                  </div>
 
                   {/* title */}
-                  <h3 className="text-xl font-semibold text-white 
+                  <h3 className="text-xl font-semibold text-white text-center
                                group-hover:gradient-text transition-all duration-300"
                       style={{ padding: '0 8px' }}>
                     {feature.title}
                   </h3>
 
                   {/* description */}
-                  <p className="text-light-gray/70 text-base leading-relaxed"
+                  <p className="text-light-gray/70 text-base leading-relaxed text-center"
                      style={{ padding: '0 8px' }}>
                     {feature.description}
                   </p>

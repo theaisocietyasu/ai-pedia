@@ -70,7 +70,7 @@ export function AudienceSection() {
                 style={{ margin: '0 16px' }}
               >
                 {/* icon */}
-                <div>
+                <div className="flex justify-center">
                   <motion.div
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.5 }}

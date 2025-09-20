@@ -118,12 +118,12 @@ export function Navbar() {
             <Link href="/" className="flex items-center gap-3 group">
               <img 
                 src="/logo.png" 
-                alt="AI Learning Hub Logo" 
+                alt="ML Visualization Logo" 
                 className="w-10 h-10 rounded-lg object-cover"
               />
               <div className="flex flex-col">
                 <span className="font-bold text-lg text-white group-hover:text-light-gray transition-colors">
-                  AI Learning Hub
+                  ML Visualization
                 </span>
                 <span className="text-xs text-light-gray/60">by The AI Society</span>
               </div>

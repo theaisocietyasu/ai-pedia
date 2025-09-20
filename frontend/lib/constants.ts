@@ -2,7 +2,7 @@ import type { NavItem, Feature, AudienceSegment, VisionItem, FooterSection, Soci
 
 // site configuration
 export const siteConfig = {
-  name: "AI Learning Hub",
+  name: "ML Visualization",
   description: "Learning Website for AI Enthusiasts",
   tagline: "Master the Future of Artificial Intelligence",
   url: "https://ailearninghub.com",
@@ -59,7 +59,7 @@ export const navItems: NavItem[] = [
 
 // hero content
 export const heroContent = {
-  title: "AI Learning Hub",
+  title: "ML Visualization",
   subtitle: "Learning Website for AI Enthusiasts",
   description: "Embark on your journey to master artificial intelligence with interactive visualizations, hands-on projects, and expert guidance from The AI Society at ASU.",
   ctaText: "Start Learning",
