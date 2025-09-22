@@ -90,3 +90,38 @@ export interface AnimationVariant {
   visible: object
   exit?: object
 }
+
+// blog types
+export interface BlogPost {
+  id: string
+  title: string
+  excerpt: string
+  author: string
+  authorImage?: string
+  publishDate: string
+  readTime: string
+  category: string
+  tags: string[]
+  featuredImage: string
+  content: BlogContent
+  slug: string
+}
+
+export interface BlogContent {
+  type: "structured" | "markdown"
+  // For structured content
+  headings?: string[]
+  paragraphs?: (string | { [key: string]: string })[]
+  images?: string[]
+  visualization?: string
+  // For markdown content
+  htmlReadMe?: string
+}
+
+export interface BlogCategory {
+  id: string
+  name: string
+  slug: string
+  description: string
+  color: string
+}
