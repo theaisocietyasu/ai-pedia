@@ -83,7 +83,7 @@ export default function BlogsPage() {
               className="text-5xl sm:text-6xl md:text-7xl font-bold"
               style={{ marginBottom: '2rem' }}
             >
-              <GradientText animate={false}>Blog</GradientText>
+              <GradientText animate={false}>Blogs</GradientText>
             </motion.h1>
 
             {/* subtitle */}
