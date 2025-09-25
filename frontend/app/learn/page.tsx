@@ -1,6 +1,6 @@
 "use client"
 import ReactMarkdown from "react-markdown";
-
+import { useEffect, useState } from "react";
 
 import { motion } from "framer-motion"
 import Link from "next/link"
@@ -9,10 +9,77 @@ import { Button } from "@/components/ui/button"
 import { GradientText } from "@/components/ui/gradient-text"
 import { desc } from "framer-motion/client"
 
-import { categories } from "./categories"
+import { getCategories } from "./categories"
 
 
 export default function LearnPage() {
+  const [categories, setCategories] = useState<Record<string, any>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        setLoading(true);
+        const categoriesData = await getCategories();
+        setCategories(categoriesData);
+      } catch (err) {
+        console.error('Error loading categories:', err);
+        setError('Failed to load learning categories. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCategories();
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen relative overflow-hidden">
+        <div className="relative min-h-screen flex flex-col items-center justify-center px-3 sm:px-8 lg:px-12">
+          <div className="w-full max-w-4xl text-center">
+            <div className="w-20 h-20 rounded-2xl gradient-bg shadow-2xl shadow-purple/30 flex items-center justify-center mx-auto mb-6">
+              <BookOpen size={40} className="text-white" />
+            </div>
+            <h1 className="text-4xl sm:text-5xl font-bold mb-4">
+              <GradientText>Loading Learning Categories...</GradientText>
+            </h1>
+            <p className="text-lg text-light-gray/80">Please wait while we fetch the latest content.</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="min-h-screen relative overflow-hidden">
+        <div className="relative min-h-screen flex flex-col items-center justify-center px-3 sm:px-8 lg:px-12">
+          <div className="w-full max-w-4xl text-center">
+            <div className="w-20 h-20 rounded-2xl gradient-bg shadow-2xl shadow-purple/30 flex items-center justify-center mx-auto mb-6">
+              <BookOpen size={40} className="text-white" />
+            </div>
+            <h1 className="text-4xl sm:text-5xl font-bold mb-4">
+              <GradientText>Error Loading Content</GradientText>
+            </h1>
+            <p className="text-lg text-light-gray/80 mb-6">{error}</p>
+            <Link href="/">
+              <Button
+                variant="outline"
+                icon={<ArrowLeft size={18} />}
+                iconPosition="left"
+                style={{ padding: '6px 12px', borderRadius: '9999px', cursor: 'pointer' }}
+              >
+                Back to Home
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen relative overflow-hidden">
       {/* Background decorations */}

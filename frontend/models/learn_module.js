@@ -21,8 +21,8 @@ const learnModuleSchema = new mongoose.Schema({
         default: []
     },
     content: {
-        type: mongoose.Schema.Types.Mixed,
-        default: {}
+        type: "string", //will be a markdown string
+        required: true
     },
     images: {
         type: [String],
