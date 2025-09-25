@@ -47,3 +47,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 *__pycache__/
+
+.env
+.env.local

@@ -2,15 +2,17 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "node server.js --dev",
     "build": "next build --turbopack",
-    "start": "next start",
+    "start": "node server.js",
     "lint": "biome check",
     "format": "biome format --write"
   },
   "dependencies": {
     "clsx": "^2.1.1",
+    "dotenv": "^17.2.2",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.542.0",
     "mongodb": "^6.20.0",
