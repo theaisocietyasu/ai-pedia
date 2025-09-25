@@ -91,8 +91,38 @@ export interface AnimationVariant {
   exit?: object
 }
 
-// blog types
+// MongoDB blog types (new dynamic structure)
+export interface Author {
+  name: string
+  socials: string[]
+}
+
+export interface ContentBlock {
+  heading?: string
+  content?: string | ContentBlock | ContentBlock[]
+  images?: string[]
+  code_blocks?: string[]
+  visualization?: string[]
+}
+
 export interface BlogPost {
+  _id: string
+  title: string
+  excerpt: string
+  slug: string
+  category: string
+  tags: string[]
+  featuredImage: string
+  publishDate: string
+  readTime: string
+  author: Author[]
+  content: ContentBlock[]
+  createdAt?: string
+  updatedAt?: string
+}
+
+// Legacy blog types (for backward compatibility during migration)
+export interface LegacyBlogPost {
   id: string
   title: string
   excerpt: string

@@ -1,31 +1,37 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
+import React, { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Search, Filter, BookOpen } from "lucide-react"
 import { GradientText } from "@/components/ui/gradient-text"
 import { BlogCard } from "@/components/ui/blog-card"
-import { blogPosts, blogCategories, getBlogsByCategory } from "@/lib/blog-data"
-import type { BlogPost } from "@/lib/types"
+import { blogCategories, getAllBlogs } from "@/lib/blog-data"
+import { BlogsClient } from "@/components/blogs/blogs-client"
+import type { LegacyBlogPost } from "@/lib/types"
 
 export default function BlogsPage() {
-  const [selectedCategory, setSelectedCategory] = useState("all")
-  const [searchQuery, setSearchQuery] = useState("")
+  const [blogs, setBlogs] = useState<LegacyBlogPost[]>([])
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  // filter blogs based on category and search
-  const filteredBlogs = useMemo(() => {
-    let blogs = selectedCategory === "all" ? blogPosts : getBlogsByCategory(selectedCategory)
-    
-    if (searchQuery.trim()) {
-      blogs = blogs.filter(blog => 
-        blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        blog.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        blog.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-      )
+  useEffect(() => {
+    async function fetchBlogs() {
+      try {
+        setLoading(true)
+        const blogData = await getAllBlogs()
+        setBlogs(blogData)
+        setError(null)
+      } catch (err) {
+        console.error('Failed to fetch blogs:', err)
+        setError('Unable to connect to the blog database. Please check your MongoDB connection or try again later.')
+        setBlogs([])
+      } finally {
+        setLoading(false)
+      }
     }
-    
-    return blogs
-  }, [selectedCategory, searchQuery])
+
+    fetchBlogs()
+  }, [])
 
   return (
     <main className="min-h-screen bg-background">
@@ -107,112 +113,48 @@ export default function BlogsPage() {
         </div>
       </section>
 
-      {/* filters and search */}
-      <section className="py-6 border-b border-white/5">
-        <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
-          <div className="flex flex-col gap-6 items-center justify-center">
-            {/* search bar */}
+      {loading ? (
+        <section className="flex-1 flex items-center justify-center min-h-[50vh]">
+          <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="relative w-full max-w-md"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col items-center justify-center text-center"
             >
-              <Search size={20} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-light-gray/60" />
-              <input
-                type="text"
-                placeholder="Search articles..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/5 border border-white/10
-                           text-white placeholder-light-gray/60 focus:outline-none focus:border-purple/50
-                           transition-colors duration-300"
-              />
-            </motion.div>
-
-            {/* category filters */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="flex flex-wrap gap-3 justify-center"
-            >
-              <button
-                onClick={() => setSelectedCategory("all")}
-                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                  selectedCategory === "all"
-                    ? "bg-purple text-white"
-                    : "bg-white/5 text-light-gray/80 hover:bg-white/10"
-                }`}
-              >
-                All Articles
-              </button>
-              {blogCategories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.name)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                    selectedCategory === category.name
-                      ? "bg-purple text-white"
-                      : "bg-white/5 text-light-gray/80 hover:bg-white/10"
-                  }`}
-                >
-                  {category.name}
-                </button>
-              ))}
+              <div className="w-16 h-16 mb-6 rounded-full bg-purple/20 flex items-center justify-center">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  className="w-8 h-8 border-2 border-purple border-t-transparent rounded-full"
+                />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">Loading Articles...</h3>
+              <p className="text-light-gray/60 max-w-md">Please wait while we fetch the latest blog posts.</p>
             </motion.div>
           </div>
-        </div>
-      </section>
-
-      {/* blog grid */}
-      <section className="pt-4 pb-12">
-        <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
-          {/* results header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            style={{ marginTop: '-2rem', marginBottom: '1.5rem' }}
-          >
-            <h2 className="text-2xl font-bold text-white mb-2">
-              {searchQuery ? `Search Results for "${searchQuery}"` : 
-               selectedCategory === "all" ? "All Articles" : selectedCategory}
-            </h2>
-            <p className="text-light-gray/60">
-              {filteredBlogs.length} article{filteredBlogs.length !== 1 ? 's' : ''} found
-            </p>
-          </motion.div>
-
-          {/* blog cards grid */}
-          {filteredBlogs.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-              {filteredBlogs.map((blog, index) => (
-                <BlogCard 
-                  key={blog.id} 
-                  blog={blog} 
-                  index={index}
-                />
-              ))}
-            </div>
-          ) : (
+        </section>
+      ) : error ? (
+        <section className="flex-1 flex items-center justify-center min-h-[50vh]">
+          <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="text-center py-20"
+              className="flex flex-col items-center justify-center text-center"
             >
-              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center">
-                <Search size={24} className="text-light-gray/60" />
+              <div className="w-16 h-16 mb-6 rounded-full bg-red-500/20 flex items-center justify-center">
+                <BookOpen size={24} className="text-red-500" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">No articles found</h3>
-              <p className="text-light-gray/60 max-w-md mx-auto">
-                Try adjusting your search terms or browse different categories to find what you're looking for.
+              <h3 className="text-xl font-bold text-white mb-2">Unable to Load Articles</h3>
+              <p className="text-light-gray/60 max-w-md">
+                {error}
               </p>
             </motion.div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
+      ) : (
+        <BlogsClient blogs={blogs} blogCategories={blogCategories} />
+      )}
     </main>
   )
 }

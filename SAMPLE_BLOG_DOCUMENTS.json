@@ -1,0 +1,197 @@
+[
+  {
+    "title": "Understanding Neural Networks: From Perceptrons to Deep Learning",
+    "excerpt": "Dive deep into the world of neural networks and discover how these powerful algorithms learn to recognize patterns and make predictions.",
+    "slug": "understanding-neural-networks",
+    "category": "Deep Learning",
+    "tags": ["Neural Networks", "Machine Learning", "AI Fundamentals"],
+    "featuredImage": "/blog/ai.jpg",
+    "publishDate": "2025-01-15T00:00:00.000Z",
+    "readTime": "8 min read",
+    "author": [
+      {
+        "name": "Dr. Sarah Chen",
+        "socials": ["https://twitter.com/sarahchen", "https://linkedin.com/in/sarahchen"]
+      }
+    ],
+    "content": [
+      {
+        "heading": "What Are Neural Networks?",
+        "content": "Neural networks are one of the most fascinating and powerful tools in artificial intelligence. Inspired by the biological neural networks in our brains, these computational models have revolutionized how we approach complex problems in machine learning.",
+        "images": ["/blog/neural-network-diagram.png"],
+        "code_blocks": [],
+        "visualization": ["NeuralNetworkVisualization"]
+      },
+      {
+        "heading": "The Building Blocks: Perceptrons", 
+        "content": "At their core, neural networks are mathematical models designed to recognize patterns in data. They consist of interconnected nodes (neurons) that process information and learn from examples.",
+        "images": ["/blog/perceptron-visualization.png"],
+        "code_blocks": [],
+        "visualization": []
+      },
+      {
+        "heading": "From Single Layer to Deep Networks",
+        "content": "The journey of neural networks began with the simple perceptron, a single-layer network that could solve linearly separable problems. While limited, perceptrons laid the groundwork for more sophisticated architectures.",
+        "images": ["/blog/deep-network-architecture.png"],
+        "code_blocks": [],
+        "visualization": []
+      }
+    ]
+  },
+  {
+    "title": "Computer Vision Revolution: How Object Detection Changed Everything",
+    "excerpt": "Explore the evolution of object detection algorithms and see how modern computer vision systems can identify and locate objects in real-time.",
+    "slug": "computer-vision-object-detection",
+    "category": "Computer Vision",
+    "tags": ["Object Detection", "YOLO", "Computer Vision", "CNN"],
+    "featuredImage": "/blog/ai.jpg",
+    "publishDate": "2025-01-12T00:00:00.000Z",
+    "readTime": "6 min read",
+    "author": [
+      {
+        "name": "Alex Rodriguez",
+        "socials": ["https://twitter.com/alexrodriguez", "https://github.com/alexrodriguez"]
+      }
+    ],
+    "content": [
+      {
+        "heading": "The Dawn of Computer Vision",
+        "content": "Computer vision has transformed from a theoretical concept to a practical technology that powers everything from autonomous vehicles to medical imaging. At the heart of this revolution lies object detection - the ability to identify and locate objects within images.",
+        "images": [],
+        "code_blocks": [],
+        "visualization": ["ObjectDetectionDemo"]
+      },
+      {
+        "heading": "Early Approaches: Template Matching",
+        "content": "The earliest computer vision systems relied on template matching and simple feature extraction. These methods were computationally expensive, limited to specific viewing angles, sensitive to lighting conditions, and unable to handle object variations.",
+        "images": [],
+        "code_blocks": [],
+        "visualization": []
+      },
+      {
+        "heading": "The CNN Revolution",
+        "content": "The introduction of Convolutional Neural Networks (CNNs) marked a turning point in computer vision with translation invariance, automatic feature learning, and hierarchical processing.",
+        "images": [],
+        "code_blocks": [],
+        "visualization": []
+      }
+    ]
+  },
+  {
+    "title": "The Transformer Architecture: Revolutionizing Natural Language Processing",
+    "excerpt": "Discover how the Transformer architecture changed NLP forever and learn about the attention mechanism that makes it so powerful.",
+    "slug": "natural-language-processing-transformers",
+    "category": "Natural Language Processing",
+    "tags": ["Transformers", "Attention", "BERT", "GPT", "NLP"],
+    "featuredImage": "/blog/ai.jpg",
+    "publishDate": "2025-01-10T00:00:00.000Z",
+    "readTime": "10 min read",
+    "author": [
+      {
+        "name": "Prof. Michael Zhang",
+        "socials": ["https://scholar.google.com/citations?user=mzhang", "https://twitter.com/profmzhang"]
+      }
+    ],
+    "content": [
+      {
+        "heading": "The Pre-Transformer Era",
+        "content": "Before Transformers, natural language processing relied heavily on recurrent neural networks (RNNs) and Long Short-Term Memory (LSTM) networks. While these architectures achieved remarkable results, they had significant limitations in processing long sequences and parallel computation.",
+        "images": ["/blog/transformer-architecture.png"],
+        "code_blocks": [],
+        "visualization": ["TransformerVisualization"]
+      },
+      {
+        "heading": "Understanding Self-Attention",
+        "content": "At the heart of the Transformer lies the self-attention mechanism. This allows the model to weigh the importance of different words in a sequence when processing each word, enabling it to capture long-range dependencies more effectively than previous architectures.",
+        "images": ["/blog/attention-visualization.png"],
+        "code_blocks": [],
+        "visualization": []
+      },
+      {
+        "heading": "Multi-Head Attention Mechanism",
+        "content": "Multi-head attention extends this concept by allowing the model to attend to information from different representation subspaces simultaneously. This parallel processing capability significantly improves the model's ability to understand complex relationships in text.",
+        "images": ["/blog/multi-head-attention.png"],
+        "code_blocks": [],
+        "visualization": []
+      }
+    ]
+  },
+  {
+    "title": "Machine Learning Fundamentals: Linear Regression Explained",
+    "excerpt": "Master the foundations of machine learning with linear regression - the gateway algorithm that introduces key concepts used throughout ML.",
+    "slug": "machine-learning-fundamentals-regression",
+    "category": "ML Fundamentals",
+    "tags": ["Linear Regression", "Supervised Learning", "Statistics", "Fundamentals"],
+    "featuredImage": "/blog/ai.jpg",
+    "publishDate": "2025-01-08T00:00:00.000Z",
+    "readTime": "7 min read",
+    "author": [
+      {
+        "name": "Emma Thompson",
+        "socials": ["https://medium.com/@emmathompson", "https://linkedin.com/in/emmathompson"]
+      }
+    ],
+    "content": [
+      {
+        "heading": "Why Start with Linear Regression?",
+        "content": "Linear regression might seem simple, but it's the perfect starting point for understanding machine learning. It introduces crucial concepts that appear throughout ML while remaining mathematically tractable and intuitive.",
+        "images": [],
+        "code_blocks": ["y = mx + b"],
+        "visualization": ["LinearRegressionDemo"]
+      },
+      {
+        "heading": "What is Linear Regression?",
+        "content": "Linear regression is a statistical method that models the relationship between a dependent variable and one or more independent variables using a linear equation.",
+        "images": [],
+        "code_blocks": [],
+        "visualization": []
+      },
+      {
+        "heading": "Key Concepts Introduced",
+        "content": "Linear regression is a supervised learning algorithm, meaning it learns from labeled training data to make predictions on new, unseen data. We measure performance using loss functions like Mean Squared Error (MSE) and Mean Absolute Error (MAE).",
+        "images": [],
+        "code_blocks": [],
+        "visualization": []
+      }
+    ]
+  },
+  {
+    "title": "Getting Started with TensorFlow: Your First Neural Network",
+    "excerpt": "Build your first neural network from scratch using TensorFlow and learn the essential concepts needed for deep learning development.",
+    "slug": "getting-started-with-tensorflow",
+    "category": "Tutorials",
+    "tags": ["TensorFlow", "Neural Networks", "Python", "Deep Learning", "Tutorial"],
+    "featuredImage": "/blog/ai.jpg",
+    "publishDate": "2025-01-05T00:00:00.000Z",
+    "readTime": "12 min read",
+    "author": [
+      {
+        "name": "David Kim",
+        "socials": ["https://github.com/davidkim", "https://stackoverflow.com/users/davidkim"]
+      }
+    ],
+    "content": [
+      {
+        "heading": "Setting Up Your Environment",
+        "content": "TensorFlow is Google's open-source machine learning framework that has become the go-to tool for deep learning development. In this tutorial, we'll build a simple neural network to classify handwritten digits, introducing you to the fundamental concepts and workflow of TensorFlow.",
+        "images": ["/blog/tensorflow-setup.png"],
+        "code_blocks": ["pip install tensorflow"],
+        "visualization": ["TensorFlowDemo"]
+      },
+      {
+        "heading": "Understanding TensorFlow Basics",
+        "content": "First, install TensorFlow using pip: pip install tensorflow. We'll also need NumPy and Matplotlib for data manipulation and visualization.",
+        "images": ["/blog/neural-network-architecture.png"],
+        "code_blocks": ["import tensorflow as tf\nimport numpy as np\nimport matplotlib.pyplot as plt"],
+        "visualization": []
+      },
+      {
+        "heading": "Building Your First Model",
+        "content": "TensorFlow operates on computational graphs where operations are represented as nodes and data flows through edges. Understanding this concept is crucial for effective TensorFlow development.",
+        "images": ["/blog/training-progress.png"],
+        "code_blocks": [],
+        "visualization": []
+      }
+    ]
+  }
+]

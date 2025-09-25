@@ -5,11 +5,11 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
 import { Calendar, Clock, User, ArrowRight } from "lucide-react"
-import type { BlogPost } from "@/lib/types"
+import type { BlogPost, LegacyBlogPost } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
 interface BlogCardProps {
-  blog: BlogPost
+  blog: LegacyBlogPost | BlogPost
   index?: number
 }
 
@@ -21,6 +21,13 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
   ]
   
   const cardGradient = gradients[index % gradients.length]
+
+  // Handle author field for both legacy and new formats
+  const authorName = 'author' in blog && typeof blog.author === 'string' 
+    ? blog.author 
+    : 'author' in blog && Array.isArray(blog.author) && blog.author.length > 0
+    ? blog.author[0].name
+    : 'Unknown Author'
 
   return (
     <motion.article
@@ -155,7 +162,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
               </div>
               <div className="flex items-center gap-1">
                 <User size={14} />
-                <span>{blog.author}</span>
+                <span>{authorName}</span>
               </div>
             </div>
 

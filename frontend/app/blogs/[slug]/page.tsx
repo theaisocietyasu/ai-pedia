@@ -1,5 +1,3 @@
-"use client"
-
 import React from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
@@ -18,22 +16,30 @@ import { GradientText } from "@/components/ui/gradient-text"
 import { BlogContent } from "@/components/ui/blog-content"
 import { BlogCard } from "@/components/ui/blog-card"
 import { getBlogPost, getRelatedBlogs } from "@/lib/blog-data"
-import type { BlogPost } from "@/lib/types"
+import type { LegacyBlogPost } from "@/lib/types"
 
 interface BlogDetailPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
-export default function BlogDetailPage({ params }: BlogDetailPageProps) {
-  const blog = getBlogPost(params.slug)
-  
-  if (!blog) {
+export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
+  const { slug } = await params
+
+  let blog: LegacyBlogPost | null = null
+  let relatedBlogs: LegacyBlogPost[] = []
+
+  try {
+    blog = await getBlogPost(slug)
+    if (!blog) {
+      notFound()
+    }
+    relatedBlogs = await getRelatedBlogs(slug, 3)
+  } catch (error) {
+    console.error('Error fetching blog data:', error)
     notFound()
   }
-  
-  const relatedBlogs = getRelatedBlogs(params.slug, 3)
   
   return (
     <main className="min-h-screen bg-background">
