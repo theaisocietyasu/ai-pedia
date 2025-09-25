@@ -1,5 +1,7 @@
 import { spawn } from 'node:child_process';
 import { mongoConnection } from './utilities/db_connector.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const isDev = process.argv.includes('--dev');
 
