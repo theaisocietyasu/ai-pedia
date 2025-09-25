@@ -49,8 +49,8 @@ export default function AlgorithmPage() {
       <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
         <div className="w-full max-w-5xl flex flex-col items-center gap-16">
           <div className="relative inline-block mb-10 text-center">
-            <h1 className="text-2xl md:text-5xl font-bold font-sans italic relative z-10 capitalize">
-              Loading {displayTitle}...
+            <h1 className="text-2xl md:text-5xl font-bold font-sans italic relative z-10">
+              Loading Learning Content...
             </h1>
           </div>
           <div className="text-center">
