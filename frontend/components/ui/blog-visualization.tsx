@@ -3,10 +3,11 @@
 import React from "react"
 import { motion } from "framer-motion"
 import { Play, Code, ExternalLink } from "lucide-react"
+import { Visualization, VISUALIZATION_COMPONENTS } from "../visualizations/visualization-registry"
 
 interface BlogVisualizationProps {
   componentId: string
-  title: string
+  title?: string
 }
 
 // placeholder visualization components - these would be replaced with actual interactive demos
@@ -233,43 +234,76 @@ model.fit(x_train, y_train, epochs=5)`}</code>
 }
 
 export function BlogVisualization({ componentId, title }: BlogVisualizationProps) {
-  const VisualizationComponent = visualizationComponents[componentId]
-  
-  if (!VisualizationComponent) {
+  const hasComponent = !!VISUALIZATION_COMPONENTS[componentId]
+  const legacyComponent = visualizationComponents[componentId]
+  const displayTitle = title || `${componentId} Demo`
+
+  // Use new registry first, fall back to legacy components
+  if (hasComponent) {
     return (
-      <div className="text-center py-12 border border-white/10 rounded-xl bg-white/5">
-        <Code size={48} className="mx-auto mb-4 text-light-gray/60" />
-        <h3 className="text-lg font-semibold text-white mb-2">Interactive Demo</h3>
-        <p className="text-light-gray/60 mb-4">
-          Component "{componentId}" will be implemented here
-        </p>
-        <button className="inline-flex items-center gap-2 px-4 py-2 bg-purple/20 hover:bg-purple/30 
-                          text-purple border border-purple/50 rounded-lg transition-colors duration-300">
-          <ExternalLink size={16} />
-          View Implementation
-        </button>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+        className="border border-white/10 rounded-xl bg-white/5 overflow-hidden"
+      >
+        {title && (
+          <div className="p-4 border-b border-white/10">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold gradient-text">{title}</h3>
+              <button className="inline-flex items-center gap-2 px-3 py-1 text-sm bg-purple/20 hover:bg-purple/30
+                                text-purple border border-purple/50 rounded-lg transition-colors duration-300">
+                <Play size={14} />
+                Interactive
+              </button>
+            </div>
+          </div>
+        )}
+        <div className="p-0">
+          <Visualization componentId={componentId} fallbackTitle={displayTitle} />
+        </div>
+      </motion.div>
     )
   }
-  
+
+  // Legacy component support
+  if (legacyComponent) {
+    const LegacyComponent = legacyComponent
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+        className="border border-white/10 rounded-xl bg-white/5 p-6 space-y-4"
+      >
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-semibold gradient-text">{displayTitle}</h3>
+          <button className="inline-flex items-center gap-2 px-3 py-1 text-sm bg-purple/20 hover:bg-purple/30
+                            text-purple border border-purple/50 rounded-lg transition-colors duration-300">
+            <Play size={14} />
+            Run Demo
+          </button>
+        </div>
+        <LegacyComponent />
+      </motion.div>
+    )
+  }
+
+  // Fallback for missing components
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      viewport={{ once: true }}
-      className="border border-white/10 rounded-xl bg-white/5 p-6 space-y-4"
-    >
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold gradient-text">{title}</h3>
-        <button className="inline-flex items-center gap-2 px-3 py-1 text-sm bg-purple/20 hover:bg-purple/30 
-                          text-purple border border-purple/50 rounded-lg transition-colors duration-300">
-          <Play size={14} />
-          Run Demo
-        </button>
-      </div>
-      
-      <VisualizationComponent />
-    </motion.div>
+    <div className="text-center py-12 border border-white/10 rounded-xl bg-white/5">
+      <Code size={48} className="mx-auto mb-4 text-light-gray/60" />
+      <h3 className="text-lg font-semibold text-white mb-2">Interactive Demo</h3>
+      <p className="text-light-gray/60 mb-4">
+        Component "{componentId}" will be implemented here
+      </p>
+      <button className="inline-flex items-center gap-2 px-4 py-2 bg-purple/20 hover:bg-purple/30
+                        text-purple border border-purple/50 rounded-lg transition-colors duration-300">
+        <ExternalLink size={16} />
+        View Implementation
+      </button>
+    </div>
   )
 }

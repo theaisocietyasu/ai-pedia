@@ -72,6 +72,16 @@ export async function getBlogsByCategory(category: string): Promise<LegacyBlogPo
   }
 }
 
+export async function getBlogsByCategories(categories: string): Promise<LegacyBlogPost[]> {
+  try {
+    const blogs = await fetchBlogs({ category: categories })
+    return blogs.map(convertToLegacyBlog)
+  } catch (error) {
+    console.error('Error fetching blogs by categories:', error)
+    return []
+  }
+}
+
 export async function getFeaturedBlogs(limit: number = 3): Promise<LegacyBlogPost[]> {
   try {
     const blogs = await fetchBlogs({ limit })
@@ -88,8 +98,13 @@ export async function getRelatedBlogs(currentSlug: string, limit: number = 3): P
     const currentBlog = allBlogs.find(blog => blog.slug === currentSlug)
     if (!currentBlog) return []
 
+    // Use categories (new) or category (legacy) for matching
+    const currentCategory = currentBlog.categories || currentBlog.category
     const relatedBlogs = allBlogs
-      .filter(blog => blog.slug !== currentSlug && blog.category === currentBlog.category)
+      .filter(blog => {
+        const blogCategory = blog.categories || blog.category
+        return blog.slug !== currentSlug && blogCategory === currentCategory
+      })
       .slice(0, limit)
 
     return relatedBlogs.map(convertToLegacyBlog)
