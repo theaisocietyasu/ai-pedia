@@ -17,6 +17,7 @@ export interface LearnModule {
   thumbnail: string;
   description: string;
   content?: string;
+  action_buttions?: { name: string; link: string }[];
 }
 
 // API client functions
@@ -81,6 +82,7 @@ export function transformModulesToUIFormat(modules: LearnModule[]): any[] {
     name: module.title,
     description: module.description,
     imgPath: module.thumbnail,
+    actionButtons: module.action_buttions || [],
     _id: module._id
   }));
 }
@@ -91,6 +93,7 @@ export function transformModuleToModelFormat(module: LearnModule): any {
     title: module.title || '',
     content: module.content || '',
     description: module.description || '',
-    imgPath: module.thumbnail || ''
+    imgPath: module.thumbnail || '',
+    actionButtons: module.action_buttions || []
   };
 }

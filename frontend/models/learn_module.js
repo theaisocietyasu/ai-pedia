@@ -35,6 +35,13 @@ const learnModuleSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    action_buttons : {
+        type: [{
+            name: { type: String, required: true },
+            link: { type: String, required: true }
+        }],
+        default: []
+    }
 });
 
 export const learnModule = mongoose.model('LearnModule', learnModuleSchema, 'learn_content');
