@@ -16,23 +16,9 @@ const learnModuleSchema = new mongoose.Schema({
             message: props => `At least one category is required!`
         }
     },
-    code_blocks: {
-        type: [String],
-        default: []
-    },
     content: {
         type: "string", //will be a markdown string
         required: true
-    },
-    images: {
-        type: [String],
-        default: [],
-        validate: {
-            validator: function(v) {
-                return v.every(url => /\.(jpg|jpeg|png|webp|svg|gif)$/i.test(url));
-            },
-            message: props => `One or more image URLs are not supported image files!`
-        }
     },
     thumbnail: {
         type: String,
@@ -43,7 +29,12 @@ const learnModuleSchema = new mongoose.Schema({
             },
             message: props => `${props.value} is not a supported image file!`
         }
-    }
+    },
+    description: {
+        type: String,
+        required: true,
+        trim: true
+    },
 });
 
 export const learnModule = mongoose.model('LearnModule', learnModuleSchema, 'learn_content');

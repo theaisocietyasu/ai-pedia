@@ -17,8 +17,6 @@ export interface LearnModule {
   thumbnail: string;
   description: string;
   content?: string;
-  code_blocks?: string[];
-  images?: string[];
 }
 
 // API client functions
@@ -92,7 +90,7 @@ export function transformModuleToModelFormat(module: LearnModule): any {
   return {
     title: module.title || '',
     content: module.content || '',
-    images: module.images || [],
-    code_blocks: module.code_blocks || []
+    description: module.description || '',
+    imgPath: module.thumbnail || ''
   };
 }
