@@ -1,7 +1,7 @@
 "use client"
 
 import { useParams } from "next/navigation"
-import { categories } from "../categories"
+import { getModulesForCategory } from "../categories"
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 
@@ -9,13 +9,33 @@ export default function AlgorithmPage() {
   const params = useParams()
   const category = Array.isArray(params.category) ? params.category[0] : params.category
 
-  const algorithmCategory = category ? categories[category as keyof typeof categories] : undefined
-  const models = algorithmCategory?.models || []
-
+  const [models, setModels] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [activeId, setActiveId] = useState<string>("")
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
   const manualScrollTarget = useRef<string | null>(null)
   const rafIdRef = useRef<number | null>(null)
+
+  // Load models for the category
+  useEffect(() => {
+    const loadModels = async () => {
+      if (!category) return;
+      
+      try {
+        setLoading(true);
+        const modelsData = await getModulesForCategory(category);
+        setModels(modelsData);
+      } catch (err) {
+        console.error(`Error loading models for category ${category}:`, err);
+        setError(`Failed to load models for ${category}. Please try again later.`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadModels();
+  }, [category]);
 
   // compute the card whose center is closest to viewport center
   const computeClosestId = () => {
@@ -111,6 +131,45 @@ export default function AlgorithmPage() {
     }
   }, [])
 
+  if (loading) {
+    return (
+      <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
+        <div className="w-full max-w-5xl flex flex-col items-center gap-16">
+          <div className="relative inline-block mb-10 text-center">
+            <h1 className="text-2xl md:text-5xl font-bold font-sans italic relative z-10 capitalize">
+              Loading {category} Learning...
+            </h1>
+          </div>
+          <div className="text-center">
+            <p className="text-lg text-light-gray/80">Please wait while we fetch the latest content.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
+        <div className="w-full max-w-5xl flex flex-col items-center gap-16">
+          <div className="relative inline-block mb-10 text-center">
+            <h1 className="text-2xl md:text-5xl font-bold font-sans italic relative z-10 capitalize">
+              Error Loading Content
+            </h1>
+          </div>
+          <div className="text-center">
+            <p className="text-lg text-light-gray/80 mb-6">{error}</p>
+            <Link href="/learn">
+              <button className="px-6 py-3 bg-purple text-white rounded-lg hover:bg-purple/80 transition-colors">
+                Back to Learning Hub
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!models.length) return <p className="text-center mt-20">Models not found.</p>
 
   return (
@@ -134,7 +193,7 @@ export default function AlgorithmPage() {
           {/* Cards */}
           <div className="flex flex-col gap-16 w-full lg:w-3/4">
             {models.map((item, index) => {
-              const id = item.name.toLowerCase().replace(/\s+/g, "-")
+              const id = item._id || item.name.toLowerCase().replace(/\s+/g, "-")
               return (
                 <div
                   key={id}
@@ -168,7 +227,7 @@ export default function AlgorithmPage() {
           {/* Sidebar (sticky, not fixed) */}
           <div className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
             {models.map((item) => {
-              const id = item.name.toLowerCase().replace(/\s+/g, "-")
+              const id = item._id || item.name.toLowerCase().replace(/\s+/g, "-")
               const isActive = activeId === id
               return (
                 <button
