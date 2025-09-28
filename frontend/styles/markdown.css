@@ -1,0 +1,424 @@
+/* Markdown Content Styling */
+.markdown-content {
+  /* Base container styling */
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  line-height: 1.7;
+  color: var(--foreground);
+  font-size: 16px;
+  word-wrap: break-word;
+}
+
+/* Headings */
+.markdown-content h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 3rem 0 1.5rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid var(--purple);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.markdown-content h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 2.5rem 0 1rem 0;
+  padding-bottom: 0.3rem;
+  border-bottom: 2px solid var(--blue-purple);
+  color: var(--light-gray);
+  line-height: 1.3;
+}
+
+.markdown-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 2rem 0 0.8rem 0;
+  color: var(--blue-purple);
+  line-height: 1.4;
+}
+
+.markdown-content h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.6rem 0;
+  color: var(--pink);
+  line-height: 1.4;
+}
+
+.markdown-content h5,
+.markdown-content h6 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 1rem 0 0.5rem 0;
+  color: var(--light-gray);
+  line-height: 1.4;
+}
+
+/* Paragraphs */
+.markdown-content p {
+  margin: 1.2rem 0;
+  color: var(--light-gray);
+  text-align: justify;
+}
+
+/* Links */
+.markdown-content a {
+  color: var(--blue-purple);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: var(--transition-default);
+}
+
+.markdown-content a:hover {
+  border-bottom-color: var(--blue-purple);
+  background: var(--gradient-secondary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Lists */
+.markdown-content ul,
+.markdown-content ol {
+  margin: 1.2rem 0;
+  padding-left: 2rem;
+  color: var(--light-gray);
+}
+
+.markdown-content li {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.markdown-content li::marker {
+  color: var(--purple);
+}
+
+.markdown-content ul ul,
+.markdown-content ol ol,
+.markdown-content ul ol,
+.markdown-content ol ul {
+  margin: 0.5rem 0;
+}
+
+/* Blockquotes */
+.markdown-content blockquote {
+  margin: 2rem 0;
+  padding: 1rem 1.5rem;
+  border-left: 4px solid var(--purple);
+  background: rgba(58, 56, 142, 0.1);
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  position: relative;
+}
+
+.markdown-content blockquote::before {
+  content: '"';
+  font-size: 4rem;
+  color: var(--purple);
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  opacity: 0.3;
+}
+
+.markdown-content blockquote p {
+  margin: 0;
+  color: var(--light-gray);
+}
+
+/* Code blocks and inline code */
+.markdown-content code {
+  background: var(--dark-gray);
+  color: #f8f8f2;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', monospace;
+  font-size: 0.9em;
+  border: 1px solid rgba(75, 74, 189, 0.3);
+}
+
+.markdown-content pre {
+  background: var(--dark-gray);
+  border: 1px solid rgba(75, 74, 189, 0.3);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  overflow-x: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.markdown-content pre code {
+  background: none;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #f8f8f2;
+}
+
+/* Syntax highlighting for different languages */
+.markdown-content pre[class*="language-"] {
+  position: relative;
+}
+
+.markdown-content pre[class*="language-"]::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: var(--purple);
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+/* Tables */
+.markdown-content table {
+  width: 100%;
+  margin: 2rem 0;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.markdown-content th,
+.markdown-content td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(75, 74, 189, 0.3);
+}
+
+.markdown-content th {
+  background: var(--gradient-primary);
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+}
+
+.markdown-content tr:nth-child(even) {
+  background: rgba(26, 26, 46, 0.5);
+}
+
+.markdown-content tr:hover {
+  background: rgba(75, 74, 189, 0.1);
+  transition: var(--transition-default);
+}
+
+/* Images */
+.markdown-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 2rem 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: var(--transition-default);
+}
+
+.markdown-content img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(75, 74, 189, 0.4);
+}
+
+/* Horizontal Rules */
+.markdown-content hr {
+  margin: 3rem 0;
+  border: none;
+  height: 2px;
+  background: var(--gradient-primary);
+  border-radius: 1px;
+}
+
+/* LaTeX/Math equations */
+.markdown-content .katex {
+  font-size: 1.1em;
+  color: var(--light-gray);
+}
+
+.markdown-content .katex-display {
+  margin: 2rem 0;
+  padding: 1rem;
+  background: rgba(26, 26, 46, 0.5);
+  border-radius: 8px;
+  border-left: 4px solid var(--blue-purple);
+}
+
+/* Custom VZ Visualization Components */
+.markdown-content div[id^="VZ-"] {
+  margin: 3rem 0;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(58, 56, 142, 0.1) 0%, rgba(141, 47, 106, 0.1) 50%, rgba(75, 74, 189, 0.1) 100%);
+  border-radius: 12px;
+  border: 2px solid rgba(75, 74, 189, 0.3);
+  position: relative;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.markdown-content div[id^="VZ-"]::before {
+  content: "Interactive Visualization";
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: var(--gradient-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.markdown-content div[id^="VZ-"]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(75, 74, 189, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.markdown-content div[id^="VZ-"][data-placeholder]::before {
+  content: attr(data-placeholder);
+}
+
+/* Placeholder text for VZ components */
+.markdown-content div[id^="VZ-"] .vz-placeholder {
+  text-align: center;
+  color: var(--light-gray);
+  font-size: 1.1rem;
+  font-style: italic;
+  z-index: 1;
+  position: relative;
+}
+
+/* Strong and emphasis */
+.markdown-content strong,
+.markdown-content b {
+  font-weight: 700;
+  color: var(--blue-purple);
+}
+
+.markdown-content em,
+.markdown-content i {
+  font-style: italic;
+  color: var(--pink);
+}
+
+/* Definition lists */
+.markdown-content dl {
+  margin: 1.5rem 0;
+}
+
+.markdown-content dt {
+  font-weight: 600;
+  color: var(--blue-purple);
+  margin: 1rem 0 0.5rem 0;
+}
+
+.markdown-content dd {
+  margin: 0 0 1rem 2rem;
+  color: var(--light-gray);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .markdown-content {
+    padding: 1rem;
+    font-size: 15px;
+  }
+  
+  .markdown-content h1 {
+    font-size: 2rem;
+    margin: 2rem 0 1rem 0;
+  }
+  
+  .markdown-content h2 {
+    font-size: 1.7rem;
+    margin: 1.8rem 0 0.8rem 0;
+  }
+  
+  .markdown-content h3 {
+    font-size: 1.4rem;
+    margin: 1.5rem 0 0.6rem 0;
+  }
+  
+  .markdown-content pre {
+    padding: 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .markdown-content table {
+    font-size: 0.9rem;
+  }
+  
+  .markdown-content th,
+  .markdown-content td {
+    padding: 0.7rem;
+  }
+  
+  .markdown-content div[id^="VZ-"] {
+    margin: 2rem 0;
+    padding: 1rem;
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .markdown-content {
+    padding: 0.5rem;
+    font-size: 14px;
+  }
+  
+  .markdown-content ul,
+  .markdown-content ol {
+    padding-left: 1.5rem;
+  }
+  
+  .markdown-content blockquote {
+    padding: 0.8rem 1rem;
+  }
+  
+  .markdown-content div[id^="VZ-"] {
+    padding: 0.8rem;
+    min-height: 150px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .markdown-content {
+    color: black;
+    background: white;
+  }
+  
+  .markdown-content h1,
+  .markdown-content h2,
+  .markdown-content h3 {
+    color: black;
+    background: none;
+    -webkit-text-fill-color: initial;
+  }
+  
+  .markdown-content div[id^="VZ-"] {
+    border: 2px solid #ccc;
+    background: #f5f5f5;
+  }
+}
