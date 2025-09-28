@@ -62,6 +62,8 @@ We can test these assumptions using various diagnostic plots and statistical tes
 
 <div id="VZ-assumptions-plots" data-placeholder="Diagnostic Plots for Linear Regression Assumptions"></div>
 
+![linear regression](https://media.geeksforgeeks.org/wp-content/uploads/20231129130431/11111111.png)
+
 ## Implementation in Python
 
 Let's implement linear regression from scratch and using scikit-learn:
