@@ -422,3 +422,76 @@
     background: #f5f5f5;
   }
 }
+
+/* Editor Styles */
+.editor-container {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', monospace;
+}
+
+.editor-textarea {
+  background: var(--dark-gray);
+  color: var(--light-gray);
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', monospace;
+  line-height: 1.6;
+  tab-size: 2;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.editor-textarea::selection {
+  background: rgba(75, 74, 189, 0.3);
+}
+
+.editor-textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+.editor-textarea::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+.editor-textarea::-webkit-scrollbar-thumb {
+  background: var(--purple);
+  border-radius: 4px;
+}
+
+.editor-textarea::-webkit-scrollbar-thumb:hover {
+  background: var(--blue-purple);
+}
+
+/* Preview Panel Scrollbar */
+.preview-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.preview-container::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+.preview-container::-webkit-scrollbar-thumb {
+  background: var(--purple);
+  border-radius: 4px;
+}
+
+.preview-container::-webkit-scrollbar-thumb:hover {
+  background: var(--blue-purple);
+}
+
+/* Split pane separator */
+.split-separator {
+  position: relative;
+}
+
+.split-separator::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -1px;
+  bottom: 0;
+  width: 1px;
+  background: var(--gradient-primary);
+  opacity: 0.3;
+}

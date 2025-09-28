@@ -1,8 +1,9 @@
-import React from 'react';
+'use client'
+import React, { useState } from 'react';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 export default function TestPage() {
-    const markdown = `# Understanding Linear Regression: From Theory to Practice
+  const initialMarkdown = `# Understanding Linear Regression: From Theory to Practice
 
 Linear regression is one of the most fundamental and widely used statistical techniques in data science and machine learning. Despite its simplicity, it forms the backbone of many advanced algorithms and provides crucial insights into the relationships between variables.
 
@@ -129,30 +130,6 @@ print(f"Intercept: {model.intercept_:.2f}")
 
 <div id="VZ-regression-comparison" data-placeholder="Comparison of From-Scratch vs Scikit-learn Implementation"></div>
 
-## Cost Function and Optimization
-
-Linear regression minimizes the **Mean Squared Error (MSE)** cost function:
-
-$$J(\\beta) = \\frac{1}{2m}\\sum_{i=1}^{m}(h_\\beta(x^{(i)}) - y^{(i)})^2$$
-
-Where:
-- $m$ is the number of training examples
-- $h_\\beta(x^{(i)}) = \\beta_0 + \\beta_1 x^{(i)}$ is our hypothesis function
-
-### Gradient Descent
-
-We can minimize this cost function using gradient descent:
-
-$$\\beta_j := \\beta_j - \\alpha\\frac{\\partial}{\\partial\\beta_j}J(\\beta)$$
-
-The partial derivatives are:
-
-$$\\frac{\\partial}{\\partial\\beta_0}J(\\beta) = \\frac{1}{m}\\sum_{i=1}^{m}(h_\\beta(x^{(i)}) - y^{(i)})$$
-
-$$\\frac{\\partial}{\\partial\\beta_1}J(\\beta) = \\frac{1}{m}\\sum_{i=1}^{m}(h_\\beta(x^{(i)}) - y^{(i)})x^{(i)}$$
-
-<div id="VZ-gradient-descent" data-placeholder="Interactive Gradient Descent Visualization"></div>
-
 ## Model Evaluation Metrics
 
 ### Regression Metrics
@@ -164,111 +141,17 @@ $$\\frac{\\partial}{\\partial\\beta_1}J(\\beta) = \\frac{1}{m}\\sum_{i=1}^{m}(h_
 | **MAE** | $\\frac{1}{n}\\sum_{i=1}^{n}|y_i - \\hat{y_i}|$ | Average absolute difference |
 | **R²** | $1 - \\frac{SS_{res}}{SS_{tot}}$ | Proportion of variance explained |
 
-### Cross-Validation
-
-\`\`\`python
-from sklearn.model_selection import cross_val_score, KFold
-
-# K-Fold Cross-Validation
-kfold = KFold(n_splits=5, shuffle=True, random_state=42)
-cv_scores = cross_val_score(model, X, y, cv=kfold, scoring='r2')
-
-print(f"Cross-validation R² scores: {cv_scores}")
-print(f"Mean R² score: {cv_scores.mean():.3f} (+/- {cv_scores.std() * 2:.3f})")
-\`\`\`
-
 <div id="VZ-model-evaluation" data-placeholder="Model Performance Metrics Dashboard"></div>
 
-## Advanced Topics
+## Interactive Visualizations
 
-### Regularization
+Try editing this markdown to see how different elements render:
 
-To prevent overfitting, we can add regularization terms:
-
-#### Ridge Regression (L2)
-
-$$J(\\beta) = \\frac{1}{2m}\\sum_{i=1}^{m}(h_\\beta(x^{(i)}) - y^{(i)})^2 + \\lambda\\sum_{j=1}^{n}\\beta_j^2$$
-
-#### Lasso Regression (L1)
-
-$$J(\\beta) = \\frac{1}{2m}\\sum_{i=1}^{m}(h_\\beta(x^{(i)}) - y^{(i)})^2 + \\lambda\\sum_{j=1}^{n}|\\beta_j|$$
-
-### Feature Engineering
-
-Common feature engineering techniques include:
-
-- **Polynomial features**: $x, x^2, x^3, ...$
-- **Interaction terms**: $x_1 \\times x_2$
-- **Log transformations**: $\\log(x)$
-- **Standardization**: $\\frac{x - \\mu}{\\sigma}$
-
-\`\`\`python
-from sklearn.preprocessing import PolynomialFeatures, StandardScaler
-from sklearn.pipeline import Pipeline
-
-# Create a pipeline with feature engineering
-pipeline = Pipeline([
-    ('scaler', StandardScaler()),
-    ('poly', PolynomialFeatures(degree=2)),
-    ('regressor', LinearRegression())
-])
-
-pipeline.fit(X_train, y_train)
-y_pred_pipeline = pipeline.predict(X_test)
-\`\`\`
-
-<div id="VZ-regularization-comparison" data-placeholder="Regularization Methods Comparison"></div>
-
----
-
-## Real-World Example: Housing Price Prediction
-
-Let's apply linear regression to predict housing prices using the California Housing dataset:
-
-\`\`\`python
-import pandas as pd
-from sklearn.datasets import fetch_california_housing
-
-# Load the dataset
-housing = fetch_california_housing()
-X, y = housing.data, housing.target
-
-# Create DataFrame for easier manipulation
-df = pd.DataFrame(X, columns=housing.feature_names)
-df['price'] = y
-
-# Display basic statistics
-print(df.describe())
-\`\`\`
-
-### Feature Importance Analysis
-
-\`\`\`python
-# Fit the model and examine coefficients
-model = LinearRegression()
-model.fit(X, y)
-
-# Create feature importance DataFrame
-feature_importance = pd.DataFrame({
-    'feature': housing.feature_names,
-    'coefficient': model.coef_,
-    'abs_coefficient': np.abs(model.coef_)
-}).sort_values('abs_coefficient', ascending=False)
-
-print(feature_importance)
-\`\`\`
-
-<div id="VZ-housing-analysis" data-placeholder="Housing Price Prediction Analysis Dashboard"></div>
+<div id="VZ-interactive-demo" data-placeholder="Live Markdown Editor Demo"></div>
 
 ## Conclusion
 
-Linear regression remains a cornerstone of statistical modeling and machine learning due to its:
-
-1. **Simplicity** and ease of interpretation
-2. **Fast training** and prediction times
-3. **No hyperparameter tuning** required for basic version
-4. **Good baseline** for more complex models
-5. **Statistical insights** into feature relationships
+Linear regression remains a cornerstone of statistical modeling and machine learning due to its **simplicity** and **interpretability**.
 
 ### When to Use Linear Regression
 
@@ -276,33 +159,142 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
 - Relationship between variables appears linear
 - Interpretability is important
 - You have sufficient data relative to features
-- Assumptions are reasonably met
 
 ❌ **Avoid when:**
 - Relationships are clearly non-linear
 - You have more features than samples
-- Severe multicollinearity exists
-- Assumptions are severely violated
+- Severe multicollinearity exists`;
 
-### Next Steps
+  const [markdown, setMarkdown] = useState(initialMarkdown);
 
-To extend your understanding of linear regression:
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="border-b border-gray-800 bg-dark-gray">
+        <div className="px-6 py-4">
+          <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            Markdown Editor & Preview
+          </h1>
+          <p className="text-gray-400 mt-1">
+            Edit markdown on the left and see the live preview on the right
+          </p>
+        </div>
+      </div>
 
-- Explore **polynomial regression** for non-linear relationships
-- Learn about **logistic regression** for classification
-- Study **generalized linear models** (GLMs)
-- Investigate **neural networks** as universal function approximators
+      {/* Editor Layout */}
+      <div className="flex h-[calc(100vh-120px)]">
+        {/* Editor Panel */}
+        <div className="w-1/2 border-r border-gray-800 bg-dark-gray split-separator">
+          <div className="h-full flex flex-col">
+            {/* Editor Header */}
+            <div className="border-b border-gray-800 px-4 py-2 bg-background">
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-medium text-gray-300">
+                  📝 Markdown Editor
+                </h2>
+                <div className="flex items-center space-x-4 text-xs text-gray-500">
+                  <span>Lines: {markdown.split('\n').length}</span>
+                  <span>Words: {markdown.split(/\s+/).filter(word => word.length > 0).length}</span>
+                  <span>Chars: {markdown.length}</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Text Editor */}
+            <div className="flex-1 relative editor-container">
+              <textarea
+                value={markdown}
+                onChange={(e) => setMarkdown(e.target.value)}
+                className="editor-textarea w-full h-full p-4 text-sm"
+                placeholder={`Type your markdown here...
 
-<div id="VZ-learning-path" data-placeholder="Interactive Learning Path Visualization"></div>
+Try these examples:
+# Heading
+**bold text**
+*italic text*
+\`inline code\`
 
----
+\`\`\`python
+print('code block')
+\`\`\`
 
-*This blog post covered the fundamentals of linear regression, from mathematical foundations to practical implementation. The combination of theory and hands-on examples should provide a solid foundation for understanding and applying this essential technique.*
+$$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
 
-**Further Reading:**
-- [Elements of Statistical Learning](https://hastie.su.domains/ElemStatLearn/) by Hastie, Tibshirani, and Friedman
-- [Introduction to Statistical Learning](https://www.statlearning.com/) by James, Witten, Hastie, and Tibshirani
-- [Pattern Recognition and Machine Learning](https://www.microsoft.com/en-us/research/people/cmbishop/prml-book/) by Christopher Bishop`;
+<div id="VZ-example" data-placeholder="Your Interactive Viz"></div>`}
+                spellCheck={false}
+              />
+              
+              {/* Editor Guidelines Overlay */}
+              <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm rounded-lg p-3 text-xs text-gray-400 max-w-xs opacity-60 hover:opacity-100 transition-opacity pointer-events-auto">
+                <div className="font-medium mb-2 text-blue-purple">✨ Quick Reference</div>
+                <div className="space-y-1 font-mono">
+                  <div># Heading 1</div>
+                  <div>## Heading 2</div>
+                  <div>**bold** *italic*</div>
+                  <div>`inline code`</div>
+                  <div>```python</div>
+                  <div>code block</div>
+                  <div>```</div>
+                  <div>$$math equation$$</div>
+                  <div className="text-purple-300">&lt;div id="VZ-name"&gt;&lt;/div&gt;</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-  return <MarkdownRenderer content={markdown} />;
+        {/* Preview Panel */}
+        <div className="w-1/2 bg-background">
+          <div className="h-full flex flex-col">
+            {/* Preview Header */}
+            <div className="border-b border-gray-800 px-4 py-2 bg-dark-gray">
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-medium text-gray-300">
+                  👁️ Live Preview
+                </h2>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => setMarkdown(initialMarkdown)}
+                    className="px-3 py-1 text-xs bg-purple/20 text-purple-300 rounded border border-purple/30 hover:bg-purple/30 transition-colors"
+                  >
+                    🔄 Reset Example
+                  </button>
+                  <button
+                    onClick={() => setMarkdown('')}
+                    className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-600 transition-colors"
+                  >
+                    🗑️ Clear All
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            {/* Preview Content */}
+            <div className="flex-1 overflow-y-auto preview-container">
+              {markdown.trim() ? (
+                <MarkdownRenderer content={markdown} />
+              ) : (
+                <div className="flex items-center justify-center h-full text-gray-500">
+                  <div className="text-center max-w-md">
+                    <div className="text-6xl mb-4">📝✨</div>
+                    <div className="text-lg mb-2 text-gray-400">No content to preview</div>
+                    <div className="text-sm text-gray-500 leading-relaxed">
+                      Start typing markdown in the editor to see the live preview.
+                      Try headings, code blocks, math equations, and VZ components!
+                    </div>
+                    <div className="mt-4 p-3 bg-purple/10 border border-purple/20 rounded-lg text-left">
+                      <div className="text-xs text-purple-300 font-medium mb-1">💡 Pro Tip:</div>
+                      <div className="text-xs text-gray-400">
+                        Use the "Reset Example" button to load a full sample with all supported features
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
