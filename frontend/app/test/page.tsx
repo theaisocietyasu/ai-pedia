@@ -1,5 +1,11 @@
 'use client'
 import React, { useState } from 'react';
+import { 
+  SignedIn, 
+  SignedOut,
+  SignIn,
+} from '@clerk/nextjs'
+import { shadesOfPurple, dark } from '@clerk/themes';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 
 export default function TestPage() {
@@ -171,132 +177,151 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b border-gray-800 bg-dark-gray">
-        <div className="px-6 py-4">
-          <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            Markdown Editor & Preview
-          </h1>
-          <p className="text-gray-400 mt-1">
+      <SignedOut>
+        <div className="flex flex-col items-center justify-center min-h-screen bg-background px-4">
+        <SignIn 
+          appearance={{
+            theme: shadesOfPurple
+          }} 
+          routing="hash" />
+        </div>
+      </SignedOut>
+      <SignedIn>
+        {/* Header/Navbar */}
+        <div className="border-b border-gray-800 bg-dark-gray">
+          <header className="flex items-center justify-between px-6 py-4">
+            <div className="flex items-center w-full">
+              {/* Logo or Title */}
+              <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent mr-8">
+                Markdown Editor & Preview
+              </h1>
+              {/* Search Bar (if present) */}
+              <div className="flex-1 flex items-center">
+                {/* Insert search bar here if you have one, e.g. <SearchBar /> */}
+                {/* ...existing code... */}
+              </div>
+            </div>
+          </header>
+          <p className="text-gray-400 mt-1 px-6">
             Edit markdown on the left and see the live preview on the right
           </p>
         </div>
-      </div>
 
-      {/* Editor Layout */}
-      <div className="flex h-[calc(100vh-120px)]">
-        {/* Editor Panel */}
-        <div className="w-1/2 border-r border-gray-800 bg-dark-gray split-separator">
-          <div className="h-full flex flex-col">
-            {/* Editor Header */}
-            <div className="border-b border-gray-800 px-4 py-2 bg-background">
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm font-medium text-gray-300">
-                  📝 Markdown Editor
-                </h2>
-                <div className="flex items-center space-x-4 text-xs text-gray-500">
-                  <span>Lines: {markdown.split('\n').length}</span>
-                  <span>Words: {markdown.split(/\s+/).filter(word => word.length > 0).length}</span>
-                  <span>Chars: {markdown.length}</span>
+        {/* Editor Layout */}
+        <div className="flex h-[calc(100vh-120px)]">
+          {/* Editor Panel */}
+          <div className="w-1/2 border-r border-gray-800 bg-dark-gray split-separator">
+            <div className="h-full flex flex-col">
+              {/* Editor Header */}
+              <div className="border-b border-gray-800 px-4 py-2 bg-background">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-sm font-medium text-gray-300">
+                    📝 Markdown Editor
+                  </h2>
+                  <div className="flex items-center space-x-4 text-xs text-gray-500">
+                    <span>Lines: {markdown.split('\n').length}</span>
+                    <span>Words: {markdown.split(/\s+/).filter(word => word.length > 0).length}</span>
+                    <span>Chars: {markdown.length}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            {/* Text Editor */}
-            <div className="flex-1 relative editor-container">
-              <textarea
-                value={markdown}
-                onChange={(e) => setMarkdown(e.target.value)}
-                className="editor-textarea w-full h-full p-4 text-sm"
-                placeholder={`Type your markdown here...
-
-Try these examples:
-# Heading
-**bold text**
-*italic text*
-\`inline code\`
-
-\`\`\`python
-print('code block')
-\`\`\`
-
-$$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
-
-<div id="VZ-example" data-placeholder="Your Interactive Viz"></div>`}
-                spellCheck={false}
-              />
               
-              {/* Editor Guidelines Overlay */}
-              <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm rounded-lg p-3 text-xs text-gray-400 max-w-xs opacity-60 hover:opacity-100 transition-opacity pointer-events-auto">
-                <div className="font-medium mb-2 text-blue-purple">✨ Quick Reference</div>
-                <div className="space-y-1 font-mono">
-                  <div># Heading 1</div>
-                  <div>## Heading 2</div>
-                  <div>**bold** *italic*</div>
-                  <div>`inline code`</div>
-                  <div>```python</div>
-                  <div>code block</div>
-                  <div>```</div>
-                  <div>$$math equation$$</div>
-                  <div className="text-purple-300">&lt;div id="VZ-name"&gt;&lt;/div&gt;</div>
+              {/* Text Editor */}
+              <div className="flex-1 relative editor-container">
+                <textarea
+                  value={markdown}
+                  onChange={(e) => setMarkdown(e.target.value)}
+                  className="editor-textarea w-full h-full p-4 text-sm"
+                  placeholder={`Type your markdown here...
+
+    Try these examples:
+    # Heading
+    **bold text**
+    *italic text*
+    \`inline code\`
+
+    \`\`\`python
+    print('code block')
+    \`\`\`
+
+    $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
+
+    <div id="VZ-example" data-placeholder="Your Interactive Viz"></div>`}
+                  spellCheck={false}
+                />
+                
+                {/* Editor Guidelines Overlay */}
+                <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm rounded-lg p-3 text-xs text-gray-400 max-w-xs opacity-60 hover:opacity-100 transition-opacity pointer-events-auto">
+                  <div className="font-medium mb-2 text-blue-purple">✨ Quick Reference</div>
+                  <div className="space-y-1 font-mono">
+                    <div># Heading 1</div>
+                    <div>## Heading 2</div>
+                    <div>**bold** *italic*</div>
+                    <div>`inline code`</div>
+                    <div>```python</div>
+                    <div>code block</div>
+                    <div>```</div>
+                    <div>$$math equation$$</div>
+                    <div className="text-purple-300">&lt;div id="VZ-name"&gt;&lt;/div&gt;</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Preview Panel */}
-        <div className="w-1/2 bg-background">
-          <div className="h-full flex flex-col">
-            {/* Preview Header */}
-            <div className="border-b border-gray-800 px-4 py-2 bg-dark-gray">
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm font-medium text-gray-300">
-                  👁️ Live Preview
-                </h2>
-                <div className="flex items-center space-x-2">
-                  <button
-                    onClick={() => setMarkdown(initialMarkdown)}
-                    className="px-3 py-1 text-xs bg-purple/20 text-purple-300 rounded border border-purple/30 hover:bg-purple/30 transition-colors"
-                  >
-                    🔄 Reset Example
-                  </button>
-                  <button
-                    onClick={() => setMarkdown('')}
-                    className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-600 transition-colors"
-                  >
-                    🗑️ Clear All
-                  </button>
+          {/* Preview Panel */}
+          <div className="w-1/2 bg-background">
+            <div className="h-full flex flex-col">
+              {/* Preview Header */}
+              <div className="border-b border-gray-800 px-4 py-2 bg-dark-gray">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-sm font-medium text-gray-300">
+                    👁️ Live Preview
+                  </h2>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => setMarkdown(initialMarkdown)}
+                      className="px-3 py-1 text-xs bg-purple/20 text-purple-300 rounded border border-purple/30 hover:bg-purple/30 transition-colors"
+                    >
+                      🔄 Reset Example
+                    </button>
+                    <button
+                      onClick={() => setMarkdown('')}
+                      className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-600 transition-colors"
+                    >
+                      🗑️ Clear All
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            {/* Preview Content */}
-            <div className="flex-1 overflow-y-auto preview-container">
-              {markdown.trim() ? (
-                <MarkdownRenderer content={markdown} />
-              ) : (
-                <div className="flex items-center justify-center h-full text-gray-500">
-                  <div className="text-center max-w-md">
-                    <div className="text-6xl mb-4">📝✨</div>
-                    <div className="text-lg mb-2 text-gray-400">No content to preview</div>
-                    <div className="text-sm text-gray-500 leading-relaxed">
-                      Start typing markdown in the editor to see the live preview.
-                      Try headings, code blocks, math equations, and VZ components!
-                    </div>
-                    <div className="mt-4 p-3 bg-purple/10 border border-purple/20 rounded-lg text-left">
-                      <div className="text-xs text-purple-300 font-medium mb-1">💡 Pro Tip:</div>
-                      <div className="text-xs text-gray-400">
-                        Use the "Reset Example" button to load a full sample with all supported features
+              
+              {/* Preview Content */}
+              <div className="flex-1 overflow-y-auto preview-container">
+                {markdown.trim() ? (
+                  <MarkdownRenderer content={markdown} />
+                ) : (
+                  <div className="flex items-center justify-center h-full text-gray-500">
+                    <div className="text-center max-w-md">
+                      <div className="text-6xl mb-4">📝✨</div>
+                      <div className="text-lg mb-2 text-gray-400">No content to preview</div>
+                      <div className="text-sm text-gray-500 leading-relaxed">
+                        Start typing markdown in the editor to see the live preview.
+                        Try headings, code blocks, math equations, and VZ components!
+                      </div>
+                      <div className="mt-4 p-3 bg-purple/10 border border-purple/20 rounded-lg text-left">
+                        <div className="text-xs text-purple-300 font-medium mb-1">💡 Pro Tip:</div>
+                        <div className="text-xs text-gray-400">
+                          Use the "Reset Example" button to load a full sample with all supported features
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </SignedIn>
     </div>
   );
 }
