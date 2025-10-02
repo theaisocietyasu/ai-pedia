@@ -1,0 +1,38 @@
+<svg width="800" height="400" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8d2f6a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3a388e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="#0b0a10"/>
+  <rect width="800" height="400" fill="url(#grad3)" opacity="0.3"/>
+  
+  <!-- Attention mechanism visualization -->
+  <g transform="translate(200, 100)">
+    <!-- Input tokens -->
+    <rect x="0" y="0" width="60" height="20" fill="#3a388e" opacity="0.8" rx="3"/>
+    <text x="30" y="14" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">The</text>
+    
+    <rect x="80" y="0" width="60" height="20" fill="#3a388e" opacity="0.8" rx="3"/>
+    <text x="110" y="14" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">cat</text>
+    
+    <rect x="160" y="0" width="60" height="20" fill="#3a388e" opacity="0.8" rx="3"/>
+    <text x="190" y="14" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">sat</text>
+    
+    <!-- Attention connections -->
+    <path d="M30,25 Q100,50 110,75" fill="none" stroke="#8d2f6a" stroke-width="2" opacity="0.7"/>
+    <path d="M110,25 Q150,50 190,75" fill="none" stroke="#8d2f6a" stroke-width="2" opacity="0.7"/>
+    <path d="M190,25 Q160,50 110,75" fill="none" stroke="#8d2f6a" stroke-width="2" opacity="0.7"/>
+    
+    <!-- Attention matrix -->
+    <rect x="80" y="80" width="60" height="60" fill="#8d2f6a" opacity="0.3" rx="3"/>
+    <text x="110" y="115" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">Attention</text>
+    
+    <!-- Output tokens -->
+    <rect x="80" y="160" width="60" height="20" fill="#4b4abd" opacity="0.8" rx="3"/>
+    <text x="110" y="174" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">output</text>
+  </g>
+  
+  <text x="400" y="350" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">Transformers</text>
+</svg>

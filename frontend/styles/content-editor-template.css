@@ -1,28 +1,49 @@
 /*
- * Comprehensive Markdown CSS Template for Technical Officers
+ * MARKDOWN CSS TEMPLATE FOR CONTENT DEVELOPERS
  *
- * This CSS file provides consistent styling for all markdown content
- * across the blog system. It covers all edge cases and can be used
- * as a template in online readme editors.
+ * This CSS template should be used in online markdown editors
+ * to ensure consistent styling across all blog content.
+ *
+ * Instructions for Content Developers:
+ * 1. Copy this CSS into your online markdown editor's custom CSS section
+ * 2. Write your content using standard markdown syntax
+ * 3. Use HTML tags as specified below for images and visualizations
+ * 4. Preview your content to ensure proper styling
+ *
+ * Supported Elements:
+ * - Headings: # ## ### #### ##### ######
+ * - Paragraphs: Regular text
+ * - Bold: **text** or __text__
+ * - Italic: *text* or _text_
+ * - Code blocks: ```language\ncode\n```
+ * - Inline code: `code`
+ * - Links: [text](url) or <a href="url">text</a>
+ * - Images: <img src="cloudinary-url"/>
+ * - Visualizations: <div id="component-id"></div>
+ * - Lists: - item or 1. item
+ * - Blockquotes: > text
+ * - Tables: | col1 | col2 |
  *
  * Color Scheme: Dark theme with purple/pink gradient accents
- * Typography: Geist Sans with proper hierarchy and readability
- *
- * Usage: Apply the 'markdown-content' class to any container with markdown content
  */
 
-/* Root container for all markdown content */
-.markdown-content {
+/* BASIC STYLES */
+body,
+.markdown-preview,
+.content-editor {
+  background-color: #0b0a10;
   color: #ffffff;
-  font-family: var(--font-geist-sans, system-ui, -apple-system, sans-serif);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.7;
   font-size: 16px;
-  max-width: none;
-  word-wrap: break-word;
+  margin: 0;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-/* Headings */
-.markdown-content .markdown-heading {
+/* HEADINGS */
+h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   margin-top: 2rem;
   margin-bottom: 1rem;
@@ -35,7 +56,7 @@
   animation: gradient-shift 3s ease infinite;
 }
 
-.markdown-content .markdown-h1 {
+h1 {
   font-size: 2.5rem;
   margin-top: 0;
   margin-bottom: 1.5rem;
@@ -43,7 +64,7 @@
   padding-bottom: 0.5rem;
 }
 
-.markdown-content .markdown-h2 {
+h2 {
   font-size: 2rem;
   margin-top: 3rem;
   margin-bottom: 1.25rem;
@@ -51,25 +72,25 @@
   padding-bottom: 0.25rem;
 }
 
-.markdown-content .markdown-h3 {
+h3 {
   font-size: 1.5rem;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
 }
 
-.markdown-content .markdown-h4 {
+h4 {
   font-size: 1.25rem;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
 }
 
-.markdown-content .markdown-h5 {
+h5 {
   font-size: 1.125rem;
   margin-top: 1.75rem;
   margin-bottom: 0.5rem;
 }
 
-.markdown-content .markdown-h6 {
+h6 {
   font-size: 1rem;
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;
@@ -77,39 +98,38 @@
   letter-spacing: 0.05em;
 }
 
-/* Paragraphs */
-.markdown-content .markdown-paragraph {
+/* PARAGRAPHS */
+p {
   margin-bottom: 1.5rem;
   color: rgba(224, 224, 224, 0.9);
   line-height: 1.7;
 }
 
-.markdown-content .markdown-paragraph:last-child {
+p:last-child {
   margin-bottom: 0;
 }
 
-/* Links */
-.markdown-content .markdown-link {
+/* LINKS */
+a {
   color: #3a388e;
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: all 0.3s ease;
-  position: relative;
 }
 
-.markdown-content .markdown-link:hover {
+a:hover {
   color: #8d2f6a;
   border-bottom-color: #8d2f6a;
 }
 
-.markdown-content .markdown-link:focus {
+a:focus {
   outline: 2px solid #3a388e;
   outline-offset: 2px;
   border-radius: 2px;
 }
 
-/* Images */
-.markdown-content .markdown-image {
+/* IMAGES */
+img {
   max-width: 100%;
   height: auto;
   border-radius: 12px;
@@ -120,96 +140,79 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.markdown-content .markdown-image:hover {
+img:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 }
 
-/* Code blocks */
-.markdown-content .markdown-code-block {
+/* CODE BLOCKS */
+pre {
   background: rgba(26, 26, 46, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 1.5rem;
   margin: 2rem 0;
   overflow-x: auto;
-  font-family: var(--font-geist-mono, 'SF Mono', 'Monaco', 'Consolas', monospace);
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
   font-size: 0.875rem;
   line-height: 1.6;
-  position: relative;
   backdrop-filter: blur(10px);
 }
 
-.markdown-content .markdown-code-block code {
+pre code {
   background: transparent;
   padding: 0;
   border-radius: 0;
   color: #e0e0e0;
+  border: none;
 }
 
-.markdown-content .markdown-code-block[data-language]::before {
-  content: attr(data-language);
-  position: absolute;
-  top: 0.5rem;
-  right: 1rem;
-  font-size: 0.75rem;
-  color: rgba(224, 224, 224, 0.6);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Inline code */
-.markdown-content .markdown-inline-code {
+/* INLINE CODE */
+code {
   background: rgba(255, 255, 255, 0.1);
   color: #e0e0e0;
   padding: 0.2em 0.4em;
   border-radius: 4px;
-  font-family: var(--font-geist-mono, 'SF Mono', 'Monaco', 'Consolas', monospace);
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
   font-size: 0.875em;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Lists */
-.markdown-content ul,
-.markdown-content ol {
+/* LISTS */
+ul, ol {
   margin: 1.5rem 0;
   padding-left: 2rem;
   color: rgba(224, 224, 224, 0.9);
 }
 
-.markdown-content ul {
+ul {
   list-style-type: disc;
 }
 
-.markdown-content ol {
+ol {
   list-style-type: decimal;
 }
 
-.markdown-content li {
+li {
   margin-bottom: 0.5rem;
   line-height: 1.6;
 }
 
-.markdown-content li::marker {
+li::marker {
   color: #3a388e;
 }
 
-.markdown-content li > ul,
-.markdown-content li > ol {
+ul ul {
+  list-style-type: circle;
   margin: 0.5rem 0;
 }
 
-/* Nested list styles */
-.markdown-content ul ul {
-  list-style-type: circle;
-}
-
-.markdown-content ul ul ul {
+ul ul ul {
   list-style-type: square;
 }
 
-/* Blockquotes */
-.markdown-content blockquote {
+/* BLOCKQUOTES */
+blockquote {
   border-left: 4px solid #3a388e;
   background: rgba(255, 255, 255, 0.05);
   margin: 2rem 0;
@@ -220,7 +223,7 @@
   position: relative;
 }
 
-.markdown-content blockquote::before {
+blockquote::before {
   content: '"';
   font-size: 3rem;
   color: rgba(58, 56, 142, 0.3);
@@ -230,16 +233,16 @@
   line-height: 1;
 }
 
-.markdown-content blockquote p {
+blockquote p {
   margin-bottom: 0.5rem;
 }
 
-.markdown-content blockquote p:last-child {
+blockquote p:last-child {
   margin-bottom: 0;
 }
 
-/* Tables */
-.markdown-content table {
+/* TABLES */
+table {
   width: 100%;
   border-collapse: collapse;
   margin: 2rem 0;
@@ -248,34 +251,33 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.markdown-content th,
-.markdown-content td {
+th, td {
   padding: 0.75rem 1rem;
   text-align: left;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.markdown-content th {
+th {
   background: rgba(58, 56, 142, 0.2);
   font-weight: 600;
   color: #ffffff;
   border-bottom-color: rgba(255, 255, 255, 0.2);
 }
 
-.markdown-content td {
+td {
   color: rgba(224, 224, 224, 0.9);
 }
 
-.markdown-content tr:nth-child(even) {
+tr:nth-child(even) {
   background: rgba(255, 255, 255, 0.02);
 }
 
-.markdown-content tr:hover {
+tr:hover {
   background: rgba(255, 255, 255, 0.05);
 }
 
-/* Horizontal rule */
-.markdown-content hr {
+/* HORIZONTAL RULE */
+hr {
   border: none;
   height: 2px;
   background: linear-gradient(135deg, #3a388e 0%, #8d2f6a 50%, #4b4abd 100%);
@@ -284,19 +286,19 @@
   opacity: 0.6;
 }
 
-/* Strong and emphasis */
-.markdown-content .markdown-bold {
+/* EMPHASIS */
+strong, b {
   font-weight: 700;
   color: #ffffff;
 }
 
-.markdown-content .markdown-italic {
+em, i {
   font-style: italic;
   color: rgba(224, 224, 224, 0.95);
 }
 
-/* React visualization components */
-.markdown-content .markdown-visualization {
+/* VISUALIZATION COMPONENTS */
+div[id] {
   margin: 3rem 0;
   padding: 2rem;
   background: rgba(26, 26, 46, 0.4);
@@ -309,9 +311,10 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
+  text-align: center;
 }
 
-.markdown-content .markdown-visualization::before {
+div[id]::before {
   content: '';
   position: absolute;
   top: 0;
@@ -325,8 +328,8 @@
   pointer-events: none;
 }
 
-.markdown-content .markdown-visualization[data-component-id]::after {
-  content: 'Interactive Visualization: ' attr(data-component-id);
+div[id]::after {
+  content: 'Interactive Visualization: ' attr(id);
   position: absolute;
   top: 1rem;
   left: 1rem;
@@ -337,82 +340,7 @@
   z-index: 1;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .markdown-content {
-    font-size: 15px;
-  }
-
-  .markdown-content .markdown-h1 {
-    font-size: 2rem;
-  }
-
-  .markdown-content .markdown-h2 {
-    font-size: 1.75rem;
-  }
-
-  .markdown-content .markdown-h3 {
-    font-size: 1.375rem;
-  }
-
-  .markdown-content .markdown-h4 {
-    font-size: 1.125rem;
-  }
-
-  .markdown-content ul,
-  .markdown-content ol {
-    padding-left: 1.5rem;
-  }
-
-  .markdown-content .markdown-code-block {
-    padding: 1rem;
-    font-size: 0.8rem;
-  }
-
-  .markdown-content blockquote {
-    padding: 0.75rem 1rem;
-    margin: 1.5rem 0;
-  }
-
-  .markdown-content table {
-    font-size: 0.875rem;
-  }
-
-  .markdown-content th,
-  .markdown-content td {
-    padding: 0.5rem 0.75rem;
-  }
-
-  .markdown-content .markdown-visualization {
-    padding: 1rem;
-    min-height: 150px;
-  }
-}
-
-@media (max-width: 480px) {
-  .markdown-content {
-    font-size: 14px;
-  }
-
-  .markdown-content .markdown-h1 {
-    font-size: 1.75rem;
-  }
-
-  .markdown-content .markdown-h2 {
-    font-size: 1.5rem;
-  }
-
-  .markdown-content .markdown-image {
-    margin: 1.5rem 0;
-  }
-
-  .markdown-content .markdown-code-block {
-    margin: 1.5rem 0;
-    overflow-x: scroll;
-  }
-}
-
-/* Animation keyframes */
+/* ANIMATION KEYFRAMES */
 @keyframes gradient-shift {
   0% {
     background-position: 0% 50%;
@@ -425,66 +353,147 @@
   }
 }
 
-/* Focus and accessibility */
-.markdown-content *:focus {
-  outline: 2px solid #3a388e;
-  outline-offset: 2px;
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  body, .markdown-preview, .content-editor {
+    font-size: 15px;
+    padding: 15px;
+  }
+
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.375rem; }
+  h4 { font-size: 1.125rem; }
+
+  ul, ol {
+    padding-left: 1.5rem;
+  }
+
+  pre {
+    padding: 1rem;
+    font-size: 0.8rem;
+  }
+
+  blockquote {
+    padding: 0.75rem 1rem;
+    margin: 1.5rem 0;
+  }
+
+  table {
+    font-size: 0.875rem;
+  }
+
+  th, td {
+    padding: 0.5rem 0.75rem;
+  }
+
+  div[id] {
+    padding: 1rem;
+    min-height: 150px;
+  }
 }
 
-/* Print styles */
+@media (max-width: 480px) {
+  body, .markdown-preview, .content-editor {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.5rem; }
+
+  img {
+    margin: 1.5rem 0;
+  }
+
+  pre {
+    margin: 1.5rem 0;
+    overflow-x: scroll;
+  }
+}
+
+/* UTILITY CLASSES */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+/* PRINT STYLES */
 @media print {
-  .markdown-content {
+  body, .markdown-preview, .content-editor {
     color: #000000;
     font-size: 12pt;
     line-height: 1.4;
+    background: white;
   }
 
-  .markdown-content .markdown-heading {
+  h1, h2, h3, h4, h5, h6 {
     color: #000000;
     background: none;
     -webkit-text-fill-color: initial;
   }
 
-  .markdown-content .markdown-link {
+  a {
     color: #0000EE;
     text-decoration: underline;
   }
 
-  .markdown-content .markdown-code-block {
+  pre {
     background: #f5f5f5;
     border: 1px solid #cccccc;
   }
 
-  .markdown-content blockquote {
+  blockquote {
     border-left-color: #666666;
     background: #f9f9f9;
     color: #333333;
   }
 }
 
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .markdown-content {
-    color: #ffffff;
-  }
-
-  .markdown-content .markdown-heading {
-    color: #ffffff;
-    background: none;
-    -webkit-text-fill-color: initial;
-  }
-
-  .markdown-content .markdown-link {
-    color: #00ffff;
-  }
-
-  .markdown-content .markdown-code-block {
-    background: #000000;
-    border-color: #ffffff;
-  }
-
-  .markdown-content .markdown-inline-code {
-    background: #000000;
-    border-color: #ffffff;
-  }
-}
+/*
+ * CONTENT DEVELOPER GUIDELINES:
+ *
+ * 1. HEADINGS: Use # for main title, ## for sections, ### for subsections
+ *    Example: # Main Title
+ *             ## Section Title
+ *             ### Subsection Title
+ *
+ * 2. IMAGES: Use HTML img tags with Cloudinary URLs
+ *    Example: <img src="https://res.cloudinary.com/your-account/image/upload/v123456/image.jpg"/>
+ *
+ * 3. VISUALIZATIONS: Use div with unique ID for React components
+ *    Example: <div id="MyVisualizationComponent"></div>
+ *
+ * 4. CODE: Use triple backticks for code blocks with language specification
+ *    Example: ```python
+ *             print("Hello World")
+ *             ```
+ *
+ * 5. LINKS: Use standard markdown or HTML
+ *    Example: [Link text](https://example.com) or <a href="https://example.com">Link text</a>
+ *
+ * 6. EMPHASIS: Use **bold** and *italic* for emphasis
+ *
+ * 7. LISTS: Use - for unordered lists, 1. for ordered lists
+ *
+ * 8. BLOCKQUOTES: Use > for quotes
+ *    Example: > This is a quote
+ *
+ * 9. TABLES: Use standard markdown table syntax
+ *    Example: | Column 1 | Column 2 |
+ *             |----------|----------|
+ *             | Cell 1   | Cell 2   |
+ *
+ * 10. KEEP IT SIMPLE: Focus on content, the styling is handled automatically
+ */

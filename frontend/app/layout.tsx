@@ -17,6 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('http://localhost:3000'),
   title: "ML Visualization | The AI Society at ASU",
   description: "Master artificial intelligence through interactive visualizations and hands-on projects. Join ASU's premier AI learning platform powered by The AI Society.",
   keywords: ["AI", "Machine Learning", "Deep Learning", "ASU", "Arizona State University", "The AI Society", "AI Education", "AI Visualization"],
