@@ -1,4 +1,5 @@
 // API client functions for fetching learning data from MongoDB
+import { normalizeMarkdownContent } from './markdown-utils';
 
 const API_BASE_URL = '/api';
 
@@ -91,7 +92,7 @@ export function transformModulesToUIFormat(modules: LearnModule[]): any[] {
 export function transformModuleToModelFormat(module: LearnModule): any {
   return {
     title: module.title || '',
-    content: module.content || '',
+    content: normalizeMarkdownContent(module.content || ''),
     description: module.description || '',
     imgPath: module.thumbnail || '',
     actionButtons: module.action_buttions || []

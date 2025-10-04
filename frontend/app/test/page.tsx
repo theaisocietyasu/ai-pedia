@@ -147,7 +147,7 @@ print(f"Intercept: {model.intercept_:.2f}")
 |---------|---------|----------------|
 | **MSE** | $\\frac{1}{n}\\sum_{i=1}^{n}(y_i - \\hat{y_i})^2$ | Average squared difference |
 | **RMSE** | $\\sqrt{\\frac{1}{n}\\sum_{i=1}^{n}(y_i - \\hat{y_i})^2}$ | Same units as target variable |
-| **MAE** | $\\frac{1}{n}\\sum_{i=1}^{n}|y_i - \\hat{y_i}|$ | Average absolute difference |
+| **MAE** | $\\frac{1}{n}\\sum_{i=1}^{n}\\|y_i - \\hat{y_i}\\|$ | Average absolute difference |
 | **R²** | $1 - \\frac{SS_{res}}{SS_{tot}}$ | Proportion of variance explained |
 
 <div id="VZ-model-evaluation" data-placeholder="Model Performance Metrics Dashboard"></div>

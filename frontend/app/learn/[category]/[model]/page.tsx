@@ -7,6 +7,8 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import MarkdownRenderer from "@/components/MarkdownRenderer"
+import TableOfContents from "@/components/TableOfContents"
+import { extractHeadings, Heading } from "@/lib/markdown-utils"
 
 
 
@@ -17,6 +19,7 @@ export default function AlgorithmPage() {
   const [model, setModel] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [headings, setHeadings] = useState<Heading[]>([])
 
   // Load model data
   useEffect(() => {
@@ -26,7 +29,18 @@ export default function AlgorithmPage() {
       try {
         setLoading(true);
         const modelData = await getModelData(modelSlug);
+
+        // Debug logging (temporary)
+        console.log('📊 Content sample:', modelData.content?.substring(0, 300));
+        console.log('🔍 Checking for formulas:', modelData.content?.match(/\$[^$]+\$/g)?.slice(0, 3));
+
         setModel(modelData);
+
+        // Extract headings from markdown content
+        if (modelData.content) {
+          const extractedHeadings = extractHeadings(modelData.content);
+          setHeadings(extractedHeadings);
+        }
       } catch (err) {
         console.error(`Error loading model data for ${modelSlug}:`, err);
         setError(`Failed to load model data. Please try again later.`);
@@ -156,32 +170,36 @@ export default function AlgorithmPage() {
             </motion.div>
           </main>
 
-          {/* Sidebar - Simplified for markdown content */}
-          <div className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
-            <h3 className="font-semibold mb-3 text-gray-200">Quick Navigation</h3>
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="text-sm font-medium transition-colors py-1 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
-            >
-              Back to Top
-            </button>
-            {model.images && model.images.length > 0 && (
-              <button
-                onClick={() => document.querySelector('section:nth-of-type(2)')?.scrollIntoView({ behavior: 'smooth' })}
-                className="text-sm font-medium transition-colors py-1 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
-              >
-                Images
-              </button>
+          {/* Sidebar - Table of Contents */}
+          <aside className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
+            <TableOfContents headings={headings} />
+
+            {/* Additional navigation items */}
+            {(model.images?.length > 0 || model.code_blocks?.length > 0) && (
+              <>
+                <div className="border-t border-gray-700 mt-4 pt-4" />
+                <h3 className="font-semibold mb-2 text-gray-200 text-sm uppercase tracking-wide">
+                  Additional Sections
+                </h3>
+                {model.images && model.images.length > 0 && (
+                  <button
+                    onClick={() => document.querySelector('section:nth-of-type(2)')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
+                  >
+                    📷 Images
+                  </button>
+                )}
+                {model.code_blocks && model.code_blocks.length > 0 && (
+                  <button
+                    onClick={() => document.querySelector('section:nth-of-type(3)')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
+                  >
+                    💻 Code Examples
+                  </button>
+                )}
+              </>
             )}
-            {model.code_blocks && model.code_blocks.length > 0 && (
-              <button
-                onClick={() => document.querySelector('section:nth-of-type(3)')?.scrollIntoView({ behavior: 'smooth' })}
-                className="text-sm font-medium transition-colors py-1 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
-              >
-                Code Examples
-              </button>
-            )}
-          </div>
+          </aside>
         </div>
       </div>
     </div>
