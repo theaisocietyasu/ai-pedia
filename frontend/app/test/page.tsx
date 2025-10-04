@@ -1,12 +1,13 @@
 'use client'
 import React, { useState } from 'react';
-import { 
-  SignedIn, 
+import {
+  SignedIn,
   SignedOut,
   SignIn,
 } from '@clerk/nextjs'
 import { shadesOfPurple, dark } from '@clerk/themes';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
+import { ImageUploadButton } from '@/components/ImageUploadButton';
 
 export default function TestPage() {
   const initialMarkdown = `# Understanding Linear Regression: From Theory to Practice
@@ -225,7 +226,12 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
                   </div>
                 </div>
               </div>
-              
+
+              {/* Image Upload Section */}
+              <div className="border-b border-gray-800 px-4 py-3 bg-background/50">
+                <ImageUploadButton />
+              </div>
+
               {/* Text Editor */}
               <div className="flex-1 relative editor-container">
                 <textarea

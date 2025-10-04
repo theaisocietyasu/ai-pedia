@@ -97,3 +97,37 @@ export function transformModuleToModelFormat(module: LearnModule): any {
     actionButtons: module.action_buttions || []
   };
 }
+
+// Image upload response type
+export interface ImageUploadResponse {
+  success: boolean;
+  imageId: string;
+  url: string;
+  author: {
+    id: string;
+    name: string;
+  };
+}
+
+// Upload image to GridFS
+export async function uploadImage(file: File): Promise<ImageUploadResponse> {
+  try {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const response = await fetch(`${API_BASE_URL}/upload/image`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Failed to upload image: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw error;
+  }
+}
