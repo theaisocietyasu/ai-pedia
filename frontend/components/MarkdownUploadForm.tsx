@@ -4,6 +4,7 @@ import React, { useState, useRef } from 'react';
 import { CategorySelector } from './CategorySelector';
 import { Button } from '@/components/ui/button';
 import { uploadLearnModule } from '@/lib/api';
+import { invalidateModulesCache } from '@/app/learn/categories';
 
 interface ActionButton {
   name: string;
@@ -131,6 +132,9 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
 
       const result = await uploadLearnModule(uploadData);
       
+      // Invalidate caches for selected categories (slugs)
+      formData.categories.forEach((slug) => invalidateModulesCache(slug));
+
       // Clear form on success
       setFormData({
         title: '',

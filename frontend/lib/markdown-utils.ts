@@ -97,12 +97,13 @@ export interface Heading {
  * Converts text to lowercase, removes special chars, replaces spaces with hyphens
  */
 export function slugify(text: string): string {
+  // Deprecated for headings: kept for backward compatibility in other places
   return text
     .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
+    .replace(/[^a-z0-9\s-]/g, '')
     .trim()
-    .replace(/\s+/g, '-') // Replace spaces with hyphens
-    .replace(/-+/g, '-'); // Replace multiple hyphens with single hyphen
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
 }
 
 /**
@@ -128,7 +129,11 @@ export function extractHeadings(markdown: string): Heading[] {
     const text = match[2].trim();
 
     // Generate unique ID
-    let baseId = slugify(text);
+  // Use heading-specific slugification to match renderer ids
+  // We import lazily to avoid circular deps in some bundlers
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { slugifyHeading } = require('./slug');
+  let baseId = slugifyHeading(text);
     headingCounts[baseId] = (headingCounts[baseId] || 0) + 1;
     const id = headingCounts[baseId] > 1 ? `${baseId}-${headingCounts[baseId] - 1}` : baseId;
 

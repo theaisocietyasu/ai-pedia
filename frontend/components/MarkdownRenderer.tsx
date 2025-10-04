@@ -4,7 +4,7 @@ import remarkMath from 'remark-math';
 import remarkGfm from 'remark-gfm';
 import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
-import { slugify } from '@/lib/markdown-utils';
+import { slugifyHeading } from '@/lib/slug';
 
 interface MarkdownRendererProps {
   content: string;
@@ -21,17 +21,17 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
           // Enhanced heading handling with IDs for scroll navigation
           h1: ({ node, children, ...props }: any) => {
             const text = children?.toString() || '';
-            const id = slugify(text);
+            const id = slugifyHeading(text);
             return <h1 id={id} {...props}>{children}</h1>;
           },
           h2: ({ node, children, ...props }: any) => {
             const text = children?.toString() || '';
-            const id = slugify(text);
+            const id = slugifyHeading(text);
             return <h2 id={id} {...props}>{children}</h2>;
           },
           h3: ({ node, children, ...props }: any) => {
             const text = children?.toString() || '';
-            const id = slugify(text);
+            const id = slugifyHeading(text);
             return <h3 id={id} {...props}>{children}</h3>;
           },
           // Custom component for handling VZ- divs

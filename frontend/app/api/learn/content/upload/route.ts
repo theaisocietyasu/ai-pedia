@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { MongoClient } from 'mongodb';
 import { auth } from '@clerk/nextjs/server';
 import { uploadImageToGridFS } from '@/lib/gridfs';
+import { slugifyCategory } from '@/lib/slug';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ml-visualization';
 const LEARN_COLLECTION = process.env.LEARN_COLLECTION_NAME || 'learn_content';
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Parse categories
+    // Parse categories (accept names or slugs)
     let categories: string[];
     try {
       categories = JSON.parse(categoriesString);
@@ -90,11 +91,52 @@ export async function POST(request: NextRequest) {
     
     const db = client.db();
     const collection = db.collection(LEARN_COLLECTION);
+    const categoriesCollection = db.collection(process.env.CATEGORIES_COLLECTION_NAME || 'learn_categories');
+
+    // Normalize incoming categories to slugs and validate existance
+    const normalizedCategorySlugs: string[] = [];
+    for (const cat of categories) {
+      const slug = slugifyCategory(cat);
+      const existing = await categoriesCollection.findOne({
+        $or: [
+          { name: cat },
+          { name: new RegExp(`^${cat}$`, 'i') }
+        ]
+      });
+
+      // If not found by name, try matching by slug computed from name field
+      let valid = existing;
+      if (!existing) {
+        const bySlug = await categoriesCollection.findOne({
+          $expr: {
+            $eq: [
+              {
+                $replaceAll: {
+                  input: { $toLower: { $trim: { input: '$name' } } },
+                  find: ' ',
+                  replacement: '-'
+                }
+              },
+              slug
+            ]
+          }
+        });
+        valid = bySlug;
+      }
+
+      if (!valid) {
+        return NextResponse.json(
+          { error: `Unknown category: ${cat}` },
+          { status: 400 }
+        );
+      }
+      normalizedCategorySlugs.push(slug);
+    }
 
     // Create the learn module document
     const learnModule = {
       title: title.trim(),
-      categories: categories,
+      categories: normalizedCategorySlugs,
       content: content,
       thumbnail: thumbnailUrl,
       description: description.trim(),

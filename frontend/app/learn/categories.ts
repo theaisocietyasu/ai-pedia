@@ -39,6 +39,13 @@ export async function getModulesForCategory(category: string) {
   }
 }
 
+// Invalidate modules cache for a given category slug
+export function invalidateModulesCache(category: string) {
+  if (modulesCache[category]) {
+    delete modulesCache[category];
+  }
+}
+
 // Legacy export for backward compatibility - this will be populated dynamically
 export const categories = {};
 

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { fetchAllCategories } from '@/lib/api';
+import { slugifyCategory } from '@/lib/slug';
 
 interface Category {
   _id: string;
@@ -11,6 +12,7 @@ interface Category {
 }
 
 interface CategorySelectorProps {
+  // selected categories are slugs
   selectedCategories: string[];
   onCategoriesChange: (categories: string[]) => void;
   className?: string;
@@ -59,12 +61,13 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
   }, []);
 
   const handleCategoryToggle = (categoryName: string) => {
-    const isSelected = selectedCategories.includes(categoryName);
+    const slug = slugifyCategory(categoryName);
+    const isSelected = selectedCategories.includes(slug);
     
     if (isSelected) {
-      onCategoriesChange(selectedCategories.filter(cat => cat !== categoryName));
+      onCategoriesChange(selectedCategories.filter(cat => cat !== slug));
     } else {
-      onCategoriesChange([...selectedCategories, categoryName]);
+      onCategoriesChange([...selectedCategories, slug]);
     }
   };
 
@@ -120,15 +123,15 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
       {/* Selected Categories Display */}
       {selectedCategories.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-2">
-          {selectedCategories.map(categoryName => (
+          {selectedCategories.map(slug => (
             <span
-              key={categoryName}
+              key={slug}
               className="inline-flex items-center px-3 py-1 bg-purple/20 text-purple-300 rounded-full text-sm"
             >
-              {categoryName}
+              {categories.find(c => slugifyCategory(c.name) === slug)?.name || slug}
               <button
                 type="button"
-                onClick={() => handleCategoryToggle(categoryName)}
+                onClick={() => handleCategoryToggle(categories.find(c => slugifyCategory(c.name) === slug)?.name || slug)}
                 className="ml-2 hover:text-purple-100"
               >
                 ×
@@ -155,7 +158,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
                 <div className="ml-3">
                   <input
                     type="checkbox"
-                    checked={selectedCategories.includes(category.name)}
+                    checked={selectedCategories.includes(slugifyCategory(category.name))}
                     onChange={() => {}} // Handled by parent div click
                     className="w-4 h-4 text-purple bg-gray-700 border-gray-600 rounded focus:ring-purple focus:ring-2"
                   />

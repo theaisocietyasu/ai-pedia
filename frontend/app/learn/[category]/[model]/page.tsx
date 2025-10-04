@@ -40,6 +40,23 @@ export default function AlgorithmPage() {
         if (modelData.content) {
           const extractedHeadings = extractHeadings(modelData.content);
           setHeadings(extractedHeadings);
+          
+          // Fallback: after first paint, if no headings were extracted, scan DOM
+          // for heading elements with ids and construct headings list
+          setTimeout(() => {
+            if (extractedHeadings.length === 0) {
+              const domHeadings = Array.from(document.querySelectorAll('h2[id], h3[id], h4[id]')) as HTMLElement[];
+              if (domHeadings.length > 0) {
+                const fallback = domHeadings.map((el) => ({
+                  id: el.id,
+                  text: el.textContent || '',
+                  level: Number(el.tagName.substring(1)),
+                  children: []
+                }));
+                setHeadings(fallback);
+              }
+            }
+          }, 0);
         }
       } catch (err) {
         console.error(`Error loading model data for ${modelSlug}:`, err);
