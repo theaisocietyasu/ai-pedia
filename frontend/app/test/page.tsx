@@ -8,8 +8,14 @@ import {
 import { shadesOfPurple, dark } from '@clerk/themes';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import { ImageUploadButton } from '@/components/ImageUploadButton';
+import { MarkdownUploadForm } from '@/components/MarkdownUploadForm';
+import { useRouter } from 'next/navigation';
 
 export default function TestPage() {
+  const router = useRouter();
+  const [mode, setMode] = useState<'preview' | 'upload'>('preview');
+  const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
+  
   const initialMarkdown = `# Understanding Linear Regression: From Theory to Practice
 
 Linear regression is one of the most fundamental and widely used statistical techniques in data science and machine learning. Despite its simplicity, it forms the backbone of many advanced algorithms and provides crucial insights into the relationships between variables.
@@ -176,6 +182,17 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
 
   const [markdown, setMarkdown] = useState(initialMarkdown);
 
+  const handleUploadSuccess = (moduleId: string) => {
+    setUploadSuccess(moduleId);
+    // Show success message for a few seconds, then redirect
+    setTimeout(() => {
+      // You can redirect to the new module page here
+      // For now, just clear the success state and switch back to preview mode
+      setUploadSuccess(null);
+      setMode('preview');
+    }, 3000);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <SignedOut>
@@ -196,49 +213,81 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
               <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent mr-8">
                 Markdown Editor & Preview
               </h1>
-              {/* Search Bar (if present) */}
-              <div className="flex-1 flex items-center">
-                {/* Insert search bar here if you have one, e.g. <SearchBar /> */}
-                {/* ...existing code... */}
+              {/* Mode Toggle */}
+              <div className="flex items-center gap-4 ml-auto">
+                <div className="flex bg-gray-800 rounded-lg p-1 border border-gray-700">
+                  <button
+                    onClick={() => setMode('preview')}
+                    className={`px-4 py-2 text-sm rounded-md transition-colors ${
+                      mode === 'preview'
+                        ? 'bg-purple text-white'
+                        : 'text-gray-400 hover:text-gray-200'
+                    }`}
+                  >
+                    👁️ Preview Mode
+                  </button>
+                  <button
+                    onClick={() => setMode('upload')}
+                    className={`px-4 py-2 text-sm rounded-md transition-colors ${
+                      mode === 'upload'
+                        ? 'bg-purple text-white'
+                        : 'text-gray-400 hover:text-gray-200'
+                    }`}
+                  >
+                    📚 Upload Mode
+                  </button>
+                </div>
               </div>
             </div>
           </header>
           <p className="text-gray-400 mt-1 px-6">
-            Edit markdown on the left and see the live preview on the right
+            {mode === 'preview' 
+              ? 'Edit markdown on the left and see the live preview on the right'
+              : 'Upload your markdown as a learning module'
+            }
           </p>
         </div>
 
+        {/* Success Message */}
+        {uploadSuccess && (
+          <div className="bg-green-900/20 border border-green-500 text-green-400 px-6 py-4">
+            ✅ Learning module uploaded successfully! Module ID: {uploadSuccess}
+          </div>
+        )}
+
         {/* Editor Layout */}
-        <div className="flex h-[calc(100vh-120px)]">
-          {/* Editor Panel */}
-          <div className="w-1/2 border-r border-gray-800 bg-dark-gray split-separator">
-            <div className="h-full flex flex-col">
-              {/* Editor Header */}
-              <div className="border-b border-gray-800 px-4 py-2 bg-background">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-medium text-gray-300">
-                    📝 Markdown Editor
-                  </h2>
-                  <div className="flex items-center space-x-4 text-xs text-gray-500">
-                    <span>Lines: {markdown.split('\n').length}</span>
-                    <span>Words: {markdown.split(/\s+/).filter(word => word.length > 0).length}</span>
-                    <span>Chars: {markdown.length}</span>
+        <div className="flex h-[calc(100vh-160px)]">
+          {mode === 'preview' ? (
+            <>
+              {/* Editor Panel */}
+              <div className="w-1/2 border-r border-gray-800 bg-dark-gray split-separator">
+                <div className="h-full flex flex-col">
+                  {/* Editor Header */}
+                  <div className="border-b border-gray-800 px-4 py-2 bg-background">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-sm font-medium text-gray-300">
+                        📝 Markdown Editor
+                      </h2>
+                      <div className="flex items-center space-x-4 text-xs text-gray-500">
+                        <span>Lines: {markdown.split('\n').length}</span>
+                        <span>Words: {markdown.split(/\s+/).filter(word => word.length > 0).length}</span>
+                        <span>Chars: {markdown.length}</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              {/* Image Upload Section */}
-              <div className="border-b border-gray-800 px-4 py-3 bg-background/50">
-                <ImageUploadButton />
-              </div>
+                  {/* Image Upload Section */}
+                  <div className="border-b border-gray-800 px-4 py-3 bg-background/50">
+                    <ImageUploadButton />
+                  </div>
 
-              {/* Text Editor */}
-              <div className="flex-1 relative editor-container">
-                <textarea
-                  value={markdown}
-                  onChange={(e) => setMarkdown(e.target.value)}
-                  className="editor-textarea w-full h-full p-4 text-sm"
-                  placeholder={`Type your markdown here...
+                  {/* Text Editor */}
+                  <div className="flex-1 relative editor-container">
+                    <textarea
+                      value={markdown}
+                      onChange={(e) => setMarkdown(e.target.value)}
+                      className="editor-textarea w-full h-full p-4 text-sm"
+                      placeholder={`Type your markdown here...
 
     Try these examples:
     # Heading
@@ -253,79 +302,125 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
     $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
 
     <div id="VZ-example" data-placeholder="Your Interactive Viz"></div>`}
-                  spellCheck={false}
-                />
-                
-                {/* Editor Guidelines Overlay */}
-                <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm rounded-lg p-3 text-xs text-gray-400 max-w-xs opacity-60 hover:opacity-100 transition-opacity pointer-events-auto">
-                  <div className="font-medium mb-2 text-blue-purple">✨ Quick Reference</div>
-                  <div className="space-y-1 font-mono">
-                    <div># Heading 1</div>
-                    <div>## Heading 2</div>
-                    <div>**bold** *italic*</div>
-                    <div>`inline code`</div>
-                    <div>```python</div>
-                    <div>code block</div>
-                    <div>```</div>
-                    <div>$$math equation$$</div>
-                    <div className="text-purple-300">&lt;div id="VZ-name"&gt;&lt;/div&gt;</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Preview Panel */}
-          <div className="w-1/2 bg-background">
-            <div className="h-full flex flex-col">
-              {/* Preview Header */}
-              <div className="border-b border-gray-800 px-4 py-2 bg-dark-gray">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-medium text-gray-300">
-                    👁️ Live Preview
-                  </h2>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => setMarkdown(initialMarkdown)}
-                      className="px-3 py-1 text-xs bg-purple/20 text-purple-300 rounded border border-purple/30 hover:bg-purple/30 transition-colors"
-                    >
-                      🔄 Reset Example
-                    </button>
-                    <button
-                      onClick={() => setMarkdown('')}
-                      className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-600 transition-colors"
-                    >
-                      🗑️ Clear All
-                    </button>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Preview Content */}
-              <div className="flex-1 overflow-y-auto preview-container">
-                {markdown.trim() ? (
-                  <MarkdownRenderer content={markdown} />
-                ) : (
-                  <div className="flex items-center justify-center h-full text-gray-500">
-                    <div className="text-center max-w-md">
-                      <div className="text-6xl mb-4">📝✨</div>
-                      <div className="text-lg mb-2 text-gray-400">No content to preview</div>
-                      <div className="text-sm text-gray-500 leading-relaxed">
-                        Start typing markdown in the editor to see the live preview.
-                        Try headings, code blocks, math equations, and VZ components!
-                      </div>
-                      <div className="mt-4 p-3 bg-purple/10 border border-purple/20 rounded-lg text-left">
-                        <div className="text-xs text-purple-300 font-medium mb-1">💡 Pro Tip:</div>
-                        <div className="text-xs text-gray-400">
-                          Use the "Reset Example" button to load a full sample with all supported features
-                        </div>
+                      spellCheck={false}
+                    />
+                    
+                    {/* Editor Guidelines Overlay */}
+                    <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm rounded-lg p-3 text-xs text-gray-400 max-w-xs opacity-60 hover:opacity-100 transition-opacity pointer-events-auto">
+                      <div className="font-medium mb-2 text-blue-purple">✨ Quick Reference</div>
+                      <div className="space-y-1 font-mono">
+                        <div># Heading 1</div>
+                        <div>## Heading 2</div>
+                        <div>**bold** *italic*</div>
+                        <div>`inline code`</div>
+                        <div>```python</div>
+                        <div>code block</div>
+                        <div>```</div>
+                        <div>$$math equation$$</div>
+                        <div className="text-purple-300">&lt;div id="VZ-name"&gt;&lt;/div&gt;</div>
                       </div>
                     </div>
                   </div>
-                )}
+                </div>
+              </div>
+
+              {/* Preview Panel */}
+              <div className="w-1/2 bg-background">
+                <div className="h-full flex flex-col">
+                  {/* Preview Header */}
+                  <div className="border-b border-gray-800 px-4 py-2 bg-dark-gray">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-sm font-medium text-gray-300">
+                        👁️ Live Preview
+                      </h2>
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => setMarkdown(initialMarkdown)}
+                          className="px-3 py-1 text-xs bg-purple/20 text-purple-300 rounded border border-purple/30 hover:bg-purple/30 transition-colors"
+                        >
+                          🔄 Reset Example
+                        </button>
+                        <button
+                          onClick={() => setMarkdown('')}
+                          className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-600 transition-colors"
+                        >
+                          🗑️ Clear All
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Preview Content */}
+                  <div className="flex-1 overflow-y-auto preview-container">
+                    {markdown.trim() ? (
+                      <MarkdownRenderer content={markdown} />
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-gray-500">
+                        <div className="text-center max-w-md">
+                          <div className="text-6xl mb-4">📝✨</div>
+                          <div className="text-lg mb-2 text-gray-400">No content to preview</div>
+                          <div className="text-sm text-gray-500 leading-relaxed">
+                            Start typing markdown in the editor to see the live preview.
+                            Try headings, code blocks, math equations, and VZ components!
+                          </div>
+                          <div className="mt-4 p-3 bg-purple/10 border border-purple/20 rounded-lg text-left">
+                            <div className="text-xs text-purple-300 font-medium mb-1">💡 Pro Tip:</div>
+                            <div className="text-xs text-gray-400">
+                              Use the "Reset Example" button to load a full sample with all supported features
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            /* Upload Mode */
+            <div className="w-full bg-background">
+              <div className="h-full flex">
+                {/* Upload Form Panel */}
+                <div className="w-1/2 border-r border-gray-800 overflow-y-auto">
+                  <div className="p-6">
+                    <MarkdownUploadForm
+                      markdownContent={markdown}
+                      onUploadSuccess={handleUploadSuccess}
+                    />
+                  </div>
+                </div>
+                
+                {/* Content Preview Panel */}
+                <div className="w-1/2 bg-background">
+                  <div className="h-full flex flex-col">
+                    {/* Preview Header */}
+                    <div className="border-b border-gray-800 px-4 py-2 bg-dark-gray">
+                      <h2 className="text-sm font-medium text-gray-300">
+                        👁️ Content Preview
+                      </h2>
+                    </div>
+                    
+                    {/* Preview Content */}
+                    <div className="flex-1 overflow-y-auto preview-container">
+                      {markdown.trim() ? (
+                        <MarkdownRenderer content={markdown} />
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-gray-500">
+                          <div className="text-center max-w-md">
+                            <div className="text-6xl mb-4">📚✨</div>
+                            <div className="text-lg mb-2 text-gray-400">No content to upload</div>
+                            <div className="text-sm text-gray-500 leading-relaxed">
+                              Switch to Preview Mode to create content, then return here to upload it as a learning module.
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </SignedIn>
     </div>

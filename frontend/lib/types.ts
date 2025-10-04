@@ -90,3 +90,20 @@ export interface AnimationVariant {
   visible: object
   exit?: object
 }
+
+// learn module upload types
+export interface UploadFormData {
+  title: string;
+  description: string;
+  categories: string[];
+  content: string;
+  thumbnail: File;
+  action_buttons?: Array<{ name: string; link: string }>;
+}
+
+export interface UploadResponse {
+  success: boolean;
+  id: string;
+  message: string;
+  module: any;
+}
