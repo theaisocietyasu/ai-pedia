@@ -4,9 +4,11 @@ import { useParams } from "next/navigation"
 import { getModelData } from "../../categories"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
-import ReactMarkdown from "react-markdown"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import MarkdownRenderer from "@/components/MarkdownRenderer"
+import TableOfContents from "@/components/TableOfContents"
+import { extractHeadings, Heading } from "@/lib/markdown-utils"
 
 
 
@@ -17,6 +19,7 @@ export default function AlgorithmPage() {
   const [model, setModel] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [headings, setHeadings] = useState<Heading[]>([])
 
   // Load model data
   useEffect(() => {
@@ -26,7 +29,35 @@ export default function AlgorithmPage() {
       try {
         setLoading(true);
         const modelData = await getModelData(modelSlug);
+
+        // Debug logging (temporary)
+        console.log('📊 Content sample:', modelData.content?.substring(0, 300));
+        console.log('🔍 Checking for formulas:', modelData.content?.match(/\$[^$]+\$/g)?.slice(0, 3));
+
         setModel(modelData);
+
+        // Extract headings from markdown content
+        if (modelData.content) {
+          const extractedHeadings = extractHeadings(modelData.content);
+          setHeadings(extractedHeadings);
+          
+          // Fallback: after first paint, if no headings were extracted, scan DOM
+          // for heading elements with ids and construct headings list
+          setTimeout(() => {
+            if (extractedHeadings.length === 0) {
+              const domHeadings = Array.from(document.querySelectorAll('h2[id], h3[id], h4[id]')) as HTMLElement[];
+              if (domHeadings.length > 0) {
+                const fallback = domHeadings.map((el) => ({
+                  id: el.id,
+                  text: el.textContent || '',
+                  level: Number(el.tagName.substring(1)),
+                  children: []
+                }));
+                setHeadings(fallback);
+              }
+            }
+          }, 0);
+        }
       } catch (err) {
         console.error(`Error loading model data for ${modelSlug}:`, err);
         setError(`Failed to load model data. Please try again later.`);
@@ -107,67 +138,7 @@ export default function AlgorithmPage() {
           <main className="flex flex-col gap-16 w-full lg:w-3/4">
             {/* Markdown Content */}
             <section className="my-16 scroll-mt-24">
-              <div className="prose prose-invert max-w-none prose-headings:text-white prose-p:text-gray-300 prose-a:text-blue-400 prose-strong:text-white prose-code:text-pink-400 prose-pre:bg-gray-900 prose-blockquote:border-blue-400">
-                <ReactMarkdown
-                  components={{
-                    h1: ({ children }) => <h1 className="text-3xl font-bold text-white mb-4">{children}</h1>,
-                    h2: ({ children }) => <h2 className="text-2xl font-semibold text-white mb-3 mt-8">{children}</h2>,
-                    h3: ({ children }) => <h3 className="text-xl font-semibold text-white mb-2 mt-6">{children}</h3>,
-                    p: ({ children }) => <p className="text-gray-300 mb-4 leading-relaxed">{children}</p>,
-                    ul: ({ children }) => <ul className="list-disc list-inside text-gray-300 mb-4 space-y-1">{children}</ul>,
-                    ol: ({ children }) => <ol className="list-decimal list-inside text-gray-300 mb-4 space-y-1">{children}</ol>,
-                    li: ({ children }) => <li className="text-gray-300">{children}</li>,
-                    code: ({ children, className }) => {
-                      const isInline = !className;
-                      if (isInline) {
-                        return <code className="bg-gray-800 text-pink-400 px-1 py-0.5 rounded text-sm">{children}</code>;
-                      }
-                      return (
-                        <code className="block bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto text-sm">
-                          {children}
-                        </code>
-                      );
-                    },
-                    pre: ({ children }) => (
-                      <pre className="bg-gray-900 text-gray-300 p-4 rounded-lg overflow-x-auto mb-4">
-                        {children}
-                      </pre>
-                    ),
-                    blockquote: ({ children }) => (
-                      <blockquote className="border-l-4 border-blue-400 pl-4 italic text-gray-400 my-4">
-                        {children}
-                      </blockquote>
-                    ),
-                    a: ({ children, href }) => (
-                      <a href={href} className="text-blue-400 hover:text-blue-300 underline" target="_blank" rel="noopener noreferrer">
-                        {children}
-                      </a>
-                    ),
-                    img: ({ src, alt }) => (
-                      <img src={src} alt={alt} className="rounded-lg shadow-lg w-full my-4" />
-                    ),
-                    table: ({ children }) => (
-                      <div className="overflow-x-auto mb-4">
-                        <table className="min-w-full border-collapse border border-gray-600">
-                          {children}
-                        </table>
-                      </div>
-                    ),
-                    th: ({ children }) => (
-                      <th className="border border-gray-600 bg-gray-800 text-white px-4 py-2 text-left">
-                        {children}
-                      </th>
-                    ),
-                    td: ({ children }) => (
-                      <td className="border border-gray-600 text-gray-300 px-4 py-2">
-                        {children}
-                      </td>
-                    ),
-                  }}
-                >
-                  {model.content || 'No content available.'}
-                </ReactMarkdown>
-              </div>
+              <MarkdownRenderer content={model.content || 'No content available.'} />
             </section>
 
             {/* Images */}
@@ -216,32 +187,36 @@ export default function AlgorithmPage() {
             </motion.div>
           </main>
 
-          {/* Sidebar - Simplified for markdown content */}
-          <div className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
-            <h3 className="font-semibold mb-3 text-gray-200">Quick Navigation</h3>
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="text-sm font-medium transition-colors py-1 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
-            >
-              Back to Top
-            </button>
-            {model.images && model.images.length > 0 && (
-              <button
-                onClick={() => document.querySelector('section:nth-of-type(2)')?.scrollIntoView({ behavior: 'smooth' })}
-                className="text-sm font-medium transition-colors py-1 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
-              >
-                Images
-              </button>
+          {/* Sidebar - Table of Contents */}
+          <aside className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
+            <TableOfContents headings={headings} />
+
+            {/* Additional navigation items */}
+            {(model.images?.length > 0 || model.code_blocks?.length > 0) && (
+              <>
+                <div className="border-t border-gray-700 mt-4 pt-4" />
+                <h3 className="font-semibold mb-2 text-gray-200 text-sm uppercase tracking-wide">
+                  Additional Sections
+                </h3>
+                {model.images && model.images.length > 0 && (
+                  <button
+                    onClick={() => document.querySelector('section:nth-of-type(2)')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
+                  >
+                    📷 Images
+                  </button>
+                )}
+                {model.code_blocks && model.code_blocks.length > 0 && (
+                  <button
+                    onClick={() => document.querySelector('section:nth-of-type(3)')?.scrollIntoView({ behavior: 'smooth' })}
+                    className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
+                  >
+                    💻 Code Examples
+                  </button>
+                )}
+              </>
             )}
-            {model.code_blocks && model.code_blocks.length > 0 && (
-              <button
-                onClick={() => document.querySelector('section:nth-of-type(3)')?.scrollIntoView({ behavior: 'smooth' })}
-                className="text-sm font-medium transition-colors py-1 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
-              >
-                Code Examples
-              </button>
-            )}
-          </div>
+          </aside>
         </div>
       </div>
     </div>
