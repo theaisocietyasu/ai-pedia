@@ -54,26 +54,50 @@ export class MarkdownParser {
   }
 
   /**
-   * Parse headings and build table of contents
-   */
-  private static parseHeadings(html: string, toc: TocItem[]): string {
-    const headingRegex = /^(#{1,6})\s+(.+)$/gm
+ * Parse headings and build table of contents, ignoring code blocks
+ */
+private static parseHeadings(html: string, toc: TocItem[]): string {
+  const lines = html.split('\n')
+  let insideCodeBlock = false
+  const processedLines: string[] = []
 
-    return html.replace(headingRegex, (match, hashes, title) => {
-      const level = hashes.length
-      const id = this.generateHeadingId(title)
+  for (const line of lines) {
+    // Toggle code block state
+    if (line.trim().startsWith('```')) {
+      insideCodeBlock = !insideCodeBlock
+      processedLines.push(line)
+      continue
+    }
 
-      // Add to table of contents
-      toc.push({
-        id,
-        title: title.trim(),
-        level,
-        children: []
-      })
+    // Only process headings outside code blocks
+    if (!insideCodeBlock) {
+      const headingMatch = /^(#{1,6})\s+(.+)$/.exec(line)
+      if (headingMatch) {
+        const level = headingMatch[1].length
+        const title = headingMatch[2].trim()
+        const id = this.generateHeadingId(title)
 
-      return `<h${level} id="${id}" class="markdown-heading markdown-h${level}">${title.trim()}</h${level}>`
-    })
+        toc.push({
+          id,
+          title,
+          level,
+          children: [],
+        })
+
+        processedLines.push(
+          `<h${level} id="${id}" class="markdown-heading markdown-h${level}">${title}</h${level}>`
+        )
+        continue
+      }
+    }
+
+    // Keep other lines untouched
+    processedLines.push(line)
   }
+
+  return processedLines.join('\n')
+}
+
 
   /**
    * Parse images and preserve Cloudinary URLs

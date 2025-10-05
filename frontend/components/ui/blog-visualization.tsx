@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import { Play, Code, ExternalLink } from "lucide-react"
 import { Visualization, VISUALIZATION_COMPONENTS } from "../visualizations/visualization-registry"
 
+
 interface BlogVisualizationProps {
   componentId: string
   title?: string

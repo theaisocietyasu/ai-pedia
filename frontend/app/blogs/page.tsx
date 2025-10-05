@@ -9,6 +9,7 @@ import { blogCategories, getAllBlogs } from "@/lib/blog-data"
 import { BlogsClient } from "@/components/blogs/blogs-client"
 import type { LegacyBlogPost } from "@/lib/types"
 
+
 export default function BlogsPage() {
   const [blogs, setBlogs] = useState<LegacyBlogPost[]>([])
   const [error, setError] = useState<string | null>(null)

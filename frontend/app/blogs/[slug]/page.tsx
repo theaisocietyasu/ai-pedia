@@ -17,6 +17,7 @@ import { BlogCard } from "@/components/ui/blog-card"
 import { getBlogPost, getRelatedBlogs } from "@/lib/blog-data"
 import type { LegacyBlogPost } from "@/lib/types"
 
+
 interface BlogDetailPageProps {
   params: Promise<{
     slug: string
@@ -146,6 +147,7 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 height={600}
                 className="w-full h-auto object-cover"
                 priority
+                unoptimized
               />
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />

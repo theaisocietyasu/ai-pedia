@@ -7,6 +7,7 @@ import type { BlogContent as BlogContentType, TocItem } from "@/lib/types"
 import { BlogVisualization } from "./blog-visualization"
 import { MarkdownRenderer } from "./markdown-renderer"
 
+
 interface BlogContentProps {
   content: BlogContentType | string  // Support both legacy and new formats
   title: string

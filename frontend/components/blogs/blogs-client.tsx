@@ -6,6 +6,7 @@ import { Search } from "lucide-react"
 import { BlogCard } from "@/components/ui/blog-card"
 import type { LegacyBlogPost, BlogCategory } from "@/lib/types"
 
+
 interface BlogsClientProps {
   blogs: LegacyBlogPost[]
   blogCategories: BlogCategory[]

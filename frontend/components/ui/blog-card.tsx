@@ -8,6 +8,7 @@ import { Calendar, Clock, User, ArrowRight } from "lucide-react"
 import type { BlogPost, LegacyBlogPost } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
+
 interface BlogCardProps {
   blog: LegacyBlogPost | BlogPost
   index?: number
@@ -102,7 +103,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
                  right: '0'
                }}>
             <Image
-              src={blog.featuredImage}
+              src={blog.featuredImage || ''}
               alt=""
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -120,6 +121,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
                 transform: 'scale(1.02)',
                 transformOrigin: 'center'
               }}
+              unoptimized
             />
             
             {/* gradient overlay */}
@@ -180,7 +182,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
 
             {/* tags */}
             <div className="flex flex-wrap gap-2">
-              {blog.tags.slice(0, 3).map((tag, tagIndex) => (
+              {blog.tags?.slice(0, 3).map((tag, tagIndex) => (
                 <span
                   key={tag}
                   className="inline-flex items-center px-2 py-1 rounded-md text-xs
