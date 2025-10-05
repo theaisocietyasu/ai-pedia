@@ -194,7 +194,7 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className=" bg-background">
       <SignedOut>
         <div className="flex flex-col items-center justify-center min-h-screen bg-background px-4">
         <SignIn 
@@ -256,7 +256,7 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
         )}
 
         {/* Editor Layout */}
-        <div className="flex h-[calc(100vh-160px)]">
+        <div className="flex ">
           {mode === 'preview' ? (
             <>
               {/* Editor Panel */}
@@ -325,7 +325,7 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
               </div>
 
               {/* Preview Panel */}
-              <div className="w-1/2 bg-background">
+              <div className="w-1/2 -screen bg-background">
                 <div className="h-full flex flex-col">
                   {/* Preview Header */}
                   <div className="border-b border-gray-800 px-4 py-2 bg-dark-gray">
