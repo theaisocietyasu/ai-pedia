@@ -16,6 +16,7 @@
     "framer-motion": "^12.23.12",
     "katex": "^0.16.22",
     "lucide-react": "^0.542.0",
+    "mdast-util-to-string": "^4.0.0",
     "mongodb": "^6.20.0",
     "mongoose": "^8.18.2",
     "next": "15.5.2",
@@ -23,8 +24,11 @@
     "react-dom": "19.1.0",
     "react-markdown": "^10.1.0",
     "rehype-katex": "^7.0.1",
+    "rehype-slug": "^6.0.0",
+    "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+    "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
@@ -33,6 +37,6 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "5.9.3"
   }
 }

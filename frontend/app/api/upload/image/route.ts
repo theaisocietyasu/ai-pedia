@@ -1,0 +1,86 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { auth, clerkClient } from '@clerk/nextjs/server';
+import { uploadImageToGridFS } from '@/lib/gridfs';
+
+// Maximum file size: 5MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+// Allowed image types
+const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+
+export async function POST(request: NextRequest) {
+  try {
+    // Authenticate user with Clerk
+    const { userId } = await auth();
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Please sign in to upload images' },
+        { status: 401 }
+      );
+    }
+
+    // Get user details from Clerk
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const userName = user.firstName && user.lastName
+      ? `${user.firstName} ${user.lastName}`
+      : user.username || 'Anonymous';
+
+    // Parse form data
+    const formData = await request.formData();
+    const file = formData.get('image') as File;
+
+    if (!file) {
+      return NextResponse.json(
+        { error: 'No image file provided' },
+        { status: 400 }
+      );
+    }
+
+    // Validate file type
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      return NextResponse.json(
+        { error: `Invalid file type. Allowed types: ${ALLOWED_TYPES.join(', ')}` },
+        { status: 400 }
+      );
+    }
+
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: `File too large. Maximum size: ${MAX_FILE_SIZE / (1024 * 1024)}MB` },
+        { status: 400 }
+      );
+    }
+
+    // Convert file to buffer
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    // Upload to GridFS
+    const { fileId, url } = await uploadImageToGridFS(
+      buffer,
+      file.name,
+      file.type,
+      userId,
+      userName
+    );
+
+    return NextResponse.json({
+      success: true,
+      imageId: fileId,
+      url,
+      author: {
+        id: userId,
+        name: userName,
+      },
+    });
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    return NextResponse.json(
+      { error: 'Internal server error while uploading image' },
+      { status: 500 }
+    );
+  }
+}

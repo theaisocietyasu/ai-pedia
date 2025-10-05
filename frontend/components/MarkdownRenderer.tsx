@@ -1,7 +1,10 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
+import remarkGfm from 'remark-gfm';
 import rehypeKatex from 'rehype-katex';
+import rehypeSlug from 'rehype-slug';
+import { slugifyHeading } from '@/lib/slug';
 
 interface MarkdownRendererProps {
   content: string;
@@ -12,8 +15,8 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
   return (
     <div className={`markdown-content ${className}`}>
       <ReactMarkdown
-        remarkPlugins={[remarkMath]}
-        rehypePlugins={[rehypeKatex]}
+        remarkPlugins={[remarkGfm, remarkMath]}
+        rehypePlugins={[rehypeKatex, rehypeSlug]}
         components={{
           h1: ({ children, ...props }) => (
             <h1 className="markdown-heading markdown-h1" {...props}>

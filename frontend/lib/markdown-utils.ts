@@ -83,3 +83,141 @@ export const extractMarkdownMetadata = (content: string): { metadata: MarkdownCo
   
   return { metadata, content: markdownContent };
 };
+
+// Heading extraction for table of contents
+export interface Heading {
+  id: string;
+  text: string;
+  level: number;
+  children: Heading[];
+}
+
+/**
+ * Generates a slug from heading text
+ * Converts text to lowercase, removes special chars, replaces spaces with hyphens
+ */
+export function slugify(text: string): string {
+  // Deprecated for headings: kept for backward compatibility in other places
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
+/**
+ * Extracts headings from markdown content
+ * Parses markdown and builds a hierarchical structure of headings
+ */
+export function extractHeadings(markdown: string): Heading[] {
+  if (!markdown) return [];
+
+  const lines = markdown.split('\n');
+  const headings: Heading[] = [];
+  const headingCounts: Record<string, number> = {}; // Track duplicate heading text
+
+  // Stack to track the current hierarchy
+  const stack: Heading[] = [];
+
+  for (const line of lines) {
+    // Match markdown headings (# H1, ## H2, ### H3)
+    const match = line.match(/^(#{1,3})\s+(.+)$/);
+    if (!match) continue;
+
+    const level = match[1].length; // Number of # symbols
+    const text = match[2].trim();
+
+    // Generate unique ID
+  // Use heading-specific slugification to match renderer ids
+  // We import lazily to avoid circular deps in some bundlers
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { slugifyHeading } = require('./slug');
+  let baseId = slugifyHeading(text);
+    headingCounts[baseId] = (headingCounts[baseId] || 0) + 1;
+    const id = headingCounts[baseId] > 1 ? `${baseId}-${headingCounts[baseId] - 1}` : baseId;
+
+    const heading: Heading = {
+      id,
+      text,
+      level,
+      children: [],
+    };
+
+    // Build hierarchy
+    if (level === 1) {
+      // Top level heading
+      headings.push(heading);
+      stack.length = 0;
+      stack.push(heading);
+    } else {
+      // Find the appropriate parent in the stack
+      while (stack.length > 0 && stack[stack.length - 1].level >= level) {
+        stack.pop();
+      }
+
+      if (stack.length === 0) {
+        // No parent found, add to root
+        headings.push(heading);
+      } else {
+        // Add as child to the last item in stack
+        stack[stack.length - 1].children.push(heading);
+      }
+      stack.push(heading);
+    }
+  }
+
+  return headings;
+}
+
+/**
+ * Flattens hierarchical headings into a single array
+ * Useful for simple list rendering
+ */
+export function flattenHeadings(headings: Heading[]): Heading[] {
+  const result: Heading[] = [];
+
+  function flatten(items: Heading[]) {
+    for (const item of items) {
+      result.push(item);
+      if (item.children.length > 0) {
+        flatten(item.children);
+      }
+    }
+  }
+
+  flatten(headings);
+  return result;
+}
+
+/**
+ * Normalizes markdown content from MongoDB for proper rendering
+ * Handles LaTeX formula escaping issues
+ */
+export function normalizeMarkdownContent(content: string): string {
+  if (!content) return '';
+
+  // Log the raw content for debugging
+  const sampleFormulas = content.match(/\$[^$]+\$/g)?.slice(0, 3);
+  console.log('🔧 Raw formulas from DB:', sampleFormulas);
+
+  // MongoDB stores raw markdown with single backslashes: \frac, \sum, \beta
+  // But when this becomes a JavaScript string, we need proper escaping
+  // The test page works because template literals auto-escape: \\beta → \beta in JS string
+
+  // Check if content already has double backslashes (already escaped)
+  const hasDoubleBackslash = content.includes('\\\\');
+  console.log('🔧 Has double backslashes:', hasDoubleBackslash);
+
+  if (hasDoubleBackslash) {
+    // Content already escaped, return as-is
+    console.log('🔧 Content already escaped, returning as-is');
+    return content;
+  }
+
+  // Content has single backslashes - this is raw markdown
+  // For template literal compatibility, we don't need to change anything
+  // The markdown parser expects single backslashes in the actual string
+  console.log('🔧 Content has single backslashes (raw markdown), returning as-is');
+  return content;
+}

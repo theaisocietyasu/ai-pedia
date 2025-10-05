@@ -1,4 +1,5 @@
 // API client functions for fetching learning data from MongoDB
+import { normalizeMarkdownContent } from './markdown-utils';
 
 const API_BASE_URL = '/api';
 
@@ -91,9 +92,63 @@ export function transformModulesToUIFormat(modules: LearnModule[]): any[] {
 export function transformModuleToModelFormat(module: LearnModule): any {
   return {
     title: module.title || '',
-    content: module.content || '',
+    content: normalizeMarkdownContent(module.content || ''),
     description: module.description || '',
     imgPath: module.thumbnail || '',
     actionButtons: module.action_buttions || []
   };
+}
+
+// Image upload response type
+export interface ImageUploadResponse {
+  success: boolean;
+  imageId: string;
+  url: string;
+  author: {
+    id: string;
+    name: string;
+  };
+}
+
+// Upload image to GridFS
+export async function uploadImage(file: File): Promise<ImageUploadResponse> {
+  try {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const response = await fetch(`${API_BASE_URL}/upload/image`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Failed to upload image: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw error;
+  }
+}
+
+// Upload learn module with markdown content
+export async function uploadLearnModule(formData: FormData): Promise<any> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/learn/content/upload`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Failed to upload learn module: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error uploading learn module:', error);
+    throw error;
+  }
 }

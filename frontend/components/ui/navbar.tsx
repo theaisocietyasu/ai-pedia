@@ -9,6 +9,7 @@ import { navItems } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import type { NavItem } from "@/lib/types"
 import { SearchBar } from "./search-bar"
+import { SignedIn, UserButton } from "@clerk/nextjs"
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -134,9 +135,14 @@ export function Navbar() {
               {navItems.map((item, index) => renderNavLink(item, index))}
             </div>
 
-            {/* search bar */}
-            <div className="hidden md:block">
+            {/* search bar and user button side by side with margin */}
+            <div className="hidden md:flex items-center">
               <SearchBar />
+              <SignedIn>
+                <div className="ml-4">
+                  <UserButton afterSignOutUrl="/" />
+                </div>
+              </SignedIn>
             </div>
 
             {/* mobile menu button */}
