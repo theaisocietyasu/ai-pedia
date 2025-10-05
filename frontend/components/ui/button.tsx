@@ -1,11 +1,11 @@
 "use client"
 
 import { forwardRef, ButtonHTMLAttributes } from "react"
-import { motion, MotionProps } from "framer-motion"
+import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import type { ButtonVariant, ButtonSize } from "@/lib/types"
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, MotionProps {
+interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onDrag'> {
   variant?: ButtonVariant
   size?: ButtonSize
   fullWidth?: boolean

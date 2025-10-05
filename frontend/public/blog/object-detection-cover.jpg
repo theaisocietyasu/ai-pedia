@@ -1,0 +1,25 @@
+<svg width="800" height="400" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4b4abd;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3a388e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="#0b0a10"/>
+  <rect width="800" height="400" fill="url(#grad2)" opacity="0.3"/>
+  
+  <!-- Object detection boxes -->
+  <rect x="150" y="100" width="120" height="80" fill="none" stroke="#3a388e" stroke-width="3" opacity="0.8"/>
+  <rect x="140" y="90" width="20" height="15" fill="#3a388e" opacity="0.9"/>
+  <text x="150" y="102" fill="white" font-family="Arial, sans-serif" font-size="10">Car 95%</text>
+  
+  <rect x="400" y="150" width="80" height="60" fill="none" stroke="#8d2f6a" stroke-width="3" opacity="0.8"/>
+  <rect x="390" y="140" width="30" height="15" fill="#8d2f6a" opacity="0.9"/>
+  <text x="400" y="152" fill="white" font-family="Arial, sans-serif" font-size="10">Person 87%</text>
+  
+  <rect x="600" y="200" width="60" height="40" fill="none" stroke="#4b4abd" stroke-width="3" opacity="0.8"/>
+  <rect x="590" y="190" width="20" height="15" fill="#4b4abd" opacity="0.9"/>
+  <text x="600" y="202" fill="white" font-family="Arial, sans-serif" font-size="10">Dog 92%</text>
+  
+  <text x="400" y="350" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">Object Detection</text>
+</svg>
