@@ -7,15 +7,15 @@ export async function GET(request: NextRequest) {
     await connectToDatabase()
 
     const { searchParams } = new URL(request.url)
-    const category = searchParams.get('category')
+    const category = searchParams.get('categories')
     const search = searchParams.get('search')
     const limit = parseInt(searchParams.get('limit') || '0', 10)
 
     // Build query
     let query: Record<string, any> = {}
-    
+
     if (category && category !== 'all') {
-      query.category = { $regex: new RegExp(category, 'i') }
+      query.categories = { $regex: new RegExp(category, 'i') }
     }
 
     if (search) {

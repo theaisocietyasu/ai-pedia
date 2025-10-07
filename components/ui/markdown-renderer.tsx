@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState, useMemo } from "react"
+import React, { useEffect, useState, useMemo, useRef } from "react"
 import { motion } from "framer-motion"
 import { ChevronRight, ChevronDown, List } from "lucide-react"
 import { MarkdownParser } from "@/lib/markdown-parser"
@@ -18,6 +18,7 @@ export function MarkdownRenderer({
   const [parsedContent, setParsedContent] = useState<ParsedMarkdown | null>(null)
   const [activeHeadingId, setActiveHeadingId] = useState<string>("")
   const [tocVisible, setTocVisible] = useState(false)
+  const isScrollingRef = useRef(false)
 
   // Parse markdown content
   const parsed = useMemo(() => {
@@ -36,20 +37,37 @@ export function MarkdownRenderer({
   useEffect(() => {
     if (typeof window === 'undefined' || !showTableOfContents || !parsedContent?.tableOfContents.length) return
 
+    const HEADER_OFFSET = 120 // Must match the offset in scrollToHeading
+
     const handleScroll = () => {
+      // Ignore scroll events during programmatic scrolling
+      if (isScrollingRef.current) return
+
       const headings = parsedContent.tableOfContents.map(item => ({
         id: item.id,
         element: document.getElementById(item.id)
       })).filter(item => item.element)
 
-      const scrollPosition = window.scrollY + 100
+      if (headings.length === 0) return
 
-      for (let i = headings.length - 1; i >= 0; i--) {
-        const heading = headings[i]
-        if (heading.element && heading.element.offsetTop <= scrollPosition) {
-          setActiveHeadingId(heading.id)
-          break
-        }
+      // Get viewport position of each heading
+      const headingsWithPosition = headings.map(heading => ({
+        id: heading.id,
+        top: heading.element!.getBoundingClientRect().top
+      }))
+
+      // Find headings that have crossed the threshold (are at or above the HEADER_OFFSET)
+      const crossedHeadings = headingsWithPosition.filter(h => h.top <= HEADER_OFFSET)
+
+      if (crossedHeadings.length > 0) {
+        // Select the heading that crossed most recently (closest to threshold from above)
+        const activeHeading = crossedHeadings.reduce((closest, current) =>
+          current.top > closest.top ? current : closest
+        )
+        setActiveHeadingId(activeHeading.id)
+      } else {
+        // No heading has crossed yet, activate the first one
+        setActiveHeadingId(headings[0].id)
       }
     }
 
@@ -91,13 +109,62 @@ export function MarkdownRenderer({
     })
   }
 
+  // Helper to flatten hierarchical TOC into a flat list
+  const flattenTocItems = (items: TocItem[]): TocItem[] => {
+    const result: TocItem[] = []
+    const flatten = (item: TocItem) => {
+      result.push(item)
+      if (item.children && item.children.length > 0) {
+        item.children.forEach(flatten)
+      }
+    }
+    items.forEach(flatten)
+    return result
+  }
+
   const scrollToHeading = (id: string) => {
     if (typeof window === 'undefined') return
 
+    console.log('Attempting to scroll to heading with ID:', id)
     const element = document.getElementById(id)
+    console.log('Element found:', element)
+
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const HEADER_OFFSET = 120 // Must match the offset in handleScroll for proper TOC highlighting
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - HEADER_OFFSET
+
+      console.log('Scrolling to position:', offsetPosition)
+
+      // Disable scroll detection during programmatic scrolling
+      isScrollingRef.current = true
+
+      // Re-enable scroll detection when smooth scroll completes
+      const handleScrollEnd = () => {
+        console.log('Scroll completed, re-enabling scroll detection')
+        isScrollingRef.current = false
+        window.removeEventListener('scrollend', handleScrollEnd)
+      }
+
+      window.addEventListener('scrollend', handleScrollEnd, { once: true })
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      })
+
       setActiveHeadingId(id)
+
+      // Fallback timeout in case scrollend is not supported
+      setTimeout(() => {
+        if (isScrollingRef.current) {
+          console.log('Fallback: Re-enabling scroll detection after timeout')
+          isScrollingRef.current = false
+          window.removeEventListener('scrollend', handleScrollEnd)
+        }
+      }, 1500)
+    } else {
+      console.error('Heading element not found for ID:', id)
     }
   }
 
@@ -115,7 +182,11 @@ export function MarkdownRenderer({
           : 'text-light-gray/70 hover:text-white'
         }
       `}
-      onClick={() => scrollToHeading(item.id)}
+      onClick={(e) => {
+        e.stopPropagation() // Prevent click from bubbling to parent TOC items
+        console.log('TOC item clicked:', item.title, 'ID:', item.id)
+        scrollToHeading(item.id)
+      }}
     >
       <div className={`
         flex items-center gap-2 py-1 px-2 rounded-md transition-all duration-300
