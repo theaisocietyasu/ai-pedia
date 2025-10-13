@@ -27,9 +27,8 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="inline-flex items-center justify-center w-20 h-20 rounded-2xl 
-                     gradient-bg shadow-2xl shadow-purple/30"
-            style={{ marginBottom: '1.3rem' }}
+            className="inline-flex items-center justify-center w-20 h-20 rounded-2xl
+                     gradient-bg shadow-2xl shadow-purple/30 mb-6"
           >
             <Info size={40} className="text-white" />
           </motion.div>
@@ -39,8 +38,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-4xl sm:text-5xl font-bold"
-            style={{ marginBottom: '1.2rem' }}
+            className="text-4xl sm:text-5xl font-bold mb-6"
           >
             About <GradientText>The AI Society</GradientText>
           </motion.h1>
@@ -50,10 +48,9 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-lg text-light-gray/80"
-            style={{ marginBottom: '1.3rem' }}
+            className="text-lg text-light-gray/80 mb-8"
           >
-            Our story, mission, and the team behind ASU's premier AI learning platform 
+            Our story, mission, and the team behind ASU's premier AI learning platform
             will be shared here soon. Stay tuned!
           </motion.p>
 
@@ -62,19 +59,18 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="grid sm:grid-cols-3 gap-6"
-            style={{ marginBottom: '1.3rem' }}
+            className="grid sm:grid-cols-3 gap-6 mb-8"
           >
             {[
               { icon: <Heart size={20} />, label: "Our Passion", value: "AI Education" },
               { icon: <Trophy size={20} />, label: "Our Goal", value: "Empower Students" },
               { icon: <Target size={20} />, label: "Our Vision", value: "AI for Everyone" }
             ].map((item, index) => (
-              <div key={index} className="glass-effect rounded-lg border border-white/10 text-center" style={{ padding: '1.5rem', marginTop: '1rem', marginBottom: '1rem' }}>
-                <div className="flex items-center justify-center text-pink" style={{ marginBottom: '0.5rem' }}>
+              <div key={index} className="glass-effect rounded-lg border border-white/10 text-center p-6">
+                <div className="flex items-center justify-center text-pink mb-3">
                   {item.icon}
                 </div>
-                <h3 className="text-sm font-medium text-white" style={{ marginBottom: '0.25rem' }}>{item.label}</h3>
+                <h3 className="text-sm font-medium text-white mb-2">{item.label}</h3>
                 <p className="text-xs text-light-gray/60">{item.value}</p>
               </div>
             ))}
@@ -85,15 +81,14 @@ export default function AboutPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-            className="glass-effect rounded-xl border border-pink/20"
-            style={{ padding: '2rem', marginBottom: '2rem' }}
+            className="glass-effect rounded-xl border border-pink/20 p-8 mb-8"
           >
             <p className="text-sm text-light-gray/80 text-center">
               <span className="font-semibold text-white">Coming Soon:</span>
               <br />
-              Learn about The AI Society's journey at Arizona State University, 
-              meet our leadership team, discover our achievements, and understand 
-              our commitment to democratizing AI education. This page is being 
+              Learn about The AI Society's journey at Arizona State University,
+              meet our leadership team, discover our achievements, and understand
+              our commitment to democratizing AI education. This page is being
               crafted by our content team to showcase our story and impact.
             </p>
           </motion.div>
@@ -103,8 +98,7 @@ export default function AboutPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.55 }}
-            className="text-xs text-light-gray/50"
-            style={{ marginBottom: '1.3rem' }}
+            className="text-xs text-light-gray/50 mb-8"
           >
             <p>Page under development • Content team working on this section</p>
           </motion.div>
@@ -121,7 +115,7 @@ export default function AboutPage() {
                 variant="outline"
                 icon={<ArrowLeft size={18} />}
                 iconPosition="left"
-                style={{ padding: '6px 12px', borderRadius: '9999px' }}
+                className="rounded-full"
               >
                 Back to Home
               </Button>
@@ -132,9 +126,9 @@ export default function AboutPage() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button 
+              <Button
                 variant="primary"
-                style={{ padding: '6px 12px', borderRadius: '9999px' }}
+                className="rounded-full"
               >
                 Follow Us on Instagram
               </Button>

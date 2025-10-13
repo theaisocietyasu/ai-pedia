@@ -75,12 +75,11 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full 
-                     bg-white/5 border border-white/10"
-            style={{ padding: '8px 16px', marginBottom: '2rem' }}
+            className="inline-flex items-center gap-2 rounded-full
+                     bg-white/5 border border-white/10 px-4 py-2 mb-8"
           >
             <Sparkles size={16} className="text-purple" />
-            <span className="text-sm text-light-gray" style={{ margin: '0 4px' }}>Powered by The AI Society at ASU</span>
+            <span className="text-sm text-light-gray">Powered by The AI Society at ASU</span>
           </motion.div>
 
           {/* main title */}
@@ -88,8 +87,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-5xl sm:text-6xl md:text-7xl font-bold"
-            style={{ marginBottom: '2rem' }}
+            className="text-5xl sm:text-6xl md:text-7xl font-bold mb-8"
           >
             <GradientText animate={false}>
               {heroContent.title}
@@ -101,8 +99,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-2xl sm:text-3xl font-medium text-light-gray"
-            style={{ marginBottom: '1.5rem' }}
+            className="text-2xl sm:text-3xl font-medium text-light-gray mb-6"
           >
             {heroContent.subtitle}
           </motion.p>
@@ -112,8 +109,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-lg text-light-gray/80 max-w-2xl leading-relaxed"
-            style={{ marginBottom: '3rem' }}
+            className="text-lg text-light-gray/80 max-w-2xl leading-relaxed mb-12"
           >
             {heroContent.description}
           </motion.p>
@@ -123,8 +119,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-col sm:flex-row justify-center items-center"
-            style={{ gap: '2rem' }}
+            className="flex flex-col sm:flex-row justify-center items-center gap-4"
           >
             <Link href={heroContent.ctaLink}>
               <Button
@@ -132,7 +127,7 @@ export function HeroSection() {
                 variant="primary"
                 icon={<ArrowRight size={20} />}
                 iconPosition="right"
-                style={{ padding: '6px 12px', borderRadius: '9999px' }}
+                className="rounded-full"
               >
                 {heroContent.ctaText}
               </Button>
@@ -143,7 +138,7 @@ export function HeroSection() {
                 <Button
                   size="lg"
                   variant="outline"
-                  style={{ padding: '6px 12px', borderRadius: '9999px' }}
+                  className="rounded-full"
                 >
                   {heroContent.secondaryCtaText}
                 </Button>

@@ -39,16 +39,16 @@ export function VisionSection() {
             viewport={{ once: true }}
             className="mb-20 pt-20"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold mb-8 pt-8">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-6">
               Our <GradientText>Vision</GradientText> for AI Education
             </h2>
-            <p className="text-lg text-light-gray/80 max-w-3xl mx-auto" style={{ paddingTop: '3rem', paddingBottom: '4rem', textAlign: 'center', marginLeft: '12rem' }}>
+            <p className="text-lg text-light-gray/80 max-w-3xl mx-auto">
               We believe in making AI education accessible, engaging, and impactful for every student
             </p>
           </motion.div>
 
           {/* vision items */}
-          <div className="grid gap-16 md:gap-20 w-full" style={{ margin: '0 auto', paddingLeft: '32px', paddingRight: '32px' }}>
+          <div className="grid gap-16 md:gap-20 w-full">
           {visionItems.map((item, index) => (
             <motion.div
               key={item.title}
@@ -56,15 +56,14 @@ export function VisionSection() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
               viewport={{ once: true }}
-              className="flex flex-col gap-8 items-center max-w-5xl mx-auto"
-              style={{ margin: '0 auto', textAlign: 'center' }}
+              className="flex flex-col gap-8 items-center max-w-5xl mx-auto text-center"
             >
               {/* icon container */}
               <div className="flex-shrink-0">
                 <motion.div
                   whileHover={{ scale: 1.1 }}
                   transition={{ type: "spring", stiffness: 300 }}
-                  className="w-24 h-24 rounded-2xl gradient-bg flex items-center 
+                  className="w-24 h-24 rounded-2xl gradient-bg flex items-center
                            justify-center shadow-2xl shadow-purple/30"
                 >
                   <span className="text-white">{getIcon(item.icon)}</span>
@@ -72,13 +71,11 @@ export function VisionSection() {
               </div>
 
               {/* content */}
-              <div className="flex-1 space-y-6" style={{ textAlign: 'center', margin: '0 32px', paddingLeft: '24px', paddingRight: '24px' }}>
-                <h3 className="text-2xl font-bold text-white"
-                    style={{ margin: '0 16px', padding: '8px 12px' }}>
+              <div className="flex-1 space-y-6">
+                <h3 className="text-2xl font-bold text-white">
                   {item.title}
                 </h3>
-                <p className="text-light-gray/80 leading-relaxed"
-                   style={{ margin: '0 16px 2rem 16px', padding: '8px 12px' }}>
+                <p className="text-light-gray/80 leading-relaxed">
                   {item.content}
                 </p>
               </div>
@@ -87,8 +84,7 @@ export function VisionSection() {
         </div>
 
         {/* decorative elements */}
-          <div className="mt-32 relative w-full flex justify-center"
-               style={{ paddingTop: '3rem', paddingBottom: '3rem' }}>
+          <div className="mt-32 pt-12 pb-12 relative w-full flex justify-center">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -96,7 +92,7 @@ export function VisionSection() {
               viewport={{ once: true }}
               className="relative max-w-4xl w-full"
             >
-              <div className="glass-effect rounded-2xl p-16 md:p-24 text-center space-y-10">
+              <div className="glass-effect rounded-2xl p-12 md:p-16 text-center space-y-8">
                 <blockquote className="text-xl md:text-2xl font-medium text-white/90 italic">
                   "The future of AI is not just about building intelligent systems, 
                   but about empowering everyone to understand and shape that future."
