@@ -47,6 +47,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const MotionButton = motion.button
 
+    // Check if rounded-full is in the className
+    const isRoundedFull = className?.includes("rounded-full")
+    const borderRadius = isRoundedFull ? "rounded-full" : "rounded-lg"
+
     return (
       <MotionButton
         ref={ref}
@@ -68,7 +72,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {/* loading spinner */}
         {loading && (
-          <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/20">
+          <div className={cn("absolute inset-0 flex items-center justify-center bg-black/20", borderRadius)}>
             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
           </div>
         )}
@@ -81,7 +85,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         </span>
 
         {/* hover effect overlay */}
-        <span className="absolute inset-0 rounded-lg overflow-hidden">
+        <span className={cn("absolute inset-0 overflow-hidden", borderRadius)}>
           <span className="absolute inset-0 bg-white opacity-0 hover:opacity-10 transition-opacity duration-300" />
         </span>
       </MotionButton>

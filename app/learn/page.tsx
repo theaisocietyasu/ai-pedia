@@ -69,7 +69,7 @@ export default function LearnPage() {
                 variant="outline"
                 icon={<ArrowLeft size={18} />}
                 iconPosition="left"
-                style={{ padding: '6px 12px', borderRadius: '9999px', cursor: 'pointer' }}
+                className="rounded-full"
               >
                 Back to Home
               </Button>
@@ -179,7 +179,7 @@ export default function LearnPage() {
                   variant="outline"
                   icon={<ArrowLeft size={18} />}
                   iconPosition="left"
-                  style={{ padding: '6px 12px', borderRadius: '9999px', cursor: 'pointer' }}
+                  className="rounded-full"
                 >
                   Back to Home
                 </Button>
@@ -188,7 +188,7 @@ export default function LearnPage() {
               <Link href="/waitlist">
                 <Button
                   variant="primary"
-                  style={{ padding: '6px 12px', borderRadius: '9999px', cursor: 'pointer' }}
+                  className="rounded-full"
                 >
                   Join the Waitlist
                 </Button>
