@@ -6,7 +6,7 @@ import { Search, ChevronRight } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { navItems } from "@/lib/constants"
-import { categories } from "@/app/learn/categories"
+import { fetchAllCategories, fetchModulesByCategory } from "@/lib/api"
 
 interface SearchResult {
   title: string
@@ -26,49 +26,77 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [results, setResults] = useState<SearchResult[]>([])
   const [selectedIndex, setSelectedIndex] = useState(-1)
+  const [searchableData, setSearchableData] = useState<SearchResult[]>([])
   const router = useRouter()
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // Create searchable data
-  const searchableData: SearchResult[] = React.useMemo(() => {
-    const data: SearchResult[] = []
+  // Fetch searchable data from MongoDB
+  useEffect(() => {
+    const loadSearchableData = async () => {
+      try {
+        const data: SearchResult[] = []
 
-    // Add main navigation pages
-    navItems.forEach(item => {
-      data.push({
-        title: item.name,
-        description: item.description,
-        path: item.link,
-        type: "page"
-      })
-    })
-
-    // Add learning categories and algorithms
-    Object.entries(categories).forEach(([key, category]) => {
-      const categoryTitle = key.charAt(0).toUpperCase() + key.slice(1)
-
-      // Add category itself
-      data.push({
-        title: categoryTitle,
-        description: category.description.substring(0, 100) + "...",
-        path: `/learn/${key}`,
-        type: "category"
-      })
-
-      // Add algorithms within each category
-      category.models.forEach(model => {
-        data.push({
-          title: model.name,
-          description: model.description,
-          path: `/learn/${key}/${model.name.toLowerCase().replace(/\s+/g, "-")}`,
-          type: "model",
-          category: categoryTitle
+        // Add main navigation pages
+        navItems.forEach(item => {
+          data.push({
+            title: item.name,
+            description: item.description,
+            path: item.link,
+            type: "page"
+          })
         })
-      })
-    })
 
-    return data
+        // Fetch categories from MongoDB
+        const categories = await fetchAllCategories()
+
+        // Process each category
+        for (const category of categories) {
+          const categorySlug = category.name.toLowerCase().replace(/\s+/g, '-')
+
+          // Add category itself
+          data.push({
+            title: category.name,
+            description: category.description,
+            path: `/learn/${categorySlug}`,
+            type: "category"
+          })
+
+          // Fetch modules for this category
+          try {
+            const modules = await fetchModulesByCategory(categorySlug)
+
+            // Add each module
+            modules.forEach(module => {
+              data.push({
+                title: module.title,
+                description: module.description,
+                path: `/learn/${categorySlug}/${module._id}`,
+                type: "model",
+                category: category.name
+              })
+            })
+          } catch (error) {
+            console.error(`Error loading modules for ${categorySlug}:`, error)
+          }
+        }
+
+        setSearchableData(data)
+      } catch (error) {
+        console.error('Error loading search data:', error)
+
+        // Fallback to just nav items if MongoDB fails
+        const fallbackData: SearchResult[] = navItems.map(item => ({
+          title: item.name,
+          description: item.description,
+          path: item.link,
+          type: "page"
+        }))
+        setSearchableData(fallbackData)
+      }
+    }
+
+    loadSearchableData()
   }, [])
 
   // Search function
@@ -89,7 +117,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
     setResults(searchResults)
     setSelectedIndex(-1)
     setIsOpen(searchResults.length > 0 && query.trim().length > 0)
-  }, [query])
+  }, [query, searchableData])
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
