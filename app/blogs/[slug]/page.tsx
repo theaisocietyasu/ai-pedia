@@ -2,6 +2,7 @@ import React from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { notFound } from "next/navigation"
+import { Metadata } from "next"
 import {
   Calendar,
   Clock,
@@ -17,11 +18,68 @@ import { BlogCard } from "@/components/ui/blog-card"
 import { getBlogPost, getRelatedBlogs } from "@/lib/blog-data"
 import type { LegacyBlogPost } from "@/lib/types"
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ailearninghub.com'
 
 interface BlogDetailPageProps {
   params: Promise<{
     slug: string
   }>
+}
+
+export async function generateMetadata({ params }: BlogDetailPageProps): Promise<Metadata> {
+  const { slug } = await params
+
+  try {
+    const blog = await getBlogPost(slug)
+
+    if (!blog) {
+      return {
+        title: "Blog Not Found",
+        description: "The requested blog post could not be found."
+      }
+    }
+
+    const publishDate = new Date(blog.publishDate).toISOString()
+    const authorName = typeof blog.author === 'string' ? blog.author : blog.author
+
+    return {
+      title: blog.title,
+      description: blog.excerpt,
+      keywords: blog.tags,
+      authors: [{ name: authorName }],
+      openGraph: {
+        title: blog.title,
+        description: blog.excerpt,
+        url: `${baseUrl}/blogs/${slug}`,
+        type: "article",
+        publishedTime: publishDate,
+        authors: [authorName],
+        tags: blog.tags,
+        images: [
+          {
+            url: blog.featuredImage || "/og-image.png",
+            width: 1200,
+            height: 630,
+            alt: blog.title
+          }
+        ]
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: blog.title,
+        description: blog.excerpt,
+        images: [blog.featuredImage || "/og-image.png"]
+      },
+      alternates: {
+        canonical: `${baseUrl}/blogs/${slug}`
+      }
+    }
+  } catch (error) {
+    return {
+      title: "Blog Not Found",
+      description: "The requested blog post could not be found."
+    }
+  }
 }
 
 async function BlogDetailPage({ params }: BlogDetailPageProps) {
@@ -41,8 +99,70 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
     notFound()
   }
 
+  const authorName = typeof blog.author === 'string' ? blog.author : blog.author
+
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": blog.title,
+    "description": blog.excerpt,
+    "image": blog.featuredImage || `${baseUrl}/og-image.png`,
+    "datePublished": new Date(blog.publishDate).toISOString(),
+    "author": {
+      "@type": "Person",
+      "name": authorName
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "The AI Society at ASU",
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${baseUrl}/logo.png`
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `${baseUrl}/blogs/${slug}`
+    },
+    "keywords": blog.tags.join(", "),
+    "articleSection": blog.category
+  }
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": baseUrl
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": `${baseUrl}/blogs`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": blog.title,
+        "item": `${baseUrl}/blogs/${slug}`
+      }
+    ]
+  }
+
   return (
     <main className="min-h-screen bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       {/* back navigation */}
       <section className="pt-24 pb-8">
         <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
