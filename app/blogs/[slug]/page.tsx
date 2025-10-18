@@ -89,6 +89,7 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
   let relatedBlogs: LegacyBlogPost[] = []
 
   try {
+    console.log("Fetching blog post for slug:", slug)
     blog = await getBlogPost(slug)
     if (!blog) {
       notFound()

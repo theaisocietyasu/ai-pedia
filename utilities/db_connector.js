@@ -15,17 +15,19 @@ if (!uri) {
     throw new Error("MONGODB_URI environment variable is not set. Please check your .env.local file.");
 }
 console.log("Mongo URI: ", uri);
+const dbname = process.env.MONGODB_DB_NAME || 'ml_visualization';
+console.log("Mongo DB Name: ", dbname);
 const client = new MongoClient(uri);
 
 async function connectToDatabase() {
     try {
         await client.connect();
         console.log('Connected to MongoDB');
-        return client.db('ml_visualization');
+        return client.db(dbname);
     } catch (error) {
         console.error('Error connecting to MongoDB:', error);
         throw error;
     }
 }
 
-export const mongoConnection = connectToDatabase();
+export const mongoConnection = await connectToDatabase();

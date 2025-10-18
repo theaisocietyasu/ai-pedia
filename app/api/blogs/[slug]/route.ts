@@ -14,6 +14,8 @@ export async function GET(
     // First try to find by slug field
     let blog = await Blog.findOne({ slug }).exec()
 
+    console.log("Blog found by slug:", blog)
+
     // If not found, try to find by auto-generated slug from title
     if (!blog) {
       // Generate slug from title for blogs that don't have explicit slug
