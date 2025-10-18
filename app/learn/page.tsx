@@ -23,6 +23,7 @@ export default function LearnPage() {
         setLoading(true);
         const categoriesData = await getCategories();
         setCategories(categoriesData);
+        // console.log('Loaded categories:', categoriesData);
       } catch (err) {
         console.error('Error loading categories:', err);
         setError('Failed to load learning categories. Please try again later.');
