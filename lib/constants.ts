@@ -50,11 +50,6 @@ export const navItems: NavItem[] = [
     link: "/about",
     description: "About AI Society"
   },
-  {
-    name: "Waitlist",
-    link: "/waitlist",
-    description: "Join the waitlist"
-  }
 ]
 
 // hero content
@@ -64,8 +59,6 @@ export const heroContent = {
   description: "Embark on your journey to master artificial intelligence with interactive visualizations, hands-on projects, and expert guidance from The AI Society at ASU.",
   ctaText: "Start Learning",
   ctaLink: "/learn",
-  secondaryCtaText: "Join Waitlist",
-  secondaryCtaLink: "/waitlist"
 }
 
 // features
@@ -160,7 +153,6 @@ export const footerSections: FooterSection[] = [
       { label: "Home", href: "/" },
       { label: "Learn", href: "/learn" },
       { label: "About", href: "/about" },
-      { label: "Waitlist", href: "/waitlist" }
     ]
   },
   {

@@ -186,14 +186,6 @@ export default function LearnPage() {
                 </Button>
               </Link>
 
-              <Link href="/waitlist">
-                <Button
-                  variant="primary"
-                  className="rounded-full"
-                >
-                  Join the Waitlist
-                </Button>
-              </Link>
             </motion.div>
 
         </motion.div>
