@@ -194,29 +194,7 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
         </section>
       )}
 
-      {/* newsletter signup */}
-      <section className="py-20 border-t border-white/5">
-        <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
-          <div className="text-center glass-effect rounded-2xl p-12 border border-white/10">
-            <BookOpen size={48} className="mx-auto mb-6 text-purple" />
-            <h3 className="text-2xl font-bold gradient-text mb-4">
-              Stay Updated with Latest AI Insights
-            </h3>
-            <p className="text-light-gray/80 mb-8 max-w-2xl mx-auto">
-              Get the latest articles, tutorials, and AI research insights delivered directly to your inbox.
-              Join our community of AI enthusiasts and never miss an update.
-            </p>
-            <Link href="/waitlist">
-              <button className="inline-flex items-center gap-2 px-6 py-3 bg-purple hover:bg-purple/80
-                                text-white font-medium rounded-lg transition-all duration-300
-                                hover:scale-105 hover:shadow-lg hover:shadow-purple/25">
-                <span>Join Our Newsletter</span>
-                <ChevronRight size={18} />
-              </button>
-            </Link>
-          </div>
-        </div>
-      </section>
+     
     </main>
   )
 }

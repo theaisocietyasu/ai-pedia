@@ -133,19 +133,6 @@ export function Footer() {
               </div>
             </div>
 
-            {/* newsletter signup */}
-            <div className="pt-2">
-              <h4 className="text-sm font-medium text-white mb-3">Stay Updated</h4>
-              <Link
-                href="/waitlist"
-                className="inline-flex items-center gap-2 rounded-full px-4 py-2
-                         bg-gradient-to-r from-purple to-pink text-white text-sm font-medium
-                         hover:shadow-lg hover:shadow-purple/30 transition-all duration-300
-                         hover:scale-105"
-              >
-                Join Waitlist
-              </Link>
-            </div>
           </div>
         </div>
 
