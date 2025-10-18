@@ -54,3 +54,6 @@ __pycache__/
 node_modules/
 # clerk configuration (can include secrets)
 /.clerk/
+
+# Claude Code configuration
+.claude

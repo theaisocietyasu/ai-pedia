@@ -74,9 +74,8 @@ export default function BlogsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 rounded-full 
-                       bg-white/5 border border-white/10"
-              style={{ padding: '8px 16px', marginBottom: '2rem' }}
+              className="inline-flex items-center gap-2 rounded-full
+                       bg-white/5 border border-white/10 px-4 py-2 mb-8"
             >
               <BookOpen size={16} className="text-purple" />
               <span className="text-sm text-light-gray">Latest AI Insights</span>
@@ -87,8 +86,7 @@ export default function BlogsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-5xl sm:text-6xl md:text-7xl font-bold"
-              style={{ marginBottom: '2rem' }}
+              className="text-5xl sm:text-6xl md:text-7xl font-bold mb-8"
             >
               <GradientText animate={false}>Blogs</GradientText>
             </motion.h1>
@@ -98,16 +96,9 @@ export default function BlogsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-xl text-light-gray/80 max-w-3xl leading-relaxed"
-              style={{ 
-                margin: '0 auto',
-                textAlign: 'center',
-                display: 'block',
-                width: '100%',
-                maxWidth: '48rem'
-              }}
+              className="text-xl text-light-gray/80 max-w-3xl mx-auto leading-relaxed"
             >
-              Explore the latest insights, tutorials, and research in artificial intelligence. 
+              Explore the latest insights, tutorials, and research in artificial intelligence.
               From fundamentals to cutting-edge developments, discover knowledge that advances your AI journey.
             </motion.p>
           </div>

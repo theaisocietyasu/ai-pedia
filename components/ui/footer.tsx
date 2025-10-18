@@ -133,20 +133,6 @@ export function Footer() {
               </div>
             </div>
 
-            {/* newsletter signup */}
-            <div className="pt-2">
-              <h4 className="text-sm font-medium text-white mb-2" style={{ marginTop: '0.5rem' }}>Stay Updated</h4>
-              <Link
-                href="/waitlist"
-                className="inline-flex items-center gap-2 rounded-lg 
-                         bg-gradient-to-r from-purple to-pink text-white text-sm font-medium
-                         hover:shadow-lg hover:shadow-purple/30 transition-all duration-300
-                         hover:scale-105"
-                style={{ padding: '6px 12px', borderRadius: '9999px', marginTop: '0.5rem' }}
-              >
-                Join Waitlist
-              </Link>
-            </div>
           </div>
         </div>
 

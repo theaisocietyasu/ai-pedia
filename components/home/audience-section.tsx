@@ -31,7 +31,7 @@ export function AudienceSection() {
         }}
       />
 
-      <div className="container mx-auto px-6 lg:px-8 max-w-7xl" style={{ margin: '0 auto', paddingLeft: '32px', paddingRight: '32px' }}>
+      <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
         <div className="w-full">
           {/* section header */}
           <motion.div
@@ -41,18 +41,17 @@ export function AudienceSection() {
             viewport={{ once: true }}
             className="text-center mb-20 pt-20"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold mb-8 mt-12"
-                style={{ margin: '0 24px 32px 24px' }}>
+            <h2 className="text-4xl sm:text-5xl font-bold mb-6">
               Built for <GradientText>AI Enthusiasts</GradientText>
             </h2>
-            <p className="text-lg text-light-gray/80 max-w-3xl mx-auto" style={{ paddingTop: '3rem', paddingBottom: '4rem', textAlign: 'center', margin: '0 auto', paddingLeft: '48px', paddingRight: '48px', display: 'block', width: '100%' }}>
-              Whether you want to learn the fundamentals or visualize complex algorithms, 
+            <p className="text-lg text-light-gray/80 max-w-3xl mx-auto">
+              Whether you want to learn the fundamentals or visualize complex algorithms,
               we've got you covered
             </p>
           </motion.div>
 
           {/* audience segments */}
-          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto" style={{ margin: '0 auto', paddingLeft: '16px', paddingRight: '16px' }}>
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
           {audienceSegments.map((segment, index) => (
             <motion.div
               key={segment.title}
@@ -64,17 +63,16 @@ export function AudienceSection() {
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300 }}
-                className="h-full glass-effect rounded-2xl p-8 md:p-10 hover:shadow-2xl 
+                className="h-full glass-effect rounded-2xl p-8 hover:shadow-2xl
                          hover:shadow-purple/20 transition-all duration-300
-                         border border-white/5 hover:border-purple/30 space-y-6"
-                style={{ margin: '0 16px' }}
+                         border border-white/10 hover:border-purple/30 space-y-6"
               >
                 {/* icon */}
                 <div className="flex justify-center">
                   <motion.div
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.5 }}
-                    className="w-16 h-16 rounded-xl gradient-bg flex items-center 
+                    className="w-16 h-16 rounded-xl gradient-bg flex items-center
                              justify-center shadow-lg shadow-purple/30"
                   >
                     <span className="text-white">{getIcon(segment.icon)}</span>
@@ -82,12 +80,10 @@ export function AudienceSection() {
                 </div>
 
                 {/* title and description */}
-                <h3 className="text-2xl font-bold text-white"
-                    style={{ margin: '0 16px', padding: '8px 12px' }}>
+                <h3 className="text-2xl font-bold text-white">
                   {segment.title}
                 </h3>
-                <p className="text-light-gray/80"
-                   style={{ margin: '0 16px', padding: '8px 12px' }}>
+                <p className="text-light-gray/80">
                   {segment.description}
                 </p>
 
@@ -98,19 +94,18 @@ export function AudienceSection() {
                       key={benefitIndex}
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ 
-                        duration: 0.3, 
-                        delay: index * 0.2 + benefitIndex * 0.1 
+                      transition={{
+                        duration: 0.3,
+                        delay: index * 0.2 + benefitIndex * 0.1
                       }}
                       viewport={{ once: true }}
                       className="flex items-start gap-3"
                     >
-                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-purple/20 
+                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-purple/20
                                      flex items-center justify-center mt-0.5">
                         <Check size={12} className="text-purple" />
                       </span>
-                      <span className="text-sm text-light-gray/70"
-                            style={{ margin: '0 8px', padding: '4px 8px' }}>
+                      <span className="text-sm text-light-gray/80">
                         {benefit}
                       </span>
                     </motion.li>

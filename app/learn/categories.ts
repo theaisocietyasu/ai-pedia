@@ -7,11 +7,13 @@ let modulesCache: Record<string, any[]> = {};
 // Function to get all categories with their basic info
 export async function getCategories() {
   if (categoriesCache) {
+    console.log('Returning cached categories');
     return categoriesCache;
   }
 
   try {
     const categories = await fetchAllCategories();
+    // console.log('Fetched categories from API:', categories);
     categoriesCache = transformCategoriesToUIFormat(categories);
     return categoriesCache;
   } catch (error) {

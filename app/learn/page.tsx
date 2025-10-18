@@ -23,6 +23,7 @@ export default function LearnPage() {
         setLoading(true);
         const categoriesData = await getCategories();
         setCategories(categoriesData);
+        // console.log('Loaded categories:', categoriesData);
       } catch (err) {
         console.error('Error loading categories:', err);
         setError('Failed to load learning categories. Please try again later.');
@@ -69,7 +70,7 @@ export default function LearnPage() {
                 variant="outline"
                 icon={<ArrowLeft size={18} />}
                 iconPosition="left"
-                style={{ padding: '6px 12px', borderRadius: '9999px', cursor: 'pointer' }}
+                className="rounded-full"
               >
                 Back to Home
               </Button>
@@ -179,20 +180,12 @@ export default function LearnPage() {
                   variant="outline"
                   icon={<ArrowLeft size={18} />}
                   iconPosition="left"
-                  style={{ padding: '6px 12px', borderRadius: '9999px', cursor: 'pointer' }}
+                  className="rounded-full"
                 >
                   Back to Home
                 </Button>
               </Link>
 
-              <Link href="/waitlist">
-                <Button
-                  variant="primary"
-                  style={{ padding: '6px 12px', borderRadius: '9999px', cursor: 'pointer' }}
-                >
-                  Join the Waitlist
-                </Button>
-              </Link>
             </motion.div>
 
         </motion.div>

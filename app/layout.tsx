@@ -164,7 +164,7 @@ export default function RootLayout({
       >
         <Navbar />
         {children}
-        <div style={{ marginTop: '8rem' }}>
+        <div className="mt-32">
           <Footer />
         </div>
       </body>

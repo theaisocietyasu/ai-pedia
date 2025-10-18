@@ -55,10 +55,10 @@ export function FeaturesGrid() {
             viewport={{ once: true }}
             className="mb-20 pt-20"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold mb-12 pt-8">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-6">
               Everything You Need to <GradientText>Master AI</GradientText>
             </h2>
-            <p className="text-lg mt-12 mb-16 text-light-gray/80 max-w-3xl mx-auto" style={{ paddingTop: '3rem', paddingBottom: '4rem', textAlign: 'center', marginLeft: '12rem' }}>
+            <p className="text-lg text-light-gray/80 max-w-3xl mx-auto">
               Comprehensive tools and resources designed to accelerate your AI learning journey
             </p>
           </motion.div>
@@ -79,25 +79,18 @@ export function FeaturesGrid() {
                 className="group h-full relative"
               >
                 {/* card background with gradient border */}
-                <div 
-                  className="absolute rounded-2xl opacity-0 group-hover:opacity-100 
+                <div
+                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100
                            transition-opacity duration-500"
-                  style={{ 
-                    background: feature.gradient,
-                    left: '16px',
-                    right: '16px',
-                    top: '0',
-                    bottom: '0'
-                  }}
+                  style={{ background: feature.gradient }}
                 >
                   <div className="absolute inset-[1px] rounded-2xl bg-background" />
                 </div>
 
                 {/* card content */}
-                <div className="relative h-full glass-effect rounded-2xl p-12 md:p-16
-                              border border-white/5 group-hover:border-transparent
-                              transition-all duration-300 space-y-8"
-                     style={{ margin: '0 16px' }}>
+                <div className="relative h-full glass-effect rounded-2xl p-8
+                              border border-white/10 group-hover:border-transparent
+                              transition-all duration-300 space-y-6">
                   {/* icon */}
                   <div className="flex justify-center">
                     <motion.div
@@ -112,14 +105,12 @@ export function FeaturesGrid() {
 
                   {/* title */}
                   <h3 className="text-xl font-semibold text-white text-center
-                               group-hover:gradient-text transition-all duration-300"
-                      style={{ padding: '0 8px' }}>
+                               group-hover:gradient-text transition-all duration-300">
                     {feature.title}
                   </h3>
 
                   {/* description */}
-                  <p className="text-light-gray/70 text-base leading-relaxed text-center"
-                     style={{ padding: '0 8px' }}>
+                  <p className="text-light-gray/80 text-base leading-relaxed text-center">
                     {feature.description}
                   </p>
 
