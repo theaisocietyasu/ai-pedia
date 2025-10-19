@@ -40,11 +40,11 @@ export const navItems: NavItem[] = [
     link: "/learn",
     description: "AI learning resources"
   },
-  {
-    name: "Blogs",
-    link: "/blogs",
-    description: "Read our latest articles"
-  },
+  // {
+  //   name: "Blogs",
+  //   link: "/blogs",
+  //   description: "Read our latest articles"
+  // },
 ]
 
 // hero content
