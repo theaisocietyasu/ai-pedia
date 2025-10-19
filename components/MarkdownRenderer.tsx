@@ -4,7 +4,9 @@ import remarkMath from 'remark-math';
 import remarkGfm from 'remark-gfm';
 import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
+import rehypeRaw from 'rehype-raw';
 import { slugifyHeading } from '@/lib/slug';
+import { LazyVisualization } from './visualizations/LazyVisualization';
 
 interface MarkdownRendererProps {
   content: string;
@@ -12,11 +14,27 @@ interface MarkdownRendererProps {
 }
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className = '' }) => {
+  // Process escaped HTML div tags for visualizations
+  let processedContent = content
+    // Handle escaped div tags: \<div ...\> to <div ...>
+    .replace(/\\<div\s+id="(VZ-[^"]*)"([^>]*)\\><\/div\\>/g, '<div id="$1"$2></div>')
+    // Handle already unescaped div tags (just in case)
+    .replace(/<div\s+id="(VZ-[^"]*)"([^>]*?)><\/div>/g, '<div id="$1"$2></div>')
+    // Handle self-closing escaped div tags: \<div .../\>
+    .replace(/\\<div\s+id="(VZ-[^"]*)"([^>]*)\/\\>/g, '<div id="$1"$2></div>');
+
+  // Debug logging (only in development)
+  if (process.env.NODE_ENV === 'development' && content !== processedContent) {
+    console.log('MarkdownRenderer: Processed escaped HTML divs');
+    console.log('Original:', content.substring(0, 200) + '...');
+    console.log('Processed:', processedContent.substring(0, 200) + '...');
+  }
+
   return (
     <div className={`markdown-content ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeKatex, rehypeSlug]}
+        rehypePlugins={[rehypeRaw, rehypeKatex, rehypeSlug]}
         components={{
           h1: ({ children, ...props }) => (
             <h1 className="markdown-heading markdown-h1" {...props}>
@@ -109,8 +127,8 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
             if (id && id.startsWith('VZ-')) {
               const placeholder = props['data-placeholder'] || 'Interactive Visualization';
               return (
-                <div id={id} data-placeholder={placeholder} className={`markdown-visualization ${className || ''}`} {...props}>
-                  <div className="vz-placeholder">{placeholder}</div>
+                <div className={`markdown-visualization ${className || ''}`}>
+                  <LazyVisualization componentId={id} fallbackTitle={placeholder} />
                 </div>
               );
             }
@@ -118,7 +136,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
           },
         }}
       >
-        {content}
+        {processedContent}
       </ReactMarkdown>
     </div>
   );

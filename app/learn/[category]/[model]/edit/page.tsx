@@ -10,6 +10,7 @@ import { shadesOfPurple } from '@clerk/themes';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import { ImageUploadButton } from '@/components/ImageUploadButton';
 import { MarkdownUploadForm } from '@/components/MarkdownUploadForm';
+import { VisualizationIndicator } from '@/components/VisualizationIndicator';
 import { useRouter, useParams } from 'next/navigation';
 import { fetchModuleBySlug } from '@/lib/api';
 
@@ -232,7 +233,10 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                         <div>code block</div>
                         <div>```</div>
                         <div>$$math equation$$</div>
-                        <div className="text-purple-300">&lt;div id="VZ-name"&gt;&lt;/div&gt;</div>
+                        <div className="text-purple-300 mt-2 mb-1 font-normal">📊 Visualizations:</div>
+                        <div className="text-purple-200 text-[10px]">&lt;div id="VZ-linear-equation"&gt;&lt;/div&gt;</div>
+                        <div className="text-purple-200 text-[10px]">&lt;div id="VZ-assumptions-plots"&gt;&lt;/div&gt;</div>
+                        <div className="text-purple-200 text-[10px]">&lt;div id="VZ-model-evaluation"&gt;&lt;/div&gt;</div>
                       </div>
                     </div>
                   </div>
@@ -245,9 +249,12 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                   {/* Preview Header */}
                   <div className="border-b border-gray-800 px-4 py-2 bg-dark-gray">
                     <div className="flex items-center justify-between">
-                      <h2 className="text-sm font-medium text-gray-300">
-                        👁️ Live Preview
-                      </h2>
+                      <div className="flex items-center gap-4">
+                        <h2 className="text-sm font-medium text-gray-300">
+                          👁️ Live Preview
+                        </h2>
+                        <VisualizationIndicator content={markdown} />
+                      </div>
                       <button
                         onClick={() => setMarkdown('')}
                         className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-600 transition-colors"
@@ -299,9 +306,12 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                   <div className="h-full flex flex-col">
                     {/* Preview Header */}
                     <div className="border-b border-gray-800 px-4 py-2 bg-dark-gray">
-                      <h2 className="text-sm font-medium text-gray-300">
-                        👁️ Content Preview
-                      </h2>
+                      <div className="flex items-center gap-4">
+                        <h2 className="text-sm font-medium text-gray-300">
+                          👁️ Content Preview
+                        </h2>
+                        <VisualizationIndicator content={markdown} />
+                      </div>
                     </div>
 
                     {/* Preview Content */}

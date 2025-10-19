@@ -8,19 +8,6 @@ export const useMarkdownProcessor = () => {
     return content;
   };
 
-  const extractVZComponents = (content: string) => {
-    const vzRegex = /<div\s+id="VZ-[^"]*"[^>]*>/g;
-    const matches = content.match(vzRegex) || [];
-    return matches.map(match => {
-      const idMatch = match.match(/id="([^"]*)"/);
-      const placeholderMatch = match.match(/data-placeholder="([^"]*)"/);
-      return {
-        id: idMatch ? idMatch[1] : '',
-        placeholder: placeholderMatch ? placeholderMatch[1] : 'Interactive Visualization'
-      };
-    });
-  };
-
   return {
     processVZComponents,
     extractVZComponents
@@ -40,6 +27,46 @@ export interface VZComponent {
   id: string;
   placeholder: string;
 }
+
+// Utility function to extract VZ components from markdown content
+export const extractVZComponents = (content: string): VZComponent[] => {
+  // Handle both escaped and unescaped HTML div tags for VZ components
+  const patterns = [
+    // Escaped HTML: \<div id="VZ-name"...\></div>
+    /\\<div\s+id="(VZ-[^"]*)"([^>]*)\\><\/div\\>/g,
+    // Regular HTML: <div id="VZ-name"...></div>
+    /<div\s+id="(VZ-[^"]*)"([^>]*?)><\/div>/g,
+    // Self-closing escaped: \<div id="VZ-name".../\>
+    /\\<div\s+id="(VZ-[^"]*)"([^>]*)\/\\>/g,
+    // Self-closing regular: <div id="VZ-name".../>
+    /<div\s+id="(VZ-[^"]*)"([^>]*?)\/>/g
+  ];
+
+  const components: VZComponent[] = [];
+  const foundIds = new Set<string>();
+
+  patterns.forEach(pattern => {
+    let match;
+    while ((match = pattern.exec(content)) !== null) {
+      const id = match[1];
+      if (!foundIds.has(id)) {
+        foundIds.add(id);
+        
+        // Extract placeholder from attributes
+        const attributes = match[2] || '';
+        const placeholderMatch = attributes.match(/data-placeholder="([^"]*)"/);
+        const placeholder = placeholderMatch ? placeholderMatch[1] : 'Interactive Visualization';
+
+        components.push({
+          id,
+          placeholder
+        });
+      }
+    }
+  });
+
+  return components;
+};
 
 // Utility function to clean up markdown content
 export const cleanMarkdownContent = (content: string): string => {
