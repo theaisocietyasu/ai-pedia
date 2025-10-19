@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { MongoClient } from 'mongodb';
+import { mongoConnection } from '../../../../../utilities/db_connector';
 import { slugifyCategory } from '@/lib/slug';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ml-visualization';
@@ -13,13 +13,9 @@ export async function GET(
   
   try {
   const { category } = await params;
-    
-    client = new MongoClient(MONGODB_URI);
-    await client.connect();
-    
-    const db = client.db();
-    const collection = db.collection(LEARN_COLLECTION);
-    const categoriesCollection = db.collection(process.env.CATEGORIES_COLLECTION_NAME || 'learn_categories');
+
+    const collection = mongoConnection.collection('learn_content');
+    const categoriesCollection = mongoConnection.collection('learn_categories');
 
     // Resolve the canonical category name from the slug
     const slug = slugifyCategory(category);
@@ -51,6 +47,7 @@ export async function GET(
     const filteredContent = modules.map(item => ({
       _id: item._id,
       title: item.title,
+      slug: item.slug,
       categories: item.categories,
       thumbnail: item.thumbnail,
       description: item.description || ''
@@ -63,9 +60,5 @@ export async function GET(
       { error: 'Internal Server Error' },
       { status: 500 }
     );
-  } finally {
-    if (client) {
-      await client.close();
-    }
   }
 }

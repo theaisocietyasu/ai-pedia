@@ -6,6 +6,13 @@ const learnModuleSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    slug: {
+        type: String,
+        required: false, // Optional for backward compatibility with existing documents
+        unique: true,
+        sparse: true, // Allow multiple null values for documents without slugs
+        trim: true
+    },
     categories: {
         type: [String],
         required: true,
@@ -43,5 +50,8 @@ const learnModuleSchema = new mongoose.Schema({
         default: []
     }
 });
+
+// Create index on slug for faster lookups
+learnModuleSchema.index({ slug: 1 });
 
 export const learnModule = mongoose.model('LearnModule', learnModuleSchema, 'learn_content');

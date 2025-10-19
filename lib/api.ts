@@ -14,6 +14,7 @@ export interface LearnCategory {
 export interface LearnModule {
   _id: string;
   title: string;
+  slug: string;
   categories: string[];
   thumbnail: string;
   description: string;
@@ -48,15 +49,15 @@ export async function fetchModulesByCategory(category: string): Promise<LearnMod
   }
 }
 
-export async function fetchModuleById(id: string): Promise<LearnModule> {
+export async function fetchModuleBySlug(slug: string): Promise<LearnModule> {
   try {
-    const response = await fetch(`${API_BASE_URL}/learn/content/${id}`);
+    const response = await fetch(`${API_BASE_URL}/learn/content/${slug}`);
     if (!response.ok) {
-      throw new Error(`Failed to fetch module ${id}: ${response.statusText}`);
+      throw new Error(`Failed to fetch module ${slug}: ${response.statusText}`);
     }
     return await response.json();
   } catch (error) {
-    console.error(`Error fetching module ${id}:`, error);
+    console.error(`Error fetching module ${slug}:`, error);
     throw error;
   }
 }
@@ -84,7 +85,8 @@ export function transformModulesToUIFormat(modules: LearnModule[]): any[] {
     description: module.description,
     imgPath: module.thumbnail,
     actionButtons: module.action_buttions || [],
-    _id: module._id
+    _id: module._id,
+    slug: module.slug
   }));
 }
 

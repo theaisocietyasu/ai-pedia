@@ -1,12 +1,12 @@
-import { MongoClient, GridFSBucket, ObjectId } from 'mongodb';
+import {MongoClient, GridFSBucket, ObjectId } from 'mongodb';
+import { mongoConnection } from '../utilities/db_connector';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ml-visualization';
 
 // Get MongoDB client and GridFS bucket
 async function getGridFSBucket(): Promise<{ client: MongoClient; bucket: GridFSBucket }> {
-  const client = new MongoClient(MONGODB_URI);
-  await client.connect();
-  const db = client.db();
+  const client = mongoConnection.client;
+  const db = mongoConnection;
   const bucket = new GridFSBucket(db, { bucketName: 'images' });
   return { client, bucket };
 }

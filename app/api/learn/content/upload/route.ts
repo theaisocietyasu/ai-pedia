@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { MongoClient } from 'mongodb';
+import { mongoConnection } from '../../../../../utilities/db_connector';
 import { auth } from '@clerk/nextjs/server';
 import { uploadImageToGridFS } from '@/lib/gridfs';
-import { slugifyCategory } from '@/lib/slug';
-
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ml-visualization';
-const LEARN_COLLECTION = process.env.LEARN_COLLECTION_NAME || 'learn_content';
+import { slugifyCategory, generateLearnModuleSlug } from '@/lib/slug';
 
 export async function POST(request: NextRequest) {
   let client;
@@ -85,13 +82,8 @@ export async function POST(request: NextRequest) {
       userId
     );
 
-    // Connect to MongoDB
-    client = new MongoClient(MONGODB_URI);
-    await client.connect();
-    
-    const db = client.db();
-    const collection = db.collection(LEARN_COLLECTION);
-    const categoriesCollection = db.collection(process.env.CATEGORIES_COLLECTION_NAME || 'learn_categories');
+    const collection = mongoConnection.collection('learn_content');
+    const categoriesCollection = mongoConnection.collection('learn_categories');
 
     // Normalize incoming categories to slugs and validate existance
     const normalizedCategorySlugs: string[] = [];
@@ -133,7 +125,7 @@ export async function POST(request: NextRequest) {
       normalizedCategorySlugs.push(slug);
     }
 
-    // Create the learn module document
+    // Create the learn module document (without slug first to get the ID)
     const learnModule = {
       title: title.trim(),
       categories: normalizedCategorySlugs,
@@ -145,16 +137,27 @@ export async function POST(request: NextRequest) {
       createdBy: userId
     };
 
-    // Insert into database
+    // Insert into database to get the ObjectId
     const result = await collection.insertOne(learnModule);
+
+    // Generate slug using title and ObjectId
+    const slug = generateLearnModuleSlug(title, result.insertedId.toString());
+
+    // Update the document with the slug
+    await collection.updateOne(
+      { _id: result.insertedId },
+      { $set: { slug: slug } }
+    );
 
     return NextResponse.json({
       success: true,
       id: result.insertedId,
+      slug: slug,
       message: 'Learn module uploaded successfully',
       module: {
         ...learnModule,
-        _id: result.insertedId
+        _id: result.insertedId,
+        slug: slug
       }
     });
 
@@ -164,9 +167,5 @@ export async function POST(request: NextRequest) {
       { error: 'Internal server error while uploading learn module' },
       { status: 500 }
     );
-  } finally {
-    if (client) {
-      await client.close();
-    }
   }
 }

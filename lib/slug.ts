@@ -17,3 +17,16 @@ export function slugifyHeading(text: string): string {
     .replace(/\s+/g, '-') // spaces to hyphens
     .replace(/-+/g, '-'); // collapse multiple hyphens
 }
+
+// Utility to generate slug for learn modules
+// Format: <title-words-with-hyphens>_<objectId>
+export function generateLearnModuleSlug(title: string, objectId: string): string {
+  const titleSlug = title
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '') // remove special chars
+    .replace(/[\s_-]+/g, '-')   // collapse whitespace/underscores to hyphen
+    .replace(/^-+|-+$/g, '');    // trim leading/trailing hyphens
+
+  return `${titleSlug}_${objectId}`;
+}
