@@ -43,12 +43,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let blogPages: MetadataRoute.Sitemap = []
   try {
     const blogs = await getAllBlogs()
-    blogPages = blogs.map((blog) => ({
-      url: `${baseUrl}/blogs/${blog.slug}`,
-      lastModified: new Date(blog.publishDate),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    }))
+    blogPages = blogs.map((blog) => {
+      // Use lastUpdated if available, otherwise fall back to publishDate
+      const lastModifiedDate = blog.lastUpdated
+        ? new Date(blog.lastUpdated)
+        : new Date(blog.publishDate)
+
+      return {
+        url: `${baseUrl}/blogs/${blog.slug}`,
+        lastModified: lastModifiedDate,
+        changeFrequency: 'weekly' as const,
+        priority: 0.8,
+      }
+    })
   } catch (error) {
     console.error('Error generating blog sitemap entries:', error)
   }
@@ -71,9 +78,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       try {
         const modules = await getModulesForCategory(categorySlug)
         for (const module of modules) {
+          // Use updatedAt if available, otherwise fall back to createdAt or current date
+          let lastModifiedDate = new Date()
+          if (module.updatedAt) {
+            lastModifiedDate = new Date(module.updatedAt)
+          } else if (module.createdAt) {
+            lastModifiedDate = new Date(module.createdAt)
+          }
+
           learningPages.push({
             url: `${baseUrl}/learn/${categorySlug}/${module.slug}`,
-            lastModified: new Date(),
+            lastModified: lastModifiedDate,
             changeFrequency: 'weekly',
             priority: 0.7,
           })
