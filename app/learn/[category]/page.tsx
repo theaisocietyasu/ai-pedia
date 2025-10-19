@@ -198,7 +198,7 @@ export default function AlgorithmPage() {
         {/* Wrapper for cards + sidebar */}
         <div className="w-full flex justify-between gap-20 relative">
           {/* Cards */}
-          <div className="flex flex-col gap-16 w-full lg:w-3/4">
+          <div className="flex flex-col gap-12 w-full ">
             {loading ? (
               // Show skeleton cards while loading
               Array.from({ length: 4 }).map((_, index) => (
@@ -213,7 +213,7 @@ export default function AlgorithmPage() {
                     key={id}
                     id={id}
                     ref={(el) => { cardRefs.current[index] = el }}
-                    className={`cursor-pointer group flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl     ${
+                    className={`cursor-pointer group  flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl     ${
                       index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                     }`}
                   >
