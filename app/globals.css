@@ -151,13 +151,11 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradient-shift 0.6s ease;
 }
 
 .gradient-bg {
   background: var(--gradient-primary);
   background-size: 200% 200%;
-  animation: gradient-shift 0.6s ease;
 }
 
 .glass-effect {

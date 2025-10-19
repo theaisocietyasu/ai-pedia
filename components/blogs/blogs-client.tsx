@@ -62,9 +62,10 @@ export function BlogsClient({ blogs }: BlogsClientProps) {
                 <div className="w-16 h-16 mb-6 rounded-full bg-white/5 flex items-center justify-center">
                   <Search size={24} className="text-light-gray/60" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">No articles found</h3>
+                {/* <h3 className="text-xl font-bold text-white mb-2">No articles found</h3> */}
+                <h3 className="text-xl font-bold text-white mb-2">Coming Soon!</h3>
                 <p className="text-light-gray/60 max-w-md">
-                  Try adjusting your search terms or browse different categories to find what you're looking for.
+                  {/* Try adjusting your search terms or browse different categories to find what you're looking for. */}
                 </p>
               </motion.div>
             </div>

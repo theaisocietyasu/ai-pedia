@@ -82,49 +82,77 @@ export default function LearnPage() {
   }
 
   return (
-    <main className="min-h-screen relative overflow-hidden">
-      {/* Background decorations */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-purple/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-pink/20 rounded-full blur-3xl" />
-      </div>
+    <main className="min-h-screen relative overflow-hidden ">
+    
 
-      <div className="relative min-h-screen flex flex-col items-center justify-center px-3 sm:px-8 lg:px-12">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="w-full max-w-4xl text-center gap-5 flex flex-col"
-        >
+      
+
+     
+          
+        <section className="relative pt-32 pb-20 overflow-hidden">
+               {/* animated background */}
+               <div className="absolute inset-0 pointer-events-none">
+                 <motion.div
+                   animate={{
+                     scale: [1, 1.2, 1],
+                     opacity: [0.3, 0.5, 0.3],
+                   }}
+                   transition={{
+                     duration: 8,
+                     repeat: Infinity,
+                     ease: "easeInOut"
+                   }}
+                   className="absolute top-20 left-20 w-96 h-96 bg-purple/30 rounded-full blur-3xl"
+                 />
+                 <motion.div
+                   animate={{
+                     scale: [1, 1.3, 1], 
+                     opacity: [0.3, 0.5, 0.3],
+                   }}
+                   transition={{
+                     duration: 10,
+                     repeat: Infinity,
+                     ease: "easeInOut",
+                     delay: 1
+                   }}
+                   className="absolute bottom-20 right-20 w-96 h-96 bg-pink/30 rounded-full blur-3xl"
+                 />
+               </div>
        
-
-
-          {/* Title */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-4xl sm:text-5xl font-bold"
-          >
-            <GradientText>Learn, Visualize, & Conquer</GradientText> AI
-          </motion.h1>
-
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-lg text-light-gray/80"
-          >
-            Explore AI algorithms through interactive tutorials, explanations, and visualizations.
-          </motion.p>
+               <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
+                 <div className="text-center">
+                   {/* badge */}
+                  
+       
+                   {/* title */}
+                   <motion.h1
+                     initial={{ opacity: 0, y: 20 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     transition={{ duration: 0.5, delay: 0.1 }}
+                     className="text-5xl sm:text-6xl md:text-7xl font-bold mb-8"
+                   >
+                     <GradientText animate={false}>Learn</GradientText>
+                   </motion.h1>
+       
+                   {/* subtitle */}
+                   <motion.p
+                     initial={{ opacity: 0, y: 20 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     transition={{ duration: 0.5, delay: 0.2 }}
+                     className="text-xl text-light-gray/80 max-w-3xl mx-auto leading-relaxed"
+                   >
+                     Explore the beginner and deep dive tutorials in artificial intelligence.
+                   </motion.p>
+                 </div>
+               </div>
+             </section>
 
           {/* Category Headings */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-col gap-8 w-full items-center"
+            className="flex flex-col mt-12 gap-8 w-full items-center"
           >
             {loading ? (
               // Show skeleton cards while loading
@@ -136,8 +164,6 @@ export default function LearnPage() {
               Object.entries(categories).map(([key, cat], i) => (
                 <motion.div
                   key={key}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.3 + i * 0.2 }}
                   className="w-full max-w-2xl"
                 >
@@ -160,8 +186,6 @@ export default function LearnPage() {
 
 
 
-        </motion.div>
-      </div>
     </main>
   )
 }
