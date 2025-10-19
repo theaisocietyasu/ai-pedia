@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import {  BookOpen } from "lucide-react"
 import { GradientText } from "@/components/ui/gradient-text"
-import { blogCategories, getAllBlogs } from "@/lib/blog-data"
+import {  getAllBlogs } from "@/lib/blog-data"
 import { BlogsClient } from "@/components/blogs/blogs-client"
 import type { LegacyBlogPost } from "@/lib/types"
 
@@ -135,7 +135,7 @@ export default function BlogsPage() {
           </div>
         </section>
       ) : (
-        <BlogsClient blogs={blogs} blogCategories={blogCategories} />
+        <BlogsClient blogs={blogs} />
       )}
     </main>
   )

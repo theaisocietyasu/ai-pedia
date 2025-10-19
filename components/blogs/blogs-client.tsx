@@ -9,10 +9,9 @@ import type { LegacyBlogPost, BlogCategory } from "@/lib/types"
 
 interface BlogsClientProps {
   blogs: LegacyBlogPost[]
-  blogCategories: BlogCategory[]
 }
 
-export function BlogsClient({ blogs, blogCategories }: BlogsClientProps) {
+export function BlogsClient({ blogs }: BlogsClientProps) {
   const [selectedCategory, setSelectedCategory] = useState("all")
   const [searchQuery, setSearchQuery] = useState("")
 
@@ -35,65 +34,11 @@ export function BlogsClient({ blogs, blogCategories }: BlogsClientProps) {
 
   return (
     <>
-      {/* filters and search */}
-      <section className="py-6 border-b border-white/5">
-        <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
-          <div className="flex flex-col gap-6 items-center justify-center">
-           
-
-            {/* category filters */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="flex flex-wrap gap-3 justify-center"
-            >
-              <button
-                onClick={() => setSelectedCategory("all")}
-                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                  selectedCategory === "all"
-                    ? "bg-purple text-white"
-                    : "bg-white/5 text-light-gray/80 hover:bg-white/10"
-                }`}
-              >
-                All Articles
-              </button>
-              {blogCategories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.name)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                    selectedCategory === category.name
-                      ? "bg-purple text-white"
-                      : "bg-white/5 text-light-gray/80 hover:bg-white/10"
-                  }`}
-                >
-                  {category.name}
-                </button>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
       {/* blog grid */}
       <section className="pt-4 pb-12">
         <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
-          {/* results header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            style={{ marginTop: '-2rem', marginBottom: '1.5rem' }}
-          >
-            <h2 className="text-2xl font-bold text-white mb-2">
-              {searchQuery ? `Search Results for "${searchQuery}"` :
-               selectedCategory === "all" ? "All Articles" : selectedCategory}
-            </h2>
-            <p className="text-light-gray/60">
-              {filteredBlogs.length} article{filteredBlogs.length !== 1 ? 's' : ''} found
-            </p>
-          </motion.div>
+        
 
           {/* blog cards grid */}
           {filteredBlogs.length > 0 ? (
