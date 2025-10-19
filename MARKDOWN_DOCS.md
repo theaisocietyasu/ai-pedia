@@ -1,6 +1,6 @@
 # Markdown Rendering System Documentation
 
-This documentation explains how to use the markdown rendering system in the ML Visualization frontend.
+This documentation explains how to use the markdown rendering system in the AI Pedia frontend.
 
 ## Overview
 

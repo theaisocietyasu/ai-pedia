@@ -41,11 +41,11 @@ export function Footer() {
             <div className="flex items-center gap-3">
               <img 
                 src="/logo.png" 
-                alt="ML Visualization Logo" 
+                alt="AI Pedia Logo" 
                 className="w-10 h-10 rounded-lg object-cover"
               />
               <div>
-                <h2 className="font-bold text-lg text-white">ML Visualization</h2>
+                <h2 className="font-bold text-lg text-white">AI Pedia</h2>
                 <p className="text-xs text-light-gray/60">by The AI Society</p>
               </div>
             </div>

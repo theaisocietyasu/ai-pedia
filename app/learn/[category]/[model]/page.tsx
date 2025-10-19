@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import MarkdownRenderer from "@/components/MarkdownRenderer"
 import TableOfContents from "@/components/TableOfContents"
 import { extractHeadings, Heading } from "@/lib/markdown-utils"
+import ReactMarkdown from "react-markdown"
 
 
 
@@ -76,7 +77,7 @@ export default function AlgorithmPage() {
   }, [modelSlug]);
 
   // Use the actual title from the database, fallback to generated name from URL
-  const displayTitle = model?.title || modelSlug
+  const displayTitle = model?.title || "Loading..."
     ?.split("-")
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ")
@@ -153,6 +154,20 @@ export default function AlgorithmPage() {
           <h1 className="text-2xl mt-12 md:text-5xl font-bold  italic relative z-10">
             {displayTitle}
           </h1>
+          
+          {/* Model Description */}
+          {loading ? (
+            <div className="mt-4 max-w-2xl mx-auto">
+              <div className="h-4 bg-dark-gray/30 rounded animate-pulse mb-2"></div>
+              <div className="h-4 bg-dark-gray/30 rounded w-3/4 mx-auto animate-pulse"></div>
+            </div>
+          ) : model?.description && (
+            <div className="mt-4 text-base md:text-lg text-light-gray/80 max-w-2xl mx-auto">
+              <ReactMarkdown>
+                {model.description}
+              </ReactMarkdown>
+            </div>
+          )}
         </div>
 
         {/* Wrapper for content + sidebar */}

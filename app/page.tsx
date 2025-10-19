@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     "NLP learning"
   ],
   openGraph: {
-    title: "ML Visualization | Interactive AI Learning Platform",
+    title: "AI Pedia | Interactive AI Learning Platform",
     description: "Master artificial intelligence through interactive visualizations and hands-on projects. Learn ML, Deep Learning, Computer Vision, and NLP.",
     url: baseUrl,
     type: "website",
@@ -28,13 +28,13 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "ML Visualization - Interactive AI Learning Platform"
+        alt: "AI Pedia - Interactive AI Learning Platform"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "ML Visualization | Interactive AI Learning Platform",
+    title: "AI Pedia | Interactive AI Learning Platform",
     description: "Master artificial intelligence through interactive visualizations and hands-on projects.",
     images: ["/og-image.png"]
   },

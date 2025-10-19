@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'ML Visualization | The AI Society at ASU',
+    name: 'AI Pedia | The AI Society at ASU',
     short_name: 'ML Viz',
     description: 'Master artificial intelligence through interactive visualizations and hands-on projects. Join ASU\'s premier AI learning platform powered by The AI Society.',
     start_url: '/',

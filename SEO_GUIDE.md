@@ -1,6 +1,6 @@
-# SEO Optimization Guide - ML Visualization
+# SEO Optimization Guide - AI Pedia
 
-This document outlines all SEO optimizations implemented for the ML Visualization platform and provides guidance for maintaining and improving SEO performance.
+This document outlines all SEO optimizations implemented for the AI Pedia platform and provides guidance for maintaining and improving SEO performance.
 
 ## Table of Contents
 1. [Overview](#overview)
@@ -20,7 +20,7 @@ This document outlines all SEO optimizations implemented for the ML Visualizatio
 
 ## Overview
 
-The ML Visualization platform has been optimized for search engines with:
+The AI Pedia platform has been optimized for search engines with:
 - ✅ Dynamic page-specific metadata
 - ✅ JSON-LD structured data (Schema.org)
 - ✅ Dynamic XML sitemap
@@ -111,8 +111,8 @@ Each major page has custom metadata via `generateMetadata()` or layout files:
 The root layout uses a title template for consistency:
 ```typescript
 title: {
-  default: "ML Visualization | The AI Society at ASU",
-  template: "%s | ML Visualization"
+  default: "AI Pedia | The AI Society at ASU",
+  template: "%s | AI Pedia"
 }
 ```
 

@@ -13,7 +13,7 @@ Create these images and place them in the `/public/` folder for optimal SEO and 
 **Design Guidelines:**
 - Include your logo
 - Use brand colors (purple #8b5cf6, pink #ec4899)
-- Add text: "ML Visualization - Learn AI through Interactive Visualizations"
+- Add text: "AI Pedia - Learn AI through Interactive Visualizations"
 - Dark background (#0a0a0a) recommended
 - Keep text and important elements in the "safe area" (center 80%)
 

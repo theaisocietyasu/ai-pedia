@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "exclusive AI content"
   ],
   openGraph: {
-    title: "Join the ML Visualization Waitlist",
+    title: "Join the AI Pedia Waitlist",
     description: "Be the first to know when we launch. Get early access, exclusive content, and founding member status.",
     url: `${baseUrl}/waitlist`,
     type: "website",
@@ -22,13 +22,13 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Join the ML Visualization Waitlist"
+        alt: "Join the AI Pedia Waitlist"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Join the ML Visualization Waitlist",
+    title: "Join the AI Pedia Waitlist",
     description: "Be the first to know when we launch. Get early access and exclusive content.",
     images: ["/og-image.png"]
   },

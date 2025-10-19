@@ -1,10 +1,10 @@
-# ML Visualization
+# AI Pedia
 
 A modern web-based learning platform built by The AI Society at ASU to help students visualize and understand machine learning concepts through interactive experiences.
 
 ## Project Overview
 
-ML Visualization is a Next.js application that provides an engaging platform for AI education. The frontend features a modern design with smooth animations, responsive layout, and intuitive navigation to guide users through their AI learning journey.
+AI Pedia is a Next.js application that provides an engaging platform for AI education. The frontend features a modern design with smooth animations, responsive layout, and intuitive navigation to guide users through their AI learning journey.
 
 ## Tech Stack
 

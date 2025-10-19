@@ -75,7 +75,7 @@ export function generateOrganizationSchema() {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
     "name": "The AI Society at ASU",
-    "alternateName": "ML Visualization",
+    "alternateName": "AI Pedia",
     "url": baseUrl,
     "logo": `${baseUrl}/logo.png`,
     "description": "Master artificial intelligence through interactive visualizations and hands-on projects. Join ASU's premier AI learning platform powered by The AI Society.",
@@ -93,7 +93,7 @@ export function generateWebsiteSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "ML Visualization",
+    "name": "AI Pedia",
     "url": baseUrl,
     "description": "Master artificial intelligence through interactive visualizations and hands-on projects.",
     "potentialAction": {

@@ -24,8 +24,8 @@ const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ailearninghub.com'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "ML Visualization | The AI Society at ASU",
-    template: "%s | ML Visualization"
+    default: "AI Pedia | The AI Society at ASU",
+    template: "%s | AI Pedia"
   },
   description: "Master artificial intelligence through interactive visualizations and hands-on projects. Join ASU's premier AI learning platform powered by The AI Society.",
   keywords: [
@@ -50,16 +50,16 @@ export const metadata: Metadata = {
     canonical: baseUrl,
   },
   openGraph: {
-    title: "ML Visualization | The AI Society at ASU",
+    title: "AI Pedia | The AI Society at ASU",
     description: "Master artificial intelligence through interactive visualizations and hands-on projects.",
     url: baseUrl,
-    siteName: "ML Visualization",
+    siteName: "AI Pedia",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "ML Visualization - Learn AI through Interactive Visualizations",
+        alt: "AI Pedia - Learn AI through Interactive Visualizations",
       },
     ],
     locale: "en_US",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ML Visualization | The AI Society at ASU",
+    title: "AI Pedia | The AI Society at ASU",
     description: "Master artificial intelligence through interactive visualizations and hands-on projects.",
     images: ["/og-image.png"],
     creator: "@theaisocietyasu",
@@ -97,10 +97,10 @@ export const metadata: Metadata = {
     yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION,
   },
   category: 'education',
-  applicationName: 'ML Visualization',
+  applicationName: 'AI Pedia',
   appleWebApp: {
     capable: true,
-    title: 'ML Visualization',
+    title: 'AI Pedia',
     statusBarStyle: 'black-translucent',
   },
   formatDetection: {
@@ -117,7 +117,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
     "name": "The AI Society at ASU",
-    "alternateName": "ML Visualization",
+    "alternateName": "AI Pedia",
     "url": baseUrl,
     "logo": `${baseUrl}/logo.png`,
     "description": "Master artificial intelligence through interactive visualizations and hands-on projects. Join ASU's premier AI learning platform powered by The AI Society.",
@@ -133,7 +133,7 @@ export default function RootLayout({
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "ML Visualization",
+    "name": "AI Pedia",
     "url": baseUrl,
     "description": "Master artificial intelligence through interactive visualizations and hands-on projects.",
     "potentialAction": {

@@ -2,7 +2,7 @@
 
 ## What Was Done
 
-Your ML Visualization site has been comprehensively optimized for SEO across all major browsers (Chrome, Safari, Firefox, Edge, Brave).
+Your AI Pedia site has been comprehensively optimized for SEO across all major browsers (Chrome, Safari, Firefox, Edge, Brave).
 
 ---
 
