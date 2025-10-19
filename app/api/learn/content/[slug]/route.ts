@@ -236,3 +236,62 @@ export async function PUT(
     );
   }
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  try {
+    // Check authentication
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Please sign in to delete content' },
+        { status: 401 }
+      );
+    }
+
+    const { slug } = await params;
+
+    if (!slug) {
+      return NextResponse.json(
+        { error: 'Slug parameter is required' },
+        { status: 400 }
+      );
+    }
+
+    const collection = mongoConnection.collection('learn_content');
+
+    // Check if the module exists
+    const existingModule = await collection.findOne({ slug: slug });
+    if (!existingModule) {
+      return NextResponse.json(
+        { error: 'Content not found' },
+        { status: 404 }
+      );
+    }
+
+    // Delete the module
+    const deleteResult = await collection.deleteOne({ slug: slug });
+
+    if (deleteResult.deletedCount === 0) {
+      return NextResponse.json(
+        { error: 'Failed to delete content' },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: 'Learn module deleted successfully',
+      deletedSlug: slug
+    });
+
+  } catch (error) {
+    console.error('Error deleting learn module:', error);
+    return NextResponse.json(
+      { error: 'Internal server error while deleting learn module' },
+      { status: 500 }
+    );
+  }
+}
