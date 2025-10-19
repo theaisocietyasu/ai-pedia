@@ -16,7 +16,13 @@ export default function AlgorithmPage() {
   const params = useParams()
   const modelSlug = Array.isArray(params.model) ? params.model[0] : params.model
 
-  const [model, setModel] = useState<any>(null)
+  const [model, setModel] = useState<any>({
+      title:  '',
+      content: '',
+      description:  '',
+      imgPath:  '',
+      actionButtons:  []
+    })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [headings, setHeadings] = useState<Heading[]>([])
@@ -75,29 +81,50 @@ export default function AlgorithmPage() {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ")
 
-  if (loading) {
-    return (
-      <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
-        <div className="w-full max-w-5xl flex flex-col items-center gap-16">
-          <div className="relative inline-block mb-10 text-center">
-            <h1 className="text-2xl md:text-5xl font-bold font-sans italic relative z-10">
-              Loading Learning Content...
-            </h1>
-          </div>
-          <div className="text-center">
-            <p className="text-lg text-light-gray/80">Please wait while we fetch the latest content.</p>
-          </div>
+  // Skeleton components for loading state
+  const ContentSkeleton = () => (
+    <section className="my-16 scroll-mt-24 space-y-6">
+      {/* Title skeleton */}
+      <div className="h-8 bg-dark-gray/50 rounded w-2/3 animate-pulse mb-6"></div>
+      
+      {/* Paragraph skeletons */}
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="space-y-2">
+          <div className="h-4 bg-dark-gray/30 rounded animate-pulse"></div>
+          <div className="h-4 bg-dark-gray/30 rounded w-5/6 animate-pulse"></div>
+          <div className="h-4 bg-dark-gray/30 rounded w-4/5 animate-pulse"></div>
+          <div className="mb-4"></div>
         </div>
-      </div>
-    );
-  }
+      ))}
+      
+      {/* Image skeleton */}
+      <div className="h-48 bg-dark-gray/50 rounded-lg animate-pulse my-8"></div>
+      
+      {/* More paragraph skeletons */}
+      {Array.from({ length: 3 }).map((_, i) => (
+        <div key={i + 6} className="space-y-2">
+          <div className="h-4 bg-dark-gray/30 rounded animate-pulse"></div>
+          <div className="h-4 bg-dark-gray/30 rounded w-3/4 animate-pulse"></div>
+        </div>
+      ))}
+    </section>
+  );
+
+  const SidebarSkeleton = () => (
+    <aside className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
+      <div className="h-5 bg-dark-gray/50 rounded mb-4 animate-pulse"></div>
+      {Array.from({ length: 8 }).map((_, i) => (
+        <div key={i} className="h-4 bg-dark-gray/30 rounded animate-pulse mb-2"></div>
+      ))}
+    </aside>
+  );
 
   if (error) {
     return (
       <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
         <div className="w-full max-w-5xl flex flex-col items-center gap-16">
           <div className="relative inline-block mb-10 text-center">
-            <h1 className="text-2xl md:text-5xl font-bold font-sans italic relative z-10 capitalize">
+            <h1 className="text-2xl md:text-5xl font-bold  italic relative z-10 capitalize">
               Error Loading Content
             </h1>
           </div>
@@ -118,16 +145,12 @@ export default function AlgorithmPage() {
 
   return (
     <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
-      {/* background decoration */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-pink/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-purple/20 rounded-full blur-3xl" />
-      </div>
+    
 
       <div className="w-full max-w-5xl flex flex-col items-center gap-16">
         {/* Title */}
         <div className="relative inline-block mb-10 text-center">
-          <h1 className="text-2xl md:text-5xl font-bold font-sans italic relative z-10">
+          <h1 className="text-2xl mt-12 md:text-5xl font-bold  italic relative z-10">
             {displayTitle}
           </h1>
         </div>
@@ -136,87 +159,85 @@ export default function AlgorithmPage() {
         <div className="w-full flex justify-between gap-20 relative">
           {/* Main Content */}
           <main className="flex flex-col gap-16 w-full lg:w-3/4">
-            {/* Markdown Content */}
-            <section className="my-16 scroll-mt-24">
-              <MarkdownRenderer content={model.content || 'No content available.'} />
-            </section>
-
-            {/* Images */}
-            {model.images && model.images.length > 0 && (
-              <section className="my-16">
-                <h2 className="text-2xl font-semibold mb-4">Images</h2>
-                <div className="grid gap-6">
-                  {model.images.map((image: string, idx: number) => (
-                    <img
-                      key={idx}
-                      src={image}
-                      alt={`${displayTitle} image ${idx + 1}`}
-                      className="rounded-lg shadow-lg w-full"
-                    />
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Code Blocks */}
-            {model.code_blocks && model.code_blocks.length > 0 && (
-              <section className="my-16">
-                <h2 className="text-2xl font-semibold mb-4">Code Examples</h2>
-                <div className="space-y-4">
-                  {model.code_blocks.map((code: string, idx: number) => (
-                    <div key={idx} className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-                      <pre className="text-sm text-gray-300">
-                        <code>{code}</code>
-                      </pre>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Try button placeholder */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="mt-12"
-            >
-              <Link href={`/learn/${params.category}/${modelSlug}/try`}>
-                <Button className="cursor-pointer" variant="primary">Try</Button>
-              </Link>
-            </motion.div>
-          </main>
-
-          {/* Sidebar - Table of Contents */}
-          <aside className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
-            <TableOfContents headings={headings} />
-
-            {/* Additional navigation items */}
-            {(model.images?.length > 0 || model.code_blocks?.length > 0) && (
+            {loading ? (
+              <ContentSkeleton />
+            ) : (
               <>
-                <div className="border-t border-gray-700 mt-4 pt-4" />
-                <h3 className="font-semibold mb-2 text-gray-200 text-sm uppercase tracking-wide">
-                  Additional Sections
-                </h3>
+                {/* Markdown Content */}
+                <section className="my-16 scroll-mt-24">
+                  <MarkdownRenderer content={model.content || 'No content available.'} />
+                </section>
+
+                {/* Images */}
                 {model.images && model.images.length > 0 && (
-                  <button
-                    onClick={() => document.querySelector('section:nth-of-type(2)')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
-                  >
-                    📷 Images
-                  </button>
+                  <section className="my-16">
+                    <h2 className="text-2xl font-semibold mb-4">Images</h2>
+                    <div className="grid gap-6">
+                      {model.images.map((image: string, idx: number) => (
+                        <img
+                          key={idx}
+                          src={image}
+                          alt={`${displayTitle} image ${idx + 1}`}
+                          className="rounded-lg shadow-lg w-full"
+                        />
+                      ))}
+                    </div>
+                  </section>
                 )}
+
+                {/* Code Blocks */}
                 {model.code_blocks && model.code_blocks.length > 0 && (
-                  <button
-                    onClick={() => document.querySelector('section:nth-of-type(3)')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
-                  >
-                    💻 Code Examples
-                  </button>
+                  <section className="my-16">
+                    <h2 className="text-2xl font-semibold mb-4">Code Examples</h2>
+                    <div className="space-y-4">
+                      {model.code_blocks.map((code: string, idx: number) => (
+                        <div key={idx} className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+                          <pre className="text-sm text-gray-300">
+                            <code>{code}</code>
+                          </pre>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
                 )}
               </>
             )}
-          </aside>
+          </main>
+
+          {/* Sidebar - Table of Contents */}
+          {loading ? (
+            <SidebarSkeleton />
+          ) : (
+            <aside className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
+              <TableOfContents headings={headings} />
+
+              {/* Additional navigation items */}
+              {(model.images?.length > 0 || model.code_blocks?.length > 0) && (
+                <>
+                  <div className="border-t border-gray-700 mt-4 pt-4" />
+                  <h3 className="font-semibold mb-2 text-gray-200 text-sm uppercase tracking-wide">
+                    Additional Sections
+                  </h3>
+                  {model.images && model.images.length > 0 && (
+                    <button
+                      onClick={() => document.querySelector('section:nth-of-type(2)')?.scrollIntoView({ behavior: 'smooth' })}
+                      className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
+                    >
+                      📷 Images
+                    </button>
+                  )}
+                  {model.code_blocks && model.code_blocks.length > 0 && (
+                    <button
+                      onClick={() => document.querySelector('section:nth-of-type(3)')?.scrollIntoView({ behavior: 'smooth' })}
+                      className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
+                    >
+                      💻 Code Examples
+                    </button>
+                  )}
+                </>
+              )}
+            </aside>
+          )}
         </div>
       </div>
     </div>

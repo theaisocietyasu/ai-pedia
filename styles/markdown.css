@@ -14,7 +14,6 @@
 /* Root container for all markdown content */
 .markdown-content {
   color: #ffffff;
-  font-family: var(--font-geist-sans, system-ui, -apple-system, sans-serif);
   line-height: 1.7;
   font-size: 16px;
   max-width: none;
@@ -33,7 +32,6 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradient-shift 3s ease infinite;
 }
 
 .markdown-content .markdown-h1 {
@@ -134,7 +132,6 @@
   padding: 1.5rem;
   margin: 2rem 0;
   overflow-x: auto;
-  font-family: var(--font-geist-mono, 'SF Mono', 'Monaco', 'Consolas', monospace);
   font-size: 0.875rem;
   line-height: 1.6;
   position: relative;
@@ -165,7 +162,6 @@
   color: #e0e0e0;
   padding: 0.2em 0.4em;
   border-radius: 4px;
-  font-family: var(--font-geist-mono, 'SF Mono', 'Monaco', 'Consolas', monospace);
   font-size: 0.875em;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }

@@ -2,9 +2,8 @@
 
 import React, { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { Search, Filter, BookOpen } from "lucide-react"
+import {  BookOpen } from "lucide-react"
 import { GradientText } from "@/components/ui/gradient-text"
-import { BlogCard } from "@/components/ui/blog-card"
 import { blogCategories, getAllBlogs } from "@/lib/blog-data"
 import { BlogsClient } from "@/components/blogs/blogs-client"
 import type { LegacyBlogPost } from "@/lib/types"

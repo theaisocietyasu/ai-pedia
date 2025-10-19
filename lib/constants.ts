@@ -45,11 +45,6 @@ export const navItems: NavItem[] = [
     link: "/blogs",
     description: "Read our latest articles"
   },
-  {
-    name: "About",
-    link: "/about",
-    description: "About AI Society"
-  },
 ]
 
 // hero content

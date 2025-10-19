@@ -14,6 +14,8 @@ export async function GET() {
     const db = client.db();
     const collection = db.collection(CATEGORIES_COLLECTION);
 
+    
+
     // console.log('Connected to MongoDB, fetching categories...');
     // console.log(`Using database: ${db.databaseName}, collection: ${CATEGORIES_COLLECTION}`);
 

@@ -9,7 +9,7 @@ export default function AlgorithmPage() {
   const params = useParams()
   const category = Array.isArray(params.category) ? params.category[0] : params.category
 
-  const [models, setModels] = useState<any[]>([])
+  const [models, setModels] = useState<any[]>([0,0,0])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [activeId, setActiveId] = useState<string>("")
@@ -131,29 +131,41 @@ export default function AlgorithmPage() {
     }
   }, [])
 
-  if (loading) {
-    return (
-      <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
-        <div className="w-full max-w-5xl flex flex-col items-center gap-16">
-          <div className="relative inline-block mb-10 text-center">
-            <h1 className="text-2xl md:text-5xl font-bold font-sans italic relative z-10 capitalize">
-              Loading {category} Learning...
-            </h1>
-          </div>
-          <div className="text-center">
-            <p className="text-lg text-light-gray/80">Please wait while we fetch the latest content.</p>
-          </div>
+  // Skeleton components for loading state
+  const SkeletonCard = ({ index, reverse }: { index: number; reverse: boolean }) => (
+    <div
+      className={`flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl glass-effect ${
+        reverse ? "md:flex-row-reverse" : "md:flex-row"
+      }`}
+    >
+      {/* Image skeleton */}
+      <div className="w-full md:w-1/3 h-48 bg-dark-gray/50 rounded-lg animate-pulse"></div>
+      
+      {/* Text skeleton */}
+      <div className="flex-1 text-center md:text-left">
+        <div className="h-6 bg-dark-gray/50 rounded mb-2 animate-pulse"></div>
+        <div className="space-y-2">
+          <div className="h-4 bg-dark-gray/30 rounded animate-pulse"></div>
+          <div className="h-4 bg-dark-gray/30 rounded w-3/4 animate-pulse"></div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+
+  const SidebarSkeleton = () => (
+    <div className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div key={i} className="h-4 bg-dark-gray/30 rounded animate-pulse"></div>
+      ))}
+    </div>
+  );
 
   if (error) {
     return (
-      <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
+      <div className="relative mt-12 min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
         <div className="w-full max-w-5xl flex flex-col items-center gap-16">
           <div className="relative inline-block mb-10 text-center">
-            <h1 className="text-2xl md:text-5xl font-bold font-sans italic relative z-10 capitalize">
+            <h1 className="text-2xl md:text-5xl font-bold  italic relative z-10 capitalize">
               Error Loading Content
             </h1>
           </div>
@@ -174,16 +186,11 @@ export default function AlgorithmPage() {
 
   return (
     <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
-      {/* background decoration */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-pink/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-purple/20 rounded-full blur-3xl" />
-      </div>
 
-      <div className="w-full max-w-5xl flex flex-col items-center gap-16">
+      <div className="w-full max-w-5xl mt-12 flex flex-col items-center gap-16">
         {/* Title */}
         <div className="relative inline-block mb-10 text-center">
-          <h1 className="text-2xl md:text-5xl font-bold font-sans italic relative z-10 capitalize">
+          <h1 className="text-2xl md:text-5xl font-bold  italic relative z-10 capitalize">
             {category} Learning
           </h1>
         </div>
@@ -192,56 +199,68 @@ export default function AlgorithmPage() {
         <div className="w-full flex justify-between gap-20 relative">
           {/* Cards */}
           <div className="flex flex-col gap-16 w-full lg:w-3/4">
-            {models.map((item, index) => {
-              const id = item._id || item.name.toLowerCase().replace(/\s+/g, "-")
-              return (
-                <div
-                  key={id}
-                  id={id}
-                  ref={(el) => { cardRefs.current[index] = el }}
-                  className={`cursor-pointer group flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl glass-effect border border-white/10 transition-transform duration-300 hover:scale-[1.02] ${
-                    index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                  }`}
-                >
-                    <Link key={id} href={`/learn/${category}/${id}`} className={`group flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl glass-effect border border-white/10 transition-transform duration-300 hover:scale-[1.02] ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
-                    {/* Image */}
-                    <img
-                      src={item.imgPath}
-                      alt={item.name}
-                      className="w-full md:w-1/3 rounded-lg shadow-lg object-cover"
-                    />
+            {loading ? (
+              // Show skeleton cards while loading
+              Array.from({ length: 4 }).map((_, index) => (
+                <SkeletonCard key={index} index={index} reverse={index % 2 !== 0} />
+              ))
+            ) : (
+              // Show actual models when loaded
+              models.map((item, index) => {
+                const id = item._id || item.name.toLowerCase().replace(/\s+/g, "-")
+                return (
+                  <div
+                    key={id}
+                    id={id}
+                    ref={(el) => { cardRefs.current[index] = el }}
+                    className={`cursor-pointer group flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl     ${
+                      index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+                    }`}
+                  >
+                      <Link key={id} href={`/learn/${category}/${id}`} className={`group flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl glass-effect  ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
+                      {/* Image */}
+                      <img
+                        src={item.imgPath}
+                        alt={item.name}
+                        className="w-full md:w-1/3 rounded-lg shadow-lg object-cover"
+                      />
 
-                    {/* Text */}
-                    <div className="flex-1 text-center md:text-left">
-                      <h2 className="text-xl md:text-2xl font-semibold text-light-gray mb-2">
-                        {item.name}
-                      </h2>
-                      <p className="text-sm md:text-base text-light-gray/80">{item.description}</p>
-                    </div>
-                  </Link>
-                </div>
-              )
-            })}
+                      {/* Text */}
+                      <div className="flex-1 text-center md:text-left">
+                        <h2 className="text-xl md:text-2xl font-semibold text-light-gray mb-2">
+                          {item.name}
+                        </h2>
+                        <p className="text-sm md:text-base text-light-gray/80">{item.description}</p>
+                      </div>
+                    </Link>
+                  </div>
+                )
+              })
+            )}
           </div>
 
           {/* Sidebar (sticky, not fixed) */}
-          <div className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
-            {models.map((item) => {
-              const id = item._id || item.name.toLowerCase().replace(/\s+/g, "-")
-              const isActive = activeId === id
-              return (
-                <button
-                  key={id}
-                  onClick={() => scrollToCenter(id)}
-                  className={`text-sm font-medium transition-colors py-1 px-2 text-left ${
-                    isActive ? "text-pink-400" : "text-gray-400 hover:text-gray-200 cursor-pointer"
-                  }`}
-                >
-                  {item.name}
-                </button>
-              )
-            })}
-          </div>
+          {loading ? (
+            <SidebarSkeleton />
+          ) : (
+            <div className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
+              {models.map((item) => {
+                const id = item._id || item.name.toLowerCase().replace(/\s+/g, "-")
+                const isActive = activeId === id
+                return (
+                  <button
+                    key={id}
+                    onClick={() => scrollToCenter(id)}
+                    className={`text-sm font-medium transition-colors py-1 px-2 text-left ${
+                      isActive ? "text-pink-400" : "text-gray-400 hover:text-gray-200 cursor-pointer"
+                    }`}
+                  >
+                    {item.name}
+                  </button>
+                )
+              })}
+            </div>
+          )}
         </div>
 
       </div>
