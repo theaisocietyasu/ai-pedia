@@ -1,7 +1,6 @@
 import { Metadata } from "next"
 import { HeroSection } from "@/components/home/hero-section"
 import { FeaturesGrid } from "@/components/home/features-grid"
-import { VisionSection } from "@/components/home/vision-section"
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ailearninghub.com'
 
@@ -49,7 +48,6 @@ export default function Home() {
     <main className="min-h-screen bg-background">
       <HeroSection />
       <FeaturesGrid />
-      <VisionSection />
     </main>
   );
 }

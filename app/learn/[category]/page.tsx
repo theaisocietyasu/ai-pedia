@@ -134,19 +134,20 @@ export default function AlgorithmPage() {
   // Skeleton components for loading state
   const SkeletonCard = ({ index, reverse }: { index: number; reverse: boolean }) => (
     <div
-      className={`flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl glass-effect ${
+      className={`flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl glass-effect min-h-[280px] w-full ${
         reverse ? "md:flex-row-reverse" : "md:flex-row"
       }`}
     >
       {/* Image skeleton */}
-      <div className="w-full md:w-1/3 h-48 bg-dark-gray/50 rounded-lg animate-pulse"></div>
+      <div className="w-full md:w-1/3 md:min-w-[200px] h-48 md:h-56 bg-dark-gray/50 rounded-lg animate-pulse flex-shrink-0"></div>
       
       {/* Text skeleton */}
-      <div className="flex-1 text-center md:text-left">
-        <div className="h-6 bg-dark-gray/50 rounded mb-2 animate-pulse"></div>
+      <div className="flex-1 text-center md:text-left min-w-0">
+        <div className="h-6 bg-dark-gray/50 rounded mb-3 animate-pulse"></div>
         <div className="space-y-2">
           <div className="h-4 bg-dark-gray/30 rounded animate-pulse"></div>
           <div className="h-4 bg-dark-gray/30 rounded w-3/4 animate-pulse"></div>
+          <div className="h-4 bg-dark-gray/30 rounded w-5/6 animate-pulse"></div>
         </div>
       </div>
     </div>
@@ -217,20 +218,20 @@ export default function AlgorithmPage() {
                       index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                     }`}
                   >
-                      <Link key={id} href={`/learn/${category}/${id}`} className={`group flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl glass-effect  ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
+                      <Link key={id} href={`/learn/${category}/${id}`} className={`group flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl glass-effect min-h-[280px] w-full hover-glow transition-all duration-300 ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
                       {/* Image */}
                       <img
                         src={item.imgPath}
                         alt={item.name}
-                        className="w-full md:w-1/3 rounded-lg shadow-lg object-cover"
+                        className="w-full md:w-1/3 md:min-w-[200px] h-48 md:h-56 rounded-lg shadow-lg object-cover flex-shrink-0"
                       />
 
                       {/* Text */}
-                      <div className="flex-1 text-center md:text-left">
-                        <h2 className="text-xl md:text-2xl font-semibold text-light-gray mb-2">
+                      <div className="flex-1 text-center md:text-left min-w-0">
+                        <h2 className="text-xl md:text-2xl font-semibold text-light-gray mb-3 line-clamp-2">
                           {item.name}
                         </h2>
-                        <p className="text-sm md:text-base text-light-gray/80">{item.description}</p>
+                        <p className="text-sm md:text-base text-light-gray/80 line-clamp-4">{item.description}</p>
                       </div>
                     </Link>
                   </div>
