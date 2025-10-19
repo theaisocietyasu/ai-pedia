@@ -11,7 +11,7 @@ import MarkdownRenderer from '@/components/MarkdownRenderer';
 import { ImageUploadButton } from '@/components/ImageUploadButton';
 import { MarkdownUploadForm } from '@/components/MarkdownUploadForm';
 import { useRouter, useParams } from 'next/navigation';
-import { fetchModuleBySlug } from '@/lib/api';
+import { fetchModuleBySlug, deleteLearnModule } from '@/lib/api';
 
 export default function EditPage() {
   const router = useRouter();
@@ -24,6 +24,9 @@ export default function EditPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [initialData, setInitialData] = useState<any>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   // Load existing module data
   useEffect(() => {
@@ -72,6 +75,26 @@ export default function EditPage() {
         router.push(`/learn/${params.category}/${modelSlug}`);
       }
     }, 2000);
+  };
+
+  const handleDelete = async () => {
+    if (!modelSlug) return;
+
+    setIsDeleting(true);
+    setDeleteError(null);
+
+    try {
+      await deleteLearnModule(modelSlug);
+
+      // Redirect to category page after successful deletion
+      setTimeout(() => {
+        router.push(`/learn/${params.category}`);
+      }, 1500);
+    } catch (err) {
+      console.error('Error deleting module:', err);
+      setDeleteError(err instanceof Error ? err.message : 'Failed to delete module');
+      setIsDeleting(false);
+    }
   };
 
   if (loading) {
@@ -147,6 +170,13 @@ export default function EditPage() {
                   </button>
                 </div>
                 <button
+                  onClick={() => setShowDeleteConfirm(true)}
+                  className="px-4 py-2 text-sm bg-red-900/30 text-red-400 border border-red-800 rounded-md hover:bg-red-900/50 transition-colors"
+                  disabled={isDeleting}
+                >
+                  🗑️ Delete Module
+                </button>
+                <button
                   onClick={() => router.push(`/learn/${params.category}/${modelSlug}`)}
                   className="px-4 py-2 text-sm bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600 transition-colors"
                 >
@@ -167,6 +197,20 @@ export default function EditPage() {
         {updateSuccess && (
           <div className="bg-green-900/20 border border-green-500 text-green-400 px-6 py-4">
             ✅ Learning module updated successfully! Redirecting...
+          </div>
+        )}
+
+        {/* Delete Error Message */}
+        {deleteError && (
+          <div className="bg-red-900/20 border border-red-500 text-red-400 px-6 py-4">
+            ❌ {deleteError}
+          </div>
+        )}
+
+        {/* Deleting Message */}
+        {isDeleting && (
+          <div className="bg-yellow-900/20 border border-yellow-500 text-yellow-400 px-6 py-4">
+            🗑️ Deleting module... Please wait.
           </div>
         )}
 
@@ -326,6 +370,44 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
             </div>
           )}
         </div>
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteConfirm && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <div className="bg-dark-gray border border-gray-700 rounded-lg max-w-md w-full p-6">
+              <div className="text-center mb-6">
+                <div className="text-6xl mb-4">⚠️</div>
+                <h2 className="text-2xl font-bold text-red-400 mb-2">Delete Learning Module?</h2>
+                <p className="text-gray-300 mb-1">
+                  Are you sure you want to delete <span className="font-semibold text-white">{initialData?.title}</span>?
+                </p>
+                <p className="text-sm text-gray-400">
+                  This action cannot be undone. All content will be permanently deleted.
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="flex-1 px-4 py-3 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors font-medium"
+                  disabled={isDeleting}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    setShowDeleteConfirm(false);
+                    handleDelete();
+                  }}
+                  className="flex-1 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? 'Deleting...' : 'Yes, Delete'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </SignedIn>
     </div>
   );

@@ -195,3 +195,22 @@ export async function updateLearnModule(slug: string, formData: FormData): Promi
     throw error;
   }
 }
+
+// Delete existing learn module
+export async function deleteLearnModule(slug: string): Promise<any> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/learn/content/${slug}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Failed to delete learn module: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error deleting learn module:', error);
+    throw error;
+  }
+}
