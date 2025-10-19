@@ -207,7 +207,7 @@ export default function AlgorithmPage() {
             ) : (
               // Show actual models when loaded
               models.map((item, index) => {
-                const id = item._id || item.name.toLowerCase().replace(/\s+/g, "-")
+                const id = item.slug
                 return (
                   <div
                     key={id}
@@ -217,7 +217,7 @@ export default function AlgorithmPage() {
                       index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                     }`}
                   >
-                      <Link key={id} href={`/learn/${category}/${id}`} className={`group flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl glass-effect  ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
+                      <Link key={id} href={`/learn/${category}/${item.slug}`} className={`group flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl glass-effect  ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
                       {/* Image */}
                       <img
                         src={item.imgPath}
@@ -245,7 +245,7 @@ export default function AlgorithmPage() {
           ) : (
             <div className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
               {models.map((item) => {
-                const id = item._id || item.name.toLowerCase().replace(/\s+/g, "-")
+                const id = item.slug
                 const isActive = activeId === id
                 return (
                   <button
