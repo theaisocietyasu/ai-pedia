@@ -71,7 +71,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
               data.push({
                 title: module.title,
                 description: module.description,
-                path: `/learn/${categorySlug}/${module._id}`,
+                path: `/learn/${categorySlug}/${module.slug}`,
                 type: "model",
                 category: category.name
               })
