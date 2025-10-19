@@ -1,38 +1,35 @@
 import { NextResponse } from 'next/server';
-import { ObjectId } from 'mongodb';
 import { mongoConnection } from '../../../../../utilities/db_connector';
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  let client;
-  
   try {
-    const { id } = await params;
-    
-    if (!ObjectId.isValid(id)) {
+    const { slug } = await params;
+
+    if (!slug) {
       return NextResponse.json(
-        { error: 'Invalid ID format' },
+        { error: 'Slug parameter is required' },
         { status: 400 }
       );
     }
+
     const collection = mongoConnection.collection('learn_content');
-    
-    const content = await collection.findOne({ 
-      _id: new ObjectId(id) 
-    });
-    
+
+    // Find by slug only
+    const content = await collection.findOne({ slug: slug });
+
     if (!content) {
       return NextResponse.json(
         { error: 'Content not found' },
         { status: 404 }
       );
     }
-    
+
     return NextResponse.json(content);
   } catch (error) {
-    console.error('Error fetching content by ID:', error);
+    console.error('Error fetching content by slug:', error);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }

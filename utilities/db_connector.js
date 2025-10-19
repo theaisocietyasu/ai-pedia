@@ -14,9 +14,7 @@ const uri = process.env.MONGODB_URI;
 if (!uri) {
     throw new Error("MONGODB_URI environment variable is not set. Please check your .env.local file.");
 }
-console.log("Mongo URI: ", uri);
 const dbname = process.env.MONGODB_DB_NAME || 'ml_visualization';
-console.log("Mongo DB Name: ", dbname);
 const client = new MongoClient(uri);
 
 async function connectToDatabase() {

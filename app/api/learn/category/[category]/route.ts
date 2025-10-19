@@ -47,6 +47,7 @@ export async function GET(
     const filteredContent = modules.map(item => ({
       _id: item._id,
       title: item.title,
+      slug: item.slug,
       categories: item.categories,
       thumbnail: item.thumbnail,
       description: item.description || ''

@@ -51,14 +51,14 @@ export function invalidateModulesCache(category: string) {
 // Legacy export for backward compatibility - this will be populated dynamically
 export const categories = {};
 
-// Function to get model data by ID
-export async function getModelData(modelId: string) {
+// Function to get model data by slug
+export async function getModelData(slug: string) {
   try {
-    const { fetchModuleById, transformModuleToModelFormat } = await import('@/lib/api');
-    const module = await fetchModuleById(modelId);
+    const { fetchModuleBySlug, transformModuleToModelFormat } = await import('@/lib/api');
+    const module = await fetchModuleBySlug(slug);
     return transformModuleToModelFormat(module);
   } catch (error) {
-    console.error(`Error fetching model data for ${modelId}:`, error);
+    console.error(`Error fetching model data for ${slug}:`, error);
     // Return empty structure if API fails
     return {
       headings: [],
