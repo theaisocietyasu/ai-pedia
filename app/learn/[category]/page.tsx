@@ -5,6 +5,7 @@ import { getModulesForCategory, getCategories } from "../categories"
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import ReactMarkdown from "react-markdown"
+import { motion } from "framer-motion"
 
 export default function AlgorithmPage() {
   const params = useParams()
@@ -227,12 +228,16 @@ export default function AlgorithmPage() {
 
         {/* Wrapper for cards + sidebar */}
         <div className="w-full flex justify-between gap-20 relative">
-          {/* Cards */}
-          <div className="flex flex-col gap-12 w-full ">
+          {/* Cards */} 
+          <motion.div             initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="flex flex-col gap-12 w-full ">
+
             {loading ? (
               // Show skeleton cards while loading
               Array.from({ length: 4 }).map((_, index) => (
-                <SkeletonCard key={index} index={index} reverse={index % 2 !== 0} />
+                <SkeletonCard key={index} index={index} reverse={index % 2 !== 0}  />
               ))
             ) : (
               // Show actual models when loaded
@@ -267,7 +272,7 @@ export default function AlgorithmPage() {
                 )
               })
             )}
-          </div>
+          </motion.div>
 
           {/* Sidebar (sticky, not fixed) */}
           {loading ? (
