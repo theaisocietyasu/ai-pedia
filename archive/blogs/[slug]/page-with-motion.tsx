@@ -49,7 +49,7 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
       {/* back navigation */}
       <section className="pt-24 pb-8">
         <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
@@ -62,7 +62,7 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform duration-300" />
               <span>Back to Blog</span>
             </Link>
-          </motion.div>
+          </motion.div> */}
         </div>
       </section>
 

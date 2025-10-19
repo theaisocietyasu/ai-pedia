@@ -35,23 +35,23 @@ export default function LearnPage() {
     loadCategories();
   }, []);
 
-  if (loading) {
-    return (
-      <main className="min-h-screen relative overflow-hidden">
-        <div className="relative min-h-screen flex flex-col items-center justify-center px-3 sm:px-8 lg:px-12">
-          <div className="w-full max-w-4xl text-center">
-            <div className="w-20 h-20 rounded-2xl gradient-bg shadow-2xl shadow-purple/30 flex items-center justify-center mx-auto mb-6">
-              <BookOpen size={40} className="text-white" />
-            </div>
-            <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-              <GradientText>Loading Learning Categories...</GradientText>
-            </h1>
-            <p className="text-lg text-light-gray/80">Please wait while we fetch the latest content.</p>
-          </div>
+  // Skeleton component for loading state
+  const SkeletonCard = ({ index }: { index: number }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.3 + index * 0.2 }}
+      className="w-full max-w-2xl"
+    >
+      <div className="glass-effect rounded-2xl p-6 border border-purple/20">
+        <div className="h-8 bg-dark-gray/50 rounded-lg mb-4 animate-pulse"></div>
+        <div className="space-y-2">
+          <div className="h-4 bg-dark-gray/30 rounded animate-pulse"></div>
+          <div className="h-4 bg-dark-gray/30 rounded w-3/4 animate-pulse"></div>
         </div>
-      </main>
-    );
-  }
+      </div>
+    </motion.div>
+  );
 
   if (error) {
     return (
@@ -135,58 +135,39 @@ export default function LearnPage() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="flex flex-col gap-8 w-full items-center"
           >
-             {Object.entries(categories).map(([key, cat], i) => (
-              <motion.div
-                key={key}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 + i * 0.2 }}
-                className="flex flex-col items-center text-center group w-full max-w-2xl"
-              >
-                <Link href={`/learn/${key}`} className="w-full">
-                  <h2 className="text-2xl sm:text-3xl font-semibold transition-colors 
-                                group-hover:bg-dark-gray border-1 border-light-gray 
-                                w-full p-5 cursor-pointer capitalize">
-                    {key.replace('-', ' ') + " Learning"}
-                  </h2>
-                </Link>
-                <div
-                  className="overflow-hidden transition-all duration-500 ease-in-out 
-                            max-h-0 opacity-0 group-hover:max-h-fit group-hover:opacity-100 
-                            w-full p-3 border-1 border-light-gray"
+            {loading ? (
+              // Show skeleton cards while loading
+              Array.from({ length: 3 }).map((_, i) => (
+                <SkeletonCard key={i} index={i} />
+              ))
+            ) : (
+              // Show actual categories when loaded
+              Object.entries(categories).map(([key, cat], i) => (
+                <motion.div
+                  key={key}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 + i * 0.2 }}
+                  className="w-full max-w-2xl"
                 >
-                  <div className="text-base sm:text-lg text-light-gray/70">
-                    <ReactMarkdown>
-                      {cat.description || "Explore algorithms in this category"}
-                    </ReactMarkdown>
-                  </div>
-                </div>
-              </motion.div>
-
-
-            ))}
+                  <Link href={`/learn/${key}`} className="block">
+                    <div className="glass-effect rounded-2xl p-6 hover-glow cursor-pointer transition-all duration-300 border border-purple/20 hover:border-purple/40">
+                      <h2 className="text-2xl sm:text-3xl font-semibold mb-4 capitalize gradient-text">
+                        {key.replace('-', ' ') + " Learning"}
+                      </h2>
+                      <div className="text-base sm:text-lg text-light-gray/80">
+                        <ReactMarkdown>
+                          {cat.description || "Explore algorithms in this category"}
+                        </ReactMarkdown>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))
+            )}
           </motion.div>
 
 
-          {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-10"
-            >
-              <Link href="/">
-                <Button
-                  variant="outline"
-                  icon={<ArrowLeft size={18} />}
-                  iconPosition="left"
-                  className="rounded-full"
-                >
-                  Back to Home
-                </Button>
-              </Link>
-
-            </motion.div>
 
         </motion.div>
       </div>
