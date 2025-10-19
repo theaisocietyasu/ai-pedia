@@ -33,7 +33,7 @@ export function LearnModuleClient({ model, displayTitle, headings: initialHeadin
   }, [initialHeadings])
 
   return (
-    <div className="w-full flex justify-between gap-20 relative">
+    <div className="w-full flex justify-between gap-0 relative">
       {/* Main Content */}
       <main className="flex flex-col gap-16 w-full lg:w-3/4">
         {/* Markdown Content */}
@@ -76,7 +76,7 @@ export function LearnModuleClient({ model, displayTitle, headings: initialHeadin
       </main>
 
       {/* Sidebar - Table of Contents */}
-      <aside className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
+      <aside className="hidden lg:flex flex-col gap-2 lg:w-3/4 sticky top-32 self-start">
         <TableOfContents headings={headings} />
 
         {/* Additional navigation items */}
