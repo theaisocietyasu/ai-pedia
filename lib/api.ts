@@ -154,3 +154,23 @@ export async function uploadLearnModule(formData: FormData): Promise<any> {
     throw error;
   }
 }
+
+// Update existing learn module
+export async function updateLearnModule(slug: string, formData: FormData): Promise<any> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/learn/content/${slug}`, {
+      method: 'PUT',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Failed to update learn module: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error updating learn module:', error);
+    throw error;
+  }
+}

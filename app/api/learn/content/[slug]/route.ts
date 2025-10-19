@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import { mongoConnection } from '../../../../../utilities/db_connector';
+import { auth } from '@clerk/nextjs/server';
+import { uploadImageToGridFS } from '@/lib/gridfs';
+import { slugifyCategory, generateLearnModuleSlug } from '@/lib/slug';
 
 export async function GET(
   request: Request,
@@ -32,6 +35,203 @@ export async function GET(
     console.error('Error fetching content by slug:', error);
     return NextResponse.json(
       { error: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  try {
+    // Check authentication
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Please sign in to update content' },
+        { status: 401 }
+      );
+    }
+
+    const { slug } = await params;
+
+    if (!slug) {
+      return NextResponse.json(
+        { error: 'Slug parameter is required' },
+        { status: 400 }
+      );
+    }
+
+    const formData = await request.formData();
+
+    // Extract form fields
+    const title = formData.get('title') as string;
+    const description = formData.get('description') as string;
+    const content = formData.get('content') as string;
+    const categoriesString = formData.get('categories') as string;
+    const actionButtonsString = formData.get('action_buttons') as string;
+    const thumbnailFile = formData.get('thumbnail') as File | null;
+    const keepExistingThumbnail = formData.get('keep_existing_thumbnail') === 'true';
+
+    // Validate required fields
+    if (!title || !description || !content || !categoriesString) {
+      return NextResponse.json(
+        { error: 'Missing required fields: title, description, content, and categories are required' },
+        { status: 400 }
+      );
+    }
+
+    const collection = mongoConnection.collection('learn_content');
+    const categoriesCollection = mongoConnection.collection('learn_categories');
+
+    // Find existing document
+    const existingModule = await collection.findOne({ slug: slug });
+    if (!existingModule) {
+      return NextResponse.json(
+        { error: 'Content not found' },
+        { status: 404 }
+      );
+    }
+
+    // Parse categories
+    let categories: string[];
+    try {
+      categories = JSON.parse(categoriesString);
+      if (!Array.isArray(categories) || categories.length === 0) {
+        throw new Error('Categories must be a non-empty array');
+      }
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Invalid categories format' },
+        { status: 400 }
+      );
+    }
+
+    // Parse action buttons (optional)
+    let actionButtons = [];
+    if (actionButtonsString) {
+      try {
+        actionButtons = JSON.parse(actionButtonsString);
+      } catch (error) {
+        return NextResponse.json(
+          { error: 'Invalid action buttons format' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Normalize and validate categories
+    const normalizedCategorySlugs: string[] = [];
+    for (const cat of categories) {
+      const categorySlug = slugifyCategory(cat);
+      const existing = await categoriesCollection.findOne({
+        $or: [
+          { name: cat },
+          { name: new RegExp(`^${cat}$`, 'i') }
+        ]
+      });
+
+      let valid = existing;
+      if (!existing) {
+        const bySlug = await categoriesCollection.findOne({
+          $expr: {
+            $eq: [
+              {
+                $replaceAll: {
+                  input: { $toLower: { $trim: { input: '$name' } } },
+                  find: ' ',
+                  replacement: '-'
+                }
+              },
+              categorySlug
+            ]
+          }
+        });
+        valid = bySlug;
+      }
+
+      if (!valid) {
+        return NextResponse.json(
+          { error: `Unknown category: ${cat}` },
+          { status: 400 }
+        );
+      }
+      normalizedCategorySlugs.push(categorySlug);
+    }
+
+    // Handle thumbnail upload if new file provided
+    let thumbnailUrl = existingModule.thumbnail;
+    if (thumbnailFile && !keepExistingThumbnail) {
+      // Validate thumbnail file type
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+      if (!allowedTypes.includes(thumbnailFile.type)) {
+        return NextResponse.json(
+          { error: 'Invalid thumbnail file type. Please upload a JPG, PNG, GIF, or WebP image.' },
+          { status: 400 }
+        );
+      }
+
+      // Upload new thumbnail to GridFS
+      const arrayBuffer = await thumbnailFile.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      const { fileId, url } = await uploadImageToGridFS(
+        buffer,
+        thumbnailFile.name,
+        thumbnailFile.type,
+        userId
+      );
+      thumbnailUrl = url;
+    }
+
+    // Generate new slug if title changed
+    let newSlug = slug;
+    if (title.trim() !== existingModule.title) {
+      newSlug = generateLearnModuleSlug(title, existingModule._id.toString());
+    }
+
+    // Prepare update object
+    const updateData = {
+      title: title.trim(),
+      description: description.trim(),
+      content: content,
+      categories: normalizedCategorySlugs,
+      thumbnail: thumbnailUrl,
+      action_buttons: actionButtons,
+      slug: newSlug,
+      updatedAt: new Date()
+    };
+
+    // Update the document
+    const updateResult = await collection.updateOne(
+      { slug: slug },
+      { $set: updateData }
+    );
+
+    if (updateResult.matchedCount === 0) {
+      return NextResponse.json(
+        { error: 'Failed to update content' },
+        { status: 500 }
+      );
+    }
+
+    // Fetch updated document
+    const updatedModule = await collection.findOne({ slug: newSlug });
+
+    return NextResponse.json({
+      success: true,
+      message: 'Learn module updated successfully',
+      slugChanged: newSlug !== slug,
+      oldSlug: slug,
+      newSlug: newSlug,
+      module: updatedModule
+    });
+
+  } catch (error) {
+    console.error('Error updating learn module:', error);
+    return NextResponse.json(
+      { error: 'Internal server error while updating learn module' },
       { status: 500 }
     );
   }

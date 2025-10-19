@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { CategorySelector } from './CategorySelector';
 import { Button } from '@/components/ui/button';
-import { uploadLearnModule } from '@/lib/api';
+import { uploadLearnModule, updateLearnModule } from '@/lib/api';
 import { invalidateModulesCache } from '@/app/learn/categories';
 
 interface ActionButton {
@@ -11,16 +11,32 @@ interface ActionButton {
   link: string;
 }
 
+interface InitialData {
+  title: string;
+  description: string;
+  categories: string[];
+  actionButtons: ActionButton[];
+  thumbnail: string;
+}
+
 interface MarkdownUploadFormProps {
   markdownContent: string;
   onUploadSuccess: (moduleId: string) => void;
   className?: string;
+  mode?: 'create' | 'edit';
+  moduleSlug?: string;
+  initialData?: InitialData;
+  onUpdateSuccess?: (result: any) => void;
 }
 
 export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
   markdownContent,
   onUploadSuccess,
-  className = ''
+  className = '',
+  mode = 'create',
+  moduleSlug,
+  initialData,
+  onUpdateSuccess
 }) => {
   const [formData, setFormData] = useState({
     title: '',
@@ -28,14 +44,30 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
     categories: [] as string[],
     actionButtons: [] as ActionButton[]
   });
-  
+
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+  const [existingThumbnailUrl, setExistingThumbnailUrl] = useState<string | null>(null);
+  const [keepExistingThumbnail, setKeepExistingThumbnail] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [newActionButton, setNewActionButton] = useState({ name: '', link: '' });
-  
+
   const thumbnailInputRef = useRef<HTMLInputElement>(null);
+
+  // Initialize form with existing data in edit mode
+  useEffect(() => {
+    if (mode === 'edit' && initialData) {
+      setFormData({
+        title: initialData.title,
+        description: initialData.description,
+        categories: initialData.categories,
+        actionButtons: initialData.actionButtons
+      });
+      setExistingThumbnailUrl(initialData.thumbnail);
+      setKeepExistingThumbnail(true);
+    }
+  }, [mode, initialData]);
 
   const handleInputChange = (field: keyof typeof formData, value: any) => {
     setFormData(prev => ({
@@ -62,6 +94,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
     }
 
     setThumbnail(file);
+    setKeepExistingThumbnail(false);
     setError(null);
 
     // Create preview
@@ -70,6 +103,15 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
       setThumbnailPreview(e.target?.result as string);
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleResetThumbnail = () => {
+    setThumbnail(null);
+    setThumbnailPreview(null);
+    setKeepExistingThumbnail(true);
+    if (thumbnailInputRef.current) {
+      thumbnailInputRef.current.value = '';
+    }
   };
 
   const addActionButton = () => {
@@ -102,8 +144,13 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
       setError('At least one category is required');
       return false;
     }
-    if (!thumbnail) {
+    // In create mode, thumbnail is required. In edit mode, either keep existing or upload new
+    if (mode === 'create' && !thumbnail) {
       setError('Thumbnail image is required');
+      return false;
+    }
+    if (mode === 'edit' && !keepExistingThumbnail && !thumbnail) {
+      setError('Please select a new thumbnail or keep the existing one');
       return false;
     }
     if (!markdownContent.trim()) {
@@ -121,34 +168,58 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
 
     try {
       setIsUploading(true);
-      
-      const uploadData = new FormData();
-      uploadData.append('title', formData.title.trim());
-      uploadData.append('description', formData.description.trim());
-      uploadData.append('content', markdownContent);
-      uploadData.append('categories', JSON.stringify(formData.categories));
-      uploadData.append('action_buttons', JSON.stringify(formData.actionButtons));
-      uploadData.append('thumbnail', thumbnail!);
 
-      const result = await uploadLearnModule(uploadData);
-      
-      // Invalidate caches for selected categories (slugs)
-      formData.categories.forEach((slug) => invalidateModulesCache(slug));
+      const formDataToSend = new FormData();
+      formDataToSend.append('title', formData.title.trim());
+      formDataToSend.append('description', formData.description.trim());
+      formDataToSend.append('content', markdownContent);
+      formDataToSend.append('categories', JSON.stringify(formData.categories));
+      formDataToSend.append('action_buttons', JSON.stringify(formData.actionButtons));
 
-      // Clear form on success
-      setFormData({
-        title: '',
-        description: '',
-        categories: [],
-        actionButtons: []
-      });
-      setThumbnail(null);
-      setThumbnailPreview(null);
-      
-      onUploadSuccess(result.id);
+      if (mode === 'create') {
+        // Create mode: thumbnail is required
+        formDataToSend.append('thumbnail', thumbnail!);
+
+        const result = await uploadLearnModule(formDataToSend);
+
+        // Invalidate caches for selected categories (slugs)
+        formData.categories.forEach((slug) => invalidateModulesCache(slug));
+
+        // Clear form on success
+        setFormData({
+          title: '',
+          description: '',
+          categories: [],
+          actionButtons: []
+        });
+        setThumbnail(null);
+        setThumbnailPreview(null);
+
+        onUploadSuccess(result.id);
+      } else {
+        // Edit mode
+        if (keepExistingThumbnail) {
+          formDataToSend.append('keep_existing_thumbnail', 'true');
+        } else if (thumbnail) {
+          formDataToSend.append('thumbnail', thumbnail);
+        }
+
+        const result = await updateLearnModule(moduleSlug!, formDataToSend);
+
+        // Invalidate caches for all categories (old and new)
+        if (initialData) {
+          initialData.categories.forEach((slug) => invalidateModulesCache(slug));
+        }
+        formData.categories.forEach((slug) => invalidateModulesCache(slug));
+
+        // Call update success callback
+        if (onUpdateSuccess) {
+          onUpdateSuccess(result);
+        }
+      }
     } catch (err) {
-      console.error('Upload error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to upload learn module');
+      console.error(`${mode === 'create' ? 'Upload' : 'Update'} error:`, err);
+      setError(err instanceof Error ? err.message : `Failed to ${mode === 'create' ? 'upload' : 'update'} learn module`);
     } finally {
       setIsUploading(false);
     }
@@ -157,7 +228,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
   return (
     <div className={`bg-gray-800/50 border border-gray-700 rounded-lg p-6 ${className}`}>
       <h3 className="text-lg font-semibold text-gray-200 mb-4">
-        📚 Upload Learning Module
+        {mode === 'create' ? '📚 Upload Learning Module' : '✏️ Edit Learning Module'}
       </h3>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -202,7 +273,32 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Thumbnail Image *
           </label>
-          
+
+          {/* Show existing thumbnail in edit mode */}
+          {mode === 'edit' && existingThumbnailUrl && keepExistingThumbnail && !thumbnail && (
+            <div className="mb-3 p-3 bg-gray-700/50 rounded-lg border border-gray-600">
+              <div className="flex items-center gap-4">
+                <div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-500">
+                  <img
+                    src={existingThumbnailUrl}
+                    alt="Current thumbnail"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-gray-300 mb-2">Current Thumbnail</p>
+                  <button
+                    type="button"
+                    onClick={() => thumbnailInputRef.current?.click()}
+                    className="text-sm text-purple-300 hover:text-purple-200 underline"
+                  >
+                    Replace with new image
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="flex items-start gap-4">
             <div className="flex-1">
               <input
@@ -212,23 +308,34 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
                 onChange={handleThumbnailSelect}
                 className="hidden"
               />
-              
+
               <button
                 type="button"
                 onClick={() => thumbnailInputRef.current?.click()}
                 className="w-full p-3 border border-gray-600 rounded-lg bg-gray-800 text-gray-300 hover:border-gray-500 focus:outline-none focus:border-purple transition-colors text-left"
               >
-                {thumbnail ? thumbnail.name : 'Choose thumbnail image...'}
+                {thumbnail ? thumbnail.name : mode === 'edit' && keepExistingThumbnail ? 'Keep current thumbnail' : 'Choose thumbnail image...'}
               </button>
             </div>
-            
+
             {thumbnailPreview && (
-              <div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-600">
-                <img
-                  src={thumbnailPreview}
-                  alt="Thumbnail preview"
-                  className="w-full h-full object-cover"
-                />
+              <div className="flex items-center gap-2">
+                <div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-600">
+                  <img
+                    src={thumbnailPreview}
+                    alt="New thumbnail preview"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                {mode === 'edit' && (
+                  <button
+                    type="button"
+                    onClick={handleResetThumbnail}
+                    className="text-red-400 hover:text-red-300 text-sm"
+                  >
+                    ✕
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -319,7 +426,10 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
           className="w-full"
           variant="primary"
         >
-          {isUploading ? 'Uploading...' : 'Upload Learning Module'}
+          {isUploading
+            ? (mode === 'create' ? 'Uploading...' : 'Updating...')
+            : (mode === 'create' ? 'Upload Learning Module' : 'Update Learning Module')
+          }
         </Button>
       </form>
     </div>

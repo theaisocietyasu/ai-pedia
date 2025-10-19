@@ -10,6 +10,7 @@ import MarkdownRenderer from "@/components/MarkdownRenderer"
 import TableOfContents from "@/components/TableOfContents"
 import { extractHeadings, Heading } from "@/lib/markdown-utils"
 import ReactMarkdown from "react-markdown"
+import { SignedIn } from "@clerk/nextjs"
 
 
 
@@ -154,7 +155,7 @@ export default function AlgorithmPage() {
           <h1 className="text-2xl mt-12 md:text-5xl font-bold  italic relative z-10">
             {displayTitle}
           </h1>
-          
+
           {/* Model Description */}
           {loading ? (
             <div className="mt-4 max-w-2xl mx-auto">
@@ -168,6 +169,18 @@ export default function AlgorithmPage() {
               </ReactMarkdown>
             </div>
           )}
+
+          {/* Edit Button - Only visible to signed-in users */}
+          <SignedIn>
+            <div className="mt-6">
+              <Link href={`/learn/${params.category}/${modelSlug}/edit`}>
+                <button className="px-6 py-2 bg-purple/20 text-purple-300 rounded-lg border border-purple/30 hover:bg-purple/30 transition-colors inline-flex items-center gap-2">
+                  <span>✏️</span>
+                  <span>Edit This Module</span>
+                </button>
+              </Link>
+            </div>
+          </SignedIn>
         </div>
 
         {/* Wrapper for content + sidebar */}
