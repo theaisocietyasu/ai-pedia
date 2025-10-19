@@ -152,7 +152,7 @@ export default function LearnPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-col ml-12 gap-8 w-full items-center"
+            className="flex flex-col mt-12 gap-8 w-full items-center"
           >
             {loading ? (
               // Show skeleton cards while loading
@@ -164,8 +164,6 @@ export default function LearnPage() {
               Object.entries(categories).map(([key, cat], i) => (
                 <motion.div
                   key={key}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.3 + i * 0.2 }}
                   className="w-full max-w-2xl"
                 >
