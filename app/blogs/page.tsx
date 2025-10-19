@@ -12,26 +12,26 @@ import type { LegacyBlogPost } from "@/lib/types"
 export default function BlogsPage() {
   const [blogs, setBlogs] = useState<LegacyBlogPost[]>([])
   const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    async function fetchBlogs() {
-      try {
-        setLoading(true)
-        const blogData = await getAllBlogs()
-        setBlogs(blogData)
-        setError(null)
-      } catch (err) {
-        console.error('Failed to fetch blogs:', err)
-        setError('Unable to connect to the blog database. Please check your MongoDB connection or try again later.')
-        setBlogs([])
-      } finally {
-        setLoading(false)
-      }
-    }
+  // useEffect(() => {
+  //   async function fetchBlogs() {
+  //     try {
+  //       setLoading(true)
+  //       const blogData = await getAllBlogs()
+  //       setBlogs(blogData)
+  //       setError(null)
+  //     } catch (err) {
+  //       console.error('Failed to fetch blogs:', err)
+  //       setError('Unable to connect to the blog database. Please check your MongoDB connection or try again later.')
+  //       setBlogs([])
+  //     } finally {
+  //       setLoading(false)
+  //     }
+  //   }
 
-    fetchBlogs()
-  }, [])
+  //   fetchBlogs()
+  // }, [])
 
   return (
     <main className="min-h-screen bg-background">
