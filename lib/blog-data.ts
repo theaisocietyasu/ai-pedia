@@ -1,45 +1,6 @@
 import type { LegacyBlogPost, BlogCategory } from "./types"
 import { fetchBlogs, fetchBlogBySlug, convertToLegacyBlog } from "./api/blogs"
 
-// blog categories
-export const blogCategories: BlogCategory[] = [
-  {
-    id: "ml-fundamentals",
-    name: "ML Fundamentals",
-    slug: "ml-fundamentals",
-    description: "Core concepts and foundations of machine learning",
-    color: "var(--gradient-primary)"
-  },
-  {
-    id: "deep-learning",
-    name: "Deep Learning",
-    slug: "deep-learning", 
-    description: "Neural networks, architectures, and advanced techniques",
-    color: "var(--gradient-secondary)"
-  },
-  {
-    id: "computer-vision",
-    name: "Computer Vision",
-    slug: "computer-vision",
-    description: "Image processing, object detection, and visual AI",
-    color: "var(--gradient-accent)"
-  },
-  {
-    id: "nlp",
-    name: "Natural Language Processing",
-    slug: "nlp",
-    description: "Text analysis, language models, and conversational AI",
-    color: "var(--gradient-primary)"
-  },
-  {
-    id: "tutorials",
-    name: "Tutorials",
-    slug: "tutorials",
-    description: "Step-by-step guides and hands-on projects",
-    color: "var(--gradient-secondary)"
-  }
-]
-
 
 // API-based utility functions without static fallbacks
 export async function getBlogPost(slug: string): Promise<LegacyBlogPost | null> {
