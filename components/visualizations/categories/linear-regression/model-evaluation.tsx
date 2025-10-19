@@ -73,13 +73,13 @@ export const ModelEvaluationVisualization: React.FC = () => {
   return (
     <motion.div
       {...animationVariants.slideUp}
-      className="w-full h-96 bg-gradient-to-br from-gray-900/50 to-purple/10 rounded-lg border border-white/10 p-6"
+      className="w-full h-auto min-h-[400px] md:h-96 bg-gradient-to-br from-gray-900/50 to-purple/10 rounded-lg border border-white/10 p-4 md:p-6"
     >
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-white">Model Performance Dashboard</h3>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+        <h3 className="text-base md:text-lg font-semibold text-white">Model Performance Dashboard</h3>
         
         {/* Dataset selector */}
-        <div className="flex space-x-2">
+        <div className="flex flex-wrap gap-2">
           {Object.keys(performanceData).map((size) => (
             <button
               key={size}
@@ -96,42 +96,42 @@ export const ModelEvaluationVisualization: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6 h-80">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 min-h-[320px] lg:h-80">
         {/* Metrics Cards */}
         <div className="space-y-3">
-          <div className="bg-gray-800/50 rounded-lg p-4">
+          <div className="bg-gray-800/50 rounded-lg p-3 md:p-4">
             <h4 className="text-purple-400 text-sm font-medium mb-2">Mean Squared Error</h4>
-            <div className="text-2xl font-bold text-white">{formatNumber(currentData.mse, 1)}</div>
+            <div className="text-xl md:text-2xl font-bold text-white">{formatNumber(currentData.mse, 1)}</div>
             <div className="text-xs text-gray-400">Lower is better</div>
           </div>
 
-          <div className="bg-gray-800/50 rounded-lg p-4">
+          <div className="bg-gray-800/50 rounded-lg p-3 md:p-4">
             <h4 className="text-pink-400 text-sm font-medium mb-2">RMSE</h4>
-            <div className="text-2xl font-bold text-white">{formatNumber(currentData.rmse, 2)}</div>
+            <div className="text-xl md:text-2xl font-bold text-white">{formatNumber(currentData.rmse, 2)}</div>
             <div className="text-xs text-gray-400">Same units as target</div>
           </div>
 
-          <div className="bg-gray-800/50 rounded-lg p-4">
+          <div className="bg-gray-800/50 rounded-lg p-3 md:p-4">
             <h4 className="text-blue-400 text-sm font-medium mb-2">MAE</h4>
-            <div className="text-2xl font-bold text-white">{formatNumber(currentData.mae, 2)}</div>
+            <div className="text-xl md:text-2xl font-bold text-white">{formatNumber(currentData.mae, 2)}</div>
             <div className="text-xs text-gray-400">Robust to outliers</div>
           </div>
         </div>
 
         {/* R² Pie Chart */}
-        <div className="bg-gray-800/50 rounded-lg p-4">
+        <div className="bg-gray-800/50 rounded-lg p-3 md:p-4">
           <h4 className="text-green-400 text-sm font-medium mb-2">
             R² Score: {formatNumber(currentData.r2 * 100, 1)}%
           </h4>
-          <div className="h-40">
+          <div className="h-32 md:h-40">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={r2Data}
                   cx="50%"
                   cy="50%"
-                  innerRadius={30}
-                  outerRadius={60}
+                  innerRadius={25}
+                  outerRadius={50}
                   paddingAngle={2}
                   dataKey="value"
                 >
@@ -145,13 +145,14 @@ export const ModelEvaluationVisualization: React.FC = () => {
                     backgroundColor: '#1f2937', 
                     border: '1px solid #374151',
                     borderRadius: '8px',
-                    color: '#ffffff'
+                    color: '#ffffff',
+                    fontSize: '14px'
                   }}
                 />
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="text-center">
+          <div className="text-center mt-2">
             <div className="text-xs text-gray-400">Variance Explained</div>
             <div className="text-sm text-gray-300">
               Adj. R²: {formatNumber(currentData.adj_r2 * 100, 1)}%
@@ -160,7 +161,7 @@ export const ModelEvaluationVisualization: React.FC = () => {
         </div>
 
         {/* Metric Comparison */}
-        <div className="bg-gray-800/50 rounded-lg p-4">
+        <div className="bg-gray-800/50 rounded-lg p-3 md:p-4">
           <h4 className="text-yellow-400 text-sm font-medium mb-2">Normalized Metrics</h4>
           <div className="space-y-3">
             {metricComparison.map((item, index) => (

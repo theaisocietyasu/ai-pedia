@@ -5,6 +5,8 @@ import remarkGfm from 'remark-gfm';
 import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
 import rehypeRaw from 'rehype-raw';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { slugifyHeading } from '@/lib/slug';
 import { LazyVisualization } from './visualizations/LazyVisualization';
 
@@ -91,13 +93,36 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
           code: ({ inline, className, children, ...props }: any) => {
             const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
+            
             if (!inline && language) {
+              // Convert children to string properly
+              const code = String(children).replace(/\n$/, '');
+              
               return (
-                <pre className={`markdown-code-block language-${language}`} data-language={language}>
-                  <code {...props}>{children}</code>
-                </pre>
+                <div className="markdown-code-block" data-language={language}>
+                  <SyntaxHighlighter
+                    language={language}
+                    style={vscDarkPlus}
+                    showLineNumbers={true}
+                    customStyle={{
+                      margin: 0,
+                      borderRadius: '8px',
+                      background: 'rgba(17, 24, 39, 0.8)', // Dark background with transparency
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                    }}
+                    codeTagProps={{
+                      style: {
+                        fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
+                        fontSize: '14px',
+                      }
+                    }}
+                  >
+                    {code}
+                  </SyntaxHighlighter>
+                </div>
               );
             }
+            
             return (
               <code className="markdown-inline-code" {...props}>
                 {children}

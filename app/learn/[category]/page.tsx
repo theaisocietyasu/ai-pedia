@@ -115,9 +115,9 @@ async function CategoryPage({ params }: CategoryPageProps) {
       categoryDescription = categoryData.description;
     }
 
-    if (!models.length) {
-      notFound();
-    }
+    // if (!models.length) {
+    //   notFound();
+    // }
   } catch (err) {
     console.error(`Error loading data for category ${category}:`, err);
     notFound();

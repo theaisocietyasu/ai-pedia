@@ -1,6 +1,7 @@
 /**
  * Utility functions for visualization components
  */
+import { useState, useEffect } from 'react';
 
 /**
  * Generate sample data points for demonstrations
@@ -176,4 +177,73 @@ export const animationVariants = {
     animate: { opacity: 1, x: 0 },
     transition: { duration: 0.7 }
   }
+};
+
+/**
+ * Responsive design utilities
+ */
+export const responsiveUtils = {
+  // Get responsive height classes based on screen size
+  getResponsiveHeight: (desktop: string = 'h-96', mobile: string = 'h-80') => 
+    `${mobile} md:${desktop}`,
+  
+  // Get responsive layout classes
+  getResponsiveLayout: (direction: 'horizontal' | 'vertical' = 'horizontal') =>
+    direction === 'horizontal' 
+      ? 'flex flex-col lg:flex-row' 
+      : 'flex flex-col',
+      
+  // Get responsive grid classes
+  getResponsiveGrid: (cols: number = 3) => {
+    const gridClasses: Record<number, string> = {
+      1: 'grid grid-cols-1',
+      2: 'grid grid-cols-1 md:grid-cols-2',
+      3: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+      4: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+    };
+    return gridClasses[cols] || `grid grid-cols-1 md:grid-cols-${Math.min(cols, 2)} lg:grid-cols-${cols}`;
+  },
+  
+  // Get responsive text sizes
+  getResponsiveText: (size: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' = 'base') => {
+    const textClasses: Record<string, string> = {
+      xs: 'text-xs md:text-sm',
+      sm: 'text-sm md:text-base',
+      base: 'text-sm md:text-base',
+      lg: 'text-base md:text-lg',
+      xl: 'text-lg md:text-xl',
+      '2xl': 'text-xl md:text-2xl'
+    };
+    return textClasses[size];
+  },
+  
+  // Get responsive padding classes
+  getResponsivePadding: (size: 'sm' | 'md' | 'lg' = 'md') => {
+    const paddingClasses: Record<string, string> = {
+      sm: 'p-2 md:p-4',
+      md: 'p-4 md:p-6',
+      lg: 'p-6 md:p-8'
+    };
+    return paddingClasses[size];
+  }
+};
+
+/**
+ * Hook to detect mobile screen size
+ */
+export const useIsMobile = () => {
+  if (typeof window === 'undefined') return false;
+  
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
+  return isMobile;
 };

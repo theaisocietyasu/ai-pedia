@@ -76,16 +76,16 @@ export const RegressionComparisonVisualization: React.FC = () => {
   return (
     <motion.div
       {...animationVariants.scaleIn}
-      className="w-full h-80 bg-gradient-to-br from-blue-purple/10 to-pink/10 rounded-lg border border-white/10 p-6"
+      className="w-full h-80 md:h-96 bg-gradient-to-br from-blue-purple/10 to-pink/10 rounded-lg border border-white/10 p-4 md:p-6"
     >
-      <h3 className="text-lg font-semibold text-white mb-4">
+      <h3 className="text-base md:text-lg font-semibold text-white mb-2 md:mb-4">
         Implementation Comparison
       </h3>
 
-      <div className="flex h-full">
+      <div className="flex flex-col lg:flex-row h-full gap-4">
         {/* Chart */}
-        <div className="flex-1">
-          <div className="h-56">
+        <div className="flex-1 min-h-[250px] lg:min-h-0">
+          <div className="h-48 md:h-56">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={comparisonData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -96,15 +96,16 @@ export const RegressionComparisonVisualization: React.FC = () => {
                   textAnchor="end"
                   height={60}
                   interval={0}
-                  tick={{ fontSize: 12 }}
+                  tick={{ fontSize: 10 }}
                 />
-                <YAxis stroke="#9ca3af" />
+                <YAxis stroke="#9ca3af" tick={{ fontSize: 12 }} />
                 <Tooltip 
                   contentStyle={{ 
                     backgroundColor: '#1f2937', 
                     border: '1px solid #374151',
                     borderRadius: '8px',
-                    color: '#ffffff'
+                    color: '#ffffff',
+                    fontSize: '14px'
                   }}
                   formatter={(value, name) => [
                     `${value}${metrics[selectedMetric].unit}`, 
@@ -126,15 +127,35 @@ export const RegressionComparisonVisualization: React.FC = () => {
         </div>
 
         {/* Controls and Info */}
-        <div className="w-56 ml-6">
-          <h4 className="text-md font-medium text-white mb-3">Metrics</h4>
+        <div className="lg:w-56 lg:ml-6 mt-4 lg:mt-0">
+          <h4 className="text-sm md:text-md font-medium text-white mb-3">Metrics</h4>
           
-          <ButtonGroup
-            options={metricOptions}
-            selected={selectedMetric}
-            onChange={(key) => setSelectedMetric(key as any)}
-            className="mb-6"
-          />
+          {/* Mobile: Horizontal buttons */}
+          <div className="lg:hidden grid grid-cols-3 gap-2 mb-4">
+            {metricOptions.map((option) => (
+              <button
+                key={option.key}
+                onClick={() => setSelectedMetric(option.key as any)}
+                className={`text-center p-2 rounded-lg border transition-all text-xs ${
+                  selectedMetric === option.key
+                    ? 'bg-purple/20 border-purple text-white'
+                    : 'bg-gray-800/50 border-gray-600 text-gray-300 hover:bg-gray-700/50'
+                }`}
+              >
+                <div className="font-medium">{option.label}</div>
+                <div className="text-xs opacity-75 mt-1">{option.description}</div>
+              </button>
+            ))}
+          </div>
+
+          {/* Desktop: Vertical buttons */}
+          <div className="hidden lg:block mb-6">
+            <ButtonGroup
+              options={metricOptions}
+              selected={selectedMetric}
+              onChange={(key) => setSelectedMetric(key as any)}
+            />
+          </div>
 
           <div className="p-3 bg-gray-800/50 rounded-lg">
             <h5 className="text-sm font-medium text-white mb-2">Trade-offs:</h5>

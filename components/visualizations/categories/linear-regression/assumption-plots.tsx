@@ -41,34 +41,37 @@ export const AssumptionPlotsVisualization: React.FC = () => {
   return (
     <motion.div
       {...animationVariants.slideUp}
-      className="w-full h-96 bg-gradient-to-br from-gray-900/50 to-purple/10 rounded-lg border border-white/10 p-6"
+      className="w-full overflow-y-scroll h-80 md:h-96 bg-gradient-to-br from-gray-900/50 to-purple/10 rounded-lg border border-white/10 p-4 md:p-6"
     >
-      <div className="flex h-full">
+      <div className="flex flex-col lg:flex-row h-full gap-4">
         {/* Plot Area */}
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-white mb-4">
+        <div className="flex-1 min-h-[250px] lg:min-h-0">
+          <h3 className="text-base md:text-lg font-semibold text-white mb-2 md:mb-4">
             Diagnostic Plot: {plotConfigs[currentPlot].title}
           </h3>
           
-          <div className="h-64">
+          <div className="h-48 md:h-64">
             <ResponsiveContainer width="100%" height="100%">
               <ScatterChart data={plotData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                 <XAxis 
                   dataKey="fitted" 
                   stroke="#9ca3af"
-                  label={{ value: 'Fitted Values', position: 'insideBottom', offset: -5, style: { fill: '#9ca3af' } }}
+                  tick={{ fontSize: 12 }}
+                  label={{ value: 'Fitted Values', position: 'insideBottom', offset: -5, style: { fill: '#9ca3af', fontSize: 12 } }}
                 />
                 <YAxis 
                   stroke="#9ca3af"
-                  label={{ value: 'Residuals', angle: -90, position: 'insideLeft', style: { fill: '#9ca3af' } }}
+                  tick={{ fontSize: 12 }}
+                  label={{ value: 'Residuals', angle: -90, position: 'insideLeft', style: { fill: '#9ca3af', fontSize: 12 } }}
                 />
                 <Tooltip 
                   contentStyle={{ 
                     backgroundColor: '#1f2937', 
                     border: '1px solid #374151',
                     borderRadius: '8px',
-                    color: '#ffffff'
+                    color: '#ffffff',
+                    fontSize: '14px'
                   }}
                 />
                 <Scatter 
@@ -81,22 +84,51 @@ export const AssumptionPlotsVisualization: React.FC = () => {
             </ResponsiveContainer>
           </div>
 
-          <p className="text-sm text-gray-300 mt-2">
+          <p className="text-xs md:text-sm text-gray-300 mt-2">
             {plotConfigs[currentPlot].description}
           </p>
         </div>
 
-        {/* Controls */}
-        <div className="w-48 ml-6">
-          <h4 className="text-md font-medium text-white mb-3">Plot Types</h4>
+        {/* Controls - Mobile: Bottom, Desktop: Right */}
+        <div className="lg:w-48 lg:ml-6 mt-4 lg:mt-0">
+          <h4 className="text-sm md:text-md font-medium text-white mb-3">Plot Types</h4>
           
-          <ButtonGroup
-            options={plotOptions}
-            selected={currentPlot}
-            onChange={(key) => setCurrentPlot(key as any)}
-          />
+          {/* Mobile: Horizontal buttons */}
+          <div className="lg:hidden grid grid-cols-2 gap-2 mb-4">
+            {plotOptions.map((option) => (
+              <button
+                key={option.key}
+                onClick={() => setCurrentPlot(option.key as any)}
+                className={`text-left p-2 rounded-lg border transition-all text-sm ${
+                  currentPlot === option.key
+                    ? 'bg-purple/20 border-purple text-white'
+                    : 'bg-gray-800/50 border-gray-600 text-gray-300 hover:bg-gray-700/50'
+                }`}
+              >
+                <div className="font-medium">{option.label}</div>
+                <div className="text-xs opacity-75 mt-1">{option.description}</div>
+              </button>
+            ))}
+          </div>
 
-          
+          {/* Desktop: Vertical buttons */}
+          <div className="hidden lg:block">
+            <ButtonGroup
+              options={plotOptions}
+              selected={currentPlot}
+              onChange={(key) => setCurrentPlot(key as any)}
+            />
+          </div>
+
+          <div className="mt-6 p-3 bg-gray-800/50 rounded-lg">
+            <h5 className="text-sm font-medium text-white mb-2">Key Insights:</h5>
+            <ul className="text-xs text-gray-300 space-y-1">
+              <li>• Random scatter = Good model</li>
+              <li>• Funnel shape = Heteroscedasticity</li>
+              <li>• Curved pattern = Non-linearity</li>
+              <li>• Extreme outliers = Non-normality</li>
+            </ul>
+          </div>
         </div>
       </div>
     </motion.div>

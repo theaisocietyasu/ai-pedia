@@ -107,11 +107,11 @@ export const LinearEquationVisualization: React.FC = () => {
   return (
     <motion.div
       {...animationVariants.scaleIn}
-      className="w-full h-96 bg-gradient-to-br from-purple/10 to-pink/10 rounded-lg border border-white/10 overflow-hidden"
+      className="w-full h-80 md:h-96 bg-gradient-to-br from-purple/10 to-pink/10 rounded-lg border border-white/10 overflow-hidden relative"
     >
-      <div className="flex h-full">
+      <div className="flex flex-col lg:flex-row h-full">
         {/* 3D Visualization */}
-        <div className="flex-1 relative">
+        <div className="flex-1 relative min-h-[300px] lg:min-h-0">
           <Suspense fallback={<VisualizationLoading message="Loading 3D visualization..." />}>
             <Canvas camera={{ position: [8, 8, 8], fov: 50 }}>
               <ambientLight intensity={0.6} />
@@ -128,7 +128,7 @@ export const LinearEquationVisualization: React.FC = () => {
           </Suspense>
         </div>
 
-        {/* Controls */}
+        {/* Controls - Responsive Panel */}
         <ControlPanel title="Interactive Controls">
           <div className="space-y-4">
             <SliderControl

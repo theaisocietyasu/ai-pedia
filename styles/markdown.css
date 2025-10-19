@@ -126,34 +126,38 @@
 
 /* Code blocks */
 .markdown-content .markdown-code-block {
-  background: rgba(26, 26, 46, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 1.5rem;
   margin: 2rem 0;
-  overflow-x: auto;
-  font-size: 0.875rem;
-  line-height: 1.6;
   position: relative;
-  backdrop-filter: blur(10px);
 }
 
-.markdown-content .markdown-code-block code {
-  background: transparent;
-  padding: 0;
-  border-radius: 0;
-  color: #e0e0e0;
-}
-
+/* Language label for syntax highlighted code blocks */
 .markdown-content .markdown-code-block[data-language]::before {
   content: attr(data-language);
   position: absolute;
   top: 0.5rem;
   right: 1rem;
   font-size: 0.75rem;
-  color: rgba(224, 224, 224, 0.6);
+  color: rgba(224, 224, 224, 0.8);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  backdrop-filter: blur(5px);
+}
+
+/* Override syntax highlighter styles to match our theme */
+.markdown-content .markdown-code-block pre {
+  margin: 0 !important;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace !important;
+}
+
+/* Ensure syntax highlighter container fits our design */
+.markdown-content .markdown-code-block > div {
+  border-radius: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(10px);
 }
 
 /* Inline code */
@@ -608,5 +612,32 @@
 .recharts-tooltip-wrapper {
   border-radius: 8px !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Syntax highlighting enhancements */
+.markdown-content .markdown-code-block .react-syntax-highlighter-line-number {
+  color: rgba(156, 163, 175, 0.6) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding-right: 1rem !important;
+  margin-right: 1rem !important;
+}
+
+/* Scrollbar styling for code blocks */
+.markdown-content .markdown-code-block pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.markdown-content .markdown-code-block pre::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.markdown-content .markdown-code-block pre::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 4px;
+}
+
+.markdown-content .markdown-code-block pre::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.5);
 }
 

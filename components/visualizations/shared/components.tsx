@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   ControlPanelProps, 
@@ -8,18 +8,71 @@ import {
 } from './types';
 
 /**
- * Reusable control panel for visualization controls
+ * Reusable control panel for visualization controls with mobile responsiveness
  */
 export const ControlPanel: React.FC<ControlPanelProps> = ({ 
   children, 
   title = "Controls", 
   className = "" 
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className={`w-64 p-4 bg-gray-800/50 border-l border-white/10 ${className}`}>
-      <h3 className="text-lg font-semibold text-white mb-4">{title}</h3>
-      {children}
-    </div>
+    <>
+      {/* Mobile Toggle Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`
+          md:hidden fixed top-4 right-4 z-20 p-3 bg-gray-800/90 border border-white/20 
+          rounded-lg text-white shadow-lg backdrop-blur-sm transition-all
+          ${isOpen ? 'bg-purple/20 border-purple' : 'hover:bg-gray-700/90'}
+        `}
+        aria-label="Toggle controls"
+      >
+        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          {isOpen ? (
+            <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+          ) : (
+            <path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+          )}
+        </svg>
+      </button>
+
+      {/* Desktop Panel */}
+      <div className={`
+        hidden md:block w-64 p-4 bg-gray-800/50 border-l border-white/10 ${className}
+      `}>
+        <h3 className="text-lg font-semibold text-white mb-4">{title}</h3>
+        {children}
+      </div>
+
+      {/* Mobile Panel (Overlay) */}
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, x: 300 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 300 }}
+          className="
+            md:hidden fixed inset-y-0 right-0 z-10 w-80 max-w-[90vw] 
+            bg-gray-800/95 backdrop-blur-md border-l border-white/10 
+            shadow-2xl overflow-y-auto
+          "
+        >
+          <div className="p-4 pt-16">
+            <h3 className="text-lg font-semibold text-white mb-4">{title}</h3>
+            {children}
+          </div>
+        </motion.div>
+      )}
+
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div
+          className="md:hidden fixed inset-0 z-5 bg-black/50 backdrop-blur-sm"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+    </>
   );
 };
 
