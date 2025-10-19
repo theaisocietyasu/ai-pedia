@@ -40,6 +40,7 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
     }
 
     const publishDate = new Date(blog.publishDate).toISOString()
+    const modifiedDate = blog.lastUpdated ? new Date(blog.lastUpdated).toISOString() : publishDate
     const authorName = typeof blog.author === 'string' ? blog.author : blog.author
 
     return {
@@ -53,6 +54,7 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
         url: `${baseUrl}/blogs/${slug}`,
         type: "article",
         publishedTime: publishDate,
+        modifiedTime: modifiedDate,
         authors: [authorName],
         tags: blog.tags,
         images: [
@@ -109,6 +111,7 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
     "description": blog.excerpt,
     "image": blog.featuredImage || `${baseUrl}/og-image.png`,
     "datePublished": new Date(blog.publishDate).toISOString(),
+    "dateModified": blog.lastUpdated ? new Date(blog.lastUpdated).toISOString() : new Date(blog.publishDate).toISOString(),
     "author": {
       "@type": "Person",
       "name": authorName

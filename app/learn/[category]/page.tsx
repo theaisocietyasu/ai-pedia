@@ -1,304 +1,200 @@
-"use client"
+import React from "react";
+import { notFound } from "next/navigation";
+import { Metadata } from "next";
+import { getModulesForCategory, getCategories } from "../categories";
+import { CategoryPageClient } from "./CategoryPageClient";
 
-import { useParams } from "next/navigation"
-import { getModulesForCategory, getCategories } from "../categories"
-import { useEffect, useRef, useState } from "react"
-import Link from "next/link"
-import ReactMarkdown from "react-markdown"
-import { motion } from "framer-motion"
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ailearninghub.com";
 
-export default function AlgorithmPage() {
-  const params = useParams()
-  const category = Array.isArray(params.category) ? params.category[0] : params.category
+interface CategoryPageProps {
+  params: Promise<{
+    category: string;
+  }>;
+}
 
-  const [models, setModels] = useState<any[]>([0,0,0])
-  const [categoryDescription, setCategoryDescription] = useState<string>("")
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [activeId, setActiveId] = useState<string>("")
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([])
-  const manualScrollTarget = useRef<string | null>(null)
-  const rafIdRef = useRef<number | null>(null)
+export async function generateMetadata({
+  params,
+}: CategoryPageProps): Promise<Metadata> {
+  const { category } = await params;
 
-  // Load models and category description
-  useEffect(() => {
-    const loadData = async () => {
-      if (!category) return;
-      
-      try {
-        setLoading(true);
-        
-        // Load both models and categories data in parallel
-        const [modelsData, categoriesData] = await Promise.all([
-          getModulesForCategory(category),
-          getCategories()
-        ]);
-        
-        setModels(modelsData);
-        
-        // Get the description for this specific category
-        const categoryData = categoriesData[category];
-        if (categoryData && categoryData.description) {
-          setCategoryDescription(categoryData.description);
-        }
-        
-      } catch (err) {
-        console.error(`Error loading data for category ${category}:`, err);
-        setError(`Failed to load content for ${category}. Please try again later.`);
-      } finally {
-        setLoading(false);
-      }
+  try {
+    // Fetch category data and modules
+    const [categoriesData, modules] = await Promise.all([
+      getCategories(),
+      getModulesForCategory(category),
+    ]);
+
+    const categoryData = categoriesData[category];
+
+    if (!categoryData) {
+      return {
+        title: "Category Not Found",
+        description: "The requested learning category could not be found.",
+      };
+    }
+
+    // Extract keywords from modules
+    const keywords = [
+      category.replace(/-/g, " "),
+      ...modules.slice(0, 5).map((m) => m.name),
+    ];
+
+    // Create a comprehensive description
+    const description =
+      categoryData.description ||
+      `Explore ${
+        modules.length
+      } comprehensive tutorials and guides about ${category.replace(
+        /-/g,
+        " "
+      )}. Master key concepts with our interactive learning modules.`;
+
+    return {
+      title: `${
+        category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, " ")
+      } Learning`,
+      description: description,
+      keywords: keywords,
+      openGraph: {
+        title: `${
+          category.charAt(0).toUpperCase() +
+          category.slice(1).replace(/-/g, " ")
+        } Learning | AI Pedia`,
+        description: description,
+        url: `${baseUrl}/learn/${category}`,
+        type: "website",
+        images: [
+          {
+            url: categoryData.imgPath || "/og-image.png",
+            width: 1200,
+            height: 630,
+            alt: `${category.replace(/-/g, " ")} learning resources`,
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `${
+          category.charAt(0).toUpperCase() +
+          category.slice(1).replace(/-/g, " ")
+        } Learning`,
+        description: description,
+        images: [categoryData.imgPath || "/og-image.png"],
+      },
+      alternates: {
+        canonical: `${baseUrl}/learn/${category}`,
+      },
     };
+  } catch (error) {
+    console.error(`Error generating metadata for category ${category}:`, error);
+    return {
+      title: "Category Not Found",
+      description: "The requested learning category could not be found.",
+    };
+  }
+}
 
-    loadData();
-  }, [category]);
+async function CategoryPage({ params }: CategoryPageProps) {
+  const { category } = await params;
 
-  // compute the card whose center is closest to viewport center
-  const computeClosestId = () => {
-    const centerY = window.innerHeight / 2
-    let closestId = ""
-    let minDistance = Infinity
+  let models: any[] = [];
+  let categoryDescription: string = "";
 
-    cardRefs.current.forEach((card) => {
-      if (!card) return
-      const rect = card.getBoundingClientRect()
-      const cardCenter = rect.top + rect.height / 2
-      const distance = Math.abs(centerY - cardCenter)
-      if (distance < minDistance) {
-        minDistance = distance
-        closestId = card.id
-      }
-    })
+  try {
+    // Load both models and categories data in parallel
+    const [modelsData, categoriesData] = await Promise.all([
+      getModulesForCategory(category),
+      getCategories(),
+    ]);
 
-    return closestId
+    models = modelsData;
+
+    // Get the description for this specific category
+    const categoryData = categoriesData[category];
+    if (categoryData && categoryData.description) {
+      categoryDescription = categoryData.description;
+    }
+
+    if (!models.length) {
+      notFound();
+    }
+  } catch (err) {
+    console.error(`Error loading data for category ${category}:`, err);
+    notFound();
   }
 
-  // raf-throttled scroll handler
-  useEffect(() => {
-    let ticking = false
-    const onScroll = () => {
-      if (ticking) return
-      ticking = true
-      rafIdRef.current = requestAnimationFrame(() => {
-        // if a manual scroll to a target is in progress, do not update activeId here
-        if (!manualScrollTarget.current) {
-          const closest = computeClosestId()
-          if (closest && closest !== activeId) {
-            setActiveId(closest)
-          }
-        }
-        ticking = false
-      })
-    }
+  // Structured data for collection page
+  const collectionSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `${
+      category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, " ")
+    } Learning`,
+    description:
+      categoryDescription ||
+      `Learning resources about ${category.replace(/-/g, " ")}`,
+    url: `${baseUrl}/learn/${category}`,
+    provider: {
+      "@type": "Organization",
+      name: "The AI Society at ASU",
+      url: baseUrl,
+    },
+    numberOfItems: models.length,
+    hasPart: models.slice(0, 10).map((model) => ({
+      "@type": "LearningResource",
+      name: model.name,
+      description: model.description,
+      url: `${baseUrl}/learn/${category}/${model.slug}`,
+      image: model.imgPath,
+    })),
+  };
 
-    window.addEventListener("scroll", onScroll, { passive: true })
-    // initialize activeId on mount
-    rafIdRef.current = requestAnimationFrame(() => {
-      const closest = computeClosestId()
-      if (closest) setActiveId(closest)
-    })
-
-    return () => {
-      window.removeEventListener("scroll", onScroll)
-      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [models]) // re-run if models change
-
-  // Programmatic scroll to center + watch until centered
-  const scrollToCenter = (id: string) => {
-    const el = document.getElementById(id)
-    if (!el) return
-
-    // mark manual scroll in progress and immediately set activeId
-    manualScrollTarget.current = id
-    setActiveId(id)
-
-    el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" })
-
-    const start = performance.now()
-    const maxDuration = 2000 // fallback: stop watching after 2s
-
-    const watch = () => {
-      const rect = el.getBoundingClientRect()
-      const elCenter = rect.top + rect.height / 2
-      const centerY = window.innerHeight / 2
-      const distance = Math.abs(elCenter - centerY)
-
-      // consider centered if within 8 pixels (tweakable)
-      if (distance <= 8 || performance.now() - start > maxDuration) {
-        manualScrollTarget.current = null
-        setActiveId(id) // ensure final state
-        return
-      }
-
-      rafIdRef.current = requestAnimationFrame(watch)
-    }
-
-    // start watching
-    if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current)
-    rafIdRef.current = requestAnimationFrame(watch)
-  }
-
-  // cleanup RAF on unmount
-  useEffect(() => {
-    return () => {
-      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current)
-    }
-  }, [])
-
-  // Skeleton components for loading state
-  const SkeletonCard = ({ index, reverse }: { index: number; reverse: boolean }) => (
-    <div
-      className={`flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl glass-effect min-h-[280px] w-full ${
-        reverse ? "md:flex-row-reverse" : "md:flex-row"
-      }`}
-    >
-      {/* Image skeleton */}
-      <div className="w-full md:w-1/3 md:min-w-[200px] h-48 md:h-56 bg-dark-gray/50 rounded-lg animate-pulse flex-shrink-0"></div>
-      
-      {/* Text skeleton */}
-      <div className="flex-1 text-center md:text-left min-w-0">
-        <div className="h-6 bg-dark-gray/50 rounded mb-3 animate-pulse"></div>
-        <div className="space-y-2">
-          <div className="h-4 bg-dark-gray/30 rounded animate-pulse"></div>
-          <div className="h-4 bg-dark-gray/30 rounded w-3/4 animate-pulse"></div>
-          <div className="h-4 bg-dark-gray/30 rounded w-5/6 animate-pulse"></div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const SidebarSkeleton = () => (
-    <div className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="h-4 bg-dark-gray/30 rounded animate-pulse"></div>
-      ))}
-    </div>
-  );
-
-  if (error) {
-    return (
-      <div className="relative mt-12 min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
-        <div className="w-full max-w-5xl flex flex-col items-center gap-16">
-          <div className="relative inline-block mb-10 text-center">
-            <h1 className="text-2xl md:text-5xl font-bold  italic relative z-10 capitalize">
-              Error Loading Content
-            </h1>
-          </div>
-          <div className="text-center">
-            <p className="text-lg text-light-gray/80 mb-6">{error}</p>
-            <Link href="/learn">
-              <button className="px-6 py-3 bg-purple text-white rounded-lg hover:bg-purple/80 transition-colors">
-                Back to Learning Hub
-              </button>
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!models.length) return <p className="text-center mt-20">Models not found.</p>
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: baseUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Learn",
+        item: `${baseUrl}/learn`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name:
+          category.charAt(0).toUpperCase() +
+          category.slice(1).replace(/-/g, " "),
+        item: `${baseUrl}/learn/${category}`,
+      },
+    ],
+  };
 
   return (
     <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
 
-      <div className="w-full max-w-5xl mt-12 flex flex-col items-center gap-16">
-        {/* Title */}
-        <div className="relative inline-block mb-10 text-center">
-          <h1 className="text-2xl md:text-5xl font-bold  italic relative z-10 capitalize">
-            {category} Learning
-          </h1>
-          
-          {/* Category Description */}
-          {loading ? (
-            <div className="mt-4 max-w-2xl mx-auto">
-              <div className="h-4 bg-dark-gray/30 rounded animate-pulse mb-2"></div>
-              <div className="h-4 bg-dark-gray/30 rounded w-3/4 mx-auto animate-pulse"></div>
-            </div>
-          ) : categoryDescription && (
-            <div className="mt-4 text-base md:text-lg text-light-gray/80 max-w-2xl mx-auto">
-              <ReactMarkdown>
-                {categoryDescription}
-              </ReactMarkdown>
-            </div>
-          )}
-        </div>
-
-        {/* Wrapper for cards + sidebar */}
-        <div className="w-full flex justify-between gap-20 relative">
-          {/* Cards */} 
-          <motion.div             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-col gap-12 w-full ">
-
-            {loading ? (
-              // Show skeleton cards while loading
-              Array.from({ length: 4 }).map((_, index) => (
-                <SkeletonCard key={index} index={index} reverse={index % 2 !== 0}  />
-              ))
-            ) : (
-              // Show actual models when loaded
-              models.map((item, index) => {
-                const id = item.slug
-                return (
-                  <div
-                    key={id}
-                    id={id}
-                    ref={(el) => { cardRefs.current[index] = el }}
-                    className={`cursor-pointer group  flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl     ${
-                      index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                    }`}
-                  >
-                      <Link key={id} href={`/learn/${category}/${item.slug}`} className={`group flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl glass-effect  ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
-                      {/* Image */}
-                      <img
-                        src={item.imgPath}
-                        alt={item.name}
-                        className="w-full md:w-1/3 md:min-w-[200px] h-48 md:h-56 rounded-lg shadow-lg object-cover flex-shrink-0"
-                      />
-
-                      {/* Text */}
-                      <div className="flex-1 text-center md:text-left min-w-0">
-                        <h2 className="text-xl md:text-2xl font-semibold text-light-gray mb-3 line-clamp-2">
-                          {item.name}
-                        </h2>
-                        <p className="text-sm md:text-base text-light-gray/80 line-clamp-4">{item.description}</p>
-                      </div>
-                    </Link>
-                  </div>
-                )
-              })
-            )}
-          </motion.div>
-
-          {/* Sidebar (sticky, not fixed) */}
-          {loading ? (
-            <SidebarSkeleton />
-          ) : (
-            <div className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
-              {models.map((item) => {
-                const id = item.slug
-                const isActive = activeId === id
-                return (
-                  <button
-                    key={id}
-                    onClick={() => scrollToCenter(id)}
-                    className={`text-sm font-medium transition-colors py-1 px-2 text-left ${
-                      isActive ? "text-pink-400" : "text-gray-400 hover:text-gray-200 cursor-pointer"
-                    }`}
-                  >
-                    {item.name}
-                  </button>
-                )
-              })}
-            </div>
-          )}
-        </div>
-
-      </div>
+      {/* Pass data to client component for interactive features */}
+      <CategoryPageClient
+        category={category}
+        models={models}
+        categoryDescription={categoryDescription}
+      />
     </div>
-  )
+  );
 }
+
+export default CategoryPage;

@@ -1,7 +1,18 @@
 // API client functions for fetching learning data from MongoDB
 import { normalizeMarkdownContent } from './markdown-utils';
 
-const API_BASE_URL = '/api';
+// Helper function to get base URL for API calls
+function getApiBaseUrl(): string {
+  // In server-side context
+  if (typeof window === 'undefined') {
+    // Use localhost for development, or environment variable for production
+    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
+  }
+  // In client-side context, we can use relative URLs
+  return ''
+}
+
+const API_BASE_URL = `${getApiBaseUrl()}/api`;
 
 // Types for API responses
 export interface LearnCategory {
@@ -20,12 +31,16 @@ export interface LearnModule {
   description: string;
   content?: string;
   action_buttions?: { name: string; link: string }[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // API client functions
 export async function fetchAllCategories(): Promise<LearnCategory[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/learn/categories`);
+    const response = await fetch(`${API_BASE_URL}/learn/categories`, {
+      next: { revalidate: 3600 } // Cache for 1 hour
+    });
     if (!response.ok) {
       throw new Error(`Failed to fetch categories: ${response.statusText}`);
     }
@@ -38,7 +53,9 @@ export async function fetchAllCategories(): Promise<LearnCategory[]> {
 
 export async function fetchModulesByCategory(category: string): Promise<LearnModule[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/learn/category/${category}`);
+    const response = await fetch(`${API_BASE_URL}/learn/category/${category}`, {
+      next: { revalidate: 3600 } // Cache for 1 hour
+    });
     if (!response.ok) {
       throw new Error(`Failed to fetch modules for category ${category}: ${response.statusText}`);
     }
@@ -51,7 +68,9 @@ export async function fetchModulesByCategory(category: string): Promise<LearnMod
 
 export async function fetchModuleBySlug(slug: string): Promise<LearnModule> {
   try {
-    const response = await fetch(`${API_BASE_URL}/learn/content/${slug}`);
+    const response = await fetch(`${API_BASE_URL}/learn/content/${slug}`, {
+      next: { revalidate: 3600 } // Cache for 1 hour
+    });
     if (!response.ok) {
       throw new Error(`Failed to fetch module ${slug}: ${response.statusText}`);
     }
@@ -86,7 +105,9 @@ export function transformModulesToUIFormat(modules: LearnModule[]): any[] {
     imgPath: module.thumbnail,
     actionButtons: module.action_buttions || [],
     _id: module._id,
-    slug: module.slug
+    slug: module.slug,
+    createdAt: module.createdAt,
+    updatedAt: module.updatedAt
   }));
 }
 

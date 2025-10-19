@@ -196,28 +196,12 @@ export function flattenHeadings(headings: Heading[]): Heading[] {
  */
 export function normalizeMarkdownContent(content: string): string {
   if (!content) return '';
-
-  // Log the raw content for debugging
-  const sampleFormulas = content.match(/\$[^$]+\$/g)?.slice(0, 3);
-  console.log('🔧 Raw formulas from DB:', sampleFormulas);
-
-  // MongoDB stores raw markdown with single backslashes: \frac, \sum, \beta
-  // But when this becomes a JavaScript string, we need proper escaping
-  // The test page works because template literals auto-escape: \\beta → \beta in JS string
-
-  // Check if content already has double backslashes (already escaped)
+  
   const hasDoubleBackslash = content.includes('\\\\');
-  console.log('🔧 Has double backslashes:', hasDoubleBackslash);
 
   if (hasDoubleBackslash) {
     // Content already escaped, return as-is
-    console.log('🔧 Content already escaped, returning as-is');
     return content;
   }
-
-  // Content has single backslashes - this is raw markdown
-  // For template literal compatibility, we don't need to change anything
-  // The markdown parser expects single backslashes in the actual string
-  console.log('🔧 Content has single backslashes (raw markdown), returning as-is');
   return content;
 }

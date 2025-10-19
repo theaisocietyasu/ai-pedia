@@ -85,10 +85,6 @@ export default function LearnPage() {
     <main className="min-h-screen relative overflow-hidden ">
     
 
-      
-
-     
-          
         <section className="relative pt-32 pb-20 overflow-hidden">
                {/* animated background */}
                <div className="absolute inset-0 pointer-events-none">
