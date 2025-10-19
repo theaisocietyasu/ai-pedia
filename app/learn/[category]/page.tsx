@@ -1,15 +1,17 @@
 "use client"
 
 import { useParams } from "next/navigation"
-import { getModulesForCategory } from "../categories"
+import { getModulesForCategory, getCategories } from "../categories"
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
+import ReactMarkdown from "react-markdown"
 
 export default function AlgorithmPage() {
   const params = useParams()
   const category = Array.isArray(params.category) ? params.category[0] : params.category
 
   const [models, setModels] = useState<any[]>([0,0,0])
+  const [categoryDescription, setCategoryDescription] = useState<string>("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [activeId, setActiveId] = useState<string>("")
@@ -17,24 +19,37 @@ export default function AlgorithmPage() {
   const manualScrollTarget = useRef<string | null>(null)
   const rafIdRef = useRef<number | null>(null)
 
-  // Load models for the category
+  // Load models and category description
   useEffect(() => {
-    const loadModels = async () => {
+    const loadData = async () => {
       if (!category) return;
       
       try {
         setLoading(true);
-        const modelsData = await getModulesForCategory(category);
+        
+        // Load both models and categories data in parallel
+        const [modelsData, categoriesData] = await Promise.all([
+          getModulesForCategory(category),
+          getCategories()
+        ]);
+        
         setModels(modelsData);
+        
+        // Get the description for this specific category
+        const categoryData = categoriesData[category];
+        if (categoryData && categoryData.description) {
+          setCategoryDescription(categoryData.description);
+        }
+        
       } catch (err) {
-        console.error(`Error loading models for category ${category}:`, err);
-        setError(`Failed to load models for ${category}. Please try again later.`);
+        console.error(`Error loading data for category ${category}:`, err);
+        setError(`Failed to load content for ${category}. Please try again later.`);
       } finally {
         setLoading(false);
       }
     };
 
-    loadModels();
+    loadData();
   }, [category]);
 
   // compute the card whose center is closest to viewport center
@@ -194,6 +209,20 @@ export default function AlgorithmPage() {
           <h1 className="text-2xl md:text-5xl font-bold  italic relative z-10 capitalize">
             {category} Learning
           </h1>
+          
+          {/* Category Description */}
+          {loading ? (
+            <div className="mt-4 max-w-2xl mx-auto">
+              <div className="h-4 bg-dark-gray/30 rounded animate-pulse mb-2"></div>
+              <div className="h-4 bg-dark-gray/30 rounded w-3/4 mx-auto animate-pulse"></div>
+            </div>
+          ) : categoryDescription && (
+            <div className="mt-4 text-base md:text-lg text-light-gray/80 max-w-2xl mx-auto">
+              <ReactMarkdown>
+                {categoryDescription}
+              </ReactMarkdown>
+            </div>
+          )}
         </div>
 
         {/* Wrapper for cards + sidebar */}
