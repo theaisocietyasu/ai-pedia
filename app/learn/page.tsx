@@ -96,16 +96,7 @@ export default function LearnPage() {
           transition={{ duration: 0.5 }}
           className="w-full max-w-4xl text-center gap-5 flex flex-col"
         >
-          {/* Icon */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="w-20 h-20 rounded-2xl gradient-bg shadow-2xl shadow-purple/30 flex items-center justify-center"
-            style={{ marginLeft: 'auto', marginRight: 'auto' }}
-          >
-            <BookOpen size={40} className="text-white" />
-          </motion.div>
+       
 
 
           {/* Title */}

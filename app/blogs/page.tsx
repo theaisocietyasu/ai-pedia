@@ -69,16 +69,7 @@ export default function BlogsPage() {
         <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
           <div className="text-center">
             {/* badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 rounded-full
-                       bg-white/5 border border-white/10 px-4 py-2 mb-8"
-            >
-              <BookOpen size={16} className="text-purple" />
-              <span className="text-sm text-light-gray">Latest AI Insights</span>
-            </motion.div>
+           
 
             {/* title */}
             <motion.h1

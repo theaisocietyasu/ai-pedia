@@ -39,24 +39,7 @@ export function BlogsClient({ blogs, blogCategories }: BlogsClientProps) {
       <section className="py-6 border-b border-white/5">
         <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
           <div className="flex flex-col gap-6 items-center justify-center">
-            {/* search bar */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="relative w-full max-w-md"
-            >
-              <Search size={20} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-light-gray/60" />
-              <input
-                type="text"
-                placeholder="Search articles..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 rounded-xl bg-white/5 border border-white/10
-                           text-white placeholder-light-gray/60 focus:outline-none focus:border-purple/50
-                           transition-colors duration-300"
-              />
-            </motion.div>
+           
 
             {/* category filters */}
             <motion.div

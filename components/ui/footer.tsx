@@ -25,17 +25,13 @@ export function Footer() {
   }
 
   return (
-    <footer className="relative bg-background mt-0">
-      {/* background decorations */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-pink/5 rounded-full blur-3xl" />
-      </div>
+    <footer className="relative  mt-0">
+    
 
       <div className="container mx-auto px-6 lg:px-8 max-w-7xl py-20">
         <div className="w-full">
           {/* main footer content */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
           {/* brand section with social links */}
           <div className="space-y-6 lg:col-span-1">
             <div className="flex items-center gap-3">
@@ -142,13 +138,7 @@ export function Footer() {
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
             <p>© {currentYear} {siteConfig.author}. All rights reserved.</p>
             <span className="hidden md:inline">•</span>
-            <Link href="/privacy" className="hover:text-white transition-colors">
-              Privacy Policy
-            </Link>
-            <span className="hidden md:inline">•</span>
-            <Link href="/terms" className="hover:text-white transition-colors">
-              Terms of Service
-            </Link>
+            
           </div>
           <p className="flex items-center gap-1">
             Built with <Heart size={14} className="text-pink animate-pulse" /> by The AI Society team

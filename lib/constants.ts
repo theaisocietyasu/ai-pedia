@@ -40,11 +40,11 @@ export const navItems: NavItem[] = [
     link: "/learn",
     description: "AI learning resources"
   },
-  // {
-  //   name: "Blogs",
-  //   link: "/blogs",
-  //   description: "Read our latest articles"
-  // },
+  {
+    name: "Blogs",
+    link: "/blogs",
+    description: "Read our latest articles"
+  },
 ]
 
 // hero content
@@ -142,29 +142,29 @@ export const visionItems: VisionItem[] = [
 
 // footer sections
 export const footerSections: FooterSection[] = [
-  {
-    title: "Quick Links",
-    links: [
-      { label: "Home", href: "/" },
-      { label: "Learn", href: "/learn" },
-      { label: "About", href: "/about" },
-    ]
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "Documentation", href: "#" },
-      { label: "Tutorials", href: "#" },
-      { label: "Blog", href: "#" },
-      { label: "Community", href: "#" }
-    ]
-  },
+  // {
+  //   title: "Quick Links",
+  //   links: [
+  //     { label: "Home", href: "/" },
+  //     { label: "Learn", href: "/learn" },
+  //     { label: "About", href: "/about" },
+  //   ]
+  // },
+  // {
+  //   title: "Resources",
+  //   links: [
+  //     { label: "Documentation", href: "#" },
+  //     { label: "Tutorials", href: "#" },
+  //     { label: "Blog", href: "#" },
+  //     { label: "Community", href: "#" }
+  //   ]
+  // },
   {
     title: "Connect",
     links: [
-      { label: "Discord", href: "https://discord.gg/", external: true },
-      { label: "Contact Us", href: "mailto:theaisociety@asu.edu" },
-      { label: "Sun Devil Central", href: "https://sundevilcentral.asu.edu", external: true }
+      { label: "Website", href: "https://www.ais-asu.com/", external: true },
+      { label: "Discord", href: "https://discord.gg/fXWXwz6fEG", external: true },
+      { label: "Contact Us", href: "mailto:theaisociety.asu@gmail.com" },
     ]
   }
 ]
