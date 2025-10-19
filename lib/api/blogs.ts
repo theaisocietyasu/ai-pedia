@@ -28,6 +28,7 @@ export async function fetchBlogs(options?: {
     if (options?.limit) params.append('limit', options.limit.toString())
 
     const url = `${API_BASE}${params.toString() ? `?${params.toString()}` : ''}`
+    console.log(url)
     const response = await fetch(url)
     
     if (!response.ok) {
