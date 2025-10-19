@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
-import { MongoClient, ObjectId } from 'mongodb';
-
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ml-visualization';
-const LEARN_COLLECTION = process.env.LEARN_COLLECTION_NAME || 'learn_content';
+import { ObjectId } from 'mongodb';
+import { mongoConnection } from '../../../../../utilities/db_connector';
 
 export async function GET(
   request: Request,
@@ -19,12 +17,7 @@ export async function GET(
         { status: 400 }
       );
     }
-    
-    client = new MongoClient(MONGODB_URI);
-    await client.connect();
-    
-    const db = client.db();
-    const collection = db.collection(LEARN_COLLECTION);
+    const collection = mongoConnection.collection('learn_content');
     
     const content = await collection.findOne({ 
       _id: new ObjectId(id) 
@@ -44,9 +37,5 @@ export async function GET(
       { error: 'Internal Server Error' },
       { status: 500 }
     );
-  } finally {
-    if (client) {
-      await client.close();
-    }
   }
 }

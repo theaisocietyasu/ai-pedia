@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { MongoClient } from 'mongodb';
+import { mongoConnection } from '../../../../../utilities/db_connector';
 import { auth } from '@clerk/nextjs/server';
 import { uploadImageToGridFS } from '@/lib/gridfs';
 import { slugifyCategory } from '@/lib/slug';
-
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ml-visualization';
-const LEARN_COLLECTION = process.env.LEARN_COLLECTION_NAME || 'learn_content';
 
 export async function POST(request: NextRequest) {
   let client;
@@ -85,13 +82,8 @@ export async function POST(request: NextRequest) {
       userId
     );
 
-    // Connect to MongoDB
-    client = new MongoClient(MONGODB_URI);
-    await client.connect();
-    
-    const db = client.db();
-    const collection = db.collection(LEARN_COLLECTION);
-    const categoriesCollection = db.collection(process.env.CATEGORIES_COLLECTION_NAME || 'learn_categories');
+    const collection = mongoConnection.collection('learn_content');
+    const categoriesCollection = mongoConnection.collection('learn_categories');
 
     // Normalize incoming categories to slugs and validate existance
     const normalizedCategorySlugs: string[] = [];
@@ -164,9 +156,5 @@ export async function POST(request: NextRequest) {
       { error: 'Internal server error while uploading learn module' },
       { status: 500 }
     );
-  } finally {
-    if (client) {
-      await client.close();
-    }
   }
 }

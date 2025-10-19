@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { mongoConnection } from '../../../../utilities/db_connector';
+import { mongoConnection } from '../../../../../utilities/db_connector';
 import { slugifyCategory } from '@/lib/slug';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ml-visualization';
