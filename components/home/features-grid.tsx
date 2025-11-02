@@ -99,7 +99,7 @@ export function FeaturesGrid() {
                       className="w-14 h-14 rounded-lg flex items-center justify-center"
                       style={{ background: feature.gradient }}
                     >
-                      <span className="text-white">{getIcon(feature.icon)}</span>
+                      <span className="text-dark-gray">{getIcon(feature.icon)}</span>
                     </motion.div>
                   </div>
 

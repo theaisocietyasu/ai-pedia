@@ -641,3 +641,114 @@
   background: rgba(139, 92, 246, 0.5);
 }
 
+/* =========================================================
+   ☀️ Light Mode Overrides for Markdown Content
+   ========================================================= */
+html[data-theme="light"] .markdown-content {
+  color: #1a1a1a; /* base text color */
+}
+
+
+html[data-theme="light"] .markdown-content .markdown-h1,
+html[data-theme="light"] .markdown-content .markdown-h2,
+html[data-theme="light"] .markdown-content .markdown-h3,
+html[data-theme="light"] .markdown-content .markdown-h4,
+html[data-theme="light"] .markdown-content .markdown-h5,
+html[data-theme="light"] .markdown-content .markdown-h6 {
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Paragraphs & Lists */
+html[data-theme="light"] .markdown-content .markdown-paragraph,
+html[data-theme="light"] .markdown-content ul,
+html[data-theme="light"] .markdown-content ol {
+  color: rgba(30, 30, 30, 0.9);
+}
+
+/* Links */
+html[data-theme="light"] .markdown-content .markdown-link {
+  color: #4b4abd;
+}
+html[data-theme="light"] .markdown-content .markdown-link:hover {
+  color: #8d2f6a;
+  border-bottom-color: #8d2f6a;
+}
+
+/* Images */
+html[data-theme="light"] .markdown-content .markdown-image {
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Code blocks & inline code */
+html[data-theme="light"] .markdown-content .markdown-code-block > div {
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  background: rgba(245, 245, 245, 0.8);
+}
+html[data-theme="light"] .markdown-content .markdown-inline-code {
+  background: rgba(0, 0, 0, 0.05);
+  color: #222;
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Blockquotes */
+html[data-theme="light"] .markdown-content blockquote {
+  color: rgba(30, 30, 30, 0.9);
+  background: rgba(0, 0, 0, 0.05);
+  border-left-color: #3a388e;
+}
+
+/* Tables */
+html[data-theme="light"] .markdown-content table {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+html[data-theme="light"] .markdown-content th,
+html[data-theme="light"] .markdown-content td {
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+html[data-theme="light"] .markdown-content th {
+  background: rgba(58, 56, 142, 0.05);
+  color: #111;
+}
+html[data-theme="light"] .markdown-content td {
+  color: #222;
+}
+html[data-theme="light"] .markdown-content tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.02);
+}
+html[data-theme="light"] .markdown-content tr:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Visualizations / glassy containers */
+html[data-theme="light"] .markdown-content .markdown-visualization {
+  background: rgba(215, 215, 215, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+html[data-theme="light"] .markdown-content .markdown-visualization[data-component-id]::after {
+  color: rgba(30, 30, 30, 0.6);
+}
+
+/* Inline strong/emphasis */
+html[data-theme="light"] .markdown-content .markdown-bold {
+  color: #000;
+}
+html[data-theme="light"] .markdown-content .markdown-italic {
+  color: rgba(30, 30, 30, 0.9);
+}
+
+/* Chart axes & tooltips */
+html[data-theme="light"] .recharts-text {
+  fill: #555 !important;
+}
+html[data-theme="light"] .recharts-cartesian-grid line {
+  stroke: #ddd !important;
+}
+
+/* Code line numbers */
+html[data-theme="light"] .markdown-content .markdown-code-block .react-syntax-highlighter-line-number {
+  color: rgba(255, 255, 255, 0.6) !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+

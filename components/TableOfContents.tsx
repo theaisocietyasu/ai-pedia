@@ -83,7 +83,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings, className =
   return (
     <div className={`flex flex-col ${className}`}>
       {/* Fixed Header Section */}
-      <h3 className="font-semibold mb-3 text-gray-200 text-sm uppercase tracking-wide">
+      <h3 className="font-semibold mb-3 text-light-gray text-sm uppercase tracking-wide">
         Quick Navigation
       </h3>
 

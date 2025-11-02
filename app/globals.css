@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import "../styles/markdown.css";
-@import url('https://fonts.googleapis.com/css2?family=Rokkitt:ital,wght@0,100..900;1,100..900&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Rokkitt:ital,wght@0,100..900;1,100..900&display=swap'); */
 /* Cache refresh - spacing fix 2025-09-03 */
 
 :root {
@@ -30,6 +30,48 @@
   --transition-smooth: 0.6s cubic-bezier(0.43, 0.13, 0.23, 0.96);
 }
 
+/* =========================
+   ☀️ Light Theme Overrides
+   ========================= */
+html[data-theme="light"] {
+  --background: #ffffff; /* white */
+  --foreground: #0b0a10; /* black text */
+
+  /* you can keep accent colors same, or brighten slightly if needed */
+  --dark-gray: #f0f0f0;
+  --light-gray: #1a1a2e;
+  --border-color: rgba(0, 0, 0, 0.1); /* darker border for light mode */
+
+  --gradient-primary: linear-gradient(135deg, #3a388e 0%, #8d2f6a 50%, #4b4abd 100%);
+  --gradient-secondary: linear-gradient(135deg, #4b4abd 0%, #3a388e 100%);
+  --gradient-accent: linear-gradient(135deg, #8d2f6a 0%, #3a388e 100%);
+  --gradient-dark: linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%);
+
+  color-scheme: light;
+}
+
+/* Fix white text in light mode */
+html[data-theme="light"] .text-white {
+  color: #000 !important;
+}
+
+html[data-theme="light"] .hover\:text-white:hover {
+  color: #000 !important;
+}
+
+/* Light mode override */
+html[data-theme="light"] .glass-effect {
+  background: rgba(235, 235, 245, 0.6); /* light glass */
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+
+
+/* Smooth theme transition */
+html, body, * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -54,7 +96,7 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: 'Rokkitt', var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
 }
 
 body {

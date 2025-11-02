@@ -19,7 +19,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ rawContent }) => {
           <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
             {metadata.title}
           </h1>
-          <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-400">
+          <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-300">
             {metadata.author && (
               <span>By {metadata.author}</span>
             )}
