@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils"
 import type { NavItem } from "@/lib/types"
 import { SearchBar } from "./search-bar"
 import { SignedIn, UserButton } from "@clerk/nextjs"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -136,6 +137,7 @@ export function Navbar() {
             {/* search bar and user button side by side with margin */}
             <div className="hidden md:flex items-center">
               <SearchBar />
+              <ThemeToggle />
               <SignedIn>
                 <div className="ml-4">
                   <UserButton afterSignOutUrl="/" />

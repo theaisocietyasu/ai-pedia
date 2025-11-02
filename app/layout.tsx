@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Open_Sans, Inter, Source_Sans_3, IBM_Plex_Sans, Noto_Sans, Lexend, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/components/ui/navbar";
 import { Footer } from "@/components/ui/footer";
 import "./globals.css";
@@ -9,7 +9,7 @@ import {
   ClerkProvider,
 } from '@clerk/nextjs'
 
-const geistSans = Geist({
+const geistSans = Noto_Sans({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
@@ -148,7 +148,7 @@ export default function RootLayout({
 
   return (
     <ClerkProvider>
-    <html lang="en">
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
         <script
           type="application/ld+json"
@@ -160,7 +160,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className="antialiased"
       >
         <Navbar />
         {children}
