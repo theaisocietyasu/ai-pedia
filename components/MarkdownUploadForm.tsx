@@ -17,6 +17,12 @@ interface InitialData {
   categories: string[];
   actionButtons: ActionButton[];
   thumbnail: string;
+  contributors?: Array<{
+    id: string;
+    name: string;
+    email?: string;
+    addedAt?: string;
+  }>;
 }
 
 interface MarkdownUploadFormProps {
@@ -340,6 +346,38 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
             )}
           </div>
         </div>
+
+        {/* Contributors, Shows in edit mode */}
+        {mode === 'edit' && initialData?.contributors && initialData.contributors.length > 0 && (
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Contributors
+            </label>
+            <div className="p-3 bg-gray-900/50 border border-gray-600 rounded-lg space-y-2">
+              {initialData.contributors.map((contributor) => (
+                <div key={contributor.id} className="flex items-center gap-3 text-sm">
+                  <div className="w-8 h-8 rounded-full bg-purple/20 border border-purple/30 flex items-center justify-center text-purple-300 font-medium">
+                    {contributor.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-gray-300 font-medium">{contributor.name}</div>
+                    {contributor.email && (
+                      <div className="text-gray-500 text-xs">{contributor.email}</div>
+                    )}
+                  </div>
+                  {contributor.addedAt && (
+                    <div className="text-gray-600 text-xs">
+                      {new Date(contributor.addedAt).toLocaleDateString()}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-gray-500 mt-2">
+              Contributors are automatically added when someone edits this module.
+            </p>
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div>

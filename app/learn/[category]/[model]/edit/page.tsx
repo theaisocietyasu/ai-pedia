@@ -47,7 +47,8 @@ export default function EditPage() {
           description: module.description,
           categories: module.categories || [],
           actionButtons: module.action_buttions || [],
-          thumbnail: module.thumbnail
+          thumbnail: module.thumbnail,
+          contributors: module.contributors || []
         });
 
         setError(null);

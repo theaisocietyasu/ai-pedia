@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { mongoConnection } from '../../../../../utilities/db_connector';
-import { auth } from '@clerk/nextjs/server';
+import { auth, clerkClient } from '@clerk/nextjs/server';
 import { uploadImageToGridFS } from '@/lib/gridfs';
 import { slugifyCategory, generateLearnModuleSlug } from '@/lib/slug';
 
@@ -125,6 +125,14 @@ export async function POST(request: NextRequest) {
       normalizedCategorySlugs.push(slug);
     }
 
+    // Get user information from Clerk
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const userName = user.firstName && user.lastName
+      ? `${user.firstName} ${user.lastName}`
+      : user.username || 'Anonymous';
+    const userEmail = user.emailAddresses?.[0]?.emailAddress;
+
     // Create the learn module document (without slug first to get the ID)
     const learnModule = {
       title: title.trim(),
@@ -134,7 +142,13 @@ export async function POST(request: NextRequest) {
       description: description.trim(),
       action_buttons: actionButtons,
       createdAt: new Date(),
-      createdBy: userId
+      createdBy: userId,
+      contributors: [{
+        id: userId,
+        name: userName,
+        email: userEmail,
+        addedAt: new Date()
+      }]
     };
 
     // Insert into database to get the ObjectId

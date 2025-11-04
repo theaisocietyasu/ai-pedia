@@ -33,6 +33,12 @@ export interface LearnModule {
   action_buttions?: { name: string; link: string }[];
   createdAt?: string;
   updatedAt?: string;
+  contributors?: Array<{
+    id: string;
+    name: string;
+    email?: string;
+    addedAt?: string;
+  }>;
 }
 
 // API client functions

@@ -48,6 +48,15 @@ const learnModuleSchema = new mongoose.Schema({
             link: { type: String, required: true }
         }],
         default: []
+    },
+    contributors: {
+        type: [{
+            id: { type: String, required: true },
+            name: { type: String, required: true },
+            email: { type: String, required: false },
+            addedAt: { type: Date, default: Date.now }
+        }],
+        default: []
     }
 });
 
