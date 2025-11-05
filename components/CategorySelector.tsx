@@ -8,7 +8,7 @@ interface Category {
   _id: string;
   name: string;
   description: string;
-  image: string;
+  image?: string;
 }
 
 interface CategorySelectorProps {
@@ -27,6 +27,13 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [newCategoryData, setNewCategoryData] = useState({
+    name: '',
+    description: ''
+  });
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -63,11 +70,79 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
   const handleCategoryToggle = (categoryName: string) => {
     const slug = slugifyCategory(categoryName);
     const isSelected = selectedCategories.includes(slug);
-    
+
     if (isSelected) {
       onCategoriesChange(selectedCategories.filter(cat => cat !== slug));
     } else {
       onCategoriesChange([...selectedCategories, slug]);
+    }
+  };
+
+  const handleCreateCategory = async () => {
+    setCreateError(null);
+
+    if (!newCategoryData.name.trim()) {
+      setCreateError('Category name is required');
+      return;
+    }
+
+    try {
+      setIsCreating(true);
+
+      const response = await fetch('/api/learn/categories', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: newCategoryData.name.trim(),
+          description: newCategoryData.description.trim()
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create category');
+      }
+
+      // Add the new category to the list
+      const newCategory: Category = data.category;
+      setCategories(prev => [...prev, newCategory]);
+
+      // Auto-select the newly created category
+      const newSlug = slugifyCategory(newCategory.name);
+      onCategoriesChange([...selectedCategories, newSlug]);
+
+      // Reset form and close modal
+      setNewCategoryData({ name: '', description: '' });
+      setShowCreateModal(false);
+      setIsOpen(false);
+    } catch (err) {
+      console.error('Error creating category:', err);
+      setCreateError(err instanceof Error ? err.message : 'Failed to create category');
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  const handleOpenCreateModal = () => {
+    setIsOpen(false);
+    setShowCreateModal(true);
+    setCreateError(null);
+    setNewCategoryData({ name: '', description: '' });
+  };
+
+  const handleCloseCreateModal = () => {
+    setShowCreateModal(false);
+    setCreateError(null);
+    setNewCategoryData({ name: '', description: '' });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleCreateCategory();
     }
   };
 
@@ -147,7 +222,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
           {categories.map(category => (
             <div
               key={category._id}
-              className="p-3 hover:bg-gray-700 cursor-pointer border-b border-gray-700 last:border-b-0"
+              className="p-3 hover:bg-gray-700 cursor-pointer border-b border-gray-700"
               onClick={() => handleCategoryToggle(category.name)}
             >
               <div className="flex items-center justify-between">
@@ -166,6 +241,90 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
               </div>
             </div>
           ))}
+
+          {/* Create New Category Button */}
+          <div
+            className="p-3 hover:bg-gray-700 cursor-pointer bg-gray-800/80 border-t-2 border-purple/30"
+            onClick={handleOpenCreateModal}
+          >
+            <div className="flex items-center gap-2 text-purple-300">
+              <span className="text-xl">+</span>
+              <span className="font-medium">Create New Category</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Category Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-dark-gray border border-gray-700 rounded-lg max-w-md w-full p-6">
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold text-gray-200 mb-2">Create New Category</h2>
+              <p className="text-sm text-gray-400">
+                Add a new category for organizing learning modules.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {/* Name Field */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Category Name *
+                </label>
+                <input
+                  type="text"
+                  value={newCategoryData.name}
+                  onChange={(e) => setNewCategoryData(prev => ({ ...prev, name: e.target.value }))}
+                  onKeyDown={handleKeyDown}
+                  className="w-full p-3 border border-gray-600 rounded-lg bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-purple transition-colors"
+                  placeholder="e.g., Deep Learning"
+                  autoFocus
+                />
+              </div>
+
+              {/* Description Field */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Description (Optional)
+                </label>
+                <textarea
+                  value={newCategoryData.description}
+                  onChange={(e) => setNewCategoryData(prev => ({ ...prev, description: e.target.value }))}
+                  rows={3}
+                  className="w-full p-3 border border-gray-600 rounded-lg bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-purple transition-colors resize-none"
+                  placeholder="Brief description of the category..."
+                />
+              </div>
+
+              {/* Error Display */}
+              {createError && (
+                <div className="p-3 bg-red-900/20 border border-red-500 rounded-lg text-red-400 text-sm">
+                  {createError}
+                </div>
+              )}
+
+              {/* Buttons */}
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={handleCloseCreateModal}
+                  className="flex-1 px-4 py-3 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors font-medium"
+                  disabled={isCreating}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCreateCategory}
+                  className="flex-1 px-4 py-3 bg-purple text-white rounded-lg hover:bg-purple/80 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isCreating || !newCategoryData.name.trim()}
+                >
+                  {isCreating ? 'Creating...' : 'Create Category'}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
