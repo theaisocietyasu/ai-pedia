@@ -124,7 +124,8 @@ export function transformModuleToModelFormat(module: LearnModule): any {
     content: normalizeMarkdownContent(module.content || ''),
     description: module.description || '',
     imgPath: module.thumbnail || '',
-    actionButtons: module.action_buttions || []
+    actionButtons: module.action_buttions || [],
+    contributors: module.contributors || []
   };
 }
 
