@@ -3,6 +3,7 @@ import { mongoConnection } from '../../../../../utilities/db_connector';
 import { auth } from '@clerk/nextjs/server';
 import { uploadImageToGridFS } from '@/lib/gridfs';
 import { slugifyCategory, generateLearnModuleSlug } from '@/lib/slug';
+import { revalidatePath } from 'next/cache';
 
 export async function GET(
   request: Request,
@@ -30,7 +31,14 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(content);
+    // Return with cache control headers
+    return NextResponse.json(content, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+        'CDN-Cache-Control': 'public, s-maxage=3600',
+        'Vercel-CDN-Cache-Control': 'public, s-maxage=3600',
+      }
+    });
   } catch (error) {
     console.error('Error fetching content by slug:', error);
     return NextResponse.json(
@@ -219,6 +227,18 @@ export async function PUT(
     // Fetch updated document
     const updatedModule = await collection.findOne({ slug: newSlug });
 
+    // Revalidate relevant paths to clear Next.js cache
+    try {
+      revalidatePath('/learn');
+      revalidatePath(`/learn/${normalizedCategorySlugs[0]}`);
+      revalidatePath(`/learn/${normalizedCategorySlugs[0]}/${newSlug}`);
+      if (newSlug !== slug) {
+        revalidatePath(`/learn/${normalizedCategorySlugs[0]}/${slug}`);
+      }
+    } catch (revalidateError) {
+      console.error('Error revalidating paths:', revalidateError);
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Learn module updated successfully',
@@ -279,6 +299,17 @@ export async function DELETE(
         { error: 'Failed to delete content' },
         { status: 500 }
       );
+    }
+
+    // Revalidate relevant paths to clear Next.js cache
+    try {
+      revalidatePath('/learn');
+      if (existingModule.categories && existingModule.categories.length > 0) {
+        revalidatePath(`/learn/${existingModule.categories[0]}`);
+        revalidatePath(`/learn/${existingModule.categories[0]}/${slug}`);
+      }
+    } catch (revalidateError) {
+      console.error('Error revalidating paths:', revalidateError);
     }
 
     return NextResponse.json({

@@ -96,10 +96,10 @@ export async function fetchBlogCategories(): Promise<Array<{name: string, slug: 
 // Utility functions to work with the new schema
 export function getBlogsByCategory(blogs: BlogPost[], category: string): BlogPost[] {
   if (category === 'all') return blogs
-  return blogs.filter(blog =>
-    blog.categories?.toLowerCase() === category.toLowerCase() ||
-    blog.category?.toLowerCase() === category.toLowerCase()  // Legacy support
-  )
+  return blogs.filter(blog => {
+    const blogCategory = 'categories' in blog ? blog.categories : undefined
+    return blogCategory?.toLowerCase() === category.toLowerCase()
+  })
 }
 
 export function getFeaturedBlogs(blogs: BlogPost[], limit: number = 3): BlogPost[] {
@@ -110,11 +110,11 @@ export function getRelatedBlogs(blogs: BlogPost[], currentSlug: string, limit: n
   const currentBlog = blogs.find(blog => blog.slug === currentSlug)
   if (!currentBlog) return []
 
-  const currentCategory = currentBlog.categories || currentBlog.category
+  const currentCategory = 'categories' in currentBlog ? currentBlog.categories : undefined
 
   return blogs
     .filter(blog => {
-      const blogCategory = blog.categories || blog.category
+      const blogCategory = 'categories' in blog ? blog.categories : undefined
       return blog.slug !== currentSlug && blogCategory === currentCategory
     })
     .slice(0, limit)
@@ -123,7 +123,7 @@ export function getRelatedBlogs(blogs: BlogPost[], currentSlug: string, limit: n
 // Helper function to convert MongoDB blog to legacy format for backward compatibility
 export function convertToLegacyBlog(blog: BlogPost): LegacyBlogPost {
   // Handle both new and legacy author formats
-  const primaryAuthor = blog.authors?.[0] || blog.author?.[0] || { name: 'Unknown Author', social: '' }
+  const primaryAuthor = blog.authors?.[0] || { name: 'Unknown Author', social: '' }
 
   // Generate missing fields from markdown content if needed
   let excerpt = blog.excerpt
@@ -157,11 +157,12 @@ export function convertToLegacyBlog(blog: BlogPost): LegacyBlogPost {
     authorImage: `/authors/${primaryAuthor.name.toLowerCase().replace(/\s+/g, '-')}.jpg`,
     publishDate: blog.publishDate || blog.lastUpdated || new Date().toISOString(),
     readTime: readTime || '5 min read',
-    category: blog.categories || blog.category || 'General',
+    category: blog.categories || 'General',
     tags: blog.tags || [],
     featuredImage: blog.featuredImage || '/blog/default-featured.jpg',
     slug: slug || 'untitled-blog',
-    content: legacyContent
+    content: legacyContent,
+    lastUpdated: blog.lastUpdated
   }
 }
 

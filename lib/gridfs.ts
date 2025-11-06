@@ -39,9 +39,12 @@ export async function uploadImageToGridFS(
 
     // Write file buffer to stream
     await new Promise((resolve, reject) => {
-      uploadStream.end(fileBuffer, (error) => {
-        if (error) reject(error);
-        else resolve(uploadStream.id);
+      uploadStream.write(fileBuffer);
+      uploadStream.end(() => {
+        resolve(uploadStream.id);
+      });
+      uploadStream.on('error', (error) => {
+        reject(error);
       });
     });
 
