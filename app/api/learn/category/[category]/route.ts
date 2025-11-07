@@ -53,7 +53,13 @@ export async function GET(
       description: item.description || ''
     }));
     
-    return NextResponse.json(filteredContent);
+    return NextResponse.json(filteredContent, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+        'CDN-Cache-Control': 'public, s-maxage=3600',
+        'Vercel-CDN-Cache-Control': 'public, s-maxage=3600',
+      }
+    });
   } catch (error) {
     console.error('Error fetching modules by category:', error);
     return NextResponse.json(

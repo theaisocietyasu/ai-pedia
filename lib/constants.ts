@@ -48,7 +48,7 @@ export const navItems: NavItem[] = [
 ]
 
 // hero content
-export const heroContent = {
+export const heroContent: import('./types').HeroContent = {
   title: "AI Pedia",
   subtitle: "Learning Website for AI Enthusiasts",
   description: "Embark on your journey to master artificial intelligence with interactive visualizations, hands-on projects, and expert guidance from The AI Society at ASU.",

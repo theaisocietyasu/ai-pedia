@@ -5,7 +5,12 @@ import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 import type { ButtonVariant, ButtonSize } from "@/lib/types"
 
-interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onDrag'> {
+interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
+  'onDrag' | 'onDragStart' | 'onDragEnd' | 'onDragCapture' | 'onDragEndCapture' | 
+  'onDragEnter' | 'onDragEnterCapture' | 'onDragExit' | 'onDragExitCapture' | 
+  'onDragLeave' | 'onDragLeaveCapture' | 'onDragOver' | 'onDragOverCapture' | 
+  'onDragStartCapture' | 'onDrop' | 'onDropCapture' |
+  'onAnimationStart' | 'onAnimationStartCapture' | 'onAnimationEnd' | 'onAnimationEndCapture' | 'onAnimationIteration' | 'onAnimationIterationCapture'> {
   variant?: ButtonVariant
   size?: ButtonSize
   fullWidth?: boolean
