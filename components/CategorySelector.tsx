@@ -34,7 +34,10 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
     name: '',
     description: ''
   });
+  const [categoryImage, setCategoryImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -81,23 +84,33 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
   const handleCreateCategory = async () => {
     setCreateError(null);
 
+    // Validate required fields
     if (!newCategoryData.name.trim()) {
       setCreateError('Category name is required');
+      return;
+    }
+
+    if (!newCategoryData.description.trim()) {
+      setCreateError('Category description is required');
+      return;
+    }
+
+    if (!categoryImage) {
+      setCreateError('Category image is required');
       return;
     }
 
     try {
       setIsCreating(true);
 
+      const formData = new FormData();
+      formData.append('name', newCategoryData.name.trim());
+      formData.append('description', newCategoryData.description.trim());
+      formData.append('image', categoryImage);
+
       const response = await fetch('/api/learn/categories', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: newCategoryData.name.trim(),
-          description: newCategoryData.description.trim()
-        }),
+        body: formData,
       });
 
       const data = await response.json();
@@ -116,6 +129,8 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
 
       // Reset form and close modal
       setNewCategoryData({ name: '', description: '' });
+      setCategoryImage(null);
+      setImagePreview(null);
       setShowCreateModal(false);
       setIsOpen(false);
     } catch (err) {
@@ -126,17 +141,49 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
     }
   };
 
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      setCreateError('Invalid file type. Please upload a JPG, PNG, GIF, or WebP image.');
+      return;
+    }
+
+    // Validate file size (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+      setCreateError('File too large. Please upload an image smaller than 5MB.');
+      return;
+    }
+
+    setCategoryImage(file);
+    setCreateError(null);
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImagePreview(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleOpenCreateModal = () => {
     setIsOpen(false);
     setShowCreateModal(true);
     setCreateError(null);
     setNewCategoryData({ name: '', description: '' });
+    setCategoryImage(null);
+    setImagePreview(null);
   };
 
   const handleCloseCreateModal = () => {
     setShowCreateModal(false);
     setCreateError(null);
     setNewCategoryData({ name: '', description: '' });
+    setCategoryImage(null);
+    setImagePreview(null);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -286,7 +333,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
               {/* Description Field */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Description (Optional)
+                  Description *
                 </label>
                 <textarea
                   value={newCategoryData.description}
@@ -295,6 +342,44 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
                   className="w-full p-3 border border-gray-600 rounded-lg bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-purple transition-colors resize-none"
                   placeholder="Brief description of the category..."
                 />
+              </div>
+
+              {/* Image Upload Field */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Category Image *
+                </label>
+                <div className="flex items-start gap-4">
+                  <div className="flex-1">
+                    <input
+                      ref={imageInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageSelect}
+                      className="hidden"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => imageInputRef.current?.click()}
+                      className="w-full p-3 border border-gray-600 rounded-lg bg-gray-800 text-gray-300 hover:border-gray-500 focus:outline-none focus:border-purple transition-colors text-left"
+                    >
+                      {categoryImage ? categoryImage.name : 'Choose image...'}
+                    </button>
+                  </div>
+
+                  {imagePreview && (
+                    <div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-600">
+                      <img
+                        src={imagePreview}
+                        alt="Category preview"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  JPG, PNG, GIF, or WebP. Max 5MB.
+                </p>
               </div>
 
               {/* Error Display */}
@@ -318,7 +403,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
                   type="button"
                   onClick={handleCreateCategory}
                   className="flex-1 px-4 py-3 bg-purple text-white rounded-lg hover:bg-purple/80 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={isCreating || !newCategoryData.name.trim()}
+                  disabled={isCreating || !newCategoryData.name.trim() || !newCategoryData.description.trim() || !categoryImage}
                 >
                   {isCreating ? 'Creating...' : 'Create Category'}
                 </button>
