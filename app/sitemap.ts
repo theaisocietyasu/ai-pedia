@@ -3,7 +3,7 @@ import { getAllBlogs } from '@/lib/blog-data'
 import { getCategories, getModulesForCategory } from './learn/categories'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ailearninghub.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aipedia.ais-asu.com/'
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [

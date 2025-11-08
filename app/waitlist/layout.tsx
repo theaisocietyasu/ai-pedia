@@ -1,6 +1,6 @@
 import { Metadata } from "next"
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ailearninghub.com'
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aipedia.ais-asu.com/'
 
 export const metadata: Metadata = {
   title: "Join the Waitlist",

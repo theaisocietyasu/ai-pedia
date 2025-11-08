@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { getModulesForCategory, getCategories } from "../categories";
 import { CategoryPageClient } from "./CategoryPageClient";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ailearninghub.com";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aipedia.ais-asu.com/";
 
 interface CategoryPageProps {
   params: Promise<{

@@ -18,7 +18,7 @@ import { BlogCard } from "@/components/ui/blog-card"
 import { getBlogPost, getRelatedBlogs } from "@/lib/blog-data"
 import type { LegacyBlogPost } from "@/lib/types"
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ailearninghub.com'
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aipedia.ais-asu.com/'
 
 interface BlogDetailPageProps {
   params: Promise<{

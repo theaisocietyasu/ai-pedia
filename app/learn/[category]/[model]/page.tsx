@@ -8,7 +8,7 @@ import { extractHeadings } from "@/lib/markdown-utils"
 import { LearnModuleClient } from "./LearnModuleClient"
 import { EditButton } from "./EditButton"
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ailearninghub.com'
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aipedia.ais-asu.com/'
 
 interface LearnModulePageProps {
   params: Promise<{

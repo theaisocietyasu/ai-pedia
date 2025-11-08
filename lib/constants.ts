@@ -5,7 +5,7 @@ export const siteConfig = {
   name: "AI Pedia",
   description: "Learning Website for AI Enthusiasts",
   tagline: "Master the Future of Artificial Intelligence",
-  url: "https://ailearninghub.com",
+  url: "https://aipedia.ais-asu.com/",
   ogImage: "/og-image.png",
   author: "The AI Society",
   email: "theaisociety@asu.edu",

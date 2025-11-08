@@ -1,6 +1,6 @@
 import React from 'react'
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ailearninghub.com'
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aipedia.ais-asu.com/'
 
 export interface ArticleSchemaProps {
   title: string
