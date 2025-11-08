@@ -28,14 +28,42 @@ export default function EditPage() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [lockError, setLockError] = useState<string | null>(null);
+  const [lockedBy, setLockedBy] = useState<string | null>(null);
+  const [hasLock, setHasLock] = useState(false);
+  const [heartbeatInterval, setHeartbeatInterval] = useState<NodeJS.Timeout | null>(null);
 
-  // Load existing module data
+  // Acquire lock and load existing module data
   useEffect(() => {
-    const loadModule = async () => {
+    const acquireLockAndLoadModule = async () => {
       if (!modelSlug) return;
 
       try {
         setLoading(true);
+
+        // First, try to acquire the lock
+        const lockResponse = await fetch(`/api/learn/content/${modelSlug}/lock`, {
+          method: 'POST',
+        });
+
+        const lockData = await lockResponse.json();
+
+        if (!lockResponse.ok) {
+          if (lockResponse.status === 423) {
+            // Locked by another user
+            setLockedBy(lockData.lockedBy || 'Another officer');
+            setLockError(`This module is currently being edited by ${lockData.lockedBy || 'another officer'}. Please try again later.`);
+            setLoading(false);
+            return;
+          }
+          throw new Error('Failed to acquire edit lock');
+        }
+
+        // Lock acquired successfully
+        setHasLock(true);
+        setLockError(null);
+
+        // Load the module data
         const module = await fetchModuleBySlug(modelSlug);
 
         // Set markdown content
@@ -51,6 +79,26 @@ export default function EditPage() {
           contributors: module.contributors || []
         });
 
+        // Set up heartbeat to keep lock alive
+        const interval = setInterval(async () => {
+          try {
+            const heartbeatResponse = await fetch(`/api/learn/content/${modelSlug}/lock`, {
+              method: 'PATCH',
+            });
+
+            if (!heartbeatResponse.ok) {
+              console.error('Heartbeat failed - lock may have expired');
+              clearInterval(interval);
+              setHasLock(false);
+              setLockError('Your edit session has expired. Please refresh the page to continue editing.');
+            }
+          } catch (err) {
+            console.error('Error sending heartbeat:', err);
+          }
+        }, lockData.heartbeatInterval || 30000);
+
+        setHeartbeatInterval(interval);
+
         setError(null);
       } catch (err) {
         console.error('Error loading module:', err);
@@ -60,11 +108,37 @@ export default function EditPage() {
       }
     };
 
-    loadModule();
+    acquireLockAndLoadModule();
+
+    // Cleanup: release lock on unmount
+    return () => {
+      if (modelSlug && hasLock) {
+        fetch(`/api/learn/content/${modelSlug}/lock`, {
+          method: 'DELETE',
+        }).catch(err => console.error('Error releasing lock:', err));
+      }
+      if (heartbeatInterval) {
+        clearInterval(heartbeatInterval);
+      }
+    };
   }, [modelSlug]);
 
-  const handleUpdateSuccess = (result: any) => {
+  const handleUpdateSuccess = async (result: any) => {
     setUpdateSuccess(result.newSlug);
+
+    // Release the lock
+    if (modelSlug && hasLock) {
+      try {
+        await fetch(`/api/learn/content/${modelSlug}/lock`, {
+          method: 'DELETE',
+        });
+        if (heartbeatInterval) {
+          clearInterval(heartbeatInterval);
+        }
+      } catch (err) {
+        console.error('Error releasing lock after update:', err);
+      }
+    }
 
     // Show success message for a few seconds, then redirect
     setTimeout(() => {
@@ -105,6 +179,37 @@ export default function EditPage() {
         <div className="text-center">
           <div className="text-6xl mb-4">⏳</div>
           <div className="text-xl text-gray-400">Loading module data...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (lockError) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <div className="text-6xl mb-4">🔒</div>
+          <h2 className="text-2xl font-bold text-yellow-400 mb-4">Module is Locked</h2>
+          <div className="text-lg text-gray-300 mb-2">{lockError}</div>
+          {lockedBy && (
+            <div className="text-sm text-gray-400 mb-6">
+              Currently being edited by: <span className="font-semibold text-yellow-300">{lockedBy}</span>
+            </div>
+          )}
+          <div className="flex gap-3 justify-center">
+            <button
+              onClick={() => router.push(`/learn/${params.category}/${modelSlug}`)}
+              className="px-6 py-3 bg-purple text-white rounded-lg hover:bg-purple/80 transition-colors"
+            >
+              View Module
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
         </div>
       </div>
     );
