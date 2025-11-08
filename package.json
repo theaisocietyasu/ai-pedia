@@ -11,8 +11,6 @@
     "format": "biome format --write"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.33.0",
-    "@clerk/themes": "^2.4.22",
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.4.0",
     "@types/react-syntax-highlighter": "^15.5.13",
@@ -25,6 +23,7 @@
     "mongodb": "^6.20.0",
     "mongoose": "^8.18.2",
     "next": "15.5.2",
+    "next-auth": "^4.24.13",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-markdown": "^10.1.0",

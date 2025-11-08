@@ -4,18 +4,23 @@ import React, { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, ChevronRight, Home, BookOpen, Info, Users } from "lucide-react"
+import { Menu, X, ChevronRight, Home, BookOpen, Info, Users, LogOut, User } from "lucide-react"
 import { navItems } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import type { NavItem } from "@/lib/types"
 import { SearchBar } from "./search-bar"
-import { SignedIn, UserButton } from "@clerk/nextjs"
+import { useSession, signOut } from "@/lib/auth/auth-client"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
+  const { data: session } = useSession()
+
+  const handleSignOut = async () => {
+    await signOut()
+  }
 
   // handle scroll events for navbar background
   useEffect(() => {
@@ -135,14 +140,34 @@ export function Navbar() {
             </div>
 
             {/* search bar and user button side by side with margin */}
-            <div className="hidden md:flex items-center">
+            <div className="hidden md:flex items-center gap-4">
               <SearchBar />
               <ThemeToggle />
-              <SignedIn>
-                <div className="ml-4">
-                  <UserButton afterSignOutUrl="/" />
+              {session?.user && (
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-purple/20 border border-purple/30">
+                    {session.user.image ? (
+                      <img 
+                        src={session.user.image} 
+                        alt={session.user.name || "User"} 
+                        className="w-6 h-6 rounded-full"
+                      />
+                    ) : (
+                      <User size={16} className="text-purple-300" />
+                    )}
+                    <span className="text-sm text-purple-300">
+                      {session.user.name || session.user.email}
+                    </span>
+                  </div>
+                  <button
+                    onClick={handleSignOut}
+                    className="p-2 rounded-lg hover:bg-purple/20 text-light-gray hover:text-white transition-colors"
+                    title="Sign out"
+                  >
+                    <LogOut size={18} />
+                  </button>
                 </div>
-              </SignedIn>
+              )}
             </div>
 
             {/* mobile menu button */}

@@ -1,94 +1,185 @@
-# AI Pedia
+# AI Pedia# AI Pedia
 
-A modern web-based learning platform built by The AI Society at ASU to help students visualize and understand machine learning concepts through interactive experiences.
 
-## Project Overview
 
-AI Pedia is a Next.js application that provides an engaging platform for AI education. The frontend features a modern design with smooth animations, responsive layout, and intuitive navigation to guide users through their AI learning journey.
+A modern web-based learning platform built by The AI Society at ASU to help students visualize and understand machine learning concepts through interactive experiences.A modern web-based learning platform built by The AI Society at ASU to help students visualize and understand machine learning concepts through interactive experiences.
 
-## Tech Stack
 
-- **Framework:** Next.js 15 with Turbopack
+
+## Tech Stack## Project Overview
+
+
+
+- **Framework:** Next.js 15AI Pedia is a Next.js application that provides an engaging platform for AI education. The frontend features a modern design with smooth animations, responsive layout, and intuitive navigation to guide users through their AI learning journey.
+
 - **Runtime:** React 19
-- **Language:** TypeScript 5
+
+- **Language:** TypeScript 5## Tech Stack
+
 - **Styling:** Tailwind CSS 4
-- **Animations:** Framer Motion
+
+- **Authentication:** NextAuth.js with Discord OAuth- **Framework:** Next.js 15 with Turbopack
+
+- **Database:** MongoDB- **Runtime:** React 19
+
+- **Code Quality:** Biome- **Language:** TypeScript 5
+
+- **Styling:** Tailwind CSS 4
+
+## Quick Start- **Animations:** Framer Motion
+
 - **Icons:** Lucide React
-- **Code Quality:** Biome (linting & formatting)
 
-## Project Structure
+### Prerequisites- **Code Quality:** Biome (linting & formatting)
 
-```
+
+
+- Node.js 18+## Project Structure
+
+- MongoDB connection
+
+- Discord OAuth application```
+
 frontend/
-├── app/                    # Next.js App Router pages
+
+### Setup├── app/                    # Next.js App Router pages
+
 │   ├── page.tsx           # Home page
-│   ├── about/             # About The AI Society
-│   ├── learn/             # Learning content (coming soon)
-│   ├── waitlist/          # Waitlist signup
-│   ├── layout.tsx         # Root layout with navbar & footer
-│   └── globals.css        # Global styles
-├── components/
+
+1. **Clone and install**│   ├── about/             # About The AI Society
+
+   ```bash│   ├── learn/             # Learning content (coming soon)
+
+   git clone <repository-url>│   ├── waitlist/          # Waitlist signup
+
+   cd ml-visualization│   ├── layout.tsx         # Root layout with navbar & footer
+
+   npm install│   └── globals.css        # Global styles
+
+   ```├── components/
+
 │   ├── home/              # Home page sections
-│   └── ui/                # Reusable UI components
-├── lib/                   # Utilities and constants
-└── public/                # Static assets
-```
 
-## Quick Start
+2. **Configure environment**│   └── ui/                # Reusable UI components
 
-### Prerequisites
+   ├── lib/                   # Utilities and constants
 
-- Node.js 18+
-- npm or yarn
+   Copy `.env.example` to `.env` and fill in your values:└── public/                # Static assets
 
-### Setup Instructions
+   ```bash```
 
-1. **Clone the repository**
+   cp .env.example .env
 
-   ```bash
-   git clone <repository-url>
-   cd ml-visualization
-   ```
+   ```## Quick Start
 
-2. **Navigate to frontend directory**
 
-   ```bash
+
+   Required environment variables:### Prerequisites
+
+   - `MONGODB_URI` - MongoDB connection string
+
+   - `DISCORD_CLIENT_ID` - Discord OAuth client ID- Node.js 18+
+
+   - `DISCORD_CLIENT_SECRET` - Discord OAuth client secret- npm or yarn
+
+   - `NEXTAUTH_SECRET` - Random secret (generate with `openssl rand -base64 32`)
+
+   - `DISCORD_BOT_TOKEN` - Discord bot token for role verification### Setup Instructions
+
+   - `DISCORD_GUILD_ID` - Discord server ID
+
+   - `ADMIN_ROLE_ID` - Discord role ID for admin access1. **Clone the repository**
+
+
+
+3. **Start development server**   ```bash
+
+   ```bash   git clone <repository-url>
+
+   npm run dev   cd ml-visualization
+
+   ```   ```
+
+
+
+4. **Open browser**2. **Navigate to frontend directory**
+
+   
+
+   Navigate to `http://localhost:3000`   ```bash
+
    cd frontend
-   ```
 
-3. **Install dependencies**
+## Authentication & Authorization   ```
 
-   ```bash
-   npm install
-   ```
+
+
+The application uses Discord OAuth for authentication with role-based access control:3. **Install dependencies**
+
+
+
+- Users sign in with their Discord account (no database storage for auth)   ```bash
+
+- Protected routes require Discord admin role verification   npm install
+
+- Discord Bot API is used to verify roles in real-time   ```
+
+- Sessions are stored as encrypted JWT tokens (no database needed)
 
 4. **Start development server**
 
-   ```bash
-   npm run dev
-   ```
+## Available Scripts
 
-5. **Open your browser**
+   ```bash
+
+- `npm run dev` - Start development server   npm run dev
+
+- `npm run build` - Build for production   ```
+
+- `npm start` - Start production server
+
+- `npm run lint` - Check code quality5. **Open your browser**
+
    Navigate to `http://localhost:3000`
+
+## Project Structure
 
 ## Available Scripts
 
-- `npm run dev` - Start development server with Turbopack
-- `npm run build` - Build for production
-- `npm start` - Start production server
-- `npm run lint` - Check code quality with Biome
-- `npm run format` - Format code with Biome
+```
 
-## Pages
+├── app/                    # Next.js App Router- `npm run dev` - Start development server with Turbopack
 
-### Home Page (`/`)
+│   ├── api/               # API routes- `npm run build` - Build for production
 
-- Hero section with animated background
-- Features grid showcasing platform capabilities
+│   ├── auth/              # Authentication pages- `npm start` - Start production server
+
+│   ├── learn/             # Learning content- `npm run lint` - Check code quality with Biome
+
+│   └── blogs/             # Blog posts- `npm run format` - Format code with Biome
+
+├── components/            # React components
+
+│   ├── auth/              # Auth components## Pages
+
+│   ├── ui/                # UI components
+
+│   └── visualizations/    # Interactive visualizations### Home Page (`/`)
+
+└── lib/                   # Utilities & server code
+
+    └── auth/              # Authentication logic- Hero section with animated background
+
+```- Features grid showcasing platform capabilities
+
 - Target audience section
-- Vision and mission statement
 
-### Learn Page (`/learn`)
+---- Vision and mission statement
+
+
+
+Built with ❤️ by The AI Society at Arizona State University### Learn Page (`/learn`)
+
 
 - Coming soon placeholder with course previews
 - Status cards showing development progress

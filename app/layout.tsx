@@ -2,12 +2,10 @@ import type { Metadata } from "next";
 import { Open_Sans, Inter, Source_Sans_3, IBM_Plex_Sans, Noto_Sans, Lexend, Geist_Mono } from "next/font/google";
 import { Navbar } from "@/components/ui/navbar";
 import { Footer } from "@/components/ui/footer";
+import { NextAuthProvider } from "@/components/auth/NextAuthProvider";
 import "./globals.css";
 import "../styles/markdown.css";
 import "katex/dist/katex.min.css";
-import {
-  ClerkProvider,
-} from '@clerk/nextjs'
 
 const geistSans = Noto_Sans({
   variable: "--font-geist-sans",
@@ -147,7 +145,6 @@ export default function RootLayout({
   }
 
   return (
-    <ClerkProvider>
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <head>
         <script
@@ -162,13 +159,14 @@ export default function RootLayout({
       <body
         className="antialiased"
       >
-        <Navbar />
-        {children}
-        <div className="mt-32">
-          <Footer />
-        </div>
+        <NextAuthProvider>
+          <Navbar />
+          {children}
+          <div className="mt-32">
+            <Footer />
+          </div>
+        </NextAuthProvider>
       </body>
     </html>
-    </ClerkProvider>
   );
 }

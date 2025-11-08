@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { mongoConnection } from '@/utilities/db_connector';
-import { auth, clerkClient } from '@clerk/nextjs/server';
+import { requireAuthWithRole } from '@/lib/auth/server';
 
 const LOCK_DURATION_MS = 5 * 60 * 1000; // 5 minutes
 const HEARTBEAT_INTERVAL_MS = 30 * 1000; // 30 seconds
@@ -10,14 +10,9 @@ export async function POST(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    // Check authentication
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Please sign in' },
-        { status: 401 }
-      );
-    }
+    // Check authentication and Discord role
+    const session = await requireAuthWithRole();
+    const userId = session.user.id;
 
     const { slug } = await params;
 
@@ -33,11 +28,7 @@ export async function POST(
     const expiresAt = new Date(now.getTime() + LOCK_DURATION_MS);
 
     // Get user info for display
-    const client = await clerkClient();
-    const user = await client.users.getUser(userId);
-    const userName = user.firstName && user.lastName
-      ? `${user.firstName} ${user.lastName}`
-      : user.username || 'Unknown Officer';
+    const userName = session.user.name || session.user.email || 'Unknown Officer';
 
     // Try to acquire or refresh lock
     const result = await collection.findOneAndUpdate(
@@ -151,14 +142,9 @@ export async function DELETE(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    // Check authentication
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Please sign in' },
-        { status: 401 }
-      );
-    }
+    // Check authentication and Discord role
+    const session = await requireAuthWithRole();
+    const userId = session.user.id;
 
     const { slug } = await params;
 
@@ -204,14 +190,9 @@ export async function PATCH(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    // Check authentication
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Please sign in' },
-        { status: 401 }
-      );
-    }
+    // Check authentication and Discord role
+    const session = await requireAuthWithRole();
+    const userId = session.user.id;
 
     const { slug } = await params;
 

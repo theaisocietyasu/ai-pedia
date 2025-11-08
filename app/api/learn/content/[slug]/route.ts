@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { mongoConnection } from '../../../../../utilities/db_connector';
-import { auth, clerkClient } from '@clerk/nextjs/server';
+import { requireAuthWithRole, getServerSession } from '@/lib/auth/server';
 import { uploadImageToGridFS } from '@/lib/gridfs';
 import { slugifyCategory, generateLearnModuleSlug } from '@/lib/slug';
 import { revalidatePath } from 'next/cache';
@@ -53,14 +53,9 @@ export async function PUT(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    // Check authentication
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Please sign in to update content' },
-        { status: 401 }
-      );
-    }
+    // Check authentication and Discord role
+    const session = await requireAuthWithRole();
+    const userId = session.user.id;
 
     const { slug } = await params;
 
@@ -206,12 +201,8 @@ export async function PUT(
     let contributors = existingContributors;
     if (!isContributor) {
       // Add current user as a new contributor
-      const client = await clerkClient();
-      const user = await client.users.getUser(userId);
-      const userName = user.firstName && user.lastName
-        ? `${user.firstName} ${user.lastName}`
-        : user.username || 'Anonymous';
-      const userEmail = user.emailAddresses?.[0]?.emailAddress;
+      const userName = session.user.name || session.user.email || 'Anonymous';
+      const userEmail = session.user.email;
 
       contributors = [
         ...existingContributors,
@@ -288,14 +279,9 @@ export async function DELETE(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    // Check authentication
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Please sign in to delete content' },
-        { status: 401 }
-      );
-    }
+    // Check authentication and Discord role
+    const session = await requireAuthWithRole();
+    const userId = session.user.id;
 
     const { slug } = await params;
 

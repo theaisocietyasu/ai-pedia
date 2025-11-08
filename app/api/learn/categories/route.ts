@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { auth, clerkClient } from '@clerk/nextjs/server';
+import { requireAuthWithRole } from '@/lib/auth/server';
 import { mongoConnection } from '../../../../utilities/db_connector';
 import { uploadImageToGridFS } from '@/lib/gridfs';
 
@@ -27,22 +27,10 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    // Authenticate user with Clerk
-    const { userId } = await auth();
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Please sign in to create categories' },
-        { status: 401 }
-      );
-    }
-
-    // Get user details from Clerk
-    const client = await clerkClient();
-    const user = await client.users.getUser(userId);
-    const userName = user.firstName && user.lastName
-      ? `${user.firstName} ${user.lastName}`
-      : user.username || 'Anonymous';
+    // Authenticate user and verify Discord role
+    const session = await requireAuthWithRole();
+    const userId = session.user.id;
+    const userName = session.user.name || session.user.email || 'Anonymous';
 
     const formData = await request.formData();
     const name = formData.get('name') as string;

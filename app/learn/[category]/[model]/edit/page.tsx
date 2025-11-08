@@ -1,23 +1,21 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import {
-  SignedIn,
-  SignedOut,
-  SignIn,
-} from '@clerk/nextjs'
-import { shadesOfPurple } from '@clerk/themes';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { RoleGuard } from '@/components/auth/RoleGuard';
+import { useSession } from '@/lib/auth/auth-client';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import { ImageUploadButton } from '@/components/ImageUploadButton';
 import { MarkdownUploadForm } from '@/components/MarkdownUploadForm';
 import { VisualizationIndicator } from '@/components/VisualizationIndicator';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useParams, redirect } from 'next/navigation';
 import { fetchModuleBySlug, deleteLearnModule } from '@/lib/api';
 
 export default function EditPage() {
   const router = useRouter();
   const params = useParams();
   const modelSlug = Array.isArray(params.model) ? params.model[0] : params.model;
+  const { data: session, status } = useSession();
 
   const [mode, setMode] = useState<'preview' | 'edit'>('edit');
   const [updateSuccess, setUpdateSuccess] = useState<string | null>(null);
@@ -35,6 +33,12 @@ export default function EditPage() {
 
   // Acquire lock and load existing module data
   useEffect(() => {
+    // Don't make API calls until we know the user is authenticated
+    if (status === "loading" || !session?.user) {
+      redirect(`/auth/signin?redirectTo=/learn/${params.category}/${modelSlug}/edit`);
+      return; 
+    }
+
     const acquireLockAndLoadModule = async () => {
       if (!modelSlug) return;
 
@@ -121,7 +125,7 @@ export default function EditPage() {
         clearInterval(heartbeatInterval);
       }
     };
-  }, [modelSlug]);
+  }, [modelSlug, session, status]);
 
   const handleUpdateSuccess = async (result: any) => {
     setUpdateSuccess(result.newSlug);
@@ -172,6 +176,18 @@ export default function EditPage() {
       setIsDeleting(false);
     }
   };
+
+  // Show loading while checking auth status
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">⏳</div>
+          <div className="text-xl text-gray-400">Checking authentication...</div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -233,17 +249,9 @@ export default function EditPage() {
   }
 
   return (
-    <div className="bg-background">
-      <SignedOut>
-        <div className="flex flex-col items-center justify-center min-h-screen bg-background px-4">
-          <SignIn
-            appearance={{
-              theme: shadesOfPurple
-            }}
-            routing="hash" />
-        </div>
-      </SignedOut>
-      <SignedIn>
+    <ProtectedRoute>
+      <RoleGuard>
+        <div className="bg-background">
         {/* Header/Navbar */}
         <div className="border-b border-gray-800 bg-dark-gray">
           <header className="flex items-center justify-between px-6 py-4">
@@ -524,7 +532,8 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
             </div>
           </div>
         )}
-      </SignedIn>
-    </div>
+        </div>
+      </RoleGuard>
+    </ProtectedRoute>
   );
 }

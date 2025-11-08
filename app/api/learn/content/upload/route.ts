@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { mongoConnection } from '../../../../../utilities/db_connector';
-import { auth, clerkClient } from '@clerk/nextjs/server';
+import { requireAuthWithRole } from '@/lib/auth/server';
 import { uploadImageToGridFS } from '@/lib/gridfs';
 import { slugifyCategory, generateLearnModuleSlug } from '@/lib/slug';
 
@@ -8,14 +8,9 @@ export async function POST(request: NextRequest) {
   let client;
   
   try {
-    // Check authentication
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Please sign in to upload content' },
-        { status: 401 }
-      );
-    }
+    // Check authentication and Discord role
+    const session = await requireAuthWithRole();
+    const userId = session.user.id;
 
     const formData = await request.formData();
     
@@ -125,13 +120,9 @@ export async function POST(request: NextRequest) {
       normalizedCategorySlugs.push(slug);
     }
 
-    // Get user information from Clerk
-    const client = await clerkClient();
-    const user = await client.users.getUser(userId);
-    const userName = user.firstName && user.lastName
-      ? `${user.firstName} ${user.lastName}`
-      : user.username || 'Anonymous';
-    const userEmail = user.emailAddresses?.[0]?.emailAddress;
+    // Get user information
+    const userName = session.user.name || session.user.email || 'Anonymous';
+    const userEmail = session.user.email;
 
     // Create the learn module document (without slug first to get the ID)
     const learnModule = {

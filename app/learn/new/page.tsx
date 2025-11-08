@@ -1,11 +1,7 @@
 'use client'
 import React, { useState } from 'react';
-import {
-  SignedIn,
-  SignedOut,
-  SignIn,
-} from '@clerk/nextjs'
-import { shadesOfPurple, dark } from '@clerk/themes';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { RoleGuard } from '@/components/auth/RoleGuard';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import { ImageUploadButton } from '@/components/ImageUploadButton';
 import { MarkdownUploadForm } from '@/components/MarkdownUploadForm';
@@ -195,17 +191,9 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
   };
 
   return (
-    <div className=" bg-background">
-      <SignedOut>
-        <div className="flex flex-col items-center justify-center min-h-screen bg-background px-4">
-        <SignIn 
-          appearance={{
-            theme: shadesOfPurple
-          }} 
-          routing="hash" />
-        </div>
-      </SignedOut>
-      <SignedIn>
+    <ProtectedRoute>
+      <RoleGuard>
+        <div className="bg-background">
         {/* Header/Navbar */}
         <div className="border-b border-gray-800 bg-dark-gray">
           <header className="flex items-center justify-between px-6 py-4">
@@ -434,7 +422,8 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
             </div>
           )}
         </div>
-      </SignedIn>
-    </div>
+        </div>
+      </RoleGuard>
+    </ProtectedRoute>
   );
 }

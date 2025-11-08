@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth, clerkClient } from '@clerk/nextjs/server';
+import { requireAuthWithRole } from '@/lib/auth/server';
 import { uploadImageToGridFS } from '@/lib/gridfs';
 
 // Maximum file size: 5MB
@@ -10,22 +10,10 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'ima
 
 export async function POST(request: NextRequest) {
   try {
-    // Authenticate user with Clerk
-    const { userId } = await auth();
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Please sign in to upload images' },
-        { status: 401 }
-      );
-    }
-
-    // Get user details from Clerk
-    const client = await clerkClient();
-    const user = await client.users.getUser(userId);
-    const userName = user.firstName && user.lastName
-      ? `${user.firstName} ${user.lastName}`
-      : user.username || 'Anonymous';
+    // Authenticate user and verify Discord role
+    const session = await requireAuthWithRole();
+    const userId = session.user.id;
+    const userName = session.user.name || session.user.email || 'Anonymous';
 
     // Parse form data
     const formData = await request.formData();

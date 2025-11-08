@@ -1,18 +1,27 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-const isPublicRoute = createRouteMatcher([
+// Public routes that don't require authentication
+const publicRoutes = [
   '/',
-  '/learn(.*)',
-  '/blogs(.*)',
-  '/api/learn(.*)',
-  '/sign-in(.*)',
-]);
+  '/learn',
+  '/blogs',
+  '/api/auth',
+  '/api/learn',
+];
 
-export default clerkMiddleware(async (auth, request) => {
-  if (!isPublicRoute(request)) {
-    await auth.protect();
-  }
-});
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  
+  // Check if the route is public
+  const isPublicRoute = publicRoutes.some(route => 
+    pathname === route || pathname.startsWith(`${route}/`)
+  );
+  
+  // For now, allow all routes (Better Auth handles auth on the client/component level)
+  // You can add server-side protection later if needed
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: [

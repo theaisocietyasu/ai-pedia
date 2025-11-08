@@ -1,18 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { mongoConnection } from '../../../../utilities/db_connector';
 import { generateLearnModuleSlug } from '@/lib/slug';
-import { auth } from '@clerk/nextjs/server';
+import { requireAuthWithRole } from '@/lib/auth/server';
 
 export async function POST(request: NextRequest) {
   try {
-    // Check authentication - only authenticated users can run migrations
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Please sign in to run migrations' },
-        { status: 401 }
-      );
-    }
+    // Check authentication and Discord role - only authenticated admins can run migrations
+    const session = await requireAuthWithRole();
+    const userId = session.user.id;
 
     const collection = mongoConnection.collection('learn_content');
 
