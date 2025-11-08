@@ -1,3 +1,5 @@
+import React from 'react'
+
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ailearninghub.com'
 
 export interface ArticleSchemaProps {
@@ -160,16 +162,4 @@ export function generateVideoSchema(props: {
     "duration": props.duration,
     "contentUrl": props.contentUrl
   }
-}
-
-export function injectStructuredData(schema: object) {
-  if (typeof window === 'undefined') {
-    return (
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-      />
-    )
-  }
-  return null
 }

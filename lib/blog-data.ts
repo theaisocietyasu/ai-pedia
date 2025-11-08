@@ -59,11 +59,11 @@ export async function getRelatedBlogs(currentSlug: string, limit: number = 3): P
     const currentBlog = allBlogs.find(blog => blog.slug === currentSlug)
     if (!currentBlog) return []
 
-    // Use categories (new) or category (legacy) for matching
-    const currentCategory = currentBlog.categories || currentBlog.category
+    // Use categories (new) for matching
+    const currentCategory = currentBlog.categories
     const relatedBlogs = allBlogs
       .filter(blog => {
-        const blogCategory = blog.categories || blog.category
+        const blogCategory = blog.categories
         return blog.slug !== currentSlug && blogCategory === currentCategory
       })
       .slice(0, limit)

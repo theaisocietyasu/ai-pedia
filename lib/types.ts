@@ -144,6 +144,7 @@ export interface LegacyBlogPost {
   featuredImage: string
   content: BlogContent
   slug: string
+  lastUpdated?: string  // Added for compatibility
 }
 
 // Enhanced blog post interface that combines new and legacy structures

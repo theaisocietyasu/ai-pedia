@@ -30,6 +30,18 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
     ? blog.author[0].name
     : 'Unknown Author'
 
+  // Handle category field for both legacy and new formats
+  const categoryName = 'category' in blog ? blog.category : 'categories' in blog ? blog.categories : 'Uncategorized'
+  
+  // Handle publishDate for both formats
+  const publishDate = 'publishDate' in blog && blog.publishDate ? blog.publishDate : 'createdAt' in blog && blog.createdAt ? blog.createdAt : new Date().toISOString()
+  
+  // Handle readTime for both formats
+  const readTime = 'readTime' in blog && blog.readTime ? blog.readTime : '5 min read'
+  
+  // Handle tags for both formats
+  const tags = 'tags' in blog && blog.tags ? blog.tags : []
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 30 }}
@@ -145,7 +157,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
                 className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
                            bg-black/60 backdrop-blur-md text-white"
               >
-                {blog.category}
+                {categoryName}
               </motion.span>
             </div>
           </div>
@@ -156,11 +168,11 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
             <div className="flex flex-wrap items-center gap-4 text-sm text-light-gray/60">
               <div className="flex items-center gap-1">
                 <Calendar size={14} />
-                <span>{new Date(blog.publishDate).toLocaleDateString()}</span>
+                <span>{new Date(publishDate).toLocaleDateString()}</span>
               </div>
               <div className="flex items-center gap-1">
                 <Clock size={14} />
-                <span>{blog.readTime}</span>
+                <span>{readTime}</span>
               </div>
               <div className="flex items-center gap-1">
                 <User size={14} />
@@ -182,7 +194,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
 
             {/* tags */}
             <div className="flex flex-wrap gap-2">
-              {blog.tags?.slice(0, 3).map((tag, tagIndex) => (
+              {tags?.slice(0, 3).map((tag, tagIndex) => (
                 <span
                   key={tag}
                   className="inline-flex items-center px-2 py-1 rounded-md text-xs
@@ -198,9 +210,9 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
                   {tag}
                 </span>
               ))}
-              {blog.tags.length > 3 && (
+              {tags && tags.length > 3 && (
                 <span className="text-xs text-light-gray/50">
-                  +{blog.tags.length - 3} more
+                  +{tags.length - 3} more
                 </span>
               )}
             </div>
