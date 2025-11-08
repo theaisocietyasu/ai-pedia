@@ -39,6 +39,24 @@ export function LearnModuleClient({ model, displayTitle, headings: initialHeadin
         {/* Markdown Content */}
         <section className="my-16 scroll-mt-24">
           <MarkdownRenderer content={model.content || 'No content available.'} />
+
+          {/* Contributors */}
+          {model.contributors && model.contributors.length > 0 && (
+            <div className="markdown-content">
+              <hr />
+              <h2 className="markdown-heading markdown-h2">Contributors</h2>
+              <div className="flex flex-wrap gap-2">
+                {model.contributors.map((contributor: any) => (
+                  <div
+                    key={contributor.id}
+                    className="px-3 py-1.5 bg-purple/20 border border-purple/30 rounded-lg text-sm text-white"
+                  >
+                    {contributor.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Images */}

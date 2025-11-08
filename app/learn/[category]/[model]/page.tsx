@@ -1,14 +1,12 @@
 import React from "react"
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Metadata } from "next"
 import { getModelData } from "../../categories"
-import { fetchModuleBySlug } from "@/lib/api"
 import { SignedIn } from "@clerk/nextjs"
 import ReactMarkdown from "react-markdown"
-import MarkdownRenderer from "@/components/MarkdownRenderer"
 import { extractHeadings } from "@/lib/markdown-utils"
 import { LearnModuleClient } from "./LearnModuleClient"
+import { EditButton } from "./EditButton"
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ailearninghub.com'
 
@@ -180,14 +178,7 @@ async function LearnModulePage({ params }: LearnModulePageProps) {
 
           {/* Edit Button - Only visible to signed-in users */}
           <SignedIn>
-            <div className="mt-6">
-              <Link href={`/learn/${category}/${modelSlug}/edit`}>
-                <button className="px-6 py-2 bg-purple/20 text-purple-300 rounded-lg border border-purple/30 hover:bg-purple/30 transition-colors inline-flex items-center gap-2">
-                  <span>✏️</span>
-                  <span>Edit This Module</span>
-                </button>
-              </Link>
-            </div>
+            <EditButton category={category} modelSlug={modelSlug} />
           </SignedIn>
         </div>
 

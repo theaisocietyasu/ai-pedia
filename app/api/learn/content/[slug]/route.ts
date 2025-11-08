@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { mongoConnection } from '../../../../../utilities/db_connector';
-import { auth } from '@clerk/nextjs/server';
+import { auth, clerkClient } from '@clerk/nextjs/server';
 import { uploadImageToGridFS } from '@/lib/gridfs';
 import { slugifyCategory, generateLearnModuleSlug } from '@/lib/slug';
 import { revalidatePath } from 'next/cache';
@@ -199,6 +199,31 @@ export async function PUT(
       newSlug = generateLearnModuleSlug(title, existingModule._id.toString());
     }
 
+    // Check if current user is already a contributor
+    const existingContributors = existingModule.contributors || [];
+    const isContributor = existingContributors.some((c: any) => c.id === userId);
+
+    let contributors = existingContributors;
+    if (!isContributor) {
+      // Add current user as a new contributor
+      const client = await clerkClient();
+      const user = await client.users.getUser(userId);
+      const userName = user.firstName && user.lastName
+        ? `${user.firstName} ${user.lastName}`
+        : user.username || 'Anonymous';
+      const userEmail = user.emailAddresses?.[0]?.emailAddress;
+
+      contributors = [
+        ...existingContributors,
+        {
+          id: userId,
+          name: userName,
+          email: userEmail,
+          addedAt: new Date()
+        }
+      ];
+    }
+
     // Prepare update object
     const updateData = {
       title: title.trim(),
@@ -208,6 +233,7 @@ export async function PUT(
       thumbnail: thumbnailUrl,
       action_buttons: actionButtons,
       slug: newSlug,
+      contributors: contributors,
       updatedAt: new Date()
     };
 

@@ -33,6 +33,12 @@ export interface LearnModule {
   action_buttions?: { name: string; link: string }[];
   createdAt?: string;
   updatedAt?: string;
+  contributors?: Array<{
+    id: string;
+    name: string;
+    email?: string;
+    addedAt?: string;
+  }>;
 }
 
 // API client functions
@@ -118,7 +124,8 @@ export function transformModuleToModelFormat(module: LearnModule): any {
     content: normalizeMarkdownContent(module.content || ''),
     description: module.description || '',
     imgPath: module.thumbnail || '',
-    actionButtons: module.action_buttions || []
+    actionButtons: module.action_buttions || [],
+    contributors: module.contributors || []
   };
 }
 
