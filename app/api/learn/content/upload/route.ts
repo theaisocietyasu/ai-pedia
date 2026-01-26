@@ -10,7 +10,14 @@ export async function POST(request: NextRequest) {
   try {
     // Check authentication and Discord role
     const session = await requireAuthWithRole();
-    const userId = session.user.id;
+    const userId = session.user.discordId;
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
 
     const formData = await request.formData();
     

@@ -29,8 +29,15 @@ export async function POST(request: Request) {
   try {
     // Authenticate user and verify Discord role
     const session = await requireAuthWithRole();
-    const userId = session.user.id;
+    const userId = session.user.discordId;
     const userName = session.user.name || session.user.email || 'Anonymous';
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
 
     const formData = await request.formData();
     const name = formData.get('name') as string;
