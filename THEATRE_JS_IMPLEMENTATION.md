@@ -374,7 +374,7 @@ export async function POST(request: Request) {
       name,
       config,
       description,
-      createdBy: session.user.id,
+      createdBy: session.user.discordId,
       createdAt: new Date()
     });
     

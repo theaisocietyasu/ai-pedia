@@ -7,7 +7,14 @@ export async function POST(request: NextRequest) {
   try {
     // Check authentication and Discord role - only authenticated admins can run migrations
     const session = await requireAuthWithRole();
-    const userId = session.user.id;
+    const userId = session.user.discordId;
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
 
     const collection = mongoConnection.collection('learn_content');
 
