@@ -5,6 +5,7 @@ import {
   VisualizationError, 
   VisualizationProps 
 } from "./shared";
+import { TheatreRenderer } from "./TheatreRenderer";
 
 // Import all visualization components from organized categories
 import {
@@ -72,6 +73,11 @@ export const Visualization: React.FC<VisualizationProps> = ({
   // Safety check for component ID
   if (!componentId || typeof componentId !== 'string') {
     return <VisualizationError componentId={componentId} type="invalid-id" />;
+  }
+
+  // Check if it's a custom Theatre.js animation (VZ-custom-*)
+  if (componentId.startsWith('VZ-custom-')) {
+    return <TheatreRenderer animationId={componentId} fallbackTitle={fallbackTitle} />;
   }
 
   const Component = VISUALIZATION_COMPONENTS[componentId];
