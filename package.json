@@ -13,6 +13,9 @@
   "dependencies": {
     "@react-three/drei": "^10.7.6",
     "@react-three/fiber": "^9.4.0",
+    "@theatre/core": "^0.7.2",
+    "@theatre/r3f": "^0.7.2",
+    "@theatre/studio": "^0.7.2",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@types/three": "^0.180.0",
     "clsx": "^2.1.1",
