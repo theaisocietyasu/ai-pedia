@@ -24,7 +24,6 @@ const ActionButtonSchema = new Schema<IActionButton>({
 
 // Main blog document interface
 export interface IBlog extends Document {
-  _id: string
   title: string
   content: string  // Raw markdown content as string
   categories: string  // Changed from category to categories (single string)

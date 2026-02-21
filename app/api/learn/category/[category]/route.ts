@@ -14,8 +14,8 @@ export async function GET(
   try {
   const { category } = await params;
 
-    const collection = mongoConnection.collection('learn_content');
-    const categoriesCollection = mongoConnection.collection('learn_categories');
+    const collection = await mongoConnection.collection('learn_content');
+    const categoriesCollection = await mongoConnection.collection('learn_categories');
 
     // Resolve the canonical category name from the slug
     const slug = slugifyCategory(category);

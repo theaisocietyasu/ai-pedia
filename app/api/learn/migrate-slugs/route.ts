@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const collection = mongoConnection.collection('learn_content');
+    const collection = await mongoConnection.collection('learn_content');
 
     // Find all documents without slugs
     const documentsWithoutSlugs = await collection.find({
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
 // GET endpoint to check migration status
 export async function GET(request: NextRequest) {
   try {
-    const collection = mongoConnection.collection('learn_content');
+    const collection = await mongoConnection.collection('learn_content');
 
     const totalDocs = await collection.countDocuments();
     const docsWithSlugs = await collection.countDocuments({ slug: { $exists: true } });

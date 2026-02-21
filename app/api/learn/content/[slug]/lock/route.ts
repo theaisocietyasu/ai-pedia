@@ -30,7 +30,7 @@ export async function POST(
       );
     }
 
-    const collection = mongoConnection.collection('learn_content_locks');
+    const collection = await mongoConnection.collection('learn_content_locks');
     const now = new Date();
     const expiresAt = new Date(now.getTime() + LOCK_DURATION_MS);
 
@@ -111,7 +111,7 @@ export async function GET(
       );
     }
 
-    const collection = mongoConnection.collection('learn_content_locks');
+    const collection = await mongoConnection.collection('learn_content_locks');
     const now = new Date();
 
     // Find active lock
@@ -169,7 +169,7 @@ export async function DELETE(
       );
     }
 
-    const collection = mongoConnection.collection('learn_content_locks');
+    const collection = await mongoConnection.collection('learn_content_locks');
 
     // Delete lock only if owned by current user
     const result = await collection.deleteOne({
@@ -224,7 +224,7 @@ export async function PATCH(
       );
     }
 
-    const collection = mongoConnection.collection('learn_content_locks');
+    const collection = await mongoConnection.collection('learn_content_locks');
     const now = new Date();
     const expiresAt = new Date(now.getTime() + LOCK_DURATION_MS);
 
