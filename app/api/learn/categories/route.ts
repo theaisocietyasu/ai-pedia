@@ -5,7 +5,7 @@ import { uploadImageToGridFS } from '@/lib/gridfs';
 
 export async function GET() {
   try {
-    const collection = mongoConnection.collection('learn_categories');
+    const collection = await mongoConnection.collection('learn_categories');
 
     const categories = await collection.find({}).toArray();
     
@@ -83,7 +83,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const collection = mongoConnection.collection('learn_categories');
+    const collection = await mongoConnection.collection('learn_categories');
 
     // Check if category already exists
     const existingCategory = await collection.findOne({

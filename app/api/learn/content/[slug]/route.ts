@@ -19,7 +19,7 @@ export async function GET(
       );
     }
 
-    const collection = mongoConnection.collection('learn_content');
+    const collection = await mongoConnection.collection('learn_content');
 
     // Find by slug only
     const content = await collection.findOne({ slug: slug });
@@ -92,8 +92,8 @@ export async function PUT(
       );
     }
 
-    const collection = mongoConnection.collection('learn_content');
-    const categoriesCollection = mongoConnection.collection('learn_categories');
+    const collection = await mongoConnection.collection('learn_content');
+    const categoriesCollection = await mongoConnection.collection('learn_categories');
 
     // Find existing document
     const existingModule = await collection.findOne({ slug: slug });
@@ -306,7 +306,7 @@ export async function DELETE(
       );
     }
 
-    const collection = mongoConnection.collection('learn_content');
+    const collection = await mongoConnection.collection('learn_content');
 
     // Check if the module exists
     const existingModule = await collection.findOne({ slug: slug });

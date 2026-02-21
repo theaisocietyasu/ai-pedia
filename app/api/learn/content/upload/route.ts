@@ -84,8 +84,8 @@ export async function POST(request: NextRequest) {
       userId
     );
 
-    const collection = mongoConnection.collection('learn_content');
-    const categoriesCollection = mongoConnection.collection('learn_categories');
+    const collection = await mongoConnection.collection('learn_content');
+    const categoriesCollection = await mongoConnection.collection('learn_categories');
 
     // Normalize incoming categories to slugs and validate existance
     const normalizedCategorySlugs: string[] = [];

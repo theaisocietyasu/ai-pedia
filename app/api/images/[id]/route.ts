@@ -18,24 +18,22 @@ export async function GET(
       );
     }
 
-    const { stream, contentType, client } = result;
+    const { stream, contentType } = result;
 
     // Convert Node stream to Web Stream
     const readableStream = new ReadableStream({
-      async start(controller) {
+      start(controller) {
         stream.on('data', (chunk: Buffer) => {
           controller.enqueue(new Uint8Array(chunk));
         });
 
-        stream.on('end', async () => {
+        stream.on('end', () => {
           controller.close();
-          await client.close(); // Close MongoDB connection after streaming
         });
 
-        stream.on('error', async (error) => {
+        stream.on('error', (error) => {
           console.error('Stream error:', error);
           controller.error(error);
-          await client.close();
         });
       },
     });
