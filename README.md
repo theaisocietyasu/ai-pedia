@@ -1,4 +1,4 @@
-# AI Pedia# AI Pedia
+# AI Pedia
 
 
 
