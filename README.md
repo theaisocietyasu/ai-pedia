@@ -1,12 +1,12 @@
 # AI Pedia
 
 
-
+## Project Overview
 A modern web-based learning platform built by The AI Society at ASU to help students visualize and understand machine learning concepts through interactive experiences.A modern web-based learning platform built by The AI Society at ASU to help students visualize and understand machine learning concepts through interactive experiences.
 
 
 
-## Tech Stack## Project Overview
+## Tech Stack
 
 
 
