@@ -1,14 +1,12 @@
-"use client"
+"use client";
 
 import React from "react";
-import { 
-  VisualizationError, 
-  VisualizationProps 
-} from "./shared";
+import { VisualizationError, VisualizationProps } from "./shared";
 
-// Import all visualization components from organized categories
+import { Fabric2DRenderer } from "./Fabric2DRenderer";
+
+/* Import visualization categories */
 import {
-  // AI/ML General visualizations
   AITrendsVisualization,
   ActivationFunctionVisualizer,
   NeuralNetworkDemo,
@@ -16,33 +14,15 @@ import {
   YOLODetectionDemo,
   AttentionMechanismDemo,
   MultiModalLearningDemo,
-  
-  // Linear Regression visualizations
   LinearEquationVisualization,
   AssumptionPlotsVisualization,
   RegressionComparisonVisualization,
   ModelEvaluationVisualization,
-  InteractiveDemoVisualization
+  InteractiveDemoVisualization,
 } from "./categories";
 
-/**
- * Visualization Component Registry
- *
- * This file contains the registry of all React visualization components that can be
- * embedded in markdown content using <div id="ComponentName"></div> syntax.
- *
- * The components are now organized in modular categories under ./categories/
- *
- * To add a new visualization:
- * 1. Create the component in the appropriate category folder
- * 2. Export it from the category's index.ts
- * 3. Import it above and add it to the VISUALIZATION_COMPONENTS object
- * 4. The component ID in markdown should match the key in the registry
- */
-
-// Registry of all available visualization components
+/* Registry */
 export const VISUALIZATION_COMPONENTS: Record<string, React.ComponentType> = {
-  // AI/ML General Components
   AITrendsVisualization,
   ActivationFunctionVisualizer,
   NeuralNetworkDemo,
@@ -51,27 +31,25 @@ export const VISUALIZATION_COMPONENTS: Record<string, React.ComponentType> = {
   AttentionMechanismDemo,
   MultiModalLearningDemo,
 
-  // Linear Regression Visualizations (with VZ- prefix for consistency)
   "VZ-linear-equation": LinearEquationVisualization,
   "VZ-assumptions-plots": AssumptionPlotsVisualization,
   "VZ-regression-comparison": RegressionComparisonVisualization,
   "VZ-model-evaluation": ModelEvaluationVisualization,
   "VZ-interactive-demo": InteractiveDemoVisualization,
-
-  // Add more visualization components here as needed
-  // The key should match the ID used in markdown: <div id="ComponentName"></div>
 };
 
-/**
- * Component to render a visualization by ID
- */
+/* Renderer */
 export const Visualization: React.FC<VisualizationProps> = ({
   componentId,
-  fallbackTitle = "Interactive Visualization"
+  fallbackTitle = "Interactive Visualization",
 }) => {
-  // Safety check for component ID
-  if (!componentId || typeof componentId !== 'string') {
+  if (!componentId || typeof componentId !== "string") {
     return <VisualizationError componentId={componentId} type="invalid-id" />;
+  }
+
+  // Fabric 2D Studio animations
+  if (componentId.startsWith("VZ2D-")) {
+    return <Fabric2DRenderer animationId={componentId} />;
   }
 
   const Component = VISUALIZATION_COMPONENTS[componentId];
@@ -83,7 +61,10 @@ export const Visualization: React.FC<VisualizationProps> = ({
   try {
     return <Component />;
   } catch (error) {
-    console.error(`Error rendering visualization component ${componentId}:`, error);
+    console.error(
+      `Error rendering visualization component ${componentId}:`,
+      error,
+    );
     return <VisualizationError componentId={componentId} type="error" />;
   }
 };
