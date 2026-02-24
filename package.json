@@ -17,6 +17,7 @@
     "@types/three": "^0.180.0",
     "clsx": "^2.1.1",
     "dotenv": "^17.2.2",
+    "fabric": "^6.9.1",
     "framer-motion": "^12.23.12",
     "katex": "^0.16.22",
     "lucide-react": "^0.542.0",
