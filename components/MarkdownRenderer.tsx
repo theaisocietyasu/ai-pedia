@@ -19,11 +19,11 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
   // Process escaped HTML div tags for visualizations
   let processedContent = content
     // Handle escaped div tags: \<div ...\> to <div ...>
-    .replace(/\\<div\s+id="(VZ-[^"]*)"([^>]*)\\><\/div\\>/g, '<div id="$1"$2></div>')
+    .replace(/\\<div\s+id="(VZ[^"]*)"([^>]*)\\><\/div\\>/g, '<div id="$1"$2></div>')
     // Handle already unescaped div tags (just in case)
-    .replace(/<div\s+id="(VZ-[^"]*)"([^>]*?)><\/div>/g, '<div id="$1"$2></div>')
+    .replace(/<div\s+id="(VZ[^"]*)"([^>]*?)><\/div>/g, '<div id="$1"$2></div>')
     // Handle self-closing escaped div tags: \<div .../\>
-    .replace(/\\<div\s+id="(VZ-[^"]*)"([^>]*)\/\\>/g, '<div id="$1"$2></div>');
+    .replace(/\\<div\s+id="(VZ[^"]*)"([^>]*)\/\\>/g, '<div id="$1"$2></div>');
 
   // Debug logging (only in development)
   if (process.env.NODE_ENV === 'development' && content !== processedContent) {
