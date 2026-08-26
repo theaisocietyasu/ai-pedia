@@ -1,23 +1,15 @@
 # AI Pedia
 
-An interactive encyclopedia of AI/ML built by [The AI Society at Arizona State University](https://github.com/ais-asu). Officers author markdown-based learn modules with embedded interactive visualizations; students browse them by category. Live at [aipedia.ais-asu.com](https://aipedia.ais-asu.com/).
-
 ## Tech Stack
 
-- **Framework:** Next.js 15 (App Router) + React 19 + TypeScript 5
-- **Styling:** Tailwind CSS 4, Framer Motion
-- **Markdown:** react-markdown + remark/rehype plugins, KaTeX for math
-- **Database:** MongoDB (raw driver; GridFS for images)
-- **Auth:** NextAuth.js with Discord OAuth; admin actions are gated by a Discord server role check
-- **Code quality:** Biome (lint + format)
+## Project Overview
+A modern web-based learning platform built by The AI Society at ASU to help students visualize and understand machine learning concepts through interactive experiences.A modern web-based learning platform built by The AI Society at ASU to help students visualize and understand machine learning concepts through interactive experiences.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+
-- A MongoDB database (Atlas works — make sure your IP is on the access list)
-- A Discord OAuth application and a bot in your Discord server (for role checks)
+## Tech Stack
 
 ### Setup
 
