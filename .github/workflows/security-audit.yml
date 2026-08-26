@@ -1,0 +1,21 @@
+name: Security audit
+
+on:
+  schedule:
+    # Every Monday 14:00 UTC (7am Phoenix)
+    - cron: "0 14 * * 1"
+  workflow_dispatch:
+
+jobs:
+  audit:
+    name: npm audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # Fail only on high/critical so the job stays actionable
+      - run: npm audit --audit-level=high

@@ -1,0 +1,33 @@
+version: 2
+updates:
+  # npm dependencies — weekly, grouped so the PR noise stays manageable
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    groups:
+      # Patch/minor bumps of prod deps land as one PR
+      production-minor:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      dev-dependencies:
+        dependency-type: "development"
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "chore(deps)"
+
+  # Keep GitHub Actions pinned versions fresh
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "chore(ci)"
