@@ -41,7 +41,7 @@ interface ButtonProps
 
 const buttonVariants = {
   primary:
-    "bg-gradient-to-r from-purple to-pink text-dark-gray hover:shadow-lg hover:shadow-purple/30",
+    "bg-gradient-to-r from-purple to-purple-deep text-white hover:shadow-lg hover:shadow-purple/30",
   secondary: "bg-dark-gray text-white hover:bg-dark-gray/80",
   outline: "border border-white/20 text-white hover:bg-white/10",
   ghost: "text-white hover:bg-white/10",

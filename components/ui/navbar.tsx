@@ -107,7 +107,7 @@ export function Navbar() {
           {isActive && !isMobile && (
             <motion.span
               layoutId="navbar-indicator"
-              className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-purple to-pink"
+              className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-purple to-purple-deep"
               initial={false}
               transition={{ type: "spring", stiffness: 380, damping: 30 }}
             />

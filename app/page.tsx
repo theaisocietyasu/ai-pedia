@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { FeaturesGrid } from "@/components/home/features-grid";
 import { HeroSection } from "@/components/home/hero-section";
 
 const baseUrl =
@@ -49,9 +48,8 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="h-[100svh] overflow-hidden bg-background">
       <HeroSection />
-      <FeaturesGrid />
     </main>
   );
 }

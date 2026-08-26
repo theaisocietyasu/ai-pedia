@@ -1,4 +1,15 @@
 "use client";
+import {
+  BarChart3,
+  BookOpen,
+  CheckCircle2,
+  Eye,
+  FileText,
+  Lightbulb,
+  RotateCcw,
+  Sparkles,
+  Trash2,
+} from "lucide-react";
 import { useState } from "react";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { RoleGuard } from "@/components/auth/RoleGuard";
@@ -165,12 +176,12 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
 
 ### When to Use Linear Regression
 
-✅ **Use when:**
+**Use when:**
 - Relationship between variables appears linear
 - Interpretability is important
 - You have sufficient data relative to features
 
-❌ **Avoid when:**
+**Avoid when:**
 - Relationships are clearly non-linear
 - You have more features than samples
 - Severe multicollinearity exists`;
@@ -212,7 +223,12 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
                           : "text-gray-400 hover:text-gray-200"
                       }`}
                     >
-                      👁️ Preview Mode
+                      <Eye
+                        size={16}
+                        className="inline-block mr-1.5 align-text-bottom"
+                        aria-hidden="true"
+                      />
+                      Preview Mode
                     </button>
                     <button
                       type="button"
@@ -223,7 +239,12 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
                           : "text-gray-400 hover:text-gray-200"
                       }`}
                     >
-                      📚 Upload Mode
+                      <BookOpen
+                        size={16}
+                        className="inline-block mr-1.5 align-text-bottom"
+                        aria-hidden="true"
+                      />
+                      Upload Mode
                     </button>
                   </div>
                 </div>
@@ -238,9 +259,9 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
 
           {/* Success Message */}
           {uploadSuccess && (
-            <div className="bg-green-900/20 border border-green-500 text-green-400 px-6 py-4">
-              ✅ Learning module uploaded successfully! Module ID:{" "}
-              {uploadSuccess}
+            <div className="flex items-center gap-2 bg-purple/10 border border-purple/40 text-purple-light px-6 py-4">
+              <CheckCircle2 size={16} aria-hidden="true" />
+              Learning module uploaded successfully! Module ID: {uploadSuccess}
             </div>
           )}
 
@@ -254,8 +275,9 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
                     {/* Editor Header */}
                     <div className="border-b border-gray-800 px-4 py-2 bg-background">
                       <div className="flex items-center justify-between">
-                        <h2 className="text-sm font-medium text-gray-300">
-                          📝 Markdown Editor
+                        <h2 className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+                          <FileText size={14} aria-hidden="true" />
+                          Markdown Editor
                         </h2>
                         <div className="flex items-center space-x-4 text-xs text-gray-500">
                           <span>Lines: {markdown.split("\n").length}</span>
@@ -303,8 +325,9 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
 
                       {/* Editor Guidelines Overlay */}
                       <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm rounded-lg p-3 text-xs text-gray-400 max-w-xs opacity-60 hover:opacity-100 transition-opacity pointer-events-auto">
-                        <div className="font-medium mb-2 text-blue-purple">
-                          ✨ Quick Reference
+                        <div className="font-medium mb-2 text-purple-light flex items-center gap-1.5">
+                          <Sparkles size={14} aria-hidden="true" />
+                          Quick Reference
                         </div>
                         <div className="space-y-1 font-mono">
                           <div># Heading 1</div>
@@ -315,8 +338,9 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
                           <div>code block</div>
                           <div>```</div>
                           <div>$$math equation$$</div>
-                          <div className="text-purple-300 mt-2 mb-1 font-normal">
-                            📊 Visualizations:
+                          <div className="text-purple-300 mt-2 mb-1 font-normal flex items-center gap-1.5">
+                            <BarChart3 size={14} aria-hidden="true" />
+                            Visualizations:
                           </div>
                           <div className="text-purple-200 text-[10px]">
                             &lt;div id="VZ-linear-equation"&gt;&lt;/div&gt;
@@ -340,8 +364,9 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
                     <div className="border-b border-gray-800 px-4 py-2 bg-dark-gray">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <h2 className="text-sm font-medium text-gray-300">
-                            👁️ Live Preview
+                          <h2 className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+                            <Eye size={14} aria-hidden="true" />
+                            Live Preview
                           </h2>
                           <VisualizationIndicator content={markdown} />
                         </div>
@@ -349,16 +374,18 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
                           <button
                             type="button"
                             onClick={() => setMarkdown(initialMarkdown)}
-                            className="px-3 py-1 text-xs bg-purple/20 text-purple-300 rounded border border-purple/30 hover:bg-purple/30 transition-colors"
+                            className="px-3 py-1 text-xs bg-purple/20 text-purple-300 rounded border border-purple/30 hover:bg-purple/30 transition-colors inline-flex items-center gap-1.5"
                           >
-                            🔄 Reset Example
+                            <RotateCcw size={12} aria-hidden="true" />
+                            Reset Example
                           </button>
                           <button
                             type="button"
                             onClick={() => setMarkdown("")}
-                            className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-600 transition-colors"
+                            className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-600 transition-colors inline-flex items-center gap-1.5"
                           >
-                            🗑️ Clear All
+                            <Trash2 size={12} aria-hidden="true" />
+                            Clear All
                           </button>
                         </div>
                       </div>
@@ -371,7 +398,13 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
                       ) : (
                         <div className="flex items-center justify-center h-full text-gray-500">
                           <div className="text-center max-w-md">
-                            <div className="text-6xl mb-4">📝✨</div>
+                            <div className="mb-4 flex justify-center">
+                              <FileText
+                                size={48}
+                                className="text-purple/60"
+                                aria-hidden="true"
+                              />
+                            </div>
                             <div className="text-lg mb-2 text-gray-400">
                               No content to preview
                             </div>
@@ -381,8 +414,9 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
                               equations, and VZ components!
                             </div>
                             <div className="mt-4 p-3 bg-purple/10 border border-purple/20 rounded-lg text-left">
-                              <div className="text-xs text-purple-300 font-medium mb-1">
-                                💡 Pro Tip:
+                              <div className="text-xs text-purple-300 font-medium mb-1 flex items-center gap-1.5">
+                                <Lightbulb size={12} aria-hidden="true" />
+                                Pro Tip:
                               </div>
                               <div className="text-xs text-gray-400">
                                 Use the "Reset Example" button to load a full
@@ -417,8 +451,9 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
                       <div className="border-b border-gray-800 px-4 py-2 bg-dark-gray">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
-                            <h2 className="text-sm font-medium text-gray-300">
-                              👁️ Content Preview
+                            <h2 className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+                              <Eye size={14} aria-hidden="true" />
+                              Content Preview
                             </h2>
                             <VisualizationIndicator content={markdown} />
                           </div>
@@ -432,7 +467,13 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
                         ) : (
                           <div className="flex items-center justify-center h-full text-gray-500">
                             <div className="text-center max-w-md">
-                              <div className="text-6xl mb-4">📚✨</div>
+                              <div className="mb-4 flex justify-center">
+                                <BookOpen
+                                  size={48}
+                                  className="text-purple/60"
+                                  aria-hidden="true"
+                                />
+                              </div>
                               <div className="text-lg mb-2 text-gray-400">
                                 No content to upload
                               </div>

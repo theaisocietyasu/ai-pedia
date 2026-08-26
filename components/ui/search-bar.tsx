@@ -188,7 +188,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
         label: "Category",
         color: "bg-purple-500/20 text-purple-300",
       },
-      model: { label: "Model", color: "bg-pink-500/20 text-pink-300" },
+      model: { label: "Model", color: "bg-purple/20 text-purple-light" },
     };
 
     const badge = badges[type as keyof typeof badges];

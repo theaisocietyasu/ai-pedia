@@ -2,10 +2,10 @@
  * Comprehensive Markdown CSS Template for Technical Officers
  *
  * This CSS file provides consistent styling for all markdown content
- * across the blog system. It covers all edge cases and can be used
+ * across the learn modules. It covers all edge cases and can be used
  * as a template in online readme editors.
  *
- * Color Scheme: Dark theme with purple/pink gradient accents
+ * Color Scheme: Dark theme with black-white-violet accents
  * Typography: Geist Sans with proper hierarchy and readability
  *
  * Usage: Apply the 'markdown-content' class to any container with markdown content
@@ -27,7 +27,7 @@
   margin-top: 2rem;
   margin-bottom: 1rem;
   line-height: 1.3;
-  background: linear-gradient(135deg, #3a388e 0%, #8d2f6a 50%, #4b4abd 100%);
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #6d28d9 100%);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -89,7 +89,7 @@
 
 /* Links */
 .markdown-content .markdown-link {
-  color: #3a388e;
+  color: #8b5cf6;
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: all 0.3s ease;
@@ -97,12 +97,12 @@
 }
 
 .markdown-content .markdown-link:hover {
-  color: #8d2f6a;
-  border-bottom-color: #8d2f6a;
+  color: #a78bfa;
+  border-bottom-color: #a78bfa;
 }
 
 .markdown-content .markdown-link:focus {
-  outline: 2px solid #3a388e;
+  outline: 2px solid #8b5cf6;
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -196,7 +196,7 @@
 }
 
 .markdown-content li::marker {
-  color: #3a388e;
+  color: #8b5cf6;
 }
 
 .markdown-content li > ul,
@@ -215,7 +215,7 @@
 
 /* Blockquotes */
 .markdown-content blockquote {
-  border-left: 4px solid #3a388e;
+  border-left: 4px solid #8b5cf6;
   background: rgba(255, 255, 255, 0.05);
   margin: 2rem 0;
   padding: 1rem 1.5rem;
@@ -228,7 +228,7 @@
 .markdown-content blockquote::before {
   content: '"';
   font-size: 3rem;
-  color: rgba(58, 56, 142, 0.3);
+  color: rgba(139, 92, 246, 0.3);
   position: absolute;
   top: -0.5rem;
   left: 1rem;
@@ -261,7 +261,7 @@
 }
 
 .markdown-content th {
-  background: rgba(58, 56, 142, 0.2);
+  background: rgba(139, 92, 246, 0.2);
   font-weight: 600;
   color: #ffffff;
   border-bottom-color: rgba(255, 255, 255, 0.2);
@@ -283,7 +283,7 @@
 .markdown-content hr {
   border: none;
   height: 2px;
-  background: linear-gradient(135deg, #3a388e 0%, #8d2f6a 50%, #4b4abd 100%);
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #6d28d9 100%);
   margin: 3rem 0;
   border-radius: 1px;
   opacity: 0.6;
@@ -304,7 +304,7 @@
 .markdown-content .markdown-visualization {
   margin: 3rem 0;
   padding: 2rem;
-  background: rgba(26, 26, 46, 0.4);
+  background: rgba(19, 19, 22, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   backdrop-filter: blur(10px);
@@ -325,9 +325,9 @@
   bottom: 0;
   background: linear-gradient(
     135deg,
-    rgba(58, 56, 142, 0.1) 0%,
-    rgba(141, 47, 106, 0.05) 50%,
-    rgba(75, 74, 189, 0.1) 100%
+    rgba(139, 92, 246, 0.1) 0%,
+    rgba(167, 139, 250, 0.05) 50%,
+    rgba(109, 40, 217, 0.1) 100%
   );
   pointer-events: none;
 }
@@ -434,7 +434,7 @@
 
 /* Focus and accessibility */
 .markdown-content *:focus {
-  outline: 2px solid #3a388e;
+  outline: 2px solid #8b5cf6;
   outline-offset: 2px;
 }
 
@@ -550,7 +550,7 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  background: rgba(26, 26, 46, 0.8);
+  background: rgba(19, 19, 22, 0.8);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -567,7 +567,7 @@
   align-items: center;
   justify-content: center;
   height: 200px;
-  background: rgba(26, 26, 46, 0.5);
+  background: rgba(19, 19, 22, 0.5);
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -672,11 +672,11 @@ html[data-theme="light"] .markdown-content ol {
 
 /* Links */
 html[data-theme="light"] .markdown-content .markdown-link {
-  color: #4b4abd;
+  color: #6d28d9;
 }
 html[data-theme="light"] .markdown-content .markdown-link:hover {
-  color: #8d2f6a;
-  border-bottom-color: #8d2f6a;
+  color: #a78bfa;
+  border-bottom-color: #a78bfa;
 }
 
 /* Images */
@@ -700,7 +700,7 @@ html[data-theme="light"] .markdown-content .markdown-inline-code {
 html[data-theme="light"] .markdown-content blockquote {
   color: rgba(30, 30, 30, 0.9);
   background: rgba(0, 0, 0, 0.05);
-  border-left-color: #3a388e;
+  border-left-color: #8b5cf6;
 }
 
 /* Tables */
@@ -712,7 +712,7 @@ html[data-theme="light"] .markdown-content td {
   border-bottom-color: rgba(0, 0, 0, 0.1);
 }
 html[data-theme="light"] .markdown-content th {
-  background: rgba(58, 56, 142, 0.05);
+  background: rgba(139, 92, 246, 0.05);
   color: #111;
 }
 html[data-theme="light"] .markdown-content td {

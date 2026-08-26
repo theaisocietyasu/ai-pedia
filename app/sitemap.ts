@@ -1,5 +1,4 @@
 import type { MetadataRoute } from "next";
-import { getAllBlogs } from "@/lib/blog-data";
 import { getCategories, getModulesForCategory } from "./learn/categories";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -15,39 +14,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${baseUrl}/blogs`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    {
       url: `${baseUrl}/learn`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
     },
   ];
-
-  // Dynamic blog pages
-  let blogPages: MetadataRoute.Sitemap = [];
-  try {
-    const blogs = await getAllBlogs();
-    blogPages = blogs.map((blog) => {
-      // Use lastUpdated if available, otherwise fall back to publishDate
-      const lastModifiedDate = blog.lastUpdated
-        ? new Date(blog.lastUpdated)
-        : new Date(blog.publishDate);
-
-      return {
-        url: `${baseUrl}/blogs/${blog.slug}`,
-        lastModified: lastModifiedDate,
-        changeFrequency: "weekly" as const,
-        priority: 0.8,
-      };
-    });
-  } catch (error) {
-    console.error("Error generating blog sitemap entries:", error);
-  }
 
   // Dynamic learning pages
   const learningPages: MetadataRoute.Sitemap = [];
@@ -93,5 +65,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("Error generating learning sitemap entries:", error);
   }
 
-  return [...staticPages, ...blogPages, ...learningPages];
+  return [...staticPages, ...learningPages];
 }

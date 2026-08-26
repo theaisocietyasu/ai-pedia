@@ -137,7 +137,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
         }
 
         .overflow-y-auto::-webkit-scrollbar-thumb:hover {
-          background: var(--pink);
+          background: var(--purple-light);
         }
       `}</style>
     </div>

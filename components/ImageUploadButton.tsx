@@ -1,5 +1,6 @@
 "use client";
 
+import { AlertCircle, Image as ImageIcon } from "lucide-react";
 import type React from "react";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -99,14 +100,26 @@ export const ImageUploadButton: React.FC = () => {
             onClick={() => fileInputRef.current?.click()}
             className="cursor-pointer"
           >
-            {isUploading ? "Uploading..." : "📷 Upload Image"}
+            {isUploading ? (
+              "Uploading..."
+            ) : (
+              <>
+                <ImageIcon size={16} aria-hidden="true" />
+                Upload Image
+              </>
+            )}
           </Button>
         </label>
       </div>
 
       {/* Error Message */}
       {error && (
-        <div className="text-xs text-red-400 bg-red-400/10 border border-red-400/20 rounded px-3 py-2">
+        <div className="flex items-center gap-2 text-xs text-white bg-white/5 border border-purple-deep/60 rounded px-3 py-2">
+          <AlertCircle
+            size={14}
+            className="text-purple-light shrink-0"
+            aria-hidden="true"
+          />
           {error}
         </div>
       )}

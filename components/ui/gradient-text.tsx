@@ -14,7 +14,7 @@ interface GradientTextProps {
 export function GradientText({
   children,
   className,
-  gradient = "from-purple via-pink to-blue-purple",
+  gradient = "from-purple-light via-purple to-purple-deep",
   animate = true,
   delay = 0,
 }: GradientTextProps) {

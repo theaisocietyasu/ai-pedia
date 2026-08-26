@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Footer } from "@/components/ui/footer";
 
 const baseUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "https://aipedia.ais-asu.com/";
@@ -50,5 +51,12 @@ export default function LearnLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <div className="mt-32">
+        <Footer />
+      </div>
+    </>
+  );
 }

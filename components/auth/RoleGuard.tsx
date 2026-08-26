@@ -1,5 +1,6 @@
 "use client";
 
+import { Ban } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
 import { useSession } from "@/lib/auth/auth-client";
@@ -64,9 +65,11 @@ export function RoleGuard({ children, fallback }: RoleGuardProps) {
     return (
       fallback || (
         <div className="flex flex-col items-center justify-center min-h-[400px] p-8">
-          <div className="max-w-md w-full bg-dark-gray/50 backdrop-blur-sm border border-red-500/20 rounded-2xl p-8 text-center">
-            <div className="text-6xl mb-4">🚫</div>
-            <h2 className="text-2xl font-bold mb-4 text-red-400">
+          <div className="max-w-md w-full bg-dark-gray/50 backdrop-blur-sm border border-purple-deep/60 rounded-2xl p-8 text-center">
+            <div className="mb-4 flex justify-center">
+              <Ban size={48} className="text-purple-light" aria-hidden="true" />
+            </div>
+            <h2 className="text-2xl font-bold mb-4 text-purple-light">
               Access Denied
             </h2>
             <p className="text-light-gray mb-6">

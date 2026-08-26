@@ -1,5 +1,6 @@
 "use client";
 
+import { Code2, Image as ImageIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import TableOfContents from "@/components/TableOfContents";
@@ -127,9 +128,10 @@ export function LearnModuleClient({
                     .querySelector("section:nth-of-type(2)")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
+                className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer inline-flex items-center gap-2"
               >
-                📷 Images
+                <ImageIcon size={16} aria-hidden="true" />
+                Images
               </button>
             )}
             {model.code_blocks && model.code_blocks.length > 0 && (
@@ -140,9 +142,10 @@ export function LearnModuleClient({
                     .querySelector("section:nth-of-type(3)")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
+                className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer inline-flex items-center gap-2"
               >
-                💻 Code Examples
+                <Code2 size={16} aria-hidden="true" />
+                Code Examples
               </button>
             )}
           </>

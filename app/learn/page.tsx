@@ -109,7 +109,7 @@ export default function LearnPage() {
               ease: "easeInOut",
               delay: 1,
             }}
-            className="absolute bottom-20 right-20 w-96 h-96 bg-pink/30 rounded-full blur-3xl"
+            className="absolute bottom-20 right-20 w-96 h-96 bg-purple-light/30 rounded-full blur-3xl"
           />
         </div>
 

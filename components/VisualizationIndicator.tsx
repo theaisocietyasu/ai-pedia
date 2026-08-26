@@ -1,5 +1,6 @@
 "use client";
 
+import { Info } from "lucide-react";
 import type React from "react";
 import { extractVZComponents } from "@/lib/markdown-utils";
 
@@ -32,9 +33,10 @@ export const VisualizationIndicator: React.FC<VisualizationIndicatorProps> = ({
       <div className="group relative">
         <button
           type="button"
+          aria-label="Visualization details"
           className="text-xs text-gray-400 hover:text-gray-200 transition-colors"
         >
-          ℹ️
+          <Info size={14} aria-hidden="true" />
         </button>
         <div className="absolute bottom-full left-0 mb-2 w-64 bg-gray-800 border border-gray-600 rounded-lg p-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-xl">
           <div className="text-xs font-medium text-purple-300 mb-2">

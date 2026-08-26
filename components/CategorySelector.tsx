@@ -222,7 +222,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
   if (error) {
     return (
       <div className={`relative ${className}`}>
-        <div className="w-full p-3 border border-red-500 rounded-lg bg-red-900/20 text-red-400">
+        <div className="w-full p-3 border border-purple-deep/60 rounded-lg bg-white/5 text-white">
           {error}
         </div>
       </div>
@@ -457,7 +457,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
 
               {/* Error Display */}
               {createError && (
-                <div className="p-3 bg-red-900/20 border border-red-500 rounded-lg text-red-400 text-sm">
+                <div className="p-3 bg-white/5 border border-purple-deep/60 rounded-lg text-white text-sm">
                   {createError}
                 </div>
               )}

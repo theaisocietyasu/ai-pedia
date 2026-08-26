@@ -1,5 +1,6 @@
 "use client";
 
+import { BookOpen, Pencil, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { invalidateModulesCache } from "@/app/learn/categories";
@@ -274,10 +275,18 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
     <div
       className={`bg-gray-800/50 border border-gray-700 rounded-lg p-6 ${className}`}
     >
-      <h3 className="text-lg font-semibold text-gray-200 mb-4">
-        {mode === "create"
-          ? "📚 Upload Learning Module"
-          : "✏️ Edit Learning Module"}
+      <h3 className="text-lg font-semibold text-gray-200 mb-4 flex items-center gap-2">
+        {mode === "create" ? (
+          <>
+            <BookOpen size={18} aria-hidden="true" />
+            Upload Learning Module
+          </>
+        ) : (
+          <>
+            <Pencil size={18} aria-hidden="true" />
+            Edit Learning Module
+          </>
+        )}
       </h3>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -403,9 +412,10 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
                   <button
                     type="button"
                     onClick={handleResetThumbnail}
-                    className="text-red-400 hover:text-red-300 text-sm"
+                    aria-label="Remove thumbnail"
+                    className="text-purple-light hover:text-purple text-sm"
                   >
-                    ✕
+                    <X size={16} aria-hidden="true" />
                   </button>
                 )}
               </div>
@@ -476,7 +486,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
                   <button
                     type="button"
                     onClick={() => removeActionButton(index)}
-                    className="text-red-400 hover:text-red-300 text-sm"
+                    className="text-purple-light hover:text-purple text-sm"
                   >
                     Remove
                   </button>
@@ -551,7 +561,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
 
         {/* Error Display */}
         {error && (
-          <div className="p-3 bg-red-900/20 border border-red-500 rounded-lg text-red-400 text-sm">
+          <div className="p-3 bg-white/5 border border-purple-deep/60 rounded-lg text-white text-sm">
             {error}
           </div>
         )}

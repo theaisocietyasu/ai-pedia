@@ -1,5 +1,6 @@
 "use client";
 
+import { Lock, Pencil } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
@@ -49,7 +50,7 @@ export function EditButton({ category, modelSlug }: EditButtonProps) {
             disabled
             className="px-6 py-2 bg-gray-800/50 text-gray-500 rounded-lg border border-gray-700 cursor-not-allowed inline-flex items-center gap-2"
           >
-            <span>🔒</span>
+            <Lock size={16} aria-hidden="true" />
             <span>Edit This Module</span>
           </button>
         ) : (
@@ -58,7 +59,7 @@ export function EditButton({ category, modelSlug }: EditButtonProps) {
               type="button"
               className="px-6 py-2 bg-purple/20 text-purple-300 rounded-lg border border-purple/30 hover:bg-purple/30 transition-colors inline-flex items-center gap-2"
             >
-              <span>✏️</span>
+              <Pencil size={16} aria-hidden="true" />
               <span>Edit This Module</span>
             </button>
           </Link>
@@ -68,10 +69,14 @@ export function EditButton({ category, modelSlug }: EditButtonProps) {
       {/* Tooltip */}
       {isHovering && isLocked && lockStatus?.lockedBy && (
         <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 z-50">
-          <div className="bg-gray-900 border border-yellow-500/50 rounded-lg px-4 py-3 shadow-xl max-w-xs">
+          <div className="bg-gray-900 border border-purple/40 rounded-lg px-4 py-3 shadow-xl max-w-xs">
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-yellow-400">🔒</span>
-              <span className="font-semibold text-yellow-400">
+              <Lock
+                size={16}
+                className="text-purple-light"
+                aria-hidden="true"
+              />
+              <span className="font-semibold text-purple-light">
                 Module Locked
               </span>
             </div>
@@ -80,11 +85,11 @@ export function EditButton({ category, modelSlug }: EditButtonProps) {
             </p>
             <p className="text-xs text-gray-400 mt-1">
               Currently being edited by:{" "}
-              <span className="font-medium text-yellow-300">
+              <span className="font-medium text-purple-light">
                 {lockStatus.lockedBy}
               </span>
             </p>
-            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-yellow-500/50"></div>
+            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-purple/40"></div>
           </div>
         </div>
       )}

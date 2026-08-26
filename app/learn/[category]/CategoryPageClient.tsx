@@ -201,7 +201,7 @@ export function CategoryPageClient({
                 onClick={() => scrollToCenter(id)}
                 className={`text-sm font-medium transition-colors py-1 px-2 text-left ${
                   isActive
-                    ? "text-pink-400"
+                    ? "text-purple-light"
                     : "text-gray-400 hover:text-gray-200 cursor-pointer"
                 }`}
               >

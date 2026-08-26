@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Noto_Sans } from "next/font/google";
+import { Geist_Mono, Playfair_Display, Source_Serif_4 } from "next/font/google";
 import { NextAuthProvider } from "@/components/auth/NextAuthProvider";
-import { Footer } from "@/components/ui/footer";
 import { Navbar } from "@/components/ui/navbar";
 import "./globals.css";
 import "../styles/markdown.css";
 import "katex/dist/katex.min.css";
 
-const geistSans = Noto_Sans({
-  variable: "--font-geist-sans",
+const displayFont = Playfair_Display({
+  variable: "--font-display",
+  subsets: ["latin"],
+});
+
+const bodyFont = Source_Serif_4({
+  variable: "--font-body",
   subsets: ["latin"],
 });
 
@@ -144,14 +148,17 @@ export default function RootLayout({
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${baseUrl}/blogs?search={search_term_string}`,
+        urlTemplate: `${baseUrl}/learn?search={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },
   };
 
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="en"
+      className={`${displayFont.variable} ${bodyFont.variable} ${geistMono.variable}`}
+    >
       <head>
         <script
           type="application/ld+json"
@@ -170,9 +177,6 @@ export default function RootLayout({
         <NextAuthProvider>
           <Navbar />
           {children}
-          <div className="mt-32">
-            <Footer />
-          </div>
         </NextAuthProvider>
       </body>
     </html>

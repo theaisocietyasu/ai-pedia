@@ -2,7 +2,7 @@
  * MARKDOWN CSS TEMPLATE FOR CONTENT DEVELOPERS
  *
  * This CSS template should be used in online markdown editors
- * to ensure consistent styling across all blog content.
+ * to ensure consistent styling across all learn content.
  *
  * Instructions for Content Developers:
  * 1. Copy this CSS into your online markdown editor's custom CSS section
@@ -24,14 +24,14 @@
  * - Blockquotes: > text
  * - Tables: | col1 | col2 |
  *
- * Color Scheme: Dark theme with purple/pink gradient accents
+ * Color Scheme: Dark theme with black-white-violet accents
  */
 
 /* BASIC STYLES */
 body,
 .markdown-preview,
 .content-editor {
-  background-color: #0b0a10;
+  background-color: #09090b;
   color: #ffffff;
   line-height: 1.7;
   font-size: 16px;
@@ -51,7 +51,7 @@ h6 {
   margin-top: 2rem;
   margin-bottom: 1rem;
   line-height: 1.3;
-  background: linear-gradient(135deg, #3a388e 0%, #8d2f6a 50%, #4b4abd 100%);
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #6d28d9 100%);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -114,19 +114,19 @@ p:last-child {
 
 /* LINKS */
 a {
-  color: #3a388e;
+  color: #8b5cf6;
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: all 0.3s ease;
 }
 
 a:hover {
-  color: #8d2f6a;
-  border-bottom-color: #8d2f6a;
+  color: #a78bfa;
+  border-bottom-color: #a78bfa;
 }
 
 a:focus {
-  outline: 2px solid #3a388e;
+  outline: 2px solid #8b5cf6;
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -152,7 +152,7 @@ img:hover {
 
 /* CODE BLOCKS */
 pre {
-  background: rgba(26, 26, 46, 0.8);
+  background: rgba(19, 19, 22, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 1.5rem;
@@ -203,7 +203,7 @@ li {
 }
 
 li::marker {
-  color: #3a388e;
+  color: #8b5cf6;
 }
 
 ul ul {
@@ -217,7 +217,7 @@ ul ul ul {
 
 /* BLOCKQUOTES */
 blockquote {
-  border-left: 4px solid #3a388e;
+  border-left: 4px solid #8b5cf6;
   background: rgba(255, 255, 255, 0.05);
   margin: 2rem 0;
   padding: 1rem 1.5rem;
@@ -230,7 +230,7 @@ blockquote {
 blockquote::before {
   content: '"';
   font-size: 3rem;
-  color: rgba(58, 56, 142, 0.3);
+  color: rgba(139, 92, 246, 0.3);
   position: absolute;
   top: -0.5rem;
   left: 1rem;
@@ -263,7 +263,7 @@ td {
 }
 
 th {
-  background: rgba(58, 56, 142, 0.2);
+  background: rgba(139, 92, 246, 0.2);
   font-weight: 600;
   color: #ffffff;
   border-bottom-color: rgba(255, 255, 255, 0.2);
@@ -285,7 +285,7 @@ tr:hover {
 hr {
   border: none;
   height: 2px;
-  background: linear-gradient(135deg, #3a388e 0%, #8d2f6a 50%, #4b4abd 100%);
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #6d28d9 100%);
   margin: 3rem 0;
   border-radius: 1px;
   opacity: 0.6;
@@ -308,7 +308,7 @@ i {
 div[id] {
   margin: 3rem 0;
   padding: 2rem;
-  background: rgba(26, 26, 46, 0.4);
+  background: rgba(19, 19, 22, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   backdrop-filter: blur(10px);
@@ -330,9 +330,9 @@ div[id]::before {
   bottom: 0;
   background: linear-gradient(
     135deg,
-    rgba(58, 56, 142, 0.1) 0%,
-    rgba(141, 47, 106, 0.05) 50%,
-    rgba(75, 74, 189, 0.1) 100%
+    rgba(139, 92, 246, 0.1) 0%,
+    rgba(167, 139, 250, 0.05) 50%,
+    rgba(109, 40, 217, 0.1) 100%
   );
   pointer-events: none;
 }

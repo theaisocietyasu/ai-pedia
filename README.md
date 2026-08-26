@@ -1,13 +1,13 @@
 # AI Pedia
 
-An interactive AI/ML learning platform built by [The AI Society at Arizona State University](https://github.com/ais-asu). Officers author markdown-based learn modules with embedded interactive visualizations; students browse them by category. Live at [aipedia.ais-asu.com](https://aipedia.ais-asu.com/).
+An interactive encyclopedia of AI/ML built by [The AI Society at Arizona State University](https://github.com/ais-asu). Officers author markdown-based learn modules with embedded interactive visualizations; students browse them by category. Live at [aipedia.ais-asu.com](https://aipedia.ais-asu.com/).
 
 ## Tech Stack
 
 - **Framework:** Next.js 15 (App Router) + React 19 + TypeScript 5
 - **Styling:** Tailwind CSS 4, Framer Motion
 - **Markdown:** react-markdown + remark/rehype plugins, KaTeX for math
-- **Database:** MongoDB (raw driver for learn content, Mongoose for blogs, GridFS for images)
+- **Database:** MongoDB (raw driver; GridFS for images)
 - **Auth:** NextAuth.js with Discord OAuth; admin actions are gated by a Discord server role check
 - **Code quality:** Biome (lint + format)
 
@@ -44,7 +44,6 @@ npm run dev            # http://localhost:3000
 See `.env.example` for the full list. In short:
 
 - `MONGODB_URI`, `MONGODB_DB_NAME` — database connection
-- `MONGODB_COLLECTION_NAME` — blogs collection (default `blogs`)
 - `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET` — Discord OAuth app
 - `NEXTAUTH_SECRET`, `NEXTAUTH_URL` — NextAuth
 - `DISCORD_BOT_TOKEN`, `DISCORD_GUILD_ID`, `ADMIN_ROLE_ID` — server-side admin role verification
@@ -55,21 +54,19 @@ See `.env.example` for the full list. In short:
 ```
 app/                      # App Router pages + API routes
   learn/                  # Category listing, module viewer, editor, authoring
-  blogs/                  # Blog index and detail pages
   auth/signin/            # Discord sign-in page
   api/
     learn/                # Learn content CRUD, categories, edit locks, slug migration
-    blogs/                # Blog read APIs
     upload/image/         # Image upload (GridFS)
     images/[id]/          # Image streaming from GridFS
     auth/                 # NextAuth + role verification
 components/
   visualizations/         # Interactive demos + registry (embedded in markdown)
-  blogs/, home/, auth/    # Page-specific components
+  home/, auth/            # Page-specific components
   ui/                     # Shared UI (navbar, footer, buttons, ...)
 lib/
-  db/                     # Mongo clients (raw driver + mongoose), GridFS, models
-  api/                    # Client-side API helpers (learn.ts, blogs.ts)
+  db/                     # Mongo client (raw driver), GridFS
+  api/                    # Client-side API helpers (learn.ts)
   auth/                   # NextAuth config, Discord role checks, server guards
   markdown-utils.ts       # Heading extraction, content normalization
   slug.ts                 # Slug generation/parsing

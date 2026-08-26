@@ -151,8 +151,8 @@ export function Footer() {
               <span className="hidden md:inline">•</span>
             </div>
             <p className="flex items-center gap-1">
-              Built with <Heart size={14} className="text-pink animate-pulse" />{" "}
-              by The AI Society team
+              Built with <Heart size={14} className="text-purple-light" /> by
+              The AI Society team
             </p>
           </div>
         </div>

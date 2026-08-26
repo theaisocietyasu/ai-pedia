@@ -72,8 +72,8 @@ export function SignInButton({ redirectTo = "/" }: SignInButtonProps) {
           Note: You must have the admin role in the AI Society Discord server
         </p>
         {error && (
-          <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
-            <p className="text-red-400 text-sm">{error}</p>
+          <div className="mb-4 p-3 bg-white/5 border border-purple-deep/60 rounded-lg">
+            <p className="text-white text-sm">{error}</p>
           </div>
         )}
         <button
