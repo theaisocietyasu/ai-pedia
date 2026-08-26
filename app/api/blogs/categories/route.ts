@@ -1,20 +1,19 @@
 import { type NextRequest, NextResponse } from "next/server";
-import Blog from "@/lib/db/models/blog";
-import connectToDatabase from "@/lib/db/mongoose";
+import { blogsCollection } from "@/lib/db/models/blog";
 
 export async function GET(_request: NextRequest) {
   try {
-    await connectToDatabase();
+    const blogsColl = await blogsCollection();
 
     // Get distinct categories from all blogs
-    const categories = await Blog.distinct("categories").exec();
+    const categories = await blogsColl.distinct("categories");
 
     // Get count for each category
     const categoriesWithCount = await Promise.all(
       categories.map(async (category) => {
-        const count = await Blog.countDocuments({
+        const count = await blogsColl.countDocuments({
           categories: category,
-        }).exec();
+        });
         return {
           name: category,
           slug: category.toLowerCase().replace(/\s+/g, "-"),

@@ -1,9 +1,15 @@
 /**
  * Discord Role Verification
- * Checks if a user has the required admin role in the Discord server
+ * Checks if a user has the required admin role in the Discord server.
+ *
+ * Results are cached in-memory per user for a few minutes so that a burst of
+ * admin actions (editor heartbeats, saves, uploads) doesn't hit the Discord
+ * API on every request. Role changes in Discord take up to the TTL to
+ * propagate here.
  */
 
 const DISCORD_API_BASE = "https://discord.com/api/v10";
+const ROLE_CACHE_TTL_MS = 5 * 60 * 1000;
 
 interface DiscordGuildMember {
   user?: {
@@ -13,27 +19,30 @@ interface DiscordGuildMember {
   roles: string[];
 }
 
+const roleCache = new Map<string, { roles: string[]; expiresAt: number }>();
+
 /**
- * Check if a Discord user has the required admin role
- * @param discordUserId - The Discord user ID
- * @returns Promise<boolean> - Whether the user has the required role
+ * Fetch a guild member's role IDs, with caching.
+ * Returns [] for users who are not guild members (a definitive, cacheable
+ * answer) and null on transient errors (not cached).
  */
-export async function hasRequiredDiscordRole(
+async function fetchGuildMemberRoles(
   discordUserId: string,
-): Promise<boolean> {
+): Promise<string[] | null> {
   const botToken = process.env.DISCORD_BOT_TOKEN;
   const guildId = process.env.DISCORD_GUILD_ID;
-  const requiredRoleId = process.env.ADMIN_ROLE_ID;
 
-  if (!botToken || !guildId || !requiredRoleId) {
-    console.error(
-      "Discord role verification is not configured. Missing environment variables.",
-    );
-    return false;
+  if (!botToken || !guildId) {
+    console.error("Discord role verification is not configured. Missing environment variables.");
+    return null;
+  }
+
+  const cached = roleCache.get(discordUserId);
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.roles;
   }
 
   try {
-    // Fetch guild member information
     const response = await fetch(
       `${DISCORD_API_BASE}/guilds/${guildId}/members/${discordUserId}`,
       {
@@ -45,69 +54,53 @@ export async function hasRequiredDiscordRole(
 
     if (!response.ok) {
       if (response.status === 404) {
-        console.error(
-          `User ${discordUserId} is not a member of the guild ${guildId}`,
-        );
-        return false;
+        // Not a guild member — definitive, cache as no roles
+        roleCache.set(discordUserId, {
+          roles: [],
+          expiresAt: Date.now() + ROLE_CACHE_TTL_MS,
+        });
+        return [];
       }
-      console.error(
-        `Discord API error: ${response.status} ${response.statusText}`,
-      );
-      return false;
+      console.error(`Discord API error: ${response.status} ${response.statusText}`);
+      return null;
     }
 
     const member: DiscordGuildMember = await response.json();
-
-    // Check if user has the required role
-    const hasRole = member.roles.includes(requiredRoleId);
-
-    if (!hasRole) {
-      console.log(
-        `User ${discordUserId} does not have the required admin role ${requiredRoleId}`,
-      );
-    }
-
-    return hasRole;
+    const roles = member.roles || [];
+    roleCache.set(discordUserId, {
+      roles,
+      expiresAt: Date.now() + ROLE_CACHE_TTL_MS,
+    });
+    return roles;
   } catch (error) {
-    console.error("Error checking Discord role:", error);
-    return false;
+    console.error("Error fetching Discord roles:", error);
+    return null;
   }
 }
 
 /**
- * Get user's Discord roles
- * @param discordUserId - The Discord user ID
- * @returns Promise<string[]> - Array of role IDs
+ * Check if a Discord user has the required admin role
+ */
+export async function hasRequiredDiscordRole(
+  discordUserId: string,
+): Promise<boolean> {
+  const requiredRoleId = process.env.ADMIN_ROLE_ID;
+
+  if (!requiredRoleId) {
+    console.error("Discord role verification is not configured. Missing ADMIN_ROLE_ID.");
+    return false;
+  }
+
+  const roles = await fetchGuildMemberRoles(discordUserId);
+  return roles !== null && roles.includes(requiredRoleId);
+}
+
+/**
+ * Get user's Discord role IDs (empty array if unavailable)
  */
 export async function getDiscordUserRoles(
   discordUserId: string,
 ): Promise<string[]> {
-  const botToken = process.env.DISCORD_BOT_TOKEN;
-  const guildId = process.env.DISCORD_GUILD_ID;
-
-  if (!botToken || !guildId) {
-    console.error("Discord configuration is missing");
-    return [];
-  }
-
-  try {
-    const response = await fetch(
-      `${DISCORD_API_BASE}/guilds/${guildId}/members/${discordUserId}`,
-      {
-        headers: {
-          Authorization: `Bot ${botToken}`,
-        },
-      },
-    );
-
-    if (!response.ok) {
-      return [];
-    }
-
-    const member: DiscordGuildMember = await response.json();
-    return member.roles || [];
-  } catch (error) {
-    console.error("Error fetching Discord roles:", error);
-    return [];
-  }
+  const roles = await fetchGuildMemberRoles(discordUserId);
+  return roles ?? [];
 }

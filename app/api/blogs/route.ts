@@ -1,10 +1,10 @@
+import type { Filter } from "mongodb";
 import { type NextRequest, NextResponse } from "next/server";
-import Blog from "@/lib/db/models/blog";
-import connectToDatabase from "@/lib/db/mongoose";
+import { type BlogDocument, blogsCollection } from "@/lib/db/models/blog";
 
 export async function GET(request: NextRequest) {
   try {
-    await connectToDatabase();
+    const blogsColl = await blogsCollection();
 
     const { searchParams } = new URL(request.url);
     const category = searchParams.get("categories");
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "0", 10);
 
     // Build query
-    const query: Record<string, any> = {};
+    const query: Filter<BlogDocument> = {};
 
     if (category && category !== "all") {
       query.categories = { $regex: new RegExp(category, "i") };
@@ -27,13 +27,13 @@ export async function GET(request: NextRequest) {
     }
 
     // Execute query
-    let blogsQuery = Blog.find(query).sort({ publishDate: -1 });
+    let cursor = blogsColl.find(query).sort({ publishDate: -1 });
 
     if (limit > 0) {
-      blogsQuery = blogsQuery.limit(limit);
+      cursor = cursor.limit(limit);
     }
 
-    const blogs = await blogsQuery.exec();
+    const blogs = await cursor.toArray();
 
     return NextResponse.json({
       success: true,
