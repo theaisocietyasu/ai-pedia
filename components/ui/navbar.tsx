@@ -3,7 +3,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import {
   BookOpen,
-  ChevronRight,
   Home,
   Info,
   LogOut,
@@ -44,6 +43,7 @@ export function Navbar() {
   }, []);
 
   // close mobile menu on route change
+  // biome-ignore lint/correctness/useExhaustiveDependencies(pathname): the effect must re-run on every route change to close the mobile menu
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
@@ -171,6 +171,7 @@ export function Navbar() {
                     </span>
                   </div>
                   <button
+                    type="button"
                     onClick={handleSignOut}
                     className="p-2 rounded-lg hover:bg-purple/20 text-light-gray hover:text-white transition-colors"
                     title="Sign out"
@@ -183,6 +184,7 @@ export function Navbar() {
 
             {/* mobile menu button */}
             <button
+              type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden p-2 rounded-lg text-light-gray hover:bg-dark-gray/50 transition-colors"
               aria-label="Toggle menu"
@@ -222,6 +224,7 @@ export function Navbar() {
                     Navigation
                   </span>
                   <button
+                    type="button"
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="p-2 rounded-lg hover:bg-purple/20 transition-colors"
                     aria-label="Close menu"
@@ -241,7 +244,7 @@ export function Navbar() {
                 {/* navigation links */}
                 <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
                   {navItems.map((item, index) => (
-                    <div key={`mobile-nav-${index}`}>
+                    <div key={`mobile-nav-${item.name}`}>
                       {renderNavLink(item, index, true)}
                       {item.description && (
                         <p className="text-xs text-light-gray/60 px-4 mt-1">

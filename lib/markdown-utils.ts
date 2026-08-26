@@ -46,8 +46,8 @@ export const extractVZComponents = (content: string): VZComponent[] => {
   const foundIds = new Set<string>();
 
   patterns.forEach((pattern) => {
-    let match;
-    while ((match = pattern.exec(content)) !== null) {
+    let match: RegExpExecArray | null = pattern.exec(content);
+    while (match !== null) {
       const id = match[1];
       if (!foundIds.has(id)) {
         foundIds.add(id);
@@ -64,6 +64,7 @@ export const extractVZComponents = (content: string): VZComponent[] => {
           placeholder,
         });
       }
+      match = pattern.exec(content);
     }
   });
 
@@ -110,7 +111,7 @@ export const extractMarkdownMetadata = (
       if (key === "tags") {
         metadata.tags = value.split(",").map((tag) => tag.trim());
       } else {
-        (metadata as any)[key] = value;
+        (metadata as unknown as Record<string, unknown>)[key] = value;
       }
     }
   });

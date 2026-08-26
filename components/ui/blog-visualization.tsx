@@ -183,6 +183,7 @@ const visualizationComponents: Record<string, React.ComponentType> = {
     <div className="space-y-4">
       <div className="relative aspect-square bg-dark-gray rounded-lg border border-white/10 p-4">
         <svg
+          aria-hidden="true"
           width="100%"
           height="100%"
           viewBox="0 0 300 300"
@@ -216,7 +217,7 @@ const visualizationComponents: Record<string, React.ComponentType> = {
             [240, 80],
           ].map(([x, y], i) => (
             <motion.circle
-              key={i}
+              key={`${x}-${y}`}
               cx={x}
               cy={y}
               r="4"
@@ -305,6 +306,7 @@ export function BlogVisualization({
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold gradient-text">{title}</h3>
               <button
+                type="button"
                 className="inline-flex items-center gap-2 px-3 py-1 text-sm bg-purple/20 hover:bg-purple/30
                                 text-purple border border-purple/50 rounded-lg transition-colors duration-300"
               >
@@ -340,6 +342,7 @@ export function BlogVisualization({
             {displayTitle}
           </h3>
           <button
+            type="button"
             className="inline-flex items-center gap-2 px-3 py-1 text-sm bg-purple/20 hover:bg-purple/30
                             text-purple border border-purple/50 rounded-lg transition-colors duration-300"
           >
@@ -363,6 +366,7 @@ export function BlogVisualization({
         Component "{componentId}" will be implemented here
       </p>
       <button
+        type="button"
         className="inline-flex items-center gap-2 px-4 py-2 bg-purple/20 hover:bg-purple/30
                         text-purple border border-purple/50 rounded-lg transition-colors duration-300"
       >

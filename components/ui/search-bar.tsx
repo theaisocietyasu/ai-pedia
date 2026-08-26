@@ -116,6 +116,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
   };
 
   // Handle input change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: searchContent is recreated every render and only reads searchableData, which is already a dependency; listing the function itself would re-run the effect on every render
   useEffect(() => {
     const searchResults = searchContent(query);
     setResults(searchResults);

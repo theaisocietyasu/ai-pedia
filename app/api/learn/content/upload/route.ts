@@ -5,8 +5,6 @@ import { uploadImageToGridFS } from "@/lib/db/gridfs";
 import { generateLearnModuleSlug, slugifyCategory } from "@/lib/slug";
 
 export async function POST(request: NextRequest) {
-  let client;
-
   try {
     // Check authentication and Discord role
     const session = await requireAuthWithRole();
@@ -50,7 +48,7 @@ export async function POST(request: NextRequest) {
       if (!Array.isArray(categories) || categories.length === 0) {
         throw new Error("Categories must be a non-empty array");
       }
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         { error: "Invalid categories format" },
         { status: 400 },
@@ -62,7 +60,7 @@ export async function POST(request: NextRequest) {
     if (actionButtonsString) {
       try {
         actionButtons = JSON.parse(actionButtonsString);
-      } catch (error) {
+      } catch {
         return NextResponse.json(
           { error: "Invalid action buttons format" },
           { status: 400 },
@@ -92,7 +90,7 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await thumbnailFile.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const { fileId, url: thumbnailUrl } = await uploadImageToGridFS(
+    const { url: thumbnailUrl } = await uploadImageToGridFS(
       buffer,
       thumbnailFile.name,
       thumbnailFile.type,

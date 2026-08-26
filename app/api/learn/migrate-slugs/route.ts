@@ -3,7 +3,7 @@ import { authErrorResponse, requireAuthWithRole } from "@/lib/auth/server";
 import { mongoConnection } from "@/lib/db/client";
 import { generateLearnModuleSlug } from "@/lib/slug";
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     // Check authentication and Discord role - only authenticated admins can run migrations
     const session = await requireAuthWithRole();
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
 }
 
 // GET endpoint to check migration status
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const collection = await mongoConnection.collection("learn_content");
 

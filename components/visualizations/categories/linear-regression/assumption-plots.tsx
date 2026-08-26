@@ -20,10 +20,10 @@ import {
   type PlotConfig,
 } from "../../shared";
 
+type PlotType = "good" | "heteroscedastic" | "nonlinear" | "nonnormal";
+
 export const AssumptionPlotsVisualization: React.FC = () => {
-  const [currentPlot, setCurrentPlot] = useState<
-    "good" | "heteroscedastic" | "nonlinear" | "nonnormal"
-  >("good");
+  const [currentPlot, setCurrentPlot] = useState<PlotType>("good");
   const plotData = generateDiagnosticData(currentPlot);
 
   const plotConfigs: Record<string, PlotConfig> = {
@@ -134,8 +134,9 @@ export const AssumptionPlotsVisualization: React.FC = () => {
           <div className="lg:hidden grid grid-cols-2 gap-2 mb-4">
             {plotOptions.map((option) => (
               <button
+                type="button"
                 key={option.key}
-                onClick={() => setCurrentPlot(option.key as any)}
+                onClick={() => setCurrentPlot(option.key as PlotType)}
                 className={`text-left p-2 rounded-lg border transition-all text-sm ${
                   currentPlot === option.key
                     ? "bg-purple/20 border-purple text-white"
@@ -155,7 +156,7 @@ export const AssumptionPlotsVisualization: React.FC = () => {
             <ButtonGroup
               options={plotOptions}
               selected={currentPlot}
-              onChange={(key) => setCurrentPlot(key as any)}
+              onChange={(key) => setCurrentPlot(key as PlotType)}
             />
           </div>
 

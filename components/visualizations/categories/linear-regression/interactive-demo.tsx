@@ -21,10 +21,10 @@ import {
   SliderControl,
 } from "../../shared";
 
+type DemoType = "polynomial" | "regularization" | "comparison";
+
 export const InteractiveDemoVisualization: React.FC = () => {
-  const [demoType, setDemoType] = useState<
-    "polynomial" | "regularization" | "comparison"
-  >("polynomial");
+  const [demoType, setDemoType] = useState<DemoType>("polynomial");
   const [polynomialDegree, setPolynomialDegree] = useState(2);
   const [regularizationStrength, setRegularizationStrength] = useState(0.1);
 
@@ -164,8 +164,9 @@ export const InteractiveDemoVisualization: React.FC = () => {
           <div className="lg:hidden grid grid-cols-3 gap-2 mb-4">
             {demoOptions.map((option) => (
               <button
+                type="button"
                 key={option.key}
-                onClick={() => setDemoType(option.key as any)}
+                onClick={() => setDemoType(option.key as DemoType)}
                 className={`text-center p-2 rounded-lg border transition-all text-xs ${
                   demoType === option.key
                     ? "bg-purple/20 border-purple text-white"
@@ -185,7 +186,7 @@ export const InteractiveDemoVisualization: React.FC = () => {
             <ButtonGroup
               options={demoOptions}
               selected={demoType}
-              onChange={(key) => setDemoType(key as any)}
+              onChange={(key) => setDemoType(key as DemoType)}
             />
           </div>
 

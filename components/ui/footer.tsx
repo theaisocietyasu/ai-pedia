@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import {
   Github,
   Heart,
@@ -83,7 +82,7 @@ export function Footer() {
             </div>
 
             {/* footer sections */}
-            {footerSections.map((section, index) => (
+            {footerSections.map((section) => (
               <div key={section.title} className="space-y-6">
                 <h3 className="font-semibold text-white">{section.title}</h3>
                 <ul className="space-y-3">

@@ -1,11 +1,10 @@
 import { MarkdownParser } from "@/lib/markdown-parser";
 import type {
-  ActionButton,
-  Author,
   BlogContent,
   BlogPost,
   EnhancedBlogPost,
   LegacyBlogPost,
+  LegacyContentBlock,
 } from "@/lib/types";
 
 // Helper function to get base URL for API calls
@@ -204,12 +203,12 @@ function convertContentToLegacy(blog: BlogPost): BlogContent {
 
   // Legacy format: ContentBlock array
   if (Array.isArray(blog.content)) {
-    const contentBlocks = blog.content as any[]; // Legacy ContentBlock type
+    const contentBlocks = blog.content as unknown as LegacyContentBlock[];
 
     // Try to convert to structured format first
-    const headings = contentBlocks
-      .filter((block) => block.heading)
-      .map((block) => block.heading!);
+    const headings = contentBlocks.flatMap((block) =>
+      block.heading ? [block.heading] : [],
+    );
 
     const paragraphs: (string | { [key: string]: string })[] = [];
     const images: string[] = [];

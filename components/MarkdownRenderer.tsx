@@ -7,7 +7,6 @@ import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
-import { slugifyHeading } from "@/lib/slug";
 import { LazyVisualization } from "./visualizations/LazyVisualization";
 
 interface MarkdownRendererProps {
@@ -34,8 +33,8 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
   // Debug logging (only in development)
   if (process.env.NODE_ENV === "development" && content !== processedContent) {
     console.log("MarkdownRenderer: Processed escaped HTML divs");
-    console.log("Original:", content.substring(0, 200) + "...");
-    console.log("Processed:", processedContent.substring(0, 200) + "...");
+    console.log("Original:", `${content.substring(0, 200)}...`);
+    console.log("Processed:", `${processedContent.substring(0, 200)}...`);
   }
 
   return (
@@ -79,7 +78,11 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
               {children}
             </p>
           ),
-          a: ({ children, href, ...props }: any) => {
+          a: ({
+            children,
+            href,
+            ...props
+          }: React.ComponentPropsWithoutRef<"a">) => {
             const isExternal =
               href?.startsWith("http") || href?.startsWith("https");
             return (
@@ -94,7 +97,11 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
               </a>
             );
           },
-          img: ({ src, alt, ...props }: any) => (
+          img: ({
+            src,
+            alt,
+            ...props
+          }: React.ComponentPropsWithoutRef<"img">) => (
             <img
               src={src || ""}
               alt={alt || ""}
@@ -102,7 +109,12 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
               {...props}
             />
           ),
-          code: ({ inline, className, children, ...props }: any) => {
+          code: ({
+            inline,
+            className,
+            children,
+            ...props
+          }: React.ComponentPropsWithoutRef<"code"> & { inline?: boolean }) => {
             const match = /language-(\w+)/.exec(className || "");
             const language = match ? match[1] : "";
 
@@ -160,9 +172,17 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
               <table {...props}>{children}</table>
             </div>
           ),
-          div: ({ node, className, children, ...props }: any) => {
+          div: ({
+            node: _node,
+            className,
+            children,
+            ...props
+          }: React.ComponentPropsWithoutRef<"div"> & {
+            node?: unknown;
+            "data-placeholder"?: string;
+          }) => {
             const id = props.id;
-            if (id && id.startsWith("VZ-")) {
+            if (id?.startsWith("VZ-")) {
               const placeholder =
                 props["data-placeholder"] || "Interactive Visualization";
               return (

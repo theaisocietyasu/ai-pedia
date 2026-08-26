@@ -8,6 +8,7 @@ import type { ParsedMarkdown, TocItem } from "./types";
  * - React visualization components: <div id="reactvisualizationcomponent id"></div>
  * - HTML links: <a>text</a>
  */
+// biome-ignore lint/complexity/noStaticOnlyClass: converting to plain functions would break consumers outside this module's scope (e.g. components/ui/markdown-renderer.tsx)
 export class MarkdownParser {
   private static readonly WORDS_PER_MINUTE = 200;
 
@@ -104,7 +105,7 @@ export class MarkdownParser {
   private static parseImages(html: string, extractedImages: string[]): string {
     const imageRegex = /<img\s+src=["']([^"']+)["']\s*\/?>/gi;
 
-    return html.replace(imageRegex, (match, src) => {
+    return html.replace(imageRegex, (_match, src) => {
       extractedImages.push(src);
       return `<img src="${src}" alt="" class="markdown-image" loading="lazy" />`;
     });
@@ -119,7 +120,7 @@ export class MarkdownParser {
   ): string {
     const visualizationRegex = /<div\s+id=["']([^"']+)["']\s*><\/div>/gi;
 
-    return html.replace(visualizationRegex, (match, id) => {
+    return html.replace(visualizationRegex, (_match, id) => {
       visualizationIds.push(id);
       return `<div class="markdown-visualization" data-component-id="${id}"></div>`;
     });
@@ -131,7 +132,7 @@ export class MarkdownParser {
   private static parseLinks(html: string): string {
     // Handle HTML links: <a href="url">text</a>
     const htmlLinkRegex = /<a(\s+href=["']([^"']+)["'])?[^>]*>([^<]+)<\/a>/gi;
-    html = html.replace(htmlLinkRegex, (match, hrefAttr, href, text) => {
+    html = html.replace(htmlLinkRegex, (_match, _hrefAttr, href, text) => {
       const url = href || "#";
       const isExternal = url.startsWith("http");
       const target = isExternal
@@ -142,7 +143,7 @@ export class MarkdownParser {
 
     // Handle markdown links: [text](url)
     const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-    html = html.replace(markdownLinkRegex, (match, text, url) => {
+    html = html.replace(markdownLinkRegex, (_match, text, url) => {
       const isExternal = url.startsWith("http");
       const target = isExternal
         ? ' target="_blank" rel="noopener noreferrer"'
@@ -159,14 +160,14 @@ export class MarkdownParser {
   private static parseCodeBlocks(html: string): string {
     // Fenced code blocks with optional language
     const fencedCodeRegex = /```(\w+)?\n([\s\S]*?)```/g;
-    html = html.replace(fencedCodeRegex, (match, lang, code) => {
+    html = html.replace(fencedCodeRegex, (_match, lang, code) => {
       const language = lang ? ` data-language="${lang}"` : "";
       return `<pre class="markdown-code-block"${language}><code>${MarkdownParser.escapeHtml(code.trim())}</code></pre>`;
     });
 
     // Indented code blocks (4+ spaces)
     const indentedCodeRegex = /^( {4}.+)$/gm;
-    html = html.replace(indentedCodeRegex, (match, code) => {
+    html = html.replace(indentedCodeRegex, (_match, code) => {
       return `<pre class="markdown-code-block"><code>${MarkdownParser.escapeHtml(code.substring(4))}</code></pre>`;
     });
 
@@ -178,7 +179,7 @@ export class MarkdownParser {
    */
   private static parseInlineCode(html: string): string {
     const inlineCodeRegex = /`([^`]+)`/g;
-    return html.replace(inlineCodeRegex, (match, code) => {
+    return html.replace(inlineCodeRegex, (_match, code) => {
       return `<code class="markdown-inline-code">${MarkdownParser.escapeHtml(code)}</code>`;
     });
   }
@@ -268,7 +269,7 @@ export class MarkdownParser {
 
     if (plainText.length <= maxLength) return plainText;
 
-    return plainText.substring(0, maxLength).replace(/\s+\w*$/, "") + "...";
+    return `${plainText.substring(0, maxLength).replace(/\s+\w*$/, "")}...`;
   }
 
   /**
@@ -301,10 +302,11 @@ export class MarkdownParser {
       if (stack.length === 0) {
         result.push(newItem);
       } else {
-        if (!stack[stack.length - 1].children) {
-          stack[stack.length - 1].children = [];
+        const parent = stack[stack.length - 1];
+        if (!parent.children) {
+          parent.children = [];
         }
-        stack[stack.length - 1].children!.push(newItem);
+        parent.children.push(newItem);
       }
 
       stack.push(newItem);

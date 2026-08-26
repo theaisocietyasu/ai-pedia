@@ -142,6 +142,7 @@ export const ImageUploadButton: React.FC = () => {
                   {image.markdownCode}
                 </code>
                 <button
+                  type="button"
                   onClick={() => copyToClipboard(image.markdownCode)}
                   className="text-xs px-2 py-1 bg-purple/20 text-purple-300 rounded border border-purple/30 hover:bg-purple/30 transition-colors"
                   title="Copy markdown code"

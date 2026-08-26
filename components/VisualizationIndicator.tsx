@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { extractVZComponents, type VZComponent } from "@/lib/markdown-utils";
+import { extractVZComponents } from "@/lib/markdown-utils";
 
 interface VisualizationIndicatorProps {
   content: string;
@@ -30,7 +30,10 @@ export const VisualizationIndicator: React.FC<VisualizationIndicatorProps> = ({
 
       {/* Tooltip with visualization list */}
       <div className="group relative">
-        <button className="text-xs text-gray-400 hover:text-gray-200 transition-colors">
+        <button
+          type="button"
+          className="text-xs text-gray-400 hover:text-gray-200 transition-colors"
+        >
           ℹ️
         </button>
         <div className="absolute bottom-full left-0 mb-2 w-64 bg-gray-800 border border-gray-600 rounded-lg p-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-xl">
@@ -38,8 +41,8 @@ export const VisualizationIndicator: React.FC<VisualizationIndicatorProps> = ({
             Interactive Visualizations Found:
           </div>
           <div className="space-y-1">
-            {vizComponents.map((viz, index) => (
-              <div key={index} className="text-xs text-gray-300">
+            {vizComponents.map((viz) => (
+              <div key={viz.id} className="text-xs text-gray-300">
                 <span className="font-mono text-purple-200">{viz.id}</span>
                 <div className="text-gray-400 ml-2">• {viz.placeholder}</div>
               </div>

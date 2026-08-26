@@ -91,11 +91,46 @@ export async function fetchModuleBySlug(slug: string): Promise<LearnModule> {
   }
 }
 
+// UI-facing shapes produced by the transform helpers below
+export interface UIActionButton {
+  name: string;
+  link: string;
+  /** Legacy aliases still referenced by some UI consumers */
+  label?: string;
+  url?: string;
+}
+
+export interface LearnModuleUIFormat {
+  name: string;
+  description: string;
+  imgPath: string;
+  actionButtons: UIActionButton[];
+  _id: string;
+  slug: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface LearnCategoryUIFormat {
+  description: string;
+  imgPath: string;
+  models: LearnModuleUIFormat[];
+}
+
+export interface LearnModelFormat {
+  title: string;
+  content: string;
+  description: string;
+  imgPath: string;
+  actionButtons: UIActionButton[];
+  contributors: NonNullable<LearnModule["contributors"]>;
+}
+
 // Utility function to convert API data to the format expected by the UI
 export function transformCategoriesToUIFormat(
   categories: LearnCategory[],
-): Record<string, any> {
-  const result: Record<string, any> = {};
+): Record<string, LearnCategoryUIFormat> {
+  const result: Record<string, LearnCategoryUIFormat> = {};
 
   categories.forEach((category) => {
     const key = category.name.toLowerCase().replace(/\s+/g, "-");
@@ -110,7 +145,9 @@ export function transformCategoriesToUIFormat(
 }
 
 // Utility function to transform modules to the format expected by the UI
-export function transformModulesToUIFormat(modules: LearnModule[]): any[] {
+export function transformModulesToUIFormat(
+  modules: LearnModule[],
+): LearnModuleUIFormat[] {
   return modules.map((module) => ({
     name: module.title,
     description: module.description,
@@ -124,7 +161,9 @@ export function transformModulesToUIFormat(modules: LearnModule[]): any[] {
 }
 
 // Utility function to transform a single module to the format expected by the model page
-export function transformModuleToModelFormat(module: LearnModule): any {
+export function transformModuleToModelFormat(
+  module: LearnModule,
+): LearnModelFormat {
   return {
     title: module.title || "",
     content: normalizeMarkdownContent(module.content || ""),
@@ -171,8 +210,33 @@ export async function uploadImage(file: File): Promise<ImageUploadResponse> {
   }
 }
 
+// API responses for learn module mutations
+export type UploadLearnModuleResponse = {
+  success: boolean;
+  id: string;
+  slug: string;
+  message: string;
+  module?: LearnModule;
+};
+
+export type UpdateLearnModuleResponse = {
+  success: boolean;
+  message: string;
+  slugChanged?: boolean;
+  oldSlug?: string;
+  newSlug?: string;
+  module?: LearnModule;
+};
+
+export type DeleteLearnModuleResponse = {
+  success: boolean;
+  message?: string;
+};
+
 // Upload learn module with markdown content
-export async function uploadLearnModule(formData: FormData): Promise<any> {
+export async function uploadLearnModule(
+  formData: FormData,
+): Promise<UploadLearnModuleResponse> {
   try {
     const response = await fetch(`${API_BASE_URL}/learn/content/upload`, {
       method: "POST",
@@ -198,7 +262,7 @@ export async function uploadLearnModule(formData: FormData): Promise<any> {
 export async function updateLearnModule(
   slug: string,
   formData: FormData,
-): Promise<any> {
+): Promise<UpdateLearnModuleResponse> {
   try {
     const response = await fetch(`${API_BASE_URL}/learn/content/${slug}`, {
       method: "PUT",
@@ -221,7 +285,9 @@ export async function updateLearnModule(
 }
 
 // Delete existing learn module
-export async function deleteLearnModule(slug: string): Promise<any> {
+export async function deleteLearnModule(
+  slug: string,
+): Promise<DeleteLearnModuleResponse> {
   try {
     const response = await fetch(`${API_BASE_URL}/learn/content/${slug}`, {
       method: "DELETE",

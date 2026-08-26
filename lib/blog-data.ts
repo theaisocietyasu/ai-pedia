@@ -1,5 +1,5 @@
 import { convertToLegacyBlog, fetchBlogBySlug, fetchBlogs } from "./api/blogs";
-import type { BlogCategory, LegacyBlogPost } from "./types";
+import type { LegacyBlogPost } from "./types";
 
 // API-based utility functions without static fallbacks
 export async function getBlogPost(

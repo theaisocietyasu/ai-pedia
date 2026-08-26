@@ -26,6 +26,11 @@ interface InitialData {
   }>;
 }
 
+interface UpdateLearnModuleResult {
+  newSlug?: string;
+  [key: string]: unknown;
+}
+
 interface MarkdownUploadFormProps {
   markdownContent: string;
   onUploadSuccess: (moduleId: string) => void;
@@ -33,7 +38,7 @@ interface MarkdownUploadFormProps {
   mode?: "create" | "edit";
   moduleSlug?: string;
   initialData?: InitialData;
-  onUpdateSuccess?: (result: any) => void;
+  onUpdateSuccess?: (result: UpdateLearnModuleResult) => void;
 }
 
 export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
@@ -81,7 +86,10 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
     }
   }, [mode, initialData]);
 
-  const handleInputChange = (field: keyof typeof formData, value: any) => {
+  const handleInputChange = <K extends keyof typeof formData>(
+    field: K,
+    value: (typeof formData)[K],
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -203,12 +211,15 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
 
       if (mode === "create") {
         // Create mode: thumbnail is required
+        // biome-ignore lint/style/noNonNullAssertion: validateForm() guarantees thumbnail is set in create mode
         formDataToSend.append("thumbnail", thumbnail!);
 
         const result = await uploadLearnModule(formDataToSend);
 
         // Invalidate caches for selected categories (slugs)
-        formData.categories.forEach((slug) => invalidateModulesCache(slug));
+        for (const slug of formData.categories) {
+          invalidateModulesCache(slug);
+        }
 
         // Clear form on success
         setFormData({
@@ -229,15 +240,18 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
           formDataToSend.append("thumbnail", thumbnail);
         }
 
+        // biome-ignore lint/style/noNonNullAssertion: moduleSlug is always provided by the caller in edit mode
         const result = await updateLearnModule(moduleSlug!, formDataToSend);
 
         // Invalidate caches for all categories (old and new)
         if (initialData) {
-          initialData.categories.forEach((slug) =>
-            invalidateModulesCache(slug),
-          );
+          for (const slug of initialData.categories) {
+            invalidateModulesCache(slug);
+          }
         }
-        formData.categories.forEach((slug) => invalidateModulesCache(slug));
+        for (const slug of formData.categories) {
+          invalidateModulesCache(slug);
+        }
 
         // Call update success callback
         if (onUpdateSuccess) {
@@ -269,10 +283,14 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Title */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label
+            htmlFor="module-title"
+            className="block text-sm font-medium text-gray-300 mb-2"
+          >
             Title *
           </label>
           <input
+            id="module-title"
             type="text"
             value={formData.title}
             onChange={(e) => handleInputChange("title", e.target.value)}
@@ -284,10 +302,14 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label
+            htmlFor="module-description"
+            className="block text-sm font-medium text-gray-300 mb-2"
+          >
             Description *
           </label>
           <textarea
+            id="module-description"
             value={formData.description}
             onChange={(e) => handleInputChange("description", e.target.value)}
             rows={3}
@@ -307,7 +329,10 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
 
         {/* Thumbnail Upload */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <label
+            htmlFor="module-thumbnail"
+            className="block text-sm font-medium text-gray-300 mb-2"
+          >
             Thumbnail Image *
           </label>
 
@@ -344,6 +369,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
           <div className="flex items-start gap-4">
             <div className="flex-1">
               <input
+                id="module-thumbnail"
                 ref={thumbnailInputRef}
                 type="file"
                 accept="image/*"
@@ -392,9 +418,9 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
           initialData?.contributors &&
           initialData.contributors.length > 0 && (
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <span className="block text-sm font-medium text-gray-300 mb-2">
                 Contributors
-              </label>
+              </span>
               <div className="p-3 bg-gray-900/50 border border-gray-600 rounded-lg space-y-2">
                 {initialData.contributors.map((contributor) => (
                   <div
@@ -431,15 +457,16 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
 
         {/* Action Buttons */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <span className="block text-sm font-medium text-gray-300 mb-2">
             Action Buttons (Optional)
-          </label>
+          </span>
 
           {/* Existing Action Buttons */}
           {formData.actionButtons.length > 0 && (
             <div className="space-y-2 mb-4">
               {formData.actionButtons.map((button, index) => (
                 <div
+                  // biome-ignore lint/suspicious/noArrayIndexKey: action buttons have no stable unique id and name/link pairs may repeat
                   key={index}
                   className="flex items-center gap-2 p-2 bg-gray-700/50 rounded border border-gray-600"
                 >
@@ -499,9 +526,9 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
 
         {/* Content Preview */}
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
+          <span className="block text-sm font-medium text-gray-300 mb-2">
             Content Preview
-          </label>
+          </span>
           <div className="p-3 bg-gray-900/50 border border-gray-600 rounded-lg text-sm text-gray-400">
             {markdownContent.trim() ? (
               <div>

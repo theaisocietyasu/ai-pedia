@@ -2,17 +2,17 @@
 
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { BlogCard } from "@/components/ui/blog-card";
-import type { BlogCategory, LegacyBlogPost } from "@/lib/types";
+import type { LegacyBlogPost } from "@/lib/types";
 
 interface BlogsClientProps {
   blogs: LegacyBlogPost[];
 }
 
 export function BlogsClient({ blogs }: BlogsClientProps) {
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory] = useState("all");
+  const [searchQuery] = useState("");
 
   // filter blogs based on category and search
   const filteredBlogs = useMemo(() => {

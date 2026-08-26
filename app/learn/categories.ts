@@ -5,11 +5,55 @@ import {
   transformModulesToUIFormat,
 } from "@/lib/api/learn";
 
+// UI-facing shapes produced by the transform helpers in @/lib/api/learn
+export interface ModuleActionButton {
+  label?: string;
+  url?: string;
+}
+
+export interface ModuleContributor {
+  id: string;
+  name?: string;
+  email?: string;
+  addedAt?: string | Date;
+}
+
+export interface LearnModuleUI {
+  name: string;
+  description: string;
+  imgPath: string;
+  actionButtons: ModuleActionButton[];
+  _id: string;
+  slug: string;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+}
+
+export interface LearnCategoryUI {
+  description: string;
+  imgPath: string;
+  models: LearnModuleUI[];
+}
+
+export interface ModelData {
+  title?: string;
+  content?: string;
+  description?: string;
+  imgPath?: string;
+  actionButtons?: ModuleActionButton[];
+  contributors?: ModuleContributor[];
+  images?: string[];
+  code_blocks?: string[];
+  headings?: string[];
+  paragraphs?: string[];
+  visualization?: string;
+}
+
 // Cache for categories and modules to avoid repeated API calls
-let categoriesCache: Record<string, any> | null = null;
-let modulesCache: Record<string, any[]> = {};
+let categoriesCache: Record<string, LearnCategoryUI> | null = null;
+let modulesCache: Record<string, LearnModuleUI[]> = {};
 // Cache for individual module data by slug
-let modelDataCache: Record<string, any> = {};
+let modelDataCache: Record<string, ModelData> = {};
 // Cache timestamps to support automatic invalidation (1 hour TTL)
 const CACHE_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
 let cacheTimestamps: Record<string, number> = {};
@@ -32,7 +76,7 @@ export async function getCategories() {
     const categories = await fetchAllCategories();
     // console.log('Fetched categories from API:', categories);
     categoriesCache = transformCategoriesToUIFormat(categories);
-    cacheTimestamps["categories"] = Date.now();
+    cacheTimestamps.categories = Date.now();
     return categoriesCache;
   } catch (error) {
     console.error("Error fetching categories:", error);

@@ -15,10 +15,10 @@ interface PerformanceData {
   samples: number;
 }
 
+type DatasetSize = "small" | "medium" | "large";
+
 export const ModelEvaluationVisualization: React.FC = () => {
-  const [selectedDataset, setSelectedDataset] = useState<
-    "small" | "medium" | "large"
-  >("medium");
+  const [selectedDataset, setSelectedDataset] = useState<DatasetSize>("medium");
 
   // Sample performance data for different dataset sizes
   const performanceData: Record<string, PerformanceData> = {
@@ -86,8 +86,9 @@ export const ModelEvaluationVisualization: React.FC = () => {
         <div className="flex flex-wrap gap-2">
           {Object.keys(performanceData).map((size) => (
             <button
+              type="button"
               key={size}
-              onClick={() => setSelectedDataset(size as any)}
+              onClick={() => setSelectedDataset(size as DatasetSize)}
               className={`px-3 py-1 rounded text-sm transition-all ${
                 selectedDataset === size
                   ? "bg-purple text-white"
@@ -147,8 +148,8 @@ export const ModelEvaluationVisualization: React.FC = () => {
                   paddingAngle={2}
                   dataKey="value"
                 >
-                  {r2Data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  {r2Data.map((entry) => (
+                    <Cell key={entry.name} fill={entry.fill} />
                   ))}
                 </Pie>
                 <Tooltip
@@ -178,7 +179,7 @@ export const ModelEvaluationVisualization: React.FC = () => {
             Normalized Metrics
           </h4>
           <div className="space-y-3">
-            {metricComparison.map((item, index) => (
+            {metricComparison.map((item) => (
               <div key={item.metric}>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-300">{item.metric}</span>

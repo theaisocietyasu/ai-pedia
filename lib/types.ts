@@ -116,6 +116,14 @@ export interface ActionButton {
   link: string;
 }
 
+// Legacy content block shape used by old blog posts (pre-markdown format)
+export interface LegacyContentBlock {
+  heading?: string;
+  content?: string;
+  images?: string[];
+  visualization?: string[];
+}
+
 // New blog post structure matching Ash's schema
 export interface BlogPost {
   _id: string;

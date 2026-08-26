@@ -15,6 +15,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
 }) => {
   const [activeId, setActiveId] = useState<string>("");
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies(headings): re-observe DOM heading elements whenever the headings prop changes, since the rendered heading elements change with it
   useEffect(() => {
     // Track active heading based on scroll position
     const observer = new IntersectionObserver(
@@ -33,10 +34,14 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
 
     // Observe all headings
     const headingElements = document.querySelectorAll("h1[id], h2[id], h3[id]");
-    headingElements.forEach((element) => observer.observe(element));
+    headingElements.forEach((element) => {
+      observer.observe(element);
+    });
 
     return () => {
-      headingElements.forEach((element) => observer.unobserve(element));
+      headingElements.forEach((element) => {
+        observer.unobserve(element);
+      });
     };
   }, [headings]);
 
@@ -61,6 +66,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
     return (
       <div key={heading.id}>
         <button
+          type="button"
           onClick={() => scrollToHeading(heading.id)}
           className={`
             text-sm font-medium transition-colors py-1.5 px-2 text-left w-full
@@ -91,6 +97,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({
 
       {/* Back to Top button */}
       <button
+        type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 mb-2"
       >

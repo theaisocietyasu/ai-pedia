@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ChevronDown, ChevronRight, List } from "lucide-react";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { MarkdownParser } from "@/lib/markdown-parser";
 import type {
   MarkdownRendererProps,
@@ -59,14 +59,17 @@ export function MarkdownRenderer({
           id: item.id,
           element: document.getElementById(item.id),
         }))
-        .filter((item) => item.element);
+        .filter(
+          (item): item is { id: string; element: HTMLElement } =>
+            item.element !== null,
+        );
 
       if (headings.length === 0) return;
 
       // Get viewport position of each heading
       const headingsWithPosition = headings.map((heading) => ({
         id: heading.id,
-        top: heading.element!.getBoundingClientRect().top,
+        top: heading.element.getBoundingClientRect().top,
       }));
 
       // Find headings that have crossed the threshold (are at or above the HEADER_OFFSET)
@@ -95,6 +98,7 @@ export function MarkdownRenderer({
   // Render visualization components
   const renderWithVisualizations = (html: string) => {
     if (!parsedContent?.visualizationIds.length) {
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: required to render parsed markdown HTML
       return <div dangerouslySetInnerHTML={{ __html: html }} />;
     }
 
@@ -111,6 +115,7 @@ export function MarkdownRenderer({
           VISUALIZATION_COMPONENTS[componentId];
 
         return (
+          // biome-ignore lint/suspicious/noArrayIndexKey: parts come from splitting an HTML string and have no stable identity
           <div key={index} className="markdown-visualization my-8">
             {Component ? (
               <Component />
@@ -124,21 +129,12 @@ export function MarkdownRenderer({
         );
       }
 
-      return <div key={index} dangerouslySetInnerHTML={{ __html: part }} />;
+      return (
+        // biome-ignore lint/suspicious/noArrayIndexKey: parts come from splitting an HTML string and have no stable identity
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: required to render parsed markdown HTML
+        <div key={index} dangerouslySetInnerHTML={{ __html: part }} />
+      );
     });
-  };
-
-  // Helper to flatten hierarchical TOC into a flat list
-  const flattenTocItems = (items: TocItem[]): TocItem[] => {
-    const result: TocItem[] = [];
-    const flatten = (item: TocItem) => {
-      result.push(item);
-      if (item.children && item.children.length > 0) {
-        item.children.forEach(flatten);
-      }
-    };
-    items.forEach(flatten);
-    return result;
   };
 
   const scrollToHeading = (id: string) => {
@@ -249,6 +245,7 @@ export function MarkdownRenderer({
       {showTableOfContents && parsedContent.tableOfContents.length > 0 && (
         <div className="md:hidden mb-6">
           <button
+            type="button"
             onClick={() => setTocVisible(!tocVisible)}
             className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10
                        border border-white/10 rounded-lg transition-all duration-300"

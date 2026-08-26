@@ -4,10 +4,11 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import type { LearnModuleUI } from "../categories";
 
 interface CategoryPageClientProps {
   category: string;
-  models: any[];
+  models: LearnModuleUI[];
   categoryDescription: string;
 }
 
@@ -42,6 +43,7 @@ export function CategoryPageClient({
   };
 
   // raf-throttled scroll handler
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally re-runs only when models change; adding activeId/computeClosestId would re-register the scroll listener on every scroll update
   useEffect(() => {
     let ticking = false;
     const onScroll = () => {
@@ -194,6 +196,7 @@ export function CategoryPageClient({
             const isActive = activeId === id;
             return (
               <button
+                type="button"
                 key={id}
                 onClick={() => scrollToCenter(id)}
                 className={`text-sm font-medium transition-colors py-1 px-2 text-left ${

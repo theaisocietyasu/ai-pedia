@@ -74,6 +74,7 @@ export function RoleGuard({ children, fallback }: RoleGuardProps) {
                 "You must have the admin role in the Discord server to access this feature."}
             </p>
             <button
+              type="button"
               onClick={() => router.push("/")}
               className="px-6 py-3 bg-purple/20 hover:bg-purple/30 text-purple-300 rounded-lg border border-purple/30 transition-colors"
             >

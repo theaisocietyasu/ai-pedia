@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import TableOfContents from "@/components/TableOfContents";
 import type { Heading } from "@/lib/markdown-utils";
+import type { ModelData, ModuleContributor } from "../../categories";
 
 interface LearnModuleClientProps {
-  model: any;
+  model: ModelData;
   displayTitle: string;
   headings: Heading[];
 }
@@ -54,7 +55,7 @@ export function LearnModuleClient({
               <hr />
               <h2 className="markdown-heading markdown-h2">Contributors</h2>
               <div className="flex flex-wrap gap-2">
-                {model.contributors.map((contributor: any) => (
+                {model.contributors.map((contributor: ModuleContributor) => (
                   <div
                     key={contributor.id}
                     className="px-3 py-1.5 bg-purple/20 border border-purple/30 rounded-lg text-sm text-white"
@@ -74,9 +75,10 @@ export function LearnModuleClient({
             <div className="grid gap-6">
               {model.images.map((image: string, idx: number) => (
                 <img
+                  // biome-ignore lint/suspicious/noArrayIndexKey: image URLs may repeat; list is static per render
                   key={idx}
                   src={image}
-                  alt={`${displayTitle} image ${idx + 1}`}
+                  alt={`${displayTitle} figure ${idx + 1}`}
                   className="rounded-lg shadow-lg w-full"
                 />
               ))}
@@ -91,6 +93,7 @@ export function LearnModuleClient({
             <div className="space-y-4">
               {model.code_blocks.map((code: string, idx: number) => (
                 <div
+                  // biome-ignore lint/suspicious/noArrayIndexKey: code blocks have no stable id; list is static per render
                   key={idx}
                   className="bg-gray-900 rounded-lg p-4 overflow-x-auto"
                 >
@@ -109,7 +112,8 @@ export function LearnModuleClient({
         <TableOfContents headings={headings} />
 
         {/* Additional navigation items */}
-        {(model.images?.length > 0 || model.code_blocks?.length > 0) && (
+        {((model.images?.length ?? 0) > 0 ||
+          (model.code_blocks?.length ?? 0) > 0) && (
           <>
             <div className="border-t border-gray-700 mt-4 pt-4" />
             <h3 className="font-semibold mb-2 text-gray-200 text-sm uppercase tracking-wide">
@@ -117,6 +121,7 @@ export function LearnModuleClient({
             </h3>
             {model.images && model.images.length > 0 && (
               <button
+                type="button"
                 onClick={() =>
                   document
                     .querySelector("section:nth-of-type(2)")
@@ -129,6 +134,7 @@ export function LearnModuleClient({
             )}
             {model.code_blocks && model.code_blocks.length > 0 && (
               <button
+                type="button"
                 onClick={() =>
                   document
                     .querySelector("section:nth-of-type(3)")

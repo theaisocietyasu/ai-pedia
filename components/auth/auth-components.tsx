@@ -35,7 +35,7 @@ export function SignedOut({ children }: AuthGuardProps) {
 interface SignInButtonProps {
   redirectTo?: string;
   appearance?: {
-    baseTheme?: any;
+    baseTheme?: unknown;
   };
 }
 
@@ -77,6 +77,7 @@ export function SignInButton({ redirectTo = "/" }: SignInButtonProps) {
           </div>
         )}
         <button
+          type="button"
           onClick={handleSignIn}
           disabled={isLoading}
           className="w-full px-6 py-3 bg-[#5865F2] hover:bg-[#4752C4] disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
@@ -89,6 +90,7 @@ export function SignInButton({ redirectTo = "/" }: SignInButtonProps) {
           ) : (
             <>
               <svg
+                aria-hidden="true"
                 width="24"
                 height="24"
                 viewBox="0 0 71 55"

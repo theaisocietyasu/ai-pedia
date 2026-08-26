@@ -1,7 +1,7 @@
 "use client";
 
 import { redirect, useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { ImageUploadButton } from "@/components/ImageUploadButton";
@@ -10,6 +10,26 @@ import { MarkdownUploadForm } from "@/components/MarkdownUploadForm";
 import { VisualizationIndicator } from "@/components/VisualizationIndicator";
 import { deleteLearnModule, fetchModuleBySlug } from "@/lib/api/learn";
 import { useSession } from "@/lib/auth/auth-client";
+
+interface ModuleInitialData {
+  title: string;
+  description: string;
+  categories: string[];
+  actionButtons: { name: string; link: string }[];
+  thumbnail: string;
+  contributors?: {
+    id: string;
+    name: string;
+    email?: string;
+    addedAt?: string;
+  }[];
+}
+
+interface UpdateResult {
+  newSlug?: string;
+  slugChanged?: unknown;
+  [key: string]: unknown;
+}
 
 export default function EditPage() {
   const router = useRouter();
@@ -24,7 +44,9 @@ export default function EditPage() {
   const [markdown, setMarkdown] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [initialData, setInitialData] = useState<any>(null);
+  const [initialData, setInitialData] = useState<ModuleInitialData | null>(
+    null,
+  );
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -35,6 +57,7 @@ export default function EditPage() {
     useState<NodeJS.Timeout | null>(null);
 
   // Acquire lock and load existing module data
+  // biome-ignore lint/correctness/useExhaustiveDependencies: adding hasLock/heartbeatInterval/params would re-run lock acquisition and break the heartbeat lifecycle; must only run when the module or session changes
   useEffect(() => {
     // Don't make API calls until we know the user is authenticated
     if (status === "loading" || !session?.user) {
@@ -142,8 +165,8 @@ export default function EditPage() {
     };
   }, [modelSlug, session, status]);
 
-  const handleUpdateSuccess = async (result: any) => {
-    setUpdateSuccess(result.newSlug);
+  const handleUpdateSuccess = async (result: UpdateResult) => {
+    setUpdateSuccess(result.newSlug ?? null);
 
     // Release the lock
     if (modelSlug && hasLock) {
@@ -236,6 +259,7 @@ export default function EditPage() {
           )}
           <div className="flex gap-3 justify-center">
             <button
+              type="button"
               onClick={() =>
                 router.push(`/learn/${params.category}/${modelSlug}`)
               }
@@ -244,6 +268,7 @@ export default function EditPage() {
               View Module
             </button>
             <button
+              type="button"
               onClick={() => window.location.reload()}
               className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
             >
@@ -262,6 +287,7 @@ export default function EditPage() {
           <div className="text-6xl mb-4">❌</div>
           <div className="text-xl text-red-400 mb-4">{error}</div>
           <button
+            type="button"
             onClick={() => router.push(`/learn/${params.category}`)}
             className="px-6 py-3 bg-purple text-white rounded-lg hover:bg-purple/80 transition-colors"
           >
@@ -288,6 +314,7 @@ export default function EditPage() {
                 <div className="flex items-center gap-4 ml-auto">
                   <div className="flex bg-gray-800 rounded-lg p-1 border border-gray-700">
                     <button
+                      type="button"
                       onClick={() => setMode("preview")}
                       className={`px-4 py-2 text-sm rounded-md transition-colors ${
                         mode === "preview"
@@ -298,6 +325,7 @@ export default function EditPage() {
                       👁️ Preview Mode
                     </button>
                     <button
+                      type="button"
                       onClick={() => setMode("edit")}
                       className={`px-4 py-2 text-sm rounded-md transition-colors ${
                         mode === "edit"
@@ -309,6 +337,7 @@ export default function EditPage() {
                     </button>
                   </div>
                   <button
+                    type="button"
                     onClick={() => setShowDeleteConfirm(true)}
                     className="px-4 py-2 text-sm bg-red-900/30 text-red-400 border border-red-800 rounded-md hover:bg-red-900/50 transition-colors"
                     disabled={isDeleting}
@@ -316,6 +345,7 @@ export default function EditPage() {
                     🗑️ Delete Module
                   </button>
                   <button
+                    type="button"
                     onClick={() =>
                       router.push(`/learn/${params.category}/${modelSlug}`)
                     }
@@ -456,6 +486,7 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                           <VisualizationIndicator content={markdown} />
                         </div>
                         <button
+                          type="button"
                           onClick={() => setMarkdown("")}
                           className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-600 transition-colors"
                         >
@@ -497,7 +528,7 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                         mode="edit"
                         moduleSlug={modelSlug}
                         markdownContent={markdown}
-                        initialData={initialData}
+                        initialData={initialData ?? undefined}
                         onUploadSuccess={() => {}} // Not used in edit mode
                         onUpdateSuccess={handleUpdateSuccess}
                       />
@@ -567,6 +598,7 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
 
                 <div className="flex gap-3">
                   <button
+                    type="button"
                     onClick={() => setShowDeleteConfirm(false)}
                     className="flex-1 px-4 py-3 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors font-medium"
                     disabled={isDeleting}
@@ -574,6 +606,7 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                     Cancel
                   </button>
                   <button
+                    type="button"
                     onClick={() => {
                       setShowDeleteConfirm(false);
                       handleDelete();

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { BookOpen } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BlogsClient } from "@/components/blogs/blogs-client";
 import { GradientText } from "@/components/ui/gradient-text";
 import { getAllBlogs } from "@/lib/blog-data";

@@ -10,7 +10,6 @@ import {
   animationVariants,
   CheckboxControl,
   ControlPanel,
-  generateSampleData,
   SliderControl,
   VisualizationLoading,
 } from "../../shared";
@@ -54,8 +53,8 @@ export const LinearEquationVisualization: React.FC = () => {
         <Line points={linePoints} color="#8b5cf6" lineWidth={3} />
 
         {/* Data points */}
-        {dataPoints.map((point, index) => (
-          <group key={index}>
+        {dataPoints.map((point) => (
+          <group key={point.x}>
             <Sphere position={[point.x, point.y, 0]} args={[0.08]}>
               <meshBasicMaterial color="#ec4899" />
             </Sphere>

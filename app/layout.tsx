@@ -1,13 +1,5 @@
 import type { Metadata } from "next";
-import {
-  Geist_Mono,
-  IBM_Plex_Sans,
-  Inter,
-  Lexend,
-  Noto_Sans,
-  Open_Sans,
-  Source_Sans_3,
-} from "next/font/google";
+import { Geist_Mono, Noto_Sans } from "next/font/google";
 import { NextAuthProvider } from "@/components/auth/NextAuthProvider";
 import { Footer } from "@/components/ui/footer";
 import { Navbar } from "@/components/ui/navbar";
@@ -163,12 +155,14 @@ export default function RootLayout({
       <head>
         <script
           type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data serialized via JSON.stringify, not user HTML
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(organizationSchema),
           }}
         />
         <script
           type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data serialized via JSON.stringify, not user HTML
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
       </head>

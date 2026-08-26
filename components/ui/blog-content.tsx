@@ -19,7 +19,7 @@ export function BlogContent({
   title,
   visualizationComponents = {},
 }: BlogContentProps) {
-  const [tableOfContents, setTableOfContents] = useState<TocItem[]>([]);
+  const [, setTableOfContents] = useState<TocItem[]>([]);
 
   // Safety check for content
   if (!content) {
@@ -75,6 +75,7 @@ export function BlogContent({
 
         return (
           <motion.section
+            // biome-ignore lint/suspicious/noArrayIndexKey: legacy structured content has no stable unique id per section
             key={index}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

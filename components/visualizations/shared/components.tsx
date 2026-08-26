@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import type React from "react";
-import { useState } from "react";
+import { useId, useState } from "react";
 import type {
   ButtonGroupProps,
   CheckboxControlProps,
@@ -22,6 +22,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
     <>
       {/* Mobile Toggle Button */}
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`
           md:hidden fixed top-4 right-4 z-20 p-3 bg-gray-800/90 border border-white/20 
@@ -30,7 +31,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         `}
         aria-label="Toggle controls"
       >
-        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <svg
+          className="w-5 h-5"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
           {isOpen ? (
             <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
           ) : (
@@ -70,7 +76,9 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
 
       {/* Mobile Backdrop */}
       {isOpen && (
-        <div
+        <button
+          type="button"
+          aria-label="Close controls"
           className="md:hidden fixed inset-0 z-5 bg-black/50 backdrop-blur-sm"
           onClick={() => setIsOpen(false)}
         />
@@ -91,13 +99,18 @@ export const SliderControl: React.FC<SliderControlProps> = ({
   onChange,
   unit = "",
 }) => {
+  const sliderId = useId();
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-300">
+      <label
+        htmlFor={sliderId}
+        className="block text-sm font-medium text-gray-300"
+      >
         {label}: {value.toFixed(step < 1 ? 1 : 0)}
         {unit}
       </label>
       <input
+        id={sliderId}
         type="range"
         min={min}
         max={max}
@@ -148,6 +161,7 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
     <div className={`space-y-2 ${className}`}>
       {options.map((option) => (
         <button
+          type="button"
           key={option.key}
           onClick={() => onChange(option.key)}
           className={`w-full text-left p-3 rounded-lg border transition-all ${
@@ -210,6 +224,7 @@ export const VisualizationError: React.FC<{
             className="w-8 h-8 text-red-500"
             fill="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path d={errorContent.icon} />
           </svg>
@@ -242,6 +257,7 @@ export const VisualizationLoading: React.FC<{ message?: string }> = ({
             className="w-8 h-8 text-purple"
             fill="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
           </svg>

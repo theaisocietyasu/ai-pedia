@@ -10,7 +10,7 @@ export interface VisualizationProps {
 export interface ChartData {
   x: number;
   y: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface MetricData {

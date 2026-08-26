@@ -57,33 +57,29 @@ export async function streamImageFromGridFS(fileId: string): Promise<{
 } | null> {
   const bucket = await getGridFSBucket();
 
-  try {
-    // Validate ObjectId
-    if (!ObjectId.isValid(fileId)) {
-      return null;
-    }
-
-    const objectId = new ObjectId(fileId);
-
-    // Get file metadata
-    const files = await bucket.find({ _id: objectId }).toArray();
-    if (files.length === 0) {
-      return null;
-    }
-
-    const file = files[0];
-    const contentType = file.contentType || "application/octet-stream";
-
-    // Create download stream
-    const downloadStream = bucket.openDownloadStream(objectId);
-
-    return {
-      stream: downloadStream,
-      contentType,
-    };
-  } catch (error) {
-    throw error;
+  // Validate ObjectId
+  if (!ObjectId.isValid(fileId)) {
+    return null;
   }
+
+  const objectId = new ObjectId(fileId);
+
+  // Get file metadata
+  const files = await bucket.find({ _id: objectId }).toArray();
+  if (files.length === 0) {
+    return null;
+  }
+
+  const file = files[0];
+  const contentType = file.contentType || "application/octet-stream";
+
+  // Create download stream
+  const downloadStream = bucket.openDownloadStream(objectId);
+
+  return {
+    stream: downloadStream,
+    contentType,
+  };
 }
 
 // Optional: Delete image from GridFS

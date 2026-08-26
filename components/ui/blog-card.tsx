@@ -4,9 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Calendar, Clock, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import type { BlogPost, LegacyBlogPost } from "@/lib/types";
-import { cn } from "@/lib/utils";
 
 interface BlogCardProps {
   blog: LegacyBlogPost | BlogPost;
@@ -14,14 +12,6 @@ interface BlogCardProps {
 }
 
 export function BlogCard({ blog, index = 0 }: BlogCardProps) {
-  const gradients = [
-    "var(--gradient-primary)",
-    "var(--gradient-secondary)",
-    "var(--gradient-accent)",
-  ];
-
-  const cardGradient = gradients[index % gradients.length];
-
   // Handle author field for both legacy and new formats
   const authorName =
     "author" in blog && typeof blog.author === "string"
@@ -211,7 +201,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
 
               {/* tags */}
               <div className="flex flex-wrap gap-2">
-                {tags?.slice(0, 3).map((tag, tagIndex) => (
+                {tags?.slice(0, 3).map((tag) => (
                   <span
                     key={tag}
                     className="inline-flex items-center px-2 py-1 rounded-md text-xs

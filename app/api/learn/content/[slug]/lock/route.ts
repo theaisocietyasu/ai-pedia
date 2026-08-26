@@ -6,7 +6,7 @@ const LOCK_DURATION_MS = 5 * 60 * 1000; // 5 minutes
 const HEARTBEAT_INTERVAL_MS = 30 * 1000; // 30 seconds
 
 export async function POST(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
@@ -97,7 +97,7 @@ export async function POST(
 
 // Check lock status
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
@@ -143,7 +143,7 @@ export async function GET(
 
 // Release lock
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
@@ -196,7 +196,7 @@ export async function DELETE(
 
 // Heartbeat to keep lock alive
 export async function PATCH(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   try {

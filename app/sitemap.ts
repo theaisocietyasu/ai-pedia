@@ -54,7 +54,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const categories = await getCategories();
 
-    for (const [categorySlug, categoryData] of Object.entries(categories)) {
+    for (const [categorySlug] of Object.entries(categories)) {
       // Add category page
       learningPages.push({
         url: `${baseUrl}/learn/${categorySlug}`,

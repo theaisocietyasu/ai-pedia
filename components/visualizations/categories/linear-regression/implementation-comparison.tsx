@@ -13,11 +13,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import {
-  animationVariants,
-  ButtonGroup,
-  generateColorPalette,
-} from "../../shared";
+import { animationVariants, ButtonGroup } from "../../shared";
 
 interface ComparisonData {
   method: string;
@@ -34,10 +30,10 @@ interface MetricConfig {
   lower_better: boolean;
 }
 
+type MetricKey = "mse" | "r2" | "time";
+
 export const RegressionComparisonVisualization: React.FC = () => {
-  const [selectedMetric, setSelectedMetric] = useState<"mse" | "r2" | "time">(
-    "mse",
-  );
+  const [selectedMetric, setSelectedMetric] = useState<MetricKey>("mse");
 
   // Sample comparison data
   const comparisonData: ComparisonData[] = [
@@ -123,7 +119,7 @@ export const RegressionComparisonVisualization: React.FC = () => {
                     color: "#ffffff",
                     fontSize: "14px",
                   }}
-                  formatter={(value, name) => [
+                  formatter={(value) => [
                     `${value}${metrics[selectedMetric].unit}`,
                     metrics[selectedMetric].label,
                   ]}
@@ -133,8 +129,8 @@ export const RegressionComparisonVisualization: React.FC = () => {
                   fill={comparisonData[0].color}
                   radius={[4, 4, 0, 0]}
                 >
-                  {comparisonData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  {comparisonData.map((entry) => (
+                    <Cell key={entry.method} fill={entry.color} />
                   ))}
                 </Bar>
               </BarChart>
@@ -152,8 +148,9 @@ export const RegressionComparisonVisualization: React.FC = () => {
           <div className="lg:hidden grid grid-cols-3 gap-2 mb-4">
             {metricOptions.map((option) => (
               <button
+                type="button"
                 key={option.key}
-                onClick={() => setSelectedMetric(option.key as any)}
+                onClick={() => setSelectedMetric(option.key as MetricKey)}
                 className={`text-center p-2 rounded-lg border transition-all text-xs ${
                   selectedMetric === option.key
                     ? "bg-purple/20 border-purple text-white"
@@ -173,7 +170,7 @@ export const RegressionComparisonVisualization: React.FC = () => {
             <ButtonGroup
               options={metricOptions}
               selected={selectedMetric}
-              onChange={(key) => setSelectedMetric(key as any)}
+              onChange={(key) => setSelectedMetric(key as MetricKey)}
             />
           </div>
 

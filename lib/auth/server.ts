@@ -52,7 +52,7 @@ export async function requireAuth() {
 export async function requireAuthWithRole() {
   const session = await requireAuth();
 
-  const discordUserId = (session.user as any).discordId;
+  const discordUserId = session.user.discordId;
 
   if (!discordUserId) {
     throw new AuthError("Unable to verify Discord account", 401);

@@ -1,6 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { RoleGuard } from "@/components/auth/RoleGuard";
 import { ImageUploadButton } from "@/components/ImageUploadButton";
@@ -9,7 +8,6 @@ import { MarkdownUploadForm } from "@/components/MarkdownUploadForm";
 import { VisualizationIndicator } from "@/components/VisualizationIndicator";
 
 export default function TestPage() {
-  const router = useRouter();
   const [mode, setMode] = useState<"preview" | "upload">("preview");
   const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
 
@@ -206,6 +204,7 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
                 <div className="flex items-center gap-4 ml-auto">
                   <div className="flex bg-gray-800 rounded-lg p-1 border border-gray-700">
                     <button
+                      type="button"
                       onClick={() => setMode("preview")}
                       className={`px-4 py-2 text-sm rounded-md transition-colors ${
                         mode === "preview"
@@ -216,6 +215,7 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
                       👁️ Preview Mode
                     </button>
                     <button
+                      type="button"
                       onClick={() => setMode("upload")}
                       className={`px-4 py-2 text-sm rounded-md transition-colors ${
                         mode === "upload"
@@ -347,12 +347,14 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
                         </div>
                         <div className="flex items-center space-x-2">
                           <button
+                            type="button"
                             onClick={() => setMarkdown(initialMarkdown)}
                             className="px-3 py-1 text-xs bg-purple/20 text-purple-300 rounded border border-purple/30 hover:bg-purple/30 transition-colors"
                           >
                             🔄 Reset Example
                           </button>
                           <button
+                            type="button"
                             onClick={() => setMarkdown("")}
                             className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-600 transition-colors"
                           >

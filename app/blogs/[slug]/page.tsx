@@ -1,6 +1,5 @@
 import {
   ArrowLeft,
-  BookOpen,
   Calendar,
   ChevronRight,
   Clock,
@@ -11,7 +10,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import React from "react";
 import { BlogCard } from "@/components/ui/blog-card";
 import { BlogContent } from "@/components/ui/blog-content";
 import { GradientText } from "@/components/ui/gradient-text";
@@ -82,7 +80,7 @@ export async function generateMetadata({
         canonical: `${baseUrl}/blogs/${slug}`,
       },
     };
-  } catch (error) {
+  } catch {
     return {
       title: "Blog Not Found",
       description: "The requested blog post could not be found.",
@@ -170,10 +168,12 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
     <main className="min-h-screen bg-background">
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data serialized via JSON.stringify, not user HTML
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data serialized via JSON.stringify, not user HTML
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       {/* back navigation */}
@@ -272,6 +272,7 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
           {/* share button */}
           <div className="flex items-center gap-4 pb-8 border-b border-white/10">
             <button
+              type="button"
               className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10
                               text-light-gray hover:text-white border border-white/10 rounded-lg
                               transition-all duration-300"

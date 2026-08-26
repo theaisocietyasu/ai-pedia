@@ -151,7 +151,7 @@ export const generateColorPalette = (count: number): string[] => {
 /**
  * Debounce function for performance optimization
  */
-export const debounce = <T extends (...args: any[]) => void>(
+export const debounce = <T extends (...args: never[]) => void>(
   func: T,
   wait: number,
 ): ((...args: Parameters<T>) => void) => {
@@ -244,9 +244,9 @@ export const responsiveUtils = {
  * Hook to detect mobile screen size
  */
 export const useIsMobile = () => {
-  if (typeof window === "undefined") return false;
-
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.innerWidth < 768,
+  );
 
   useEffect(() => {
     const handleResize = () => {

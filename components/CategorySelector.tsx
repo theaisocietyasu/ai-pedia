@@ -231,12 +231,16 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
 
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
-      <label className="block text-sm font-medium text-gray-300 mb-2">
+      <label
+        htmlFor="category-dropdown"
+        className="block text-sm font-medium text-gray-300 mb-2"
+      >
         Categories *
       </label>
 
       {/* Dropdown Button */}
       <button
+        id="category-dropdown"
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="w-full p-3 border border-gray-600 rounded-lg bg-gray-800 text-left text-gray-300 hover:border-gray-500 focus:outline-none focus:border-purple transition-colors"
@@ -248,6 +252,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
               : `${selectedCategories.length} selected`}
           </span>
           <svg
+            aria-hidden="true"
             className={`w-5 h-5 transition-transform ${isOpen ? "rotate-180" : ""}`}
             fill="none"
             stroke="currentColor"
@@ -294,10 +299,19 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
       {isOpen && (
         <div className="absolute z-10 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
           {categories.map((category) => (
+            // biome-ignore lint/a11y/useSemanticElements: a native <button> cannot contain the nested checkbox input
             <div
               key={category._id}
+              role="button"
+              tabIndex={0}
               className="p-3 hover:bg-gray-700 cursor-pointer border-b border-gray-700"
               onClick={() => handleCategoryToggle(category.name)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleCategoryToggle(category.name);
+                }
+              }}
             >
               <div className="flex items-center justify-between">
                 <div className="flex-1">
@@ -323,15 +337,16 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
           ))}
 
           {/* Create New Category Button */}
-          <div
-            className="p-3 hover:bg-gray-700 cursor-pointer bg-gray-800/80 border-t-2 border-purple/30"
+          <button
+            type="button"
+            className="w-full text-left p-3 hover:bg-gray-700 cursor-pointer bg-gray-800/80 border-t-2 border-purple/30"
             onClick={handleOpenCreateModal}
           >
             <div className="flex items-center gap-2 text-purple-300">
               <span className="text-xl">+</span>
               <span className="font-medium">Create New Category</span>
             </div>
-          </div>
+          </button>
         </div>
       )}
 
@@ -351,10 +366,14 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
             <div className="space-y-4">
               {/* Name Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label
+                  htmlFor="category-name"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                >
                   Category Name *
                 </label>
                 <input
+                  id="category-name"
                   type="text"
                   value={newCategoryData.name}
                   onChange={(e) =>
@@ -366,16 +385,21 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
                   onKeyDown={handleKeyDown}
                   className="w-full p-3 border border-gray-600 rounded-lg bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-purple transition-colors"
                   placeholder="e.g., Deep Learning"
+                  // biome-ignore lint/a11y/noAutofocus: focusing the first field when the modal opens is expected modal behavior
                   autoFocus
                 />
               </div>
 
               {/* Description Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label
+                  htmlFor="category-description"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                >
                   Description *
                 </label>
                 <textarea
+                  id="category-description"
                   value={newCategoryData.description}
                   onChange={(e) =>
                     setNewCategoryData((prev) => ({
@@ -391,12 +415,16 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
 
               {/* Image Upload Field */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label
+                  htmlFor="category-image"
+                  className="block text-sm font-medium text-gray-300 mb-2"
+                >
                   Category Image *
                 </label>
                 <div className="flex items-start gap-4">
                   <div className="flex-1">
                     <input
+                      id="category-image"
                       ref={imageInputRef}
                       type="file"
                       accept="image/*"

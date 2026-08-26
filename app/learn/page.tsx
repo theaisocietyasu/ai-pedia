@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { desc } from "framer-motion/client";
 import { ArrowLeft, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -9,10 +8,12 @@ import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { GradientText } from "@/components/ui/gradient-text";
 
-import { getCategories } from "./categories";
+import { getCategories, type LearnCategoryUI } from "./categories";
 
 export default function LearnPage() {
-  const [categories, setCategories] = useState<Record<string, any>>({});
+  const [categories, setCategories] = useState<Record<string, LearnCategoryUI>>(
+    {},
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -150,6 +151,7 @@ export default function LearnPage() {
         {loading
           ? // Show skeleton cards while loading
             Array.from({ length: 3 }).map((_, i) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: fixed-length static skeleton placeholders
               <SkeletonCard key={i} index={i} />
             ))
           : // Show actual categories when loaded
@@ -162,7 +164,7 @@ export default function LearnPage() {
                 <Link href={`/learn/${key}`} className="block">
                   <div className="glass-effect rounded-2xl p-6 hover-glow cursor-pointer transition-all duration-300 border border-purple/20 hover:border-purple/40">
                     <h2 className="text-2xl sm:text-3xl font-semibold mb-4 capitalize gradient-text">
-                      {key.replace("-", " ") + " Learning"}
+                      {`${key.replace("-", " ")} Learning`}
                     </h2>
                     <div className="text-base sm:text-lg text-light-gray/80">
                       <ReactMarkdown>

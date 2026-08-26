@@ -1,18 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronDown, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { GradientText } from "@/components/ui/gradient-text";
 import { heroContent } from "@/lib/constants";
 
 export function HeroSection() {
-  const scrollToNext = () => {
-    const element = document.getElementById("features");
-    element?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <section className="relative min-h-screen w-full flex items-start justify-center overflow-hidden pt-40 pb-16 bg-background">
       {/* animated background */}

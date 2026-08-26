@@ -62,7 +62,6 @@ export const VISUALIZATION_COMPONENTS: Record<string, React.ComponentType> = {
  */
 export const Visualization: React.FC<VisualizationProps> = ({
   componentId,
-  fallbackTitle = "Interactive Visualization",
 }) => {
   // Safety check for component ID
   if (!componentId || typeof componentId !== "string") {

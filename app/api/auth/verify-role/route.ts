@@ -18,7 +18,7 @@ export async function GET() {
     }
 
     // Check Discord role
-    const discordUserId = (session.user as any).discordId;
+    const discordUserId = session.user.discordId;
 
     if (!discordUserId) {
       return NextResponse.json(

@@ -61,7 +61,10 @@ export const mongoConnection = {
     if (!client) {
       await getConnection();
     }
-    return client!;
+    if (!client) {
+      throw new Error("MongoDB client failed to initialize.");
+    }
+    return client;
   },
 };
 

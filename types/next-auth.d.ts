@@ -6,6 +6,11 @@ declare module "next-auth" {
       discordId?: string;
     } & DefaultSession["user"];
   }
+
+  interface Profile {
+    /** Discord user ID returned by the Discord OAuth profile. */
+    id?: string;
+  }
 }
 
 declare module "next-auth/jwt" {

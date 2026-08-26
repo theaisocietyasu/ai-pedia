@@ -2,16 +2,10 @@ import { NextResponse } from "next/server";
 import { mongoConnection } from "@/lib/db/client";
 import { slugifyCategory } from "@/lib/slug";
 
-const MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost:27017/ml-visualization";
-const LEARN_COLLECTION = process.env.LEARN_COLLECTION_NAME || "learn_content";
-
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ category: string }> },
 ) {
-  let client;
-
   try {
     const { category } = await params;
 

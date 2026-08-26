@@ -33,7 +33,9 @@ async function fetchGuildMemberRoles(
   const guildId = process.env.DISCORD_GUILD_ID;
 
   if (!botToken || !guildId) {
-    console.error("Discord role verification is not configured. Missing environment variables.");
+    console.error(
+      "Discord role verification is not configured. Missing environment variables.",
+    );
     return null;
   }
 
@@ -61,7 +63,9 @@ async function fetchGuildMemberRoles(
         });
         return [];
       }
-      console.error(`Discord API error: ${response.status} ${response.statusText}`);
+      console.error(
+        `Discord API error: ${response.status} ${response.statusText}`,
+      );
       return null;
     }
 
@@ -87,12 +91,14 @@ export async function hasRequiredDiscordRole(
   const requiredRoleId = process.env.ADMIN_ROLE_ID;
 
   if (!requiredRoleId) {
-    console.error("Discord role verification is not configured. Missing ADMIN_ROLE_ID.");
+    console.error(
+      "Discord role verification is not configured. Missing ADMIN_ROLE_ID.",
+    );
     return false;
   }
 
   const roles = await fetchGuildMemberRoles(discordUserId);
-  return roles !== null && roles.includes(requiredRoleId);
+  return roles?.includes(requiredRoleId) ?? false;
 }
 
 /**

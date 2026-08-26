@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import React from "react";
-import { getCategories, getModulesForCategory } from "../categories";
+import {
+  getCategories,
+  getModulesForCategory,
+  type LearnModuleUI,
+} from "../categories";
 import { CategoryPageClient } from "./CategoryPageClient";
 
 const baseUrl =
@@ -98,7 +101,7 @@ export async function generateMetadata({
 async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = await params;
 
-  let models: any[] = [];
+  let models: LearnModuleUI[] = [];
   let categoryDescription: string = "";
 
   try {
@@ -112,7 +115,7 @@ async function CategoryPage({ params }: CategoryPageProps) {
 
     // Get the description for this specific category
     const categoryData = categoriesData[category];
-    if (categoryData && categoryData.description) {
+    if (categoryData?.description) {
       categoryDescription = categoryData.description;
     }
 
@@ -181,10 +184,12 @@ async function CategoryPage({ params }: CategoryPageProps) {
     <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data serialized via JSON.stringify, not user HTML
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
       />
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data serialized via JSON.stringify, not user HTML
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 

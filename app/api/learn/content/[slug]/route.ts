@@ -1,16 +1,12 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
-import {
-  authErrorResponse,
-  getServerSession,
-  requireAuthWithRole,
-} from "@/lib/auth/server";
+import { authErrorResponse, requireAuthWithRole } from "@/lib/auth/server";
 import { mongoConnection } from "@/lib/db/client";
 import { uploadImageToGridFS } from "@/lib/db/gridfs";
 import { generateLearnModuleSlug, slugifyCategory } from "@/lib/slug";
 
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   try {
@@ -111,7 +107,7 @@ export async function PUT(
       if (!Array.isArray(categories) || categories.length === 0) {
         throw new Error("Categories must be a non-empty array");
       }
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         { error: "Invalid categories format" },
         { status: 400 },
@@ -123,7 +119,7 @@ export async function PUT(
     if (actionButtonsString) {
       try {
         actionButtons = JSON.parse(actionButtonsString);
-      } catch (error) {
+      } catch {
         return NextResponse.json(
           { error: "Invalid action buttons format" },
           { status: 400 },
@@ -192,7 +188,7 @@ export async function PUT(
       const arrayBuffer = await thumbnailFile.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
 
-      const { fileId, url } = await uploadImageToGridFS(
+      const { url } = await uploadImageToGridFS(
         buffer,
         thumbnailFile.name,
         thumbnailFile.type,
@@ -210,7 +206,7 @@ export async function PUT(
     // Check if current user is already a contributor
     const existingContributors = existingModule.contributors || [];
     const isContributor = existingContributors.some(
-      (c: any) => c.id === userId,
+      (c: { id: string }) => c.id === userId,
     );
 
     let contributors = existingContributors;
@@ -291,7 +287,7 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   try {

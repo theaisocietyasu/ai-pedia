@@ -1,9 +1,7 @@
 "use client";
 
-import { useFrame } from "@react-three/fiber";
 import { motion } from "framer-motion";
 import type React from "react";
-import { useRef } from "react";
 import { animationVariants } from "../../shared";
 
 export const NeuralNetworkDemo: React.FC = () => {

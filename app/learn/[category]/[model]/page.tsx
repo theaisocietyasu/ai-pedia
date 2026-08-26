@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import React from "react";
 import ReactMarkdown from "react-markdown";
 import { SignedIn } from "@/components/auth/auth-components";
 import { extractHeadings } from "@/lib/markdown-utils";
-import { getModelData } from "../../categories";
+import { getModelData, type ModelData } from "../../categories";
 import { EditButton } from "./EditButton";
 import { LearnModuleClient } from "./LearnModuleClient";
 
@@ -33,9 +32,7 @@ export async function generateMetadata({
       };
     }
 
-    // Extract keywords from content (first 10 words from headings or content)
-    const contentPreview =
-      modelData.content?.substring(0, 200) || modelData.description;
+    // Extract keywords from the title and category
     const keywords = modelData.title.split(" ").concat(category.split("-"));
 
     return {
@@ -84,7 +81,7 @@ export async function generateMetadata({
 async function LearnModulePage({ params }: LearnModulePageProps) {
   const { category, model: modelSlug } = await params;
 
-  let model: any = null;
+  let model: ModelData | null = null;
 
   try {
     console.log("Fetching model data for slug:", modelSlug);
@@ -94,6 +91,10 @@ async function LearnModulePage({ params }: LearnModulePageProps) {
     }
   } catch (error) {
     console.error("Error fetching model data:", error);
+    notFound();
+  }
+
+  if (!model) {
     notFound();
   }
 
@@ -165,12 +166,14 @@ async function LearnModulePage({ params }: LearnModulePageProps) {
     <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data serialized via JSON.stringify, not user HTML
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(learningResourceSchema),
         }}
       />
       <script
         type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data serialized via JSON.stringify, not user HTML
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
