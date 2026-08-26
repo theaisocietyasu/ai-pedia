@@ -1,161 +1,165 @@
-"use client"
+"use client";
 
-import React, { useState, useRef, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Search, ChevronRight } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { cn } from "@/lib/utils"
-import { navItems } from "@/lib/constants"
-import { fetchAllCategories, fetchModulesByCategory } from "@/lib/api"
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronRight, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import { fetchAllCategories, fetchModulesByCategory } from "@/lib/api/learn";
+import { navItems } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 interface SearchResult {
-  title: string
-  description?: string
-  path: string
-  type: "page" | "category" | "model"
-  category?: string
+  title: string;
+  description?: string;
+  path: string;
+  type: "page" | "category" | "model";
+  category?: string;
 }
 
 interface SearchDropdownProps {
-  isMobile?: boolean
-  onClose?: () => void
+  isMobile?: boolean;
+  onClose?: () => void;
 }
 
 export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
-  const [query, setQuery] = useState("")
-  const [isOpen, setIsOpen] = useState(false)
-  const [results, setResults] = useState<SearchResult[]>([])
-  const [selectedIndex, setSelectedIndex] = useState(-1)
-  const [searchableData, setSearchableData] = useState<SearchResult[]>([])
-  const router = useRouter()
-  const inputRef = useRef<HTMLInputElement>(null)
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  const [query, setQuery] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [searchableData, setSearchableData] = useState<SearchResult[]>([]);
+  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Fetch searchable data from MongoDB
   useEffect(() => {
     const loadSearchableData = async () => {
       try {
-        const data: SearchResult[] = []
+        const data: SearchResult[] = [];
 
         // Add main navigation pages
-        navItems.forEach(item => {
+        navItems.forEach((item) => {
           data.push({
             title: item.name,
             description: item.description,
             path: item.link,
-            type: "page"
-          })
-        })
+            type: "page",
+          });
+        });
 
         // Fetch categories from MongoDB
-        const categories = await fetchAllCategories()
+        const categories = await fetchAllCategories();
 
         // Process each category
         for (const category of categories) {
-          const categorySlug = category.name.toLowerCase().replace(/\s+/g, '-')
+          const categorySlug = category.name.toLowerCase().replace(/\s+/g, "-");
 
           // Add category itself
           data.push({
             title: category.name,
             description: category.description,
             path: `/learn/${categorySlug}`,
-            type: "category"
-          })
+            type: "category",
+          });
 
           // Fetch modules for this category
           try {
-            const modules = await fetchModulesByCategory(categorySlug)
+            const modules = await fetchModulesByCategory(categorySlug);
 
             // Add each module
-            modules.forEach(module => {
+            modules.forEach((module) => {
               data.push({
                 title: module.title,
                 description: module.description,
                 path: `/learn/${categorySlug}/${module.slug}`,
                 type: "model",
-                category: category.name
-              })
-            })
+                category: category.name,
+              });
+            });
           } catch (error) {
-            console.error(`Error loading modules for ${categorySlug}:`, error)
+            console.error(`Error loading modules for ${categorySlug}:`, error);
           }
         }
 
-        setSearchableData(data)
+        setSearchableData(data);
       } catch (error) {
-        console.error('Error loading search data:', error)
+        console.error("Error loading search data:", error);
 
         // Fallback to just nav items if MongoDB fails
-        const fallbackData: SearchResult[] = navItems.map(item => ({
+        const fallbackData: SearchResult[] = navItems.map((item) => ({
           title: item.name,
           description: item.description,
           path: item.link,
-          type: "page"
-        }))
-        setSearchableData(fallbackData)
+          type: "page",
+        }));
+        setSearchableData(fallbackData);
       }
-    }
+    };
 
-    loadSearchableData()
-  }, [])
+    loadSearchableData();
+  }, []);
 
   // Search function
   const searchContent = (searchQuery: string): SearchResult[] => {
-    if (!searchQuery.trim()) return []
+    if (!searchQuery.trim()) return [];
 
-    const query = searchQuery.toLowerCase()
-    return searchableData.filter(item => 
-      item.title.toLowerCase().includes(query) ||
-      item.description?.toLowerCase().includes(query) ||
-      item.category?.toLowerCase().includes(query)
-    ).slice(0, 8) // Limit to 8 results
-  }
+    const query = searchQuery.toLowerCase();
+    return searchableData
+      .filter(
+        (item) =>
+          item.title.toLowerCase().includes(query) ||
+          item.description?.toLowerCase().includes(query) ||
+          item.category?.toLowerCase().includes(query),
+      )
+      .slice(0, 8); // Limit to 8 results
+  };
 
   // Handle input change
   useEffect(() => {
-    const searchResults = searchContent(query)
-    setResults(searchResults)
-    setSelectedIndex(-1)
-    setIsOpen(searchResults.length > 0 && query.trim().length > 0)
-  }, [query, searchableData])
+    const searchResults = searchContent(query);
+    setResults(searchResults);
+    setSelectedIndex(-1);
+    setIsOpen(searchResults.length > 0 && query.trim().length > 0);
+  }, [query, searchableData]);
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!isOpen) return
+    if (!isOpen) return;
 
     switch (e.key) {
       case "ArrowDown":
-        e.preventDefault()
-        setSelectedIndex(prev => 
-          prev < results.length - 1 ? prev + 1 : prev
-        )
-        break
+        e.preventDefault();
+        setSelectedIndex((prev) =>
+          prev < results.length - 1 ? prev + 1 : prev,
+        );
+        break;
       case "ArrowUp":
-        e.preventDefault()
-        setSelectedIndex(prev => prev > 0 ? prev - 1 : -1)
-        break
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
+        break;
       case "Enter":
-        e.preventDefault()
+        e.preventDefault();
         if (selectedIndex >= 0 && results[selectedIndex]) {
-          handleResultClick(results[selectedIndex])
+          handleResultClick(results[selectedIndex]);
         }
-        break
+        break;
       case "Escape":
-        setIsOpen(false)
-        setSelectedIndex(-1)
-        inputRef.current?.blur()
-        break
+        setIsOpen(false);
+        setSelectedIndex(-1);
+        inputRef.current?.blur();
+        break;
     }
-  }
+  };
 
   // Handle result click
   const handleResultClick = (result: SearchResult) => {
-    router.push(result.path)
-    setQuery("")
-    setIsOpen(false)
-    setSelectedIndex(-1)
-    onClose?.()
-  }
+    router.push(result.path);
+    setQuery("");
+    setIsOpen(false);
+    setSelectedIndex(-1);
+    onClose?.();
+  };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -166,33 +170,38 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
         inputRef.current &&
         !inputRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false)
-        setSelectedIndex(-1)
+        setIsOpen(false);
+        setSelectedIndex(-1);
       }
-    }
+    };
 
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Get result type badge
   const getTypeBadge = (type: string) => {
     const badges = {
       page: { label: "Page", color: "bg-blue-500/20 text-blue-300" },
-      category: { label: "Category", color: "bg-purple-500/20 text-purple-300" },
-      model: { label: "Model", color: "bg-pink-500/20 text-pink-300" }
-    }
-    
-    const badge = badges[type as keyof typeof badges]
+      category: {
+        label: "Category",
+        color: "bg-purple-500/20 text-purple-300",
+      },
+      model: { label: "Model", color: "bg-pink-500/20 text-pink-300" },
+    };
+
+    const badge = badges[type as keyof typeof badges];
     return (
-      <span className={cn(
-        "px-2 py-1 rounded-full text-xs font-medium",
-        badge.color
-      )}>
+      <span
+        className={cn(
+          "px-2 py-1 rounded-full text-xs font-medium",
+          badge.color,
+        )}
+      >
         {badge.label}
       </span>
-    )
-  }
+    );
+  };
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -207,7 +216,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
           onKeyDown={handleKeyDown}
           onFocus={() => {
             if (query.trim() && results.length > 0) {
-              setIsOpen(true)
+              setIsOpen(true);
             }
           }}
           className={cn(
@@ -216,7 +225,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
             "text-white placeholder-light-gray/60",
             "focus:outline-none focus:ring-2 focus:ring-purple/50 focus:border-transparent",
             "transition-all duration-300",
-            isMobile ? "w-full py-3" : "w-64"
+            isMobile ? "w-full py-3" : "w-64",
           )}
         />
       </div>
@@ -232,7 +241,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
             className={cn(
               "absolute top-full left-0 right-0 mt-2 z-50",
               "bg-dark-gray/95 backdrop-blur-xl border border-white/10 rounded-lg shadow-xl",
-              "max-h-96 overflow-y-auto"
+              "max-h-96 overflow-y-auto",
             )}
           >
             <div className="p-2">
@@ -247,7 +256,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
                     "flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all duration-200",
                     selectedIndex === index
                       ? "bg-purple/20 text-white"
-                      : "hover:bg-white/5 text-light-gray"
+                      : "hover:bg-white/5 text-light-gray",
                   )}
                 >
                   <div className="flex-1 min-w-0">
@@ -256,12 +265,14 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
                       {getTypeBadge(result.type)}
                     </div>
                     {result.description && (
-                      <p className="text-xs text-light-gray/60 overflow-hidden text-ellipsis line-clamp-2" 
-                         style={{
-                           display: '-webkit-box',
-                           WebkitLineClamp: 2,
-                           WebkitBoxOrient: 'vertical'
-                         }}>
+                      <p
+                        className="text-xs text-light-gray/60 overflow-hidden text-ellipsis line-clamp-2"
+                        style={{
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                        }}
+                      >
                         {result.description}
                       </p>
                     )}
@@ -271,7 +282,10 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
                       </p>
                     )}
                   </div>
-                  <ChevronRight size={16} className="text-light-gray/40 ml-2 flex-shrink-0" />
+                  <ChevronRight
+                    size={16}
+                    className="text-light-gray/40 ml-2 flex-shrink-0"
+                  />
                 </motion.div>
               ))}
             </div>
@@ -288,7 +302,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
             exit={{ opacity: 0, y: -10 }}
             className={cn(
               "absolute top-full left-0 right-0 mt-2 z-50",
-              "bg-dark-gray/95 backdrop-blur-xl border border-white/10 rounded-lg shadow-xl"
+              "bg-dark-gray/95 backdrop-blur-xl border border-white/10 rounded-lg shadow-xl",
             )}
           >
             <div className="p-4 text-center text-light-gray/60">
@@ -299,5 +313,5 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
         )}
       </AnimatePresence>
     </div>
-  )
+  );
 }

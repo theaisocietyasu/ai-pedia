@@ -1,12 +1,14 @@
-import { Metadata } from "next"
-import { HeroSection } from "@/components/home/hero-section"
-import { FeaturesGrid } from "@/components/home/features-grid"
+import type { Metadata } from "next";
+import { FeaturesGrid } from "@/components/home/features-grid";
+import { HeroSection } from "@/components/home/hero-section";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aipedia.ais-asu.com/'
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://aipedia.ais-asu.com/";
 
 export const metadata: Metadata = {
   title: "Home",
-  description: "Master artificial intelligence through interactive visualizations and hands-on projects. Learn ML, Deep Learning, Computer Vision, and NLP with The AI Society at ASU.",
+  description:
+    "Master artificial intelligence through interactive visualizations and hands-on projects. Learn ML, Deep Learning, Computer Vision, and NLP with The AI Society at ASU.",
   keywords: [
     "AI learning platform",
     "machine learning tutorials",
@@ -16,11 +18,12 @@ export const metadata: Metadata = {
     "AI education",
     "deep learning courses",
     "computer vision tutorials",
-    "NLP learning"
+    "NLP learning",
   ],
   openGraph: {
     title: "AI Pedia | Interactive AI Learning Platform",
-    description: "Master artificial intelligence through interactive visualizations and hands-on projects. Learn ML, Deep Learning, Computer Vision, and NLP.",
+    description:
+      "Master artificial intelligence through interactive visualizations and hands-on projects. Learn ML, Deep Learning, Computer Vision, and NLP.",
     url: baseUrl,
     type: "website",
     images: [
@@ -28,20 +31,21 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "AI Pedia - Interactive AI Learning Platform"
-      }
-    ]
+        alt: "AI Pedia - Interactive AI Learning Platform",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "AI Pedia | Interactive AI Learning Platform",
-    description: "Master artificial intelligence through interactive visualizations and hands-on projects.",
-    images: ["/og-image.png"]
+    description:
+      "Master artificial intelligence through interactive visualizations and hands-on projects.",
+    images: ["/og-image.png"],
   },
   alternates: {
-    canonical: baseUrl
-  }
-}
+    canonical: baseUrl,
+  },
+};
 
 export default function Home() {
   return (

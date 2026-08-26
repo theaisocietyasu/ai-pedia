@@ -1,35 +1,41 @@
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkMath from 'remark-math';
-import remarkGfm from 'remark-gfm';
-import rehypeKatex from 'rehype-katex';
-import rehypeSlug from 'rehype-slug';
-import rehypeRaw from 'rehype-raw';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { slugifyHeading } from '@/lib/slug';
-import { LazyVisualization } from './visualizations/LazyVisualization';
+import type React from "react";
+import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
+import rehypeSlug from "rehype-slug";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import { slugifyHeading } from "@/lib/slug";
+import { LazyVisualization } from "./visualizations/LazyVisualization";
 
 interface MarkdownRendererProps {
   content: string;
   className?: string;
 }
 
-const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className = '' }) => {
+const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
+  content,
+  className = "",
+}) => {
   // Process escaped HTML div tags for visualizations
-  let processedContent = content
+  const processedContent = content
     // Handle escaped div tags: \<div ...\> to <div ...>
-    .replace(/\\<div\s+id="(VZ-[^"]*)"([^>]*)\\><\/div\\>/g, '<div id="$1"$2></div>')
+    .replace(
+      /\\<div\s+id="(VZ-[^"]*)"([^>]*)\\><\/div\\>/g,
+      '<div id="$1"$2></div>',
+    )
     // Handle already unescaped div tags (just in case)
     .replace(/<div\s+id="(VZ-[^"]*)"([^>]*?)><\/div>/g, '<div id="$1"$2></div>')
     // Handle self-closing escaped div tags: \<div .../\>
     .replace(/\\<div\s+id="(VZ-[^"]*)"([^>]*)\/\\>/g, '<div id="$1"$2></div>');
 
   // Debug logging (only in development)
-  if (process.env.NODE_ENV === 'development' && content !== processedContent) {
-    console.log('MarkdownRenderer: Processed escaped HTML divs');
-    console.log('Original:', content.substring(0, 200) + '...');
-    console.log('Processed:', processedContent.substring(0, 200) + '...');
+  if (process.env.NODE_ENV === "development" && content !== processedContent) {
+    console.log("MarkdownRenderer: Processed escaped HTML divs");
+    console.log("Original:", content.substring(0, 200) + "...");
+    console.log("Processed:", processedContent.substring(0, 200) + "...");
   }
 
   return (
@@ -74,12 +80,13 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
             </p>
           ),
           a: ({ children, href, ...props }: any) => {
-            const isExternal = href?.startsWith('http') || href?.startsWith('https');
+            const isExternal =
+              href?.startsWith("http") || href?.startsWith("https");
             return (
               <a
                 href={href}
-                target={isExternal ? '_blank' : undefined}
-                rel={isExternal ? 'noopener noreferrer' : undefined}
+                target={isExternal ? "_blank" : undefined}
+                rel={isExternal ? "noopener noreferrer" : undefined}
                 className="markdown-link"
                 {...props}
               >
@@ -88,16 +95,21 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
             );
           },
           img: ({ src, alt, ...props }: any) => (
-            <img src={src || ''} alt={alt || ''} className="markdown-image" {...props} />
+            <img
+              src={src || ""}
+              alt={alt || ""}
+              className="markdown-image"
+              {...props}
+            />
           ),
           code: ({ inline, className, children, ...props }: any) => {
-            const match = /language-(\w+)/.exec(className || '');
-            const language = match ? match[1] : '';
-            
+            const match = /language-(\w+)/.exec(className || "");
+            const language = match ? match[1] : "";
+
             if (!inline && language) {
               // Convert children to string properly
-              const code = String(children).replace(/\n$/, '');
-              
+              const code = String(children).replace(/\n$/, "");
+
               return (
                 <div className="markdown-code-block" data-language={language}>
                   <SyntaxHighlighter
@@ -106,15 +118,16 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
                     showLineNumbers={true}
                     customStyle={{
                       margin: 0,
-                      borderRadius: '8px',
-                      background: 'rgba(17, 24, 39, 0.8)', // Dark background with transparency
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: "8px",
+                      background: "rgba(17, 24, 39, 0.8)", // Dark background with transparency
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
                     }}
                     codeTagProps={{
                       style: {
-                        fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
-                        fontSize: '14px',
-                      }
+                        fontFamily:
+                          'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
+                        fontSize: "14px",
+                      },
                     }}
                   >
                     {code}
@@ -122,7 +135,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
                 </div>
               );
             }
-            
+
             return (
               <code className="markdown-inline-code" {...props}>
                 {children}
@@ -143,21 +156,29 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, className 
             </em>
           ),
           table: ({ children, ...props }) => (
-            <div style={{ overflowX: 'auto' }}>
+            <div style={{ overflowX: "auto" }}>
               <table {...props}>{children}</table>
             </div>
           ),
           div: ({ node, className, children, ...props }: any) => {
             const id = props.id;
-            if (id && id.startsWith('VZ-')) {
-              const placeholder = props['data-placeholder'] || 'Interactive Visualization';
+            if (id && id.startsWith("VZ-")) {
+              const placeholder =
+                props["data-placeholder"] || "Interactive Visualization";
               return (
-                <div className={`markdown-visualization ${className || ''}`}>
-                  <LazyVisualization componentId={id} fallbackTitle={placeholder} />
+                <div className={`markdown-visualization ${className || ""}`}>
+                  <LazyVisualization
+                    componentId={id}
+                    fallbackTitle={placeholder}
+                  />
                 </div>
               );
             }
-            return <div className={className} {...props}>{children}</div>;
+            return (
+              <div className={className} {...props}>
+                {children}
+              </div>
+            );
           },
         }}
       >

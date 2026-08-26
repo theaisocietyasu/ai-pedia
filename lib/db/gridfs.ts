@@ -1,10 +1,10 @@
-import { GridFSBucket, ObjectId } from 'mongodb';
-import { mongoConnection } from '../utilities/db_connector';
+import { GridFSBucket, ObjectId } from "mongodb";
+import { mongoConnection } from "@/lib/db/client";
 
 // Get GridFS bucket
 async function getGridFSBucket(): Promise<GridFSBucket> {
   const db = await mongoConnection.db();
-  const bucket = new GridFSBucket(db, { bucketName: 'images' });
+  const bucket = new GridFSBucket(db, { bucketName: "images" });
   return bucket;
 }
 
@@ -14,12 +14,12 @@ export async function uploadImageToGridFS(
   originalFileName: string,
   contentType: string,
   authorId: string,
-  authorName?: string
+  authorName?: string,
 ): Promise<{ fileId: string; url: string }> {
   const bucket = await getGridFSBucket();
 
   // Generate unique filename
-  const fileExtension = originalFileName.split('.').pop();
+  const fileExtension = originalFileName.split(".").pop();
   const uniqueFileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExtension}`;
 
   // Create upload stream with metadata
@@ -39,7 +39,7 @@ export async function uploadImageToGridFS(
     uploadStream.end(() => {
       resolve(uploadStream.id);
     });
-    uploadStream.on('error', (error) => {
+    uploadStream.on("error", (error) => {
       reject(error);
     });
   });
@@ -72,7 +72,7 @@ export async function streamImageFromGridFS(fileId: string): Promise<{
     }
 
     const file = files[0];
-    const contentType = file.contentType || 'application/octet-stream';
+    const contentType = file.contentType || "application/octet-stream";
 
     // Create download stream
     const downloadStream = bucket.openDownloadStream(objectId);
@@ -99,7 +99,7 @@ export async function deleteImageFromGridFS(fileId: string): Promise<boolean> {
     await bucket.delete(objectId);
     return true;
   } catch (error) {
-    console.error('Error deleting image from GridFS:', error);
+    console.error("Error deleting image from GridFS:", error);
     return false;
   }
 }

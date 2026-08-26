@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
 import { motion } from "framer-motion";
+import { Moon, Sun } from "lucide-react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 type Theme = "dark" | "light";
@@ -12,7 +12,9 @@ function getInitialTheme(): Theme {
   const saved = localStorage.getItem("theme") as Theme | null;
   if (saved === "dark" || saved === "light") return saved;
   // default to system preference if nothing saved
-  const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+  const prefersLight = window.matchMedia(
+    "(prefers-color-scheme: light)",
+  ).matches;
   return prefersLight ? "light" : "dark";
 }
 
@@ -41,7 +43,7 @@ export function ThemeToggle({ className }: { className?: string }) {
       className={cn(
         "ml-3 p-2 rounded-lg border border-white/10 bg-dark-gray/50 hover:bg-white/10 text-light-gray",
         "transition-colors flex items-center justify-center",
-        className
+        className,
       )}
     >
       <motion.span

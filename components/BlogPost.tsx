@@ -1,7 +1,9 @@
-import React from 'react';
-import MarkdownRenderer from '@/components/MarkdownRenderer';
-import { cleanMarkdownContent, extractMarkdownMetadata } from '@/lib/markdown-utils';
-
+import type React from "react";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
+import {
+  cleanMarkdownContent,
+  extractMarkdownMetadata,
+} from "@/lib/markdown-utils";
 
 interface BlogPostProps {
   rawContent: string;
@@ -20,16 +22,16 @@ const BlogPost: React.FC<BlogPostProps> = ({ rawContent }) => {
             {metadata.title}
           </h1>
           <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-300">
-            {metadata.author && (
-              <span>By {metadata.author}</span>
-            )}
+            {metadata.author && <span>By {metadata.author}</span>}
             {metadata.date && (
-              <span>Published on {new Date(metadata.date).toLocaleDateString()}</span>
+              <span>
+                Published on {new Date(metadata.date).toLocaleDateString()}
+              </span>
             )}
           </div>
           {metadata.tags && (
             <div className="flex flex-wrap justify-center gap-2 mt-4">
-              {metadata.tags.map(tag => (
+              {metadata.tags.map((tag) => (
                 <span
                   key={tag}
                   className="px-3 py-1 text-xs bg-purple-600/20 text-purple-300 rounded-full border border-purple-600/30"

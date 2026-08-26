@@ -3,7 +3,7 @@
  * Checks if a user has the required admin role in the Discord server
  */
 
-const DISCORD_API_BASE = 'https://discord.com/api/v10';
+const DISCORD_API_BASE = "https://discord.com/api/v10";
 
 interface DiscordGuildMember {
   user?: {
@@ -18,13 +18,17 @@ interface DiscordGuildMember {
  * @param discordUserId - The Discord user ID
  * @returns Promise<boolean> - Whether the user has the required role
  */
-export async function hasRequiredDiscordRole(discordUserId: string): Promise<boolean> {
+export async function hasRequiredDiscordRole(
+  discordUserId: string,
+): Promise<boolean> {
   const botToken = process.env.DISCORD_BOT_TOKEN;
   const guildId = process.env.DISCORD_GUILD_ID;
   const requiredRoleId = process.env.ADMIN_ROLE_ID;
 
   if (!botToken || !guildId || !requiredRoleId) {
-    console.error('Discord role verification is not configured. Missing environment variables.');
+    console.error(
+      "Discord role verification is not configured. Missing environment variables.",
+    );
     return false;
   }
 
@@ -36,15 +40,19 @@ export async function hasRequiredDiscordRole(discordUserId: string): Promise<boo
         headers: {
           Authorization: `Bot ${botToken}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
       if (response.status === 404) {
-        console.error(`User ${discordUserId} is not a member of the guild ${guildId}`);
+        console.error(
+          `User ${discordUserId} is not a member of the guild ${guildId}`,
+        );
         return false;
       }
-      console.error(`Discord API error: ${response.status} ${response.statusText}`);
+      console.error(
+        `Discord API error: ${response.status} ${response.statusText}`,
+      );
       return false;
     }
 
@@ -52,14 +60,16 @@ export async function hasRequiredDiscordRole(discordUserId: string): Promise<boo
 
     // Check if user has the required role
     const hasRole = member.roles.includes(requiredRoleId);
-    
+
     if (!hasRole) {
-      console.log(`User ${discordUserId} does not have the required admin role ${requiredRoleId}`);
+      console.log(
+        `User ${discordUserId} does not have the required admin role ${requiredRoleId}`,
+      );
     }
 
     return hasRole;
   } catch (error) {
-    console.error('Error checking Discord role:', error);
+    console.error("Error checking Discord role:", error);
     return false;
   }
 }
@@ -69,12 +79,14 @@ export async function hasRequiredDiscordRole(discordUserId: string): Promise<boo
  * @param discordUserId - The Discord user ID
  * @returns Promise<string[]> - Array of role IDs
  */
-export async function getDiscordUserRoles(discordUserId: string): Promise<string[]> {
+export async function getDiscordUserRoles(
+  discordUserId: string,
+): Promise<string[]> {
   const botToken = process.env.DISCORD_BOT_TOKEN;
   const guildId = process.env.DISCORD_GUILD_ID;
 
   if (!botToken || !guildId) {
-    console.error('Discord configuration is missing');
+    console.error("Discord configuration is missing");
     return [];
   }
 
@@ -85,7 +97,7 @@ export async function getDiscordUserRoles(discordUserId: string): Promise<string
         headers: {
           Authorization: `Bot ${botToken}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -95,7 +107,7 @@ export async function getDiscordUserRoles(discordUserId: string): Promise<string
     const member: DiscordGuildMember = await response.json();
     return member.roles || [];
   } catch (error) {
-    console.error('Error fetching Discord roles:', error);
+    console.error("Error fetching Discord roles:", error);
     return [];
   }
 }

@@ -1,225 +1,91 @@
-# AI Pedia# AI Pedia
+# AI Pedia
 
+An interactive AI/ML learning platform built by [The AI Society at Arizona State University](https://github.com/ais-asu). Officers author markdown-based learn modules with embedded interactive visualizations; students browse them by category. Live at [aipedia.ais-asu.com](https://aipedia.ais-asu.com/).
 
+## Tech Stack
 
-A modern web-based learning platform built by The AI Society at ASU to help students visualize and understand machine learning concepts through interactive experiences.A modern web-based learning platform built by The AI Society at ASU to help students visualize and understand machine learning concepts through interactive experiences.
+- **Framework:** Next.js 15 (App Router) + React 19 + TypeScript 5
+- **Styling:** Tailwind CSS 4, Framer Motion
+- **Markdown:** react-markdown + remark/rehype plugins, KaTeX for math
+- **Database:** MongoDB (raw driver for learn content, Mongoose for blogs, GridFS for images)
+- **Auth:** NextAuth.js with Discord OAuth; admin actions are gated by a Discord server role check
+- **Code quality:** Biome (lint + format)
 
+## Getting Started
 
+### Prerequisites
 
-## Tech Stack## Project Overview
+- Node.js 18+
+- A MongoDB database (Atlas works — make sure your IP is on the access list)
+- A Discord OAuth application and a bot in your Discord server (for role checks)
 
+### Setup
 
+```bash
+git clone <repository-url>
+cd ai-pedia
+npm install
+cp .env.example .env   # then fill in the values
+npm run dev            # http://localhost:3000
+```
 
-- **Framework:** Next.js 15AI Pedia is a Next.js application that provides an engaging platform for AI education. The frontend features a modern design with smooth animations, responsive layout, and intuitive navigation to guide users through their AI learning journey.
+### Scripts
 
-- **Runtime:** React 19
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Start the dev server |
+| `npm run build` | Production build |
+| `npm start` | Serve the production build |
+| `npm run lint` | Biome check |
+| `npm run format` | Biome format (writes) |
 
-- **Language:** TypeScript 5## Tech Stack
+## Environment Variables
 
-- **Styling:** Tailwind CSS 4
+See `.env.example` for the full list. In short:
 
-- **Authentication:** NextAuth.js with Discord OAuth- **Framework:** Next.js 15 with Turbopack
-
-- **Database:** MongoDB- **Runtime:** React 19
-
-- **Code Quality:** Biome- **Language:** TypeScript 5
-
-- **Styling:** Tailwind CSS 4
-
-## Quick Start- **Animations:** Framer Motion
-
-- **Icons:** Lucide React
-
-### Prerequisites- **Code Quality:** Biome (linting & formatting)
-
-
-
-- Node.js 18+## Project Structure
-
-- MongoDB connection
-
-- Discord OAuth application```
-
-frontend/
-
-### Setup├── app/                    # Next.js App Router pages
-
-│   ├── page.tsx           # Home page
-
-1. **Clone and install**│   ├── about/             # About The AI Society
-
-   ```bash│   ├── learn/             # Learning content (coming soon)
-
-   git clone <repository-url>│   ├── waitlist/          # Waitlist signup
-
-   cd ml-visualization│   ├── layout.tsx         # Root layout with navbar & footer
-
-   npm install│   └── globals.css        # Global styles
-
-   ```├── components/
-
-│   ├── home/              # Home page sections
-
-2. **Configure environment**│   └── ui/                # Reusable UI components
-
-   ├── lib/                   # Utilities and constants
-
-   Copy `.env.example` to `.env` and fill in your values:└── public/                # Static assets
-
-   ```bash```
-
-   cp .env.example .env
-
-   ```## Quick Start
-
-
-
-   Required environment variables:### Prerequisites
-
-   - `MONGODB_URI` - MongoDB connection string
-
-   - `DISCORD_CLIENT_ID` - Discord OAuth client ID- Node.js 18+
-
-   - `DISCORD_CLIENT_SECRET` - Discord OAuth client secret- npm or yarn
-
-   - `NEXTAUTH_SECRET` - Random secret (generate with `openssl rand -base64 32`)
-
-   - `DISCORD_BOT_TOKEN` - Discord bot token for role verification### Setup Instructions
-
-   - `DISCORD_GUILD_ID` - Discord server ID
-
-   - `ADMIN_ROLE_ID` - Discord role ID for admin access1. **Clone the repository**
-
-
-
-3. **Start development server**   ```bash
-
-   ```bash   git clone <repository-url>
-
-   npm run dev   cd ml-visualization
-
-   ```   ```
-
-
-
-4. **Open browser**2. **Navigate to frontend directory**
-
-   
-
-   Navigate to `http://localhost:3000`   ```bash
-
-   cd frontend
-
-## Authentication & Authorization   ```
-
-
-
-The application uses Discord OAuth for authentication with role-based access control:3. **Install dependencies**
-
-
-
-- Users sign in with their Discord account (no database storage for auth)   ```bash
-
-- Protected routes require Discord admin role verification   npm install
-
-- Discord Bot API is used to verify roles in real-time   ```
-
-- Sessions are stored as encrypted JWT tokens (no database needed)
-
-4. **Start development server**
-
-## Available Scripts
-
-   ```bash
-
-- `npm run dev` - Start development server   npm run dev
-
-- `npm run build` - Build for production   ```
-
-- `npm start` - Start production server
-
-- `npm run lint` - Check code quality5. **Open your browser**
-
-   Navigate to `http://localhost:3000`
+- `MONGODB_URI`, `MONGODB_DB_NAME` — database connection
+- `MONGODB_COLLECTION_NAME` — blogs collection (default `blogs`)
+- `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET` — Discord OAuth app
+- `NEXTAUTH_SECRET`, `NEXTAUTH_URL` — NextAuth
+- `DISCORD_BOT_TOKEN`, `DISCORD_GUILD_ID`, `ADMIN_ROLE_ID` — server-side admin role verification
+- `NEXT_PUBLIC_SITE_URL` — canonical site URL (SEO, sitemap)
 
 ## Project Structure
 
-## Available Scripts
-
+```
+app/                      # App Router pages + API routes
+  learn/                  # Category listing, module viewer, editor, authoring
+  blogs/                  # Blog index and detail pages
+  auth/signin/            # Discord sign-in page
+  api/
+    learn/                # Learn content CRUD, categories, edit locks, slug migration
+    blogs/                # Blog read APIs
+    upload/image/         # Image upload (GridFS)
+    images/[id]/          # Image streaming from GridFS
+    auth/                 # NextAuth + role verification
+components/
+  visualizations/         # Interactive demos + registry (embedded in markdown)
+  blogs/, home/, auth/    # Page-specific components
+  ui/                     # Shared UI (navbar, footer, buttons, ...)
+lib/
+  db/                     # Mongo clients (raw driver + mongoose), GridFS, models
+  api/                    # Client-side API helpers (learn.ts, blogs.ts)
+  auth/                   # NextAuth config, Discord role checks, server guards
+  markdown-utils.ts       # Heading extraction, content normalization
+  slug.ts                 # Slug generation/parsing
+  constants.ts, types.ts  # Site content constants, shared types
+styles/                   # Markdown + editor CSS
+types/                    # Ambient type declarations
+docs/proposals/           # Design docs for unbuilt features
 ```
 
-├── app/                    # Next.js App Router- `npm run dev` - Start development server with Turbopack
+## How Content Works
 
-│   ├── api/               # API routes- `npm run build` - Build for production
+- **Learn modules** are markdown documents stored in MongoDB with a slug of the form `<title-slug>_<objectId>`. Officers with the admin Discord role can create (`/learn/new`), edit, and delete modules in-app.
+- **Interactive visualizations** are embedded by placing `<div id="VZ-..."></div>` (or a registered component name) in the markdown; the renderer swaps it for the matching React component from `components/visualizations/visualization-registry.tsx`.
+- **Concurrent editing** is prevented with a per-module edit lock (5-minute TTL, heartbeat refresh); a second editor gets `423 Locked`.
+- **Images** are uploaded to GridFS and served from `/api/images/[id]` with immutable caching.
 
-│   ├── auth/              # Authentication pages- `npm start` - Start production server
+## Contributing
 
-│   ├── learn/             # Learning content- `npm run lint` - Check code quality with Biome
-
-│   └── blogs/             # Blog posts- `npm run format` - Format code with Biome
-
-├── components/            # React components
-
-│   ├── auth/              # Auth components## Pages
-
-│   ├── ui/                # UI components
-
-│   └── visualizations/    # Interactive visualizations### Home Page (`/`)
-
-└── lib/                   # Utilities & server code
-
-    └── auth/              # Authentication logic- Hero section with animated background
-
-```- Features grid showcasing platform capabilities
-
-- Target audience section
-
----- Vision and mission statement
-
-
-
-Built with ❤️ by The AI Society at Arizona State University### Learn Page (`/learn`)
-
-
-- Coming soon placeholder with course previews
-- Status cards showing development progress
-- Call-to-action for waitlist signup
-
-### About Page (`/about`)
-
-- Information about The AI Society at ASU
-- Team values and mission cards
-- Social media links
-
-### Waitlist Page (`/waitlist`)
-
-- Email signup form for early access
-- Benefits of joining the waitlist
-- Success state confirmation
-
-## Development
-
-### Code Style
-
-- TypeScript for type safety
-- Tailwind CSS for styling with inline styles where needed
-- Framer Motion for smooth animations
-- Component-based architecture
-
-### Design System
-
-- Consistent color palette (purple/pink gradients)
-- Glass morphism effects
-- Rounded button styling
-- Responsive grid layouts
-
-### External Links
-
-- [Project Documentation](https://www.notion.so/theaisociety/ML-Visualization-2598867868b480b48ea1c907119fba78?source=copy_link)
-- [Latest Updates](https://www.notion.so/theaisociety/Latest-Updates-25e8867868b4800f880acdc07aabf174?source=copy_link)
-- [Developer Onboarding](https://www.notion.so/theaisociety/New-Developer-Start-here-25e8867868b480d29c95f68416a13ff8?source=copy_link)
-- [Workflow Guidelines](https://www.notion.so/theaisociety/Workflow-2598867868b4803c92c7c3f9a46f3edf?source=copy_link)
-
----
-
-Built with ❤️ by The AI Society team at Arizona State University
+Run `npm run lint` before pushing. There is no test suite yet — manual verification against a dev database is the current workflow.

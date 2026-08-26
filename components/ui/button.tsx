@@ -1,38 +1,59 @@
-"use client"
+"use client";
 
-import { forwardRef, ButtonHTMLAttributes } from "react"
-import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
-import type { ButtonVariant, ButtonSize } from "@/lib/types"
+import { motion } from "framer-motion";
+import { type ButtonHTMLAttributes, forwardRef } from "react";
+import type { ButtonSize, ButtonVariant } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
-interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
-  'onDrag' | 'onDragStart' | 'onDragEnd' | 'onDragCapture' | 'onDragEndCapture' | 
-  'onDragEnter' | 'onDragEnterCapture' | 'onDragExit' | 'onDragExitCapture' | 
-  'onDragLeave' | 'onDragLeaveCapture' | 'onDragOver' | 'onDragOverCapture' | 
-  'onDragStartCapture' | 'onDrop' | 'onDropCapture' |
-  'onAnimationStart' | 'onAnimationStartCapture' | 'onAnimationEnd' | 'onAnimationEndCapture' | 'onAnimationIteration' | 'onAnimationIterationCapture'> {
-  variant?: ButtonVariant
-  size?: ButtonSize
-  fullWidth?: boolean
-  loading?: boolean
-  icon?: React.ReactNode
-  iconPosition?: "left" | "right"
+interface ButtonProps
+  extends Omit<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    | "onDrag"
+    | "onDragStart"
+    | "onDragEnd"
+    | "onDragCapture"
+    | "onDragEndCapture"
+    | "onDragEnter"
+    | "onDragEnterCapture"
+    | "onDragExit"
+    | "onDragExitCapture"
+    | "onDragLeave"
+    | "onDragLeaveCapture"
+    | "onDragOver"
+    | "onDragOverCapture"
+    | "onDragStartCapture"
+    | "onDrop"
+    | "onDropCapture"
+    | "onAnimationStart"
+    | "onAnimationStartCapture"
+    | "onAnimationEnd"
+    | "onAnimationEndCapture"
+    | "onAnimationIteration"
+    | "onAnimationIterationCapture"
+  > {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  fullWidth?: boolean;
+  loading?: boolean;
+  icon?: React.ReactNode;
+  iconPosition?: "left" | "right";
 }
 
 const buttonVariants = {
-  primary: "bg-gradient-to-r from-purple to-pink text-dark-gray hover:shadow-lg hover:shadow-purple/30",
+  primary:
+    "bg-gradient-to-r from-purple to-pink text-dark-gray hover:shadow-lg hover:shadow-purple/30",
   secondary: "bg-dark-gray text-white hover:bg-dark-gray/80",
   outline: "border border-white/20 text-white hover:bg-white/10",
   ghost: "text-white hover:bg-white/10",
-  gradient: "gradient-bg text-white hover:shadow-lg hover:shadow-purple/30"
-}
+  gradient: "gradient-bg text-white hover:shadow-lg hover:shadow-purple/30",
+};
 
 const buttonSizes = {
   sm: "px-4 py-2 text-sm",
   md: "px-6 py-3 text-base",
   lg: "px-10 py-4 text-lg",
-  xl: "px-12 py-5 text-xl"
-}
+  xl: "px-12 py-5 text-xl",
+};
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -48,13 +69,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
-    const MotionButton = motion.button
+    const MotionButton = motion.button;
 
     // Check if rounded-full is in the className
-    const isRoundedFull = className?.includes("rounded-full")
-    const borderRadius = isRoundedFull ? "rounded-full" : "rounded-lg"
+    const isRoundedFull = className?.includes("rounded-full");
+    const borderRadius = isRoundedFull ? "rounded-full" : "rounded-lg";
 
     return (
       <MotionButton
@@ -70,20 +91,30 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           buttonVariants[variant],
           buttonSizes[size],
           fullWidth && "w-full",
-          className
+          className,
         )}
         disabled={disabled || loading}
         {...props}
       >
         {/* loading spinner */}
         {loading && (
-          <div className={cn("absolute inset-0 flex items-center justify-center bg-black/20", borderRadius)}>
+          <div
+            className={cn(
+              "absolute inset-0 flex items-center justify-center bg-black/20",
+              borderRadius,
+            )}
+          >
             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
           </div>
         )}
 
         {/* content */}
-        <span className={cn("inline-flex items-center gap-2", loading && "opacity-0")}>
+        <span
+          className={cn(
+            "inline-flex items-center gap-2",
+            loading && "opacity-0",
+          )}
+        >
           {icon && iconPosition === "left" && icon}
           {children}
           {icon && iconPosition === "right" && icon}
@@ -94,8 +125,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           <span className="absolute inset-0 bg-white opacity-0 hover:opacity-10 transition-opacity duration-300" />
         </span>
       </MotionButton>
-    )
-  }
-)
+    );
+  },
+);
 
-Button.displayName = "Button"
+Button.displayName = "Button";

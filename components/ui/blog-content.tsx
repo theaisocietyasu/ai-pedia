@@ -1,25 +1,25 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { motion } from "framer-motion"
-import Image from "next/image"
-import type { BlogContent as BlogContentType, TocItem } from "@/lib/types"
-import { BlogVisualization } from "./blog-visualization"
-import { MarkdownRenderer } from "./markdown-renderer"
-
+import { motion } from "framer-motion";
+import Image from "next/image";
+import type React from "react";
+import { useState } from "react";
+import type { BlogContent as BlogContentType, TocItem } from "@/lib/types";
+import { BlogVisualization } from "./blog-visualization";
+import { MarkdownRenderer } from "./markdown-renderer";
 
 interface BlogContentProps {
-  content: BlogContentType | string  // Support both legacy and new formats
-  title: string
-  visualizationComponents?: Record<string, React.ComponentType>
+  content: BlogContentType | string; // Support both legacy and new formats
+  title: string;
+  visualizationComponents?: Record<string, React.ComponentType>;
 }
 
 export function BlogContent({
   content,
   title,
-  visualizationComponents = {}
+  visualizationComponents = {},
 }: BlogContentProps) {
-  const [tableOfContents, setTableOfContents] = useState<TocItem[]>([])
+  const [tableOfContents, setTableOfContents] = useState<TocItem[]>([]);
 
   // Safety check for content
   if (!content) {
@@ -27,11 +27,11 @@ export function BlogContent({
       <div className="text-center py-12">
         <p className="text-light-gray/60">No content available</p>
       </div>
-    )
+    );
   }
 
   // Handle new markdown format (string content)
-  if (typeof content === 'string') {
+  if (typeof content === "string") {
     return (
       <MarkdownRenderer
         content={content}
@@ -40,19 +40,19 @@ export function BlogContent({
         visualizationComponents={visualizationComponents}
         className="space-y-8"
       />
-    )
+    );
   }
 
   // Handle legacy markdown format
   if (content.type === "markdown") {
-    const markdownContent = content.rawMarkdown || content.htmlReadMe || ''
+    const markdownContent = content.rawMarkdown || content.htmlReadMe || "";
 
     if (!markdownContent) {
       return (
         <div className="text-center py-12">
           <p className="text-light-gray/60">No markdown content available</p>
         </div>
-      )
+      );
     }
 
     return (
@@ -63,15 +63,15 @@ export function BlogContent({
         visualizationComponents={visualizationComponents}
         className="space-y-8"
       />
-    )
+    );
   }
 
   // Legacy structured content
   return (
     <div className="space-y-12">
       {content.headings?.map((heading, index) => {
-        const paragraph = content.paragraphs?.[index]
-        const image = content.images?.[index]
+        const paragraph = content.paragraphs?.[index];
+        const image = content.images?.[index];
 
         return (
           <motion.section
@@ -83,9 +83,7 @@ export function BlogContent({
             className="space-y-6"
           >
             {/* section heading */}
-            <h2 className="text-3xl font-bold gradient-text">
-              {heading}
-            </h2>
+            <h2 className="text-3xl font-bold gradient-text">{heading}</h2>
 
             {/* paragraph content */}
             {paragraph && (
@@ -99,14 +97,18 @@ export function BlogContent({
                     <div key={key} className="space-y-2">
                       {key !== "introduction" && (
                         <h3 className="text-xl font-semibold text-white capitalize">
-                          {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                          {key
+                            .replace(/([A-Z])/g, " $1")
+                            .replace(/^./, (str) => str.toUpperCase())}
                         </h3>
                       )}
-                      <p className={`text-lg leading-relaxed ${
-                        key === "introduction"
-                          ? "text-light-gray/90 bg-white/5 p-6 rounded-xl border border-white/10"
-                          : "text-light-gray/80"
-                      }`}>
+                      <p
+                        className={`text-lg leading-relaxed ${
+                          key === "introduction"
+                            ? "text-light-gray/90 bg-white/5 p-6 rounded-xl border border-white/10"
+                            : "text-light-gray/80"
+                        }`}
+                      >
                         {value}
                       </p>
                     </div>
@@ -133,7 +135,7 @@ export function BlogContent({
               </motion.div>
             )}
           </motion.section>
-        )
+        );
       })}
 
       {/* visualization component */}
@@ -152,5 +154,5 @@ export function BlogContent({
         </motion.div>
       )}
     </div>
-  )
+  );
 }

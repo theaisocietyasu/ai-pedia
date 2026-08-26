@@ -1,37 +1,38 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState } from "react"
-import { motion } from "framer-motion"
-import {  BookOpen } from "lucide-react"
-import { GradientText } from "@/components/ui/gradient-text"
-import {  getAllBlogs } from "@/lib/blog-data"
-import { BlogsClient } from "@/components/blogs/blogs-client"
-import type { LegacyBlogPost } from "@/lib/types"
-
+import { motion } from "framer-motion";
+import { BookOpen } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { BlogsClient } from "@/components/blogs/blogs-client";
+import { GradientText } from "@/components/ui/gradient-text";
+import { getAllBlogs } from "@/lib/blog-data";
+import type { LegacyBlogPost } from "@/lib/types";
 
 export default function BlogsPage() {
-  const [blogs, setBlogs] = useState<LegacyBlogPost[]>([])
-  const [error, setError] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [blogs, setBlogs] = useState<LegacyBlogPost[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   async function fetchBlogs() {
-  //     try {
-  //       setLoading(true)
-  //       const blogData = await getAllBlogs()
-  //       setBlogs(blogData)
-  //       setError(null)
-  //     } catch (err) {
-  //       console.error('Failed to fetch blogs:', err)
-  //       setError('Unable to connect to the blog database. Please check your MongoDB connection or try again later.')
-  //       setBlogs([])
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   }
+  useEffect(() => {
+    async function fetchBlogs() {
+      try {
+        setLoading(true);
+        const blogData = await getAllBlogs();
+        setBlogs(blogData);
+        setError(null);
+      } catch (err) {
+        console.error("Failed to fetch blogs:", err);
+        setError(
+          "Unable to connect to the blog database. Please check your MongoDB connection or try again later.",
+        );
+        setBlogs([]);
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  //   fetchBlogs()
-  // }, [])
+    fetchBlogs();
+  }, []);
 
   return (
     <main className="min-h-screen bg-background">
@@ -47,20 +48,20 @@ export default function BlogsPage() {
             transition={{
               duration: 8,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: "easeInOut",
             }}
             className="absolute top-20 left-20 w-96 h-96 bg-purple/30 rounded-full blur-3xl"
           />
           <motion.div
             animate={{
-              scale: [1, 1.3, 1], 
+              scale: [1, 1.3, 1],
               opacity: [0.3, 0.5, 0.3],
             }}
             transition={{
               duration: 10,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: 1
+              delay: 1,
             }}
             className="absolute bottom-20 right-20 w-96 h-96 bg-pink/30 rounded-full blur-3xl"
           />
@@ -69,7 +70,6 @@ export default function BlogsPage() {
         <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
           <div className="text-center">
             {/* badge */}
-           
 
             {/* title */}
             <motion.h1
@@ -88,8 +88,9 @@ export default function BlogsPage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-xl text-light-gray/80 max-w-3xl mx-auto leading-relaxed"
             >
-              Explore the latest insights, tutorials, and research in artificial intelligence.
-              From fundamentals to cutting-edge developments, discover knowledge that advances your AI journey.
+              Explore the latest insights, tutorials, and research in artificial
+              intelligence. From fundamentals to cutting-edge developments,
+              discover knowledge that advances your AI journey.
             </motion.p>
           </div>
         </div>
@@ -110,8 +111,12 @@ export default function BlogsPage() {
                   className="w-8 h-8 border-2 border-purple border-t-transparent rounded-full"
                 />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Loading Articles...</h3>
-              <p className="text-light-gray/60 max-w-md">Please wait while we fetch the latest blog posts.</p>
+              <h3 className="text-xl font-bold text-white mb-2">
+                Loading Articles...
+              </h3>
+              <p className="text-light-gray/60 max-w-md">
+                Please wait while we fetch the latest blog posts.
+              </p>
             </motion.div>
           </div>
         </section>
@@ -127,10 +132,10 @@ export default function BlogsPage() {
               <div className="w-16 h-16 mb-6 rounded-full bg-red-500/20 flex items-center justify-center">
                 <BookOpen size={24} className="text-red-500" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Unable to Load Articles</h3>
-              <p className="text-light-gray/60 max-w-md">
-                {error}
-              </p>
+              <h3 className="text-xl font-bold text-white mb-2">
+                Unable to Load Articles
+              </h3>
+              <p className="text-light-gray/60 max-w-md">{error}</p>
             </motion.div>
           </div>
         </section>
@@ -138,5 +143,5 @@ export default function BlogsPage() {
         <BlogsClient blogs={blogs} />
       )}
     </main>
-  )
+  );
 }

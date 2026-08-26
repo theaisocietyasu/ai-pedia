@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { fetchAllCategories } from '@/lib/api';
-import { slugifyCategory } from '@/lib/slug';
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import { fetchAllCategories } from "@/lib/api/learn";
+import { slugifyCategory } from "@/lib/slug";
 
 interface Category {
   _id: string;
@@ -21,7 +22,7 @@ interface CategorySelectorProps {
 export const CategorySelector: React.FC<CategorySelectorProps> = ({
   selectedCategories,
   onCategoriesChange,
-  className = ''
+  className = "",
 }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,8 +32,8 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
   const [isCreating, setIsCreating] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [newCategoryData, setNewCategoryData] = useState({
-    name: '',
-    description: ''
+    name: "",
+    description: "",
   });
   const [categoryImage, setCategoryImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -46,8 +47,8 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
         const fetchedCategories = await fetchAllCategories();
         setCategories(fetchedCategories);
       } catch (err) {
-        console.error('Error fetching categories:', err);
-        setError('Failed to load categories');
+        console.error("Error fetching categories:", err);
+        setError("Failed to load categories");
       } finally {
         setLoading(false);
       }
@@ -59,14 +60,17 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -75,7 +79,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
     const isSelected = selectedCategories.includes(slug);
 
     if (isSelected) {
-      onCategoriesChange(selectedCategories.filter(cat => cat !== slug));
+      onCategoriesChange(selectedCategories.filter((cat) => cat !== slug));
     } else {
       onCategoriesChange([...selectedCategories, slug]);
     }
@@ -86,17 +90,17 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
 
     // Validate required fields
     if (!newCategoryData.name.trim()) {
-      setCreateError('Category name is required');
+      setCreateError("Category name is required");
       return;
     }
 
     if (!newCategoryData.description.trim()) {
-      setCreateError('Category description is required');
+      setCreateError("Category description is required");
       return;
     }
 
     if (!categoryImage) {
-      setCreateError('Category image is required');
+      setCreateError("Category image is required");
       return;
     }
 
@@ -104,38 +108,40 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
       setIsCreating(true);
 
       const formData = new FormData();
-      formData.append('name', newCategoryData.name.trim());
-      formData.append('description', newCategoryData.description.trim());
-      formData.append('image', categoryImage);
+      formData.append("name", newCategoryData.name.trim());
+      formData.append("description", newCategoryData.description.trim());
+      formData.append("image", categoryImage);
 
-      const response = await fetch('/api/learn/categories', {
-        method: 'POST',
+      const response = await fetch("/api/learn/categories", {
+        method: "POST",
         body: formData,
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to create category');
+        throw new Error(data.error || "Failed to create category");
       }
 
       // Add the new category to the list
       const newCategory: Category = data.category;
-      setCategories(prev => [...prev, newCategory]);
+      setCategories((prev) => [...prev, newCategory]);
 
       // Auto-select the newly created category
       const newSlug = slugifyCategory(newCategory.name);
       onCategoriesChange([...selectedCategories, newSlug]);
 
       // Reset form and close modal
-      setNewCategoryData({ name: '', description: '' });
+      setNewCategoryData({ name: "", description: "" });
       setCategoryImage(null);
       setImagePreview(null);
       setShowCreateModal(false);
       setIsOpen(false);
     } catch (err) {
-      console.error('Error creating category:', err);
-      setCreateError(err instanceof Error ? err.message : 'Failed to create category');
+      console.error("Error creating category:", err);
+      setCreateError(
+        err instanceof Error ? err.message : "Failed to create category",
+      );
     } finally {
       setIsCreating(false);
     }
@@ -146,15 +152,25 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
     if (!file) return;
 
     // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+    ];
     if (!allowedTypes.includes(file.type)) {
-      setCreateError('Invalid file type. Please upload a JPG, PNG, GIF, or WebP image.');
+      setCreateError(
+        "Invalid file type. Please upload a JPG, PNG, GIF, or WebP image.",
+      );
       return;
     }
 
     // Validate file size (5MB limit)
     if (file.size > 5 * 1024 * 1024) {
-      setCreateError('File too large. Please upload an image smaller than 5MB.');
+      setCreateError(
+        "File too large. Please upload an image smaller than 5MB.",
+      );
       return;
     }
 
@@ -173,7 +189,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
     setIsOpen(false);
     setShowCreateModal(true);
     setCreateError(null);
-    setNewCategoryData({ name: '', description: '' });
+    setNewCategoryData({ name: "", description: "" });
     setCategoryImage(null);
     setImagePreview(null);
   };
@@ -181,13 +197,13 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
   const handleCloseCreateModal = () => {
     setShowCreateModal(false);
     setCreateError(null);
-    setNewCategoryData({ name: '', description: '' });
+    setNewCategoryData({ name: "", description: "" });
     setCategoryImage(null);
     setImagePreview(null);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleCreateCategory();
     }
@@ -218,7 +234,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
       <label className="block text-sm font-medium text-gray-300 mb-2">
         Categories *
       </label>
-      
+
       {/* Dropdown Button */}
       <button
         type="button"
@@ -228,16 +244,21 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
         <div className="flex justify-between items-center">
           <span>
             {selectedCategories.length === 0
-              ? 'Select categories...'
+              ? "Select categories..."
               : `${selectedCategories.length} selected`}
           </span>
           <svg
-            className={`w-5 h-5 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+            className={`w-5 h-5 transition-transform ${isOpen ? "rotate-180" : ""}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </div>
       </button>
@@ -245,15 +266,21 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
       {/* Selected Categories Display */}
       {selectedCategories.length > 0 && (
         <div className="mt-2 flex flex-wrap gap-2">
-          {selectedCategories.map(slug => (
+          {selectedCategories.map((slug) => (
             <span
               key={slug}
               className="inline-flex items-center px-3 py-1 bg-purple/20 text-purple-300 rounded-full text-sm"
             >
-              {categories.find(c => slugifyCategory(c.name) === slug)?.name || slug}
+              {categories.find((c) => slugifyCategory(c.name) === slug)?.name ||
+                slug}
               <button
                 type="button"
-                onClick={() => handleCategoryToggle(categories.find(c => slugifyCategory(c.name) === slug)?.name || slug)}
+                onClick={() =>
+                  handleCategoryToggle(
+                    categories.find((c) => slugifyCategory(c.name) === slug)
+                      ?.name || slug,
+                  )
+                }
                 className="ml-2 hover:text-purple-100"
               >
                 ×
@@ -266,7 +293,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
       {/* Dropdown Options */}
       {isOpen && (
         <div className="absolute z-10 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-          {categories.map(category => (
+          {categories.map((category) => (
             <div
               key={category._id}
               className="p-3 hover:bg-gray-700 cursor-pointer border-b border-gray-700"
@@ -274,13 +301,19 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
             >
               <div className="flex items-center justify-between">
                 <div className="flex-1">
-                  <div className="font-medium text-gray-200">{category.name}</div>
-                  <div className="text-sm text-gray-400 mt-1">{category.description}</div>
+                  <div className="font-medium text-gray-200">
+                    {category.name}
+                  </div>
+                  <div className="text-sm text-gray-400 mt-1">
+                    {category.description}
+                  </div>
                 </div>
                 <div className="ml-3">
                   <input
                     type="checkbox"
-                    checked={selectedCategories.includes(slugifyCategory(category.name))}
+                    checked={selectedCategories.includes(
+                      slugifyCategory(category.name),
+                    )}
                     onChange={() => {}} // Handled by parent div click
                     className="w-4 h-4 text-purple bg-gray-700 border-gray-600 rounded focus:ring-purple focus:ring-2"
                   />
@@ -307,7 +340,9 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
           <div className="bg-dark-gray border border-gray-700 rounded-lg max-w-md w-full p-6">
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-200 mb-2">Create New Category</h2>
+              <h2 className="text-2xl font-bold text-gray-200 mb-2">
+                Create New Category
+              </h2>
               <p className="text-sm text-gray-400">
                 Add a new category for organizing learning modules.
               </p>
@@ -322,7 +357,12 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
                 <input
                   type="text"
                   value={newCategoryData.name}
-                  onChange={(e) => setNewCategoryData(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={(e) =>
+                    setNewCategoryData((prev) => ({
+                      ...prev,
+                      name: e.target.value,
+                    }))
+                  }
                   onKeyDown={handleKeyDown}
                   className="w-full p-3 border border-gray-600 rounded-lg bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-purple transition-colors"
                   placeholder="e.g., Deep Learning"
@@ -337,7 +377,12 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
                 </label>
                 <textarea
                   value={newCategoryData.description}
-                  onChange={(e) => setNewCategoryData(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setNewCategoryData((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
                   rows={3}
                   className="w-full p-3 border border-gray-600 rounded-lg bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-purple transition-colors resize-none"
                   placeholder="Brief description of the category..."
@@ -363,7 +408,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
                       onClick={() => imageInputRef.current?.click()}
                       className="w-full p-3 border border-gray-600 rounded-lg bg-gray-800 text-gray-300 hover:border-gray-500 focus:outline-none focus:border-purple transition-colors text-left"
                     >
-                      {categoryImage ? categoryImage.name : 'Choose image...'}
+                      {categoryImage ? categoryImage.name : "Choose image..."}
                     </button>
                   </div>
 
@@ -403,9 +448,14 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
                   type="button"
                   onClick={handleCreateCategory}
                   className="flex-1 px-4 py-3 bg-purple text-white rounded-lg hover:bg-purple/80 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={isCreating || !newCategoryData.name.trim() || !newCategoryData.description.trim() || !categoryImage}
+                  disabled={
+                    isCreating ||
+                    !newCategoryData.name.trim() ||
+                    !newCategoryData.description.trim() ||
+                    !categoryImage
+                  }
                 >
-                  {isCreating ? 'Creating...' : 'Create Category'}
+                  {isCreating ? "Creating..." : "Create Category"}
                 </button>
               </div>
             </div>

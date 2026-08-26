@@ -1,73 +1,84 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Menu, X, ChevronRight, Home, BookOpen, Info, Users, LogOut, User } from "lucide-react"
-import { navItems } from "@/lib/constants"
-import { cn } from "@/lib/utils"
-import type { NavItem } from "@/lib/types"
-import { SearchBar } from "./search-bar"
-import { useSession, signOut } from "@/lib/auth/auth-client"
-import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  BookOpen,
+  ChevronRight,
+  Home,
+  Info,
+  LogOut,
+  Menu,
+  User,
+  Users,
+  X,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import type React from "react";
+import { useEffect, useState } from "react";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { signOut, useSession } from "@/lib/auth/auth-client";
+import { navItems } from "@/lib/constants";
+import type { NavItem } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { SearchBar } from "./search-bar";
 
 export function Navbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const pathname = usePathname()
-  const { data: session } = useSession()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+  const { data: session } = useSession();
 
   const handleSignOut = async () => {
-    await signOut()
-  }
+    await signOut();
+  };
 
   // handle scroll events for navbar background
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
-    }
+      setIsScrolled(window.scrollY > 20);
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // close mobile menu on route change
   useEffect(() => {
-    setIsMobileMenuOpen(false)
-  }, [pathname])
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
 
   // prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden"
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset"
+      document.body.style.overflow = "unset";
     }
 
     return () => {
-      document.body.style.overflow = "unset"
-    }
-  }, [isMobileMenuOpen])
+      document.body.style.overflow = "unset";
+    };
+  }, [isMobileMenuOpen]);
 
   // helper function to get icon component
   const getIcon = (iconName?: string | React.ReactNode) => {
-    if (!iconName) return null
-    if (typeof iconName !== 'string') return iconName
-    
+    if (!iconName) return null;
+    if (typeof iconName !== "string") return iconName;
+
     const icons: Record<string, React.ReactNode> = {
       Home: <Home size={18} />,
       BookOpen: <BookOpen size={18} />,
       Info: <Info size={18} />,
-      Users: <Users size={18} />
-    }
-    
-    return icons[iconName] || null
-  }
+      Users: <Users size={18} />,
+    };
+
+    return icons[iconName] || null;
+  };
 
   const renderNavLink = (item: NavItem, index: number, isMobile = false) => {
-    const isActive = pathname === item.link
-    const icon = getIcon(item.icon)
+    const isActive = pathname === item.link;
+    const icon = getIcon(item.icon);
 
     return (
       <motion.div
@@ -88,7 +99,7 @@ export function Navbar() {
               ? isMobile
                 ? "bg-purple/30 text-white"
                 : "text-white"
-              : "text-light-gray/80"
+              : "text-light-gray/80",
           )}
         >
           {icon && <span className="opacity-70">{icon}</span>}
@@ -103,8 +114,8 @@ export function Navbar() {
           )}
         </Link>
       </motion.div>
-    )
-  }
+    );
+  };
 
   return (
     <>
@@ -112,25 +123,25 @@ export function Navbar() {
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-          isScrolled
-            ? "navbar-glass-effect shadow-lg"
-            : "bg-transparent"
+          isScrolled ? "navbar-glass-effect shadow-lg" : "bg-transparent",
         )}
       >
         <nav className="container mx-auto px-6 sm:px-8 lg:px-12">
           <div className="flex items-center justify-between h-16">
             {/* logo and brand */}
             <Link href="/" className="flex items-center gap-3 group">
-              <img 
-                src="/logo.png" 
-                alt="AI Pedia Logo" 
+              <img
+                src="/logo.png"
+                alt="AI Pedia Logo"
                 className="w-10 h-10 rounded-lg object-cover"
               />
               <div className="flex flex-col">
                 <span className="font-bold text-lg text-white group-hover:text-light-gray transition-colors">
                   AI Pedia
                 </span>
-                <span className="text-xs text-light-gray/60">by The AI Society</span>
+                <span className="text-xs text-light-gray/60">
+                  by The AI Society
+                </span>
               </div>
             </Link>
 
@@ -147,9 +158,9 @@ export function Navbar() {
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-purple/20 border border-purple/30">
                     {session.user.image ? (
-                      <img 
-                        src={session.user.image} 
-                        alt={session.user.name || "User"} 
+                      <img
+                        src={session.user.image}
+                        alt={session.user.name || "User"}
                         className="w-6 h-6 rounded-full"
                       />
                     ) : (
@@ -207,7 +218,9 @@ export function Navbar() {
               <div className="flex flex-col h-full">
                 {/* header */}
                 <div className="flex items-center justify-between p-4 border-b border-white/10">
-                  <span className="text-lg font-bold gradient-text">Navigation</span>
+                  <span className="text-lg font-bold gradient-text">
+                    Navigation
+                  </span>
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="p-2 rounded-lg hover:bg-purple/20 transition-colors"
@@ -219,7 +232,10 @@ export function Navbar() {
 
                 {/* search bar for mobile */}
                 <div className="p-4 border-b border-white/10">
-                  <SearchBar isMobile onClose={() => setIsMobileMenuOpen(false)} />
+                  <SearchBar
+                    isMobile
+                    onClose={() => setIsMobileMenuOpen(false)}
+                  />
                 </div>
 
                 {/* navigation links */}
@@ -252,5 +268,5 @@ export function Navbar() {
       {/* spacer for fixed navbar */}
       <div className="h-16" />
     </>
-  )
+  );
 }

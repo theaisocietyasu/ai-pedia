@@ -1,11 +1,11 @@
-import { blogsMetadata } from "./metadata"
+import { blogsMetadata } from "./metadata";
 
-export const metadata = blogsMetadata
+export const metadata = blogsMetadata;
 
 export default function BlogsLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  return <>{children}</>
+  return <>{children}</>;
 }

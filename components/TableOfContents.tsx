@@ -1,15 +1,19 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { Heading } from '@/lib/markdown-utils';
+import type React from "react";
+import { useEffect, useState } from "react";
+import type { Heading } from "@/lib/markdown-utils";
 
 interface TableOfContentsProps {
   headings: Heading[];
   className?: string;
 }
 
-const TableOfContents: React.FC<TableOfContentsProps> = ({ headings, className = '' }) => {
-  const [activeId, setActiveId] = useState<string>('');
+const TableOfContents: React.FC<TableOfContentsProps> = ({
+  headings,
+  className = "",
+}) => {
+  const [activeId, setActiveId] = useState<string>("");
 
   useEffect(() => {
     // Track active heading based on scroll position
@@ -22,13 +26,13 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings, className =
         });
       },
       {
-        rootMargin: '-100px 0px -80% 0px',
+        rootMargin: "-100px 0px -80% 0px",
         threshold: 0.1,
-      }
+      },
     );
 
     // Observe all headings
-    const headingElements = document.querySelectorAll('h1[id], h2[id], h3[id]');
+    const headingElements = document.querySelectorAll("h1[id], h2[id], h3[id]");
     headingElements.forEach((element) => observer.observe(element));
 
     return () => {
@@ -45,7 +49,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings, className =
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
@@ -60,7 +64,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings, className =
           onClick={() => scrollToHeading(heading.id)}
           className={`
             text-sm font-medium transition-colors py-1.5 px-2 text-left w-full
-            ${isActive ? 'text-purple bg-purple/10 border-l-2 border-purple' : 'text-gray-400 hover:text-gray-200'}
+            ${isActive ? "text-purple bg-purple/10 border-l-2 border-purple" : "text-gray-400 hover:text-gray-200"}
           `}
           style={{ paddingLeft: `calc(0.5rem + ${indent})` }}
         >
@@ -68,9 +72,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings, className =
         </button>
         {/* Render children recursively */}
         {heading.children.length > 0 && (
-          <div>
-            {heading.children.map((child) => renderHeading(child))}
-          </div>
+          <div>{heading.children.map((child) => renderHeading(child))}</div>
         )}
       </div>
     );
@@ -89,7 +91,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings, className =
 
       {/* Back to Top button */}
       <button
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 mb-2"
       >
         ↑ Back to Top
@@ -101,9 +103,9 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ headings, className =
       <div
         className="flex flex-col gap-0.5 overflow-y-auto pr-2"
         style={{
-          maxHeight: 'calc(100vh - 300px)',
-          scrollbarWidth: 'thin',
-          scrollbarColor: 'var(--purple) var(--dark-gray)'
+          maxHeight: "calc(100vh - 300px)",
+          scrollbarWidth: "thin",
+          scrollbarColor: "var(--purple) var(--dark-gray)",
         }}
       >
         {/* Render all headings */}

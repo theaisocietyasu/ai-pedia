@@ -1,15 +1,15 @@
 // API client functions for fetching learning data from MongoDB
-import { normalizeMarkdownContent } from './markdown-utils';
+import { normalizeMarkdownContent } from "@/lib/markdown-utils";
 
 // Helper function to get base URL for API calls
 function getApiBaseUrl(): string {
   // In server-side context
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     // Use localhost for development, or environment variable for production
-    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'
+    return process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
   }
   // In client-side context, we can use relative URLs
-  return ''
+  return "";
 }
 
 const API_BASE_URL = `${getApiBaseUrl()}/api`;
@@ -45,25 +45,29 @@ export interface LearnModule {
 export async function fetchAllCategories(): Promise<LearnCategory[]> {
   try {
     const response = await fetch(`${API_BASE_URL}/learn/categories`, {
-      next: { revalidate: 3600 } // Cache for 1 hour
+      next: { revalidate: 3600 }, // Cache for 1 hour
     });
     if (!response.ok) {
       throw new Error(`Failed to fetch categories: ${response.statusText}`);
     }
     return await response.json();
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    console.error("Error fetching categories:", error);
     throw error;
   }
 }
 
-export async function fetchModulesByCategory(category: string): Promise<LearnModule[]> {
+export async function fetchModulesByCategory(
+  category: string,
+): Promise<LearnModule[]> {
   try {
     const response = await fetch(`${API_BASE_URL}/learn/category/${category}`, {
-      next: { revalidate: 3600 } // Cache for 1 hour
+      next: { revalidate: 3600 }, // Cache for 1 hour
     });
     if (!response.ok) {
-      throw new Error(`Failed to fetch modules for category ${category}: ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch modules for category ${category}: ${response.statusText}`,
+      );
     }
     return await response.json();
   } catch (error) {
@@ -75,7 +79,7 @@ export async function fetchModulesByCategory(category: string): Promise<LearnMod
 export async function fetchModuleBySlug(slug: string): Promise<LearnModule> {
   try {
     const response = await fetch(`${API_BASE_URL}/learn/content/${slug}`, {
-      next: { revalidate: 3600 } // Cache for 1 hour
+      next: { revalidate: 3600 }, // Cache for 1 hour
     });
     if (!response.ok) {
       throw new Error(`Failed to fetch module ${slug}: ${response.statusText}`);
@@ -88,24 +92,26 @@ export async function fetchModuleBySlug(slug: string): Promise<LearnModule> {
 }
 
 // Utility function to convert API data to the format expected by the UI
-export function transformCategoriesToUIFormat(categories: LearnCategory[]): Record<string, any> {
+export function transformCategoriesToUIFormat(
+  categories: LearnCategory[],
+): Record<string, any> {
   const result: Record<string, any> = {};
-  
-  categories.forEach(category => {
-    const key = category.name.toLowerCase().replace(/\s+/g, '-');
+
+  categories.forEach((category) => {
+    const key = category.name.toLowerCase().replace(/\s+/g, "-");
     result[key] = {
       description: category.description,
       imgPath: category.image,
-      models: [] // Will be populated when modules are fetched
+      models: [], // Will be populated when modules are fetched
     };
   });
-  
+
   return result;
 }
 
 // Utility function to transform modules to the format expected by the UI
 export function transformModulesToUIFormat(modules: LearnModule[]): any[] {
-  return modules.map(module => ({
+  return modules.map((module) => ({
     name: module.title,
     description: module.description,
     imgPath: module.thumbnail,
@@ -113,19 +119,19 @@ export function transformModulesToUIFormat(modules: LearnModule[]): any[] {
     _id: module._id,
     slug: module.slug,
     createdAt: module.createdAt,
-    updatedAt: module.updatedAt
+    updatedAt: module.updatedAt,
   }));
 }
 
 // Utility function to transform a single module to the format expected by the model page
 export function transformModuleToModelFormat(module: LearnModule): any {
   return {
-    title: module.title || '',
-    content: normalizeMarkdownContent(module.content || ''),
-    description: module.description || '',
-    imgPath: module.thumbnail || '',
+    title: module.title || "",
+    content: normalizeMarkdownContent(module.content || ""),
+    description: module.description || "",
+    imgPath: module.thumbnail || "",
     actionButtons: module.action_buttions || [],
-    contributors: module.contributors || []
+    contributors: module.contributors || [],
   };
 }
 
@@ -144,21 +150,23 @@ export interface ImageUploadResponse {
 export async function uploadImage(file: File): Promise<ImageUploadResponse> {
   try {
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append("image", file);
 
     const response = await fetch(`${API_BASE_URL}/upload/image`, {
-      method: 'POST',
+      method: "POST",
       body: formData,
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error || `Failed to upload image: ${response.statusText}`);
+      throw new Error(
+        errorData.error || `Failed to upload image: ${response.statusText}`,
+      );
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Error uploading image:', error);
+    console.error("Error uploading image:", error);
     throw error;
   }
 }
@@ -167,38 +175,47 @@ export async function uploadImage(file: File): Promise<ImageUploadResponse> {
 export async function uploadLearnModule(formData: FormData): Promise<any> {
   try {
     const response = await fetch(`${API_BASE_URL}/learn/content/upload`, {
-      method: 'POST',
+      method: "POST",
       body: formData,
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error || `Failed to upload learn module: ${response.statusText}`);
+      throw new Error(
+        errorData.error ||
+          `Failed to upload learn module: ${response.statusText}`,
+      );
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Error uploading learn module:', error);
+    console.error("Error uploading learn module:", error);
     throw error;
   }
 }
 
 // Update existing learn module
-export async function updateLearnModule(slug: string, formData: FormData): Promise<any> {
+export async function updateLearnModule(
+  slug: string,
+  formData: FormData,
+): Promise<any> {
   try {
     const response = await fetch(`${API_BASE_URL}/learn/content/${slug}`, {
-      method: 'PUT',
+      method: "PUT",
       body: formData,
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error || `Failed to update learn module: ${response.statusText}`);
+      throw new Error(
+        errorData.error ||
+          `Failed to update learn module: ${response.statusText}`,
+      );
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Error updating learn module:', error);
+    console.error("Error updating learn module:", error);
     throw error;
   }
 }
@@ -207,17 +224,20 @@ export async function updateLearnModule(slug: string, formData: FormData): Promi
 export async function deleteLearnModule(slug: string): Promise<any> {
   try {
     const response = await fetch(`${API_BASE_URL}/learn/content/${slug}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error || `Failed to delete learn module: ${response.statusText}`);
+      throw new Error(
+        errorData.error ||
+          `Failed to delete learn module: ${response.statusText}`,
+      );
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Error deleting learn module:', error);
+    console.error("Error deleting learn module:", error);
     throw error;
   }
 }

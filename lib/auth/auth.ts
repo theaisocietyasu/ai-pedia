@@ -1,5 +1,5 @@
-import { NextAuthOptions } from "next-auth"
-import DiscordProvider from "next-auth/providers/discord"
+import type { NextAuthOptions } from "next-auth";
+import DiscordProvider from "next-auth/providers/discord";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -16,23 +16,23 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, account, profile }) {
       // On first sign in, save Discord user ID to token
       if (account && profile) {
-        token.discordId = (profile as any).id
+        token.discordId = (profile as any).id;
       }
-      return token
+      return token;
     },
     async session({ session, token }) {
       // Add Discord ID to session
       if (session.user) {
-        (session.user as any).discordId = token.discordId
+        (session.user as any).discordId = token.discordId;
       }
-      return session
+      return session;
     },
     async redirect({ url, baseUrl }) {
       // After sign in or sign out, always redirect to home page
-      return baseUrl
+      return baseUrl;
     },
   },
   pages: {
-    signIn: '/auth/signin',
+    signIn: "/auth/signin",
   },
-}
+};

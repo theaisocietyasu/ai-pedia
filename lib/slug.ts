@@ -3,30 +3,33 @@ export function slugifyCategory(name: string): string {
   return name
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, '') // remove special chars
-    .replace(/[\s_-]+/g, '-')   // collapse whitespace/underscores to hyphen
-    .replace(/^-+|-+$/g, '');    // trim leading/trailing hyphens
+    .replace(/[^\w\s-]/g, "") // remove special chars
+    .replace(/[\s_-]+/g, "-") // collapse whitespace/underscores to hyphen
+    .replace(/^-+|-+$/g, ""); // trim leading/trailing hyphens
 }
 
 // Utility to slugify heading text similar to markdown heading anchors
 export function slugifyHeading(text: string): string {
   return text
     .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '') // remove special characters
+    .replace(/[^a-z0-9\s-]/g, "") // remove special characters
     .trim()
-    .replace(/\s+/g, '-') // spaces to hyphens
-    .replace(/-+/g, '-'); // collapse multiple hyphens
+    .replace(/\s+/g, "-") // spaces to hyphens
+    .replace(/-+/g, "-"); // collapse multiple hyphens
 }
 
 // Utility to generate slug for learn modules
 // Format: <title-words-with-hyphens>_<objectId>
-export function generateLearnModuleSlug(title: string, objectId: string): string {
+export function generateLearnModuleSlug(
+  title: string,
+  objectId: string,
+): string {
   const titleSlug = title
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, '') // remove special chars
-    .replace(/[\s_-]+/g, '-')   // collapse whitespace/underscores to hyphen
-    .replace(/^-+|-+$/g, '');    // trim leading/trailing hyphens
+    .replace(/[^\w\s-]/g, "") // remove special chars
+    .replace(/[\s_-]+/g, "-") // collapse whitespace/underscores to hyphen
+    .replace(/^-+|-+$/g, ""); // trim leading/trailing hyphens
 
   return `${titleSlug}_${objectId}`;
 }

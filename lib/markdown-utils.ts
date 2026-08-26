@@ -10,7 +10,7 @@ export const useMarkdownProcessor = () => {
 
   return {
     processVZComponents,
-    extractVZComponents
+    extractVZComponents,
   };
 };
 
@@ -39,27 +39,29 @@ export const extractVZComponents = (content: string): VZComponent[] => {
     // Self-closing escaped: \<div id="VZ-name".../\>
     /\\<div\s+id="(VZ-[^"]*)"([^>]*)\/\\>/g,
     // Self-closing regular: <div id="VZ-name".../>
-    /<div\s+id="(VZ-[^"]*)"([^>]*?)\/>/g
+    /<div\s+id="(VZ-[^"]*)"([^>]*?)\/>/g,
   ];
 
   const components: VZComponent[] = [];
   const foundIds = new Set<string>();
 
-  patterns.forEach(pattern => {
+  patterns.forEach((pattern) => {
     let match;
     while ((match = pattern.exec(content)) !== null) {
       const id = match[1];
       if (!foundIds.has(id)) {
         foundIds.add(id);
-        
+
         // Extract placeholder from attributes
-        const attributes = match[2] || '';
+        const attributes = match[2] || "";
         const placeholderMatch = attributes.match(/data-placeholder="([^"]*)"/);
-        const placeholder = placeholderMatch ? placeholderMatch[1] : 'Interactive Visualization';
+        const placeholder = placeholderMatch
+          ? placeholderMatch[1]
+          : "Interactive Visualization";
 
         components.push({
           id,
-          placeholder
+          placeholder,
         });
       }
     }
@@ -71,43 +73,48 @@ export const extractVZComponents = (content: string): VZComponent[] => {
 // Utility function to clean up markdown content
 export const cleanMarkdownContent = (content: string): string => {
   return content
-    .replace(/^\s+|\s+$/g, '') // Trim whitespace
-    .replace(/\n{3,}/g, '\n\n'); // Replace multiple newlines with double newlines
+    .replace(/^\s+|\s+$/g, "") // Trim whitespace
+    .replace(/\n{3,}/g, "\n\n"); // Replace multiple newlines with double newlines
 };
 
 // Utility function to extract metadata from markdown
-export const extractMarkdownMetadata = (content: string): { metadata: MarkdownContent; content: string } => {
+export const extractMarkdownMetadata = (
+  content: string,
+): { metadata: MarkdownContent; content: string } => {
   const metadataRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
   const match = content.match(metadataRegex);
-  
+
   if (!match) {
     return {
       metadata: { content: content },
-      content: content
+      content: content,
     };
   }
 
   const metadataStr = match[1];
   const markdownContent = match[2];
-  
+
   // Simple YAML-like parsing
   const metadata: MarkdownContent = { content: markdownContent };
-  const lines = metadataStr.split('\n');
-  
-  lines.forEach(line => {
-    const colonIndex = line.indexOf(':');
+  const lines = metadataStr.split("\n");
+
+  lines.forEach((line) => {
+    const colonIndex = line.indexOf(":");
     if (colonIndex > -1) {
       const key = line.substring(0, colonIndex).trim();
-      const value = line.substring(colonIndex + 1).trim().replace(/^["']|["']$/g, '');
-      
-      if (key === 'tags') {
-        metadata.tags = value.split(',').map(tag => tag.trim());
+      const value = line
+        .substring(colonIndex + 1)
+        .trim()
+        .replace(/^["']|["']$/g, "");
+
+      if (key === "tags") {
+        metadata.tags = value.split(",").map((tag) => tag.trim());
       } else {
         (metadata as any)[key] = value;
       }
     }
   });
-  
+
   return { metadata, content: markdownContent };
 };
 
@@ -127,10 +134,10 @@ export function slugify(text: string): string {
   // Deprecated for headings: kept for backward compatibility in other places
   return text
     .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[^a-z0-9\s-]/g, "")
     .trim()
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
 }
 
 /**
@@ -140,7 +147,7 @@ export function slugify(text: string): string {
 export function extractHeadings(markdown: string): Heading[] {
   if (!markdown) return [];
 
-  const lines = markdown.split('\n');
+  const lines = markdown.split("\n");
   const headings: Heading[] = [];
   const headingCounts: Record<string, number> = {}; // Track duplicate heading text
 
@@ -156,13 +163,16 @@ export function extractHeadings(markdown: string): Heading[] {
     const text = match[2].trim();
 
     // Generate unique ID
-  // Use heading-specific slugification to match renderer ids
-  // We import lazily to avoid circular deps in some bundlers
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { slugifyHeading } = require('./slug');
-  let baseId = slugifyHeading(text);
+    // Use heading-specific slugification to match renderer ids
+    // We import lazily to avoid circular deps in some bundlers
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { slugifyHeading } = require("./slug");
+    const baseId = slugifyHeading(text);
     headingCounts[baseId] = (headingCounts[baseId] || 0) + 1;
-    const id = headingCounts[baseId] > 1 ? `${baseId}-${headingCounts[baseId] - 1}` : baseId;
+    const id =
+      headingCounts[baseId] > 1
+        ? `${baseId}-${headingCounts[baseId] - 1}`
+        : baseId;
 
     const heading: Heading = {
       id,
@@ -222,9 +232,9 @@ export function flattenHeadings(headings: Heading[]): Heading[] {
  * Handles LaTeX formula escaping issues
  */
 export function normalizeMarkdownContent(content: string): string {
-  if (!content) return '';
-  
-  const hasDoubleBackslash = content.includes('\\\\');
+  if (!content) return "";
+
+  const hasDoubleBackslash = content.includes("\\\\");
 
   if (hasDoubleBackslash) {
     // Content already escaped, return as-is

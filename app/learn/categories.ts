@@ -1,4 +1,9 @@
-import { fetchAllCategories, fetchModulesByCategory, transformCategoriesToUIFormat, transformModulesToUIFormat } from '@/lib/api';
+import {
+  fetchAllCategories,
+  fetchModulesByCategory,
+  transformCategoriesToUIFormat,
+  transformModulesToUIFormat,
+} from "@/lib/api/learn";
 
 // Cache for categories and modules to avoid repeated API calls
 let categoriesCache: Record<string, any> | null = null;
@@ -18,8 +23,8 @@ function isCacheValid(key: string): boolean {
 
 // Function to get all categories with their basic info
 export async function getCategories() {
-  if (categoriesCache && isCacheValid('categories')) {
-    console.log('Returning cached categories');
+  if (categoriesCache && isCacheValid("categories")) {
+    console.log("Returning cached categories");
     return categoriesCache;
   }
 
@@ -27,10 +32,10 @@ export async function getCategories() {
     const categories = await fetchAllCategories();
     // console.log('Fetched categories from API:', categories);
     categoriesCache = transformCategoriesToUIFormat(categories);
-    cacheTimestamps['categories'] = Date.now();
+    cacheTimestamps["categories"] = Date.now();
     return categoriesCache;
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    console.error("Error fetching categories:", error);
     // Fallback to empty object if API fails
     return {};
   }
@@ -79,7 +84,7 @@ export function invalidateAllCaches() {
   modulesCache = {};
   modelDataCache = {};
   cacheTimestamps = {};
-  console.log('All caches invalidated');
+  console.log("All caches invalidated");
 }
 
 // Legacy export for backward compatibility - this will be populated dynamically
@@ -88,7 +93,7 @@ export const categories = {};
 // Function to get model data by slug with caching
 export async function getModelData(slug: string) {
   const cacheKey = `model_${slug}`;
-  
+
   // Check if we have a valid cached version
   if (modelDataCache[slug] && isCacheValid(cacheKey)) {
     console.log(`Returning cached model data for slug: ${slug}`);
@@ -96,14 +101,16 @@ export async function getModelData(slug: string) {
   }
 
   try {
-    const { fetchModuleBySlug, transformModuleToModelFormat } = await import('@/lib/api');
+    const { fetchModuleBySlug, transformModuleToModelFormat } = await import(
+      "@/lib/api/learn"
+    );
     const module = await fetchModuleBySlug(slug);
     const transformedData = transformModuleToModelFormat(module);
-    
+
     // Store in cache with timestamp
     modelDataCache[slug] = transformedData;
     cacheTimestamps[cacheKey] = Date.now();
-    
+
     console.log(`Cached model data for slug: ${slug}`);
     return transformedData;
   } catch (error) {
@@ -113,10 +120,10 @@ export async function getModelData(slug: string) {
       headings: [],
       paragraphs: [],
       images: [],
-      visualization: ''
+      visualization: "",
     };
   }
 }
 
 // Legacy export for backward compatibility - this will be populated dynamically
-export const modelData = {};  
+export const modelData = {};

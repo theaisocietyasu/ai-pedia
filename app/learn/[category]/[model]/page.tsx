@@ -1,46 +1,54 @@
-import React from "react"
-import { notFound } from "next/navigation"
-import { Metadata } from "next"
-import { getModelData } from "../../categories"
-import { SignedIn } from "@/components/auth/auth-components"
-import ReactMarkdown from "react-markdown"
-import { extractHeadings } from "@/lib/markdown-utils"
-import { LearnModuleClient } from "./LearnModuleClient"
-import { EditButton } from "./EditButton"
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import React from "react";
+import ReactMarkdown from "react-markdown";
+import { SignedIn } from "@/components/auth/auth-components";
+import { extractHeadings } from "@/lib/markdown-utils";
+import { getModelData } from "../../categories";
+import { EditButton } from "./EditButton";
+import { LearnModuleClient } from "./LearnModuleClient";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aipedia.ais-asu.com/'
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://aipedia.ais-asu.com/";
 
 interface LearnModulePageProps {
   params: Promise<{
-    category: string
-    model: string
-  }>
+    category: string;
+    model: string;
+  }>;
 }
 
-export async function generateMetadata({ params }: LearnModulePageProps): Promise<Metadata> {
-  const { category, model: modelSlug } = await params
+export async function generateMetadata({
+  params,
+}: LearnModulePageProps): Promise<Metadata> {
+  const { category, model: modelSlug } = await params;
 
   try {
-    const modelData = await getModelData(modelSlug)
+    const modelData = await getModelData(modelSlug);
 
     if (!modelData || !modelData.title) {
       return {
         title: "Module Not Found",
-        description: "The requested learning module could not be found."
-      }
+        description: "The requested learning module could not be found.",
+      };
     }
 
     // Extract keywords from content (first 10 words from headings or content)
-    const contentPreview = modelData.content?.substring(0, 200) || modelData.description
-    const keywords = modelData.title.split(' ').concat(category.split('-'))
+    const contentPreview =
+      modelData.content?.substring(0, 200) || modelData.description;
+    const keywords = modelData.title.split(" ").concat(category.split("-"));
 
     return {
       title: modelData.title,
-      description: modelData.description || `Learn about ${modelData.title} in our comprehensive guide.`,
+      description:
+        modelData.description ||
+        `Learn about ${modelData.title} in our comprehensive guide.`,
       keywords: keywords,
       openGraph: {
         title: modelData.title,
-        description: modelData.description || `Learn about ${modelData.title} in our comprehensive guide.`,
+        description:
+          modelData.description ||
+          `Learn about ${modelData.title} in our comprehensive guide.`,
         url: `${baseUrl}/learn/${category}/${modelSlug}`,
         type: "article",
         images: [
@@ -48,112 +56,118 @@ export async function generateMetadata({ params }: LearnModulePageProps): Promis
             url: modelData.imgPath || "/og-image.png",
             width: 1200,
             height: 630,
-            alt: modelData.title
-          }
-        ]
+            alt: modelData.title,
+          },
+        ],
       },
       twitter: {
         card: "summary_large_image",
         title: modelData.title,
-        description: modelData.description || `Learn about ${modelData.title} in our comprehensive guide.`,
-        images: [modelData.imgPath || "/og-image.png"]
+        description:
+          modelData.description ||
+          `Learn about ${modelData.title} in our comprehensive guide.`,
+        images: [modelData.imgPath || "/og-image.png"],
       },
       alternates: {
-        canonical: `${baseUrl}/learn/${category}/${modelSlug}`
-      }
-    }
+        canonical: `${baseUrl}/learn/${category}/${modelSlug}`,
+      },
+    };
   } catch (error) {
-    console.error(`Error generating metadata for ${modelSlug}:`, error)
+    console.error(`Error generating metadata for ${modelSlug}:`, error);
     return {
       title: "Module Not Found",
-      description: "The requested learning module could not be found."
-    }
+      description: "The requested learning module could not be found.",
+    };
   }
 }
 
 async function LearnModulePage({ params }: LearnModulePageProps) {
-  const { category, model: modelSlug } = await params
+  const { category, model: modelSlug } = await params;
 
-  let model: any = null
+  let model: any = null;
 
   try {
-    console.log("Fetching model data for slug:", modelSlug)
-    model = await getModelData(modelSlug)
+    console.log("Fetching model data for slug:", modelSlug);
+    model = await getModelData(modelSlug);
     if (!model || !model.title) {
-      notFound()
+      notFound();
     }
   } catch (error) {
-    console.error('Error fetching model data:', error)
-    notFound()
+    console.error("Error fetching model data:", error);
+    notFound();
   }
 
   // Extract headings for table of contents
-  const headings = model.content ? extractHeadings(model.content) : []
+  const headings = model.content ? extractHeadings(model.content) : [];
 
   // Use the actual title from the database, fallback to generated name from URL
-  const displayTitle = model?.title || modelSlug
-    ?.split("-")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ")
+  const displayTitle =
+    model?.title ||
+    modelSlug
+      ?.split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
 
   // Structured data for learning resource
   const learningResourceSchema = {
     "@context": "https://schema.org",
     "@type": "LearningResource",
-    "name": model.title,
-    "description": model.description,
-    "image": model.imgPath || `${baseUrl}/og-image.png`,
-    "educationalLevel": "Intermediate",
-    "learningResourceType": "Tutorial",
-    "inLanguage": "en-US",
-    "provider": {
+    name: model.title,
+    description: model.description,
+    image: model.imgPath || `${baseUrl}/og-image.png`,
+    educationalLevel: "Intermediate",
+    learningResourceType: "Tutorial",
+    inLanguage: "en-US",
+    provider: {
       "@type": "Organization",
-      "name": "The AI Society at ASU",
-      "url": baseUrl
+      name: "The AI Society at ASU",
+      url: baseUrl,
     },
-    "about": {
+    about: {
       "@type": "Thing",
-      "name": category.replace(/-/g, ' '),
-      "description": `Learning resources about ${category.replace(/-/g, ' ')}`
-    }
-  }
+      name: category.replace(/-/g, " "),
+      description: `Learning resources about ${category.replace(/-/g, " ")}`,
+    },
+  };
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "itemListElement": [
+    itemListElement: [
       {
         "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": baseUrl
+        position: 1,
+        name: "Home",
+        item: baseUrl,
       },
       {
         "@type": "ListItem",
-        "position": 2,
-        "name": "Learn",
-        "item": `${baseUrl}/learn`
+        position: 2,
+        name: "Learn",
+        item: `${baseUrl}/learn`,
       },
       {
         "@type": "ListItem",
-        "position": 3,
-        "name": category.replace(/-/g, ' '),
-        "item": `${baseUrl}/learn/${category}`
+        position: 3,
+        name: category.replace(/-/g, " "),
+        item: `${baseUrl}/learn/${category}`,
       },
       {
         "@type": "ListItem",
-        "position": 4,
-        "name": model.title,
-        "item": `${baseUrl}/learn/${category}/${modelSlug}`
-      }
-    ]
-  }
+        position: 4,
+        name: model.title,
+        item: `${baseUrl}/learn/${category}/${modelSlug}`,
+      },
+    ],
+  };
 
   return (
     <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(learningResourceSchema) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(learningResourceSchema),
+        }}
       />
       <script
         type="application/ld+json"
@@ -170,9 +184,7 @@ async function LearnModulePage({ params }: LearnModulePageProps) {
           {/* Model Description */}
           {model?.description && (
             <div className="mt-4 text-base md:text-lg text-light-gray/80 max-w-2xl mx-auto">
-              <ReactMarkdown>
-                {model.description}
-              </ReactMarkdown>
+              <ReactMarkdown>{model.description}</ReactMarkdown>
             </div>
           )}
 
@@ -190,7 +202,7 @@ async function LearnModulePage({ params }: LearnModulePageProps) {
         />
       </div>
     </div>
-  )
+  );
 }
 
-export default LearnModulePage
+export default LearnModulePage;

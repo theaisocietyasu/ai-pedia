@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import React, { useState, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { uploadImage } from '@/lib/api';
+import type React from "react";
+import { useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { uploadImage } from "@/lib/api/learn";
 
 interface UploadedImage {
   id: string;
@@ -17,7 +18,9 @@ export const ImageUploadButton: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -25,16 +28,24 @@ export const ImageUploadButton: React.FC = () => {
     setError(null);
 
     // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+    ];
     if (!allowedTypes.includes(file.type)) {
-      setError('Invalid file type. Please upload a JPG, PNG, GIF, or WebP image.');
+      setError(
+        "Invalid file type. Please upload a JPG, PNG, GIF, or WebP image.",
+      );
       return;
     }
 
     // Validate file size (5MB max)
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
-      setError('File too large. Maximum size is 5MB.');
+      setError("File too large. Maximum size is 5MB.");
       return;
     }
 
@@ -53,12 +64,12 @@ export const ImageUploadButton: React.FC = () => {
 
       setUploadedImages((prev) => [...prev, newImage]);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to upload image');
+      setError(err instanceof Error ? err.message : "Failed to upload image");
     } finally {
       setIsUploading(false);
       // Reset file input
       if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        fileInputRef.current.value = "";
       }
     }
   };
@@ -88,7 +99,7 @@ export const ImageUploadButton: React.FC = () => {
             onClick={() => fileInputRef.current?.click()}
             className="cursor-pointer"
           >
-            {isUploading ? 'Uploading...' : '📷 Upload Image'}
+            {isUploading ? "Uploading..." : "📷 Upload Image"}
           </Button>
         </label>
       </div>
@@ -103,7 +114,9 @@ export const ImageUploadButton: React.FC = () => {
       {/* Uploaded Images */}
       {uploadedImages.length > 0 && (
         <div className="space-y-2">
-          <div className="text-xs text-gray-400 font-medium">Uploaded Images:</div>
+          <div className="text-xs text-gray-400 font-medium">
+            Uploaded Images:
+          </div>
           {uploadedImages.map((image) => (
             <div
               key={image.id}
@@ -117,7 +130,9 @@ export const ImageUploadButton: React.FC = () => {
                   className="w-12 h-12 object-cover rounded"
                 />
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs text-gray-300 truncate">{image.fileName}</div>
+                  <div className="text-xs text-gray-300 truncate">
+                    {image.fileName}
+                  </div>
                 </div>
               </div>
 

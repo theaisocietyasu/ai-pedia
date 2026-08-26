@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Link from "next/link"
-import { ArrowRight, Sparkles, ChevronDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { GradientText } from "@/components/ui/gradient-text"
-import { heroContent } from "@/lib/constants"
+import { motion } from "framer-motion";
+import { ArrowRight, ChevronDown, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { GradientText } from "@/components/ui/gradient-text";
+import { heroContent } from "@/lib/constants";
 
 export function HeroSection() {
   const scrollToNext = () => {
-    const element = document.getElementById("features")
-    element?.scrollIntoView({ behavior: "smooth" })
-  }
+    const element = document.getElementById("features");
+    element?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <section className="relative min-h-screen w-full flex items-start justify-center overflow-hidden pt-40 pb-16 bg-background">
@@ -26,7 +26,7 @@ export function HeroSection() {
           transition={{
             duration: 8,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
           className="absolute top-20 left-20 w-96 h-96 bg-purple/30 rounded-full blur-3xl"
         />
@@ -39,7 +39,7 @@ export function HeroSection() {
             duration: 10,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 1
+            delay: 1,
           }}
           className="absolute bottom-20 right-20 w-96 h-96 bg-pink/30 rounded-full blur-3xl"
         />
@@ -52,18 +52,18 @@ export function HeroSection() {
             duration: 12,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 2
+            delay: 2,
           }}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-purple/20 rounded-full blur-3xl"
         />
 
         {/* grid pattern */}
-        <div 
+        <div
           className="absolute inset-0 opacity-10"
           style={{
             backgroundImage: `linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px),
                               linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)`,
-            backgroundSize: "50px 50px"
+            backgroundSize: "50px 50px",
           }}
         />
       </div>
@@ -79,7 +79,9 @@ export function HeroSection() {
                      bg-white/5 border border-white/10 px-4 py-2 mb-8"
           >
             <Sparkles size={16} className="text-purple" />
-            <span className="text-sm text-light-gray">Powered by The AI Society at ASU</span>
+            <span className="text-sm text-light-gray">
+              Powered by The AI Society at ASU
+            </span>
           </motion.div>
 
           {/* main title */}
@@ -89,9 +91,7 @@ export function HeroSection() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-5xl sm:text-6xl md:text-7xl font-bold mb-8"
           >
-            <GradientText animate={false}>
-              {heroContent.title}
-            </GradientText>
+            <GradientText animate={false}>{heroContent.title}</GradientText>
           </motion.h1>
 
           {/* subtitle */}
@@ -135,20 +135,14 @@ export function HeroSection() {
 
             {heroContent.secondaryCtaText && heroContent.secondaryCtaLink && (
               <Link href={heroContent.secondaryCtaLink}>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full"
-                >
+                <Button size="lg" variant="outline" className="rounded-full">
                   {heroContent.secondaryCtaText}
                 </Button>
               </Link>
             )}
           </motion.div>
-
         </div>
-
       </div>
     </section>
-  )
+  );
 }

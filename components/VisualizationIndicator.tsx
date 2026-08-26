@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { extractVZComponents, type VZComponent } from '@/lib/markdown-utils';
+import type React from "react";
+import { extractVZComponents, type VZComponent } from "@/lib/markdown-utils";
 
 interface VisualizationIndicatorProps {
   content: string;
   className?: string;
 }
 
-export const VisualizationIndicator: React.FC<VisualizationIndicatorProps> = ({ 
-  content, 
-  className = '' 
+export const VisualizationIndicator: React.FC<VisualizationIndicatorProps> = ({
+  content,
+  className = "",
 }) => {
   const vizComponents = extractVZComponents(content);
 
@@ -22,9 +22,12 @@ export const VisualizationIndicator: React.FC<VisualizationIndicatorProps> = ({
     <div className={`flex items-center gap-2 ${className}`}>
       <div className="flex items-center gap-1 text-xs text-purple-300">
         <span className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></span>
-        <span>{vizComponents.length} visualization{vizComponents.length !== 1 ? 's' : ''}</span>
+        <span>
+          {vizComponents.length} visualization
+          {vizComponents.length !== 1 ? "s" : ""}
+        </span>
       </div>
-      
+
       {/* Tooltip with visualization list */}
       <div className="group relative">
         <button className="text-xs text-gray-400 hover:text-gray-200 transition-colors">

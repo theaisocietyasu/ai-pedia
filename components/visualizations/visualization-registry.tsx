@@ -1,29 +1,24 @@
-"use client"
+"use client";
 
-import React from "react";
-import { 
-  VisualizationError, 
-  VisualizationProps 
-} from "./shared";
-
+import type React from "react";
 // Import all visualization components from organized categories
 import {
+  ActivationFunctionVisualizer,
   // AI/ML General visualizations
   AITrendsVisualization,
-  ActivationFunctionVisualizer,
-  NeuralNetworkDemo,
-  CNNArchitectureVisualizer,
-  YOLODetectionDemo,
+  AssumptionPlotsVisualization,
   AttentionMechanismDemo,
-  MultiModalLearningDemo,
-  
+  CNNArchitectureVisualizer,
+  InteractiveDemoVisualization,
   // Linear Regression visualizations
   LinearEquationVisualization,
-  AssumptionPlotsVisualization,
-  RegressionComparisonVisualization,
   ModelEvaluationVisualization,
-  InteractiveDemoVisualization
+  MultiModalLearningDemo,
+  NeuralNetworkDemo,
+  RegressionComparisonVisualization,
+  YOLODetectionDemo,
 } from "./categories";
+import { VisualizationError, type VisualizationProps } from "./shared";
 
 /**
  * Visualization Component Registry
@@ -67,10 +62,10 @@ export const VISUALIZATION_COMPONENTS: Record<string, React.ComponentType> = {
  */
 export const Visualization: React.FC<VisualizationProps> = ({
   componentId,
-  fallbackTitle = "Interactive Visualization"
+  fallbackTitle = "Interactive Visualization",
 }) => {
   // Safety check for component ID
-  if (!componentId || typeof componentId !== 'string') {
+  if (!componentId || typeof componentId !== "string") {
     return <VisualizationError componentId={componentId} type="invalid-id" />;
   }
 
@@ -83,7 +78,10 @@ export const Visualization: React.FC<VisualizationProps> = ({
   try {
     return <Component />;
   } catch (error) {
-    console.error(`Error rendering visualization component ${componentId}:`, error);
+    console.error(
+      `Error rendering visualization component ${componentId}:`,
+      error,
+    );
     return <VisualizationError componentId={componentId} type="error" />;
   }
 };

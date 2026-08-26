@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { cn } from "@/lib/utils"
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface GradientTextProps {
-  children: React.ReactNode
-  className?: string
-  gradient?: string
-  animate?: boolean
-  delay?: number
+  children: React.ReactNode;
+  className?: string;
+  gradient?: string;
+  animate?: boolean;
+  delay?: number;
 }
 
 export function GradientText({
@@ -16,7 +16,7 @@ export function GradientText({
   className,
   gradient = "from-purple via-pink to-blue-purple",
   animate = true,
-  delay = 0
+  delay = 0,
 }: GradientTextProps) {
   return (
     <motion.span
@@ -27,15 +27,15 @@ export function GradientText({
         "inline-block bg-gradient-to-r bg-clip-text text-transparent",
         "bg-[length:200%_auto] animate-gradient-shift",
         gradient,
-        className
+        className,
       )}
       style={{
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
-        backgroundClip: "text"
+        backgroundClip: "text",
       }}
     >
       {children}
     </motion.span>
-  )
+  );
 }

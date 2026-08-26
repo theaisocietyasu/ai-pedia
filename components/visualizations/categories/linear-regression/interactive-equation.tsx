@@ -1,17 +1,18 @@
-"use client"
+"use client";
 
-import React, { useState, useRef, Suspense } from "react";
-import { motion } from "framer-motion";
+import { Line, OrbitControls, Sphere, Text } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Line, OrbitControls, Text, Sphere } from "@react-three/drei";
+import { motion } from "framer-motion";
+import type React from "react";
+import { Suspense, useRef, useState } from "react";
 import * as THREE from "three";
-import { 
-  ControlPanel, 
-  SliderControl, 
-  CheckboxControl, 
-  VisualizationLoading,
+import {
+  animationVariants,
+  CheckboxControl,
+  ControlPanel,
   generateSampleData,
-  animationVariants 
+  SliderControl,
+  VisualizationLoading,
 } from "../../shared";
 
 export const LinearEquationVisualization: React.FC = () => {
@@ -32,7 +33,7 @@ export const LinearEquationVisualization: React.FC = () => {
 
   const LineVisualization = () => {
     const groupRef = useRef<THREE.Group>(null);
-    
+
     useFrame(() => {
       if (groupRef.current) {
         // Animate the line slightly
@@ -50,26 +51,19 @@ export const LinearEquationVisualization: React.FC = () => {
     return (
       <group ref={groupRef}>
         {/* Regression line */}
-        <Line
-          points={linePoints}
-          color="#8b5cf6"
-          lineWidth={3}
-        />
-        
+        <Line points={linePoints} color="#8b5cf6" lineWidth={3} />
+
         {/* Data points */}
         {dataPoints.map((point, index) => (
           <group key={index}>
-            <Sphere
-              position={[point.x, point.y, 0]}
-              args={[0.08]}
-            >
+            <Sphere position={[point.x, point.y, 0]} args={[0.08]}>
               <meshBasicMaterial color="#ec4899" />
             </Sphere>
             {showResiduals && (
               <Line
                 points={[
                   new THREE.Vector3(point.x, point.y, 0),
-                  new THREE.Vector3(point.x, point.predicted, 0)
+                  new THREE.Vector3(point.x, point.predicted, 0),
                 ]}
                 color="#fbbf24"
                 lineWidth={2}
@@ -112,14 +106,18 @@ export const LinearEquationVisualization: React.FC = () => {
       <div className="flex flex-col lg:flex-row h-full">
         {/* 3D Visualization */}
         <div className="flex-1 relative min-h-[300px] lg:min-h-0">
-          <Suspense fallback={<VisualizationLoading message="Loading 3D visualization..." />}>
+          <Suspense
+            fallback={
+              <VisualizationLoading message="Loading 3D visualization..." />
+            }
+          >
             <Canvas camera={{ position: [8, 8, 8], fov: 50 }}>
               <ambientLight intensity={0.6} />
               <pointLight position={[10, 10, 10]} />
               <LineVisualization />
-              <OrbitControls 
-                enableZoom={true} 
-                enablePan={true} 
+              <OrbitControls
+                enableZoom={true}
+                enablePan={true}
                 enableRotate={true}
                 maxDistance={15}
                 minDistance={5}
@@ -158,7 +156,9 @@ export const LinearEquationVisualization: React.FC = () => {
           </div>
 
           <div className="mt-6 p-3 bg-gray-700/50 rounded">
-            <h4 className="text-sm font-medium text-white mb-2">Equation Components:</h4>
+            <h4 className="text-sm font-medium text-white mb-2">
+              Equation Components:
+            </h4>
             <ul className="text-xs text-gray-300 space-y-1">
               <li>• β₀ (intercept): {intercept.toFixed(1)}</li>
               <li>• β₁ (slope): {slope.toFixed(1)}</li>

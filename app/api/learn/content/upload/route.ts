@@ -1,39 +1,45 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { mongoConnection } from '../../../../../utilities/db_connector';
-import { requireAuthWithRole } from '@/lib/auth/server';
-import { uploadImageToGridFS } from '@/lib/gridfs';
-import { slugifyCategory, generateLearnModuleSlug } from '@/lib/slug';
+import { type NextRequest, NextResponse } from "next/server";
+import { authErrorResponse, requireAuthWithRole } from "@/lib/auth/server";
+import { mongoConnection } from "@/lib/db/client";
+import { uploadImageToGridFS } from "@/lib/db/gridfs";
+import { generateLearnModuleSlug, slugifyCategory } from "@/lib/slug";
 
 export async function POST(request: NextRequest) {
   let client;
-  
+
   try {
     // Check authentication and Discord role
     const session = await requireAuthWithRole();
     const userId = session.user.discordId;
 
     if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const formData = await request.formData();
-    
+
     // Extract form fields
-    const title = formData.get('title') as string;
-    const description = formData.get('description') as string;
-    const content = formData.get('content') as string;
-    const categoriesString = formData.get('categories') as string;
-    const actionButtonsString = formData.get('action_buttons') as string;
-    const thumbnailFile = formData.get('thumbnail') as File;
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const content = formData.get("content") as string;
+    const categoriesString = formData.get("categories") as string;
+    const actionButtonsString = formData.get("action_buttons") as string;
+    const thumbnailFile = formData.get("thumbnail") as File;
 
     // Validate required fields
-    if (!title || !description || !content || !categoriesString || !thumbnailFile) {
+    if (
+      !title ||
+      !description ||
+      !content ||
+      !categoriesString ||
+      !thumbnailFile
+    ) {
       return NextResponse.json(
-        { error: 'Missing required fields: title, description, content, categories, and thumbnail are required' },
-        { status: 400 }
+        {
+          error:
+            "Missing required fields: title, description, content, categories, and thumbnail are required",
+        },
+        { status: 400 },
       );
     }
 
@@ -42,12 +48,12 @@ export async function POST(request: NextRequest) {
     try {
       categories = JSON.parse(categoriesString);
       if (!Array.isArray(categories) || categories.length === 0) {
-        throw new Error('Categories must be a non-empty array');
+        throw new Error("Categories must be a non-empty array");
       }
     } catch (error) {
       return NextResponse.json(
-        { error: 'Invalid categories format' },
-        { status: 400 }
+        { error: "Invalid categories format" },
+        { status: 400 },
       );
     }
 
@@ -58,44 +64,51 @@ export async function POST(request: NextRequest) {
         actionButtons = JSON.parse(actionButtonsString);
       } catch (error) {
         return NextResponse.json(
-          { error: 'Invalid action buttons format' },
-          { status: 400 }
+          { error: "Invalid action buttons format" },
+          { status: 400 },
         );
       }
     }
 
     // Validate thumbnail file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+    ];
     if (!allowedTypes.includes(thumbnailFile.type)) {
       return NextResponse.json(
-        { error: 'Invalid thumbnail file type. Please upload a JPG, PNG, GIF, or WebP image.' },
-        { status: 400 }
+        {
+          error:
+            "Invalid thumbnail file type. Please upload a JPG, PNG, GIF, or WebP image.",
+        },
+        { status: 400 },
       );
     }
 
     // Upload thumbnail to GridFS
     const arrayBuffer = await thumbnailFile.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    
+
     const { fileId, url: thumbnailUrl } = await uploadImageToGridFS(
       buffer,
       thumbnailFile.name,
       thumbnailFile.type,
-      userId
+      userId,
     );
 
-    const collection = await mongoConnection.collection('learn_content');
-    const categoriesCollection = await mongoConnection.collection('learn_categories');
+    const collection = await mongoConnection.collection("learn_content");
+    const categoriesCollection =
+      await mongoConnection.collection("learn_categories");
 
     // Normalize incoming categories to slugs and validate existance
     const normalizedCategorySlugs: string[] = [];
     for (const cat of categories) {
       const slug = slugifyCategory(cat);
       const existing = await categoriesCollection.findOne({
-        $or: [
-          { name: cat },
-          { name: new RegExp(`^${cat}$`, 'i') }
-        ]
+        $or: [{ name: cat }, { name: new RegExp(`^${cat}$`, "i") }],
       });
 
       // If not found by name, try matching by slug computed from name field
@@ -106,14 +119,14 @@ export async function POST(request: NextRequest) {
             $eq: [
               {
                 $replaceAll: {
-                  input: { $toLower: { $trim: { input: '$name' } } },
-                  find: ' ',
-                  replacement: '-'
-                }
+                  input: { $toLower: { $trim: { input: "$name" } } },
+                  find: " ",
+                  replacement: "-",
+                },
               },
-              slug
-            ]
-          }
+              slug,
+            ],
+          },
         });
         valid = bySlug;
       }
@@ -121,14 +134,14 @@ export async function POST(request: NextRequest) {
       if (!valid) {
         return NextResponse.json(
           { error: `Unknown category: ${cat}` },
-          { status: 400 }
+          { status: 400 },
         );
       }
       normalizedCategorySlugs.push(slug);
     }
 
     // Get user information
-    const userName = session.user.name || session.user.email || 'Anonymous';
+    const userName = session.user.name || session.user.email || "Anonymous";
     const userEmail = session.user.email;
 
     // Create the learn module document (without slug first to get the ID)
@@ -141,12 +154,14 @@ export async function POST(request: NextRequest) {
       action_buttons: actionButtons,
       createdAt: new Date(),
       createdBy: userId,
-      contributors: [{
-        id: userId,
-        name: userName,
-        email: userEmail,
-        addedAt: new Date()
-      }]
+      contributors: [
+        {
+          id: userId,
+          name: userName,
+          email: userEmail,
+          addedAt: new Date(),
+        },
+      ],
     };
 
     // Insert into database to get the ObjectId
@@ -158,26 +173,27 @@ export async function POST(request: NextRequest) {
     // Update the document with the slug
     await collection.updateOne(
       { _id: result.insertedId },
-      { $set: { slug: slug } }
+      { $set: { slug: slug } },
     );
 
     return NextResponse.json({
       success: true,
       id: result.insertedId,
       slug: slug,
-      message: 'Learn module uploaded successfully',
+      message: "Learn module uploaded successfully",
       module: {
         ...learnModule,
         _id: result.insertedId,
-        slug: slug
-      }
+        slug: slug,
+      },
     });
-
   } catch (error) {
-    console.error('Error uploading learn module:', error);
+    const authResponse = authErrorResponse(error);
+    if (authResponse) return authResponse;
+    console.error("Error uploading learn module:", error);
     return NextResponse.json(
-      { error: 'Internal server error while uploading learn module' },
-      { status: 500 }
+      { error: "Internal server error while uploading learn module" },
+      { status: 500 },
     );
   }
 }

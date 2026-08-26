@@ -1,10 +1,11 @@
-import React from "react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Metadata } from "next";
-import { getModulesForCategory, getCategories } from "../categories";
+import React from "react";
+import { getCategories, getModulesForCategory } from "../categories";
 import { CategoryPageClient } from "./CategoryPageClient";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://aipedia.ais-asu.com/";
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://aipedia.ais-asu.com/";
 
 interface CategoryPageProps {
   params: Promise<{
@@ -46,7 +47,7 @@ export async function generateMetadata({
         modules.length
       } comprehensive tutorials and guides about ${category.replace(
         /-/g,
-        " "
+        " ",
       )}. Master key concepts with our interactive learning modules.`;
 
     return {

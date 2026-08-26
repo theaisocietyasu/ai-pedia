@@ -1,47 +1,53 @@
-import React from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { notFound } from "next/navigation"
-import { Metadata } from "next"
 import {
-  Calendar,
-  Clock,
-  User,
   ArrowLeft,
-  Share2,
   BookOpen,
-  ChevronRight
-} from "lucide-react"
-import { GradientText } from "@/components/ui/gradient-text"
-import { BlogContent } from "@/components/ui/blog-content"
-import { BlogCard } from "@/components/ui/blog-card"
-import { getBlogPost, getRelatedBlogs } from "@/lib/blog-data"
-import type { LegacyBlogPost } from "@/lib/types"
+  Calendar,
+  ChevronRight,
+  Clock,
+  Share2,
+  User,
+} from "lucide-react";
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import React from "react";
+import { BlogCard } from "@/components/ui/blog-card";
+import { BlogContent } from "@/components/ui/blog-content";
+import { GradientText } from "@/components/ui/gradient-text";
+import { getBlogPost, getRelatedBlogs } from "@/lib/blog-data";
+import type { LegacyBlogPost } from "@/lib/types";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aipedia.ais-asu.com/'
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://aipedia.ais-asu.com/";
 
 interface BlogDetailPageProps {
   params: Promise<{
-    slug: string
-  }>
+    slug: string;
+  }>;
 }
 
-export async function generateMetadata({ params }: BlogDetailPageProps): Promise<Metadata> {
-  const { slug } = await params
+export async function generateMetadata({
+  params,
+}: BlogDetailPageProps): Promise<Metadata> {
+  const { slug } = await params;
 
   try {
-    const blog = await getBlogPost(slug)
+    const blog = await getBlogPost(slug);
 
     if (!blog) {
       return {
         title: "Blog Not Found",
-        description: "The requested blog post could not be found."
-      }
+        description: "The requested blog post could not be found.",
+      };
     }
 
-    const publishDate = new Date(blog.publishDate).toISOString()
-    const modifiedDate = blog.lastUpdated ? new Date(blog.lastUpdated).toISOString() : publishDate
-    const authorName = typeof blog.author === 'string' ? blog.author : blog.author
+    const publishDate = new Date(blog.publishDate).toISOString();
+    const modifiedDate = blog.lastUpdated
+      ? new Date(blog.lastUpdated).toISOString()
+      : publishDate;
+    const authorName =
+      typeof blog.author === "string" ? blog.author : blog.author;
 
     return {
       title: blog.title,
@@ -62,100 +68,103 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
             url: blog.featuredImage || "/og-image.png",
             width: 1200,
             height: 630,
-            alt: blog.title
-          }
-        ]
+            alt: blog.title,
+          },
+        ],
       },
       twitter: {
         card: "summary_large_image",
         title: blog.title,
         description: blog.excerpt,
-        images: [blog.featuredImage || "/og-image.png"]
+        images: [blog.featuredImage || "/og-image.png"],
       },
       alternates: {
-        canonical: `${baseUrl}/blogs/${slug}`
-      }
-    }
+        canonical: `${baseUrl}/blogs/${slug}`,
+      },
+    };
   } catch (error) {
     return {
       title: "Blog Not Found",
-      description: "The requested blog post could not be found."
-    }
+      description: "The requested blog post could not be found.",
+    };
   }
 }
 
 async function BlogDetailPage({ params }: BlogDetailPageProps) {
-  const { slug } = await params
+  const { slug } = await params;
 
-  let blog: LegacyBlogPost | null = null
-  let relatedBlogs: LegacyBlogPost[] = []
+  let blog: LegacyBlogPost | null = null;
+  let relatedBlogs: LegacyBlogPost[] = [];
 
   try {
-    console.log("Fetching blog post for slug:", slug)
-    blog = await getBlogPost(slug)
+    console.log("Fetching blog post for slug:", slug);
+    blog = await getBlogPost(slug);
     if (!blog) {
-      notFound()
+      notFound();
     }
-    relatedBlogs = await getRelatedBlogs(slug, 3)
+    relatedBlogs = await getRelatedBlogs(slug, 3);
   } catch (error) {
-    console.error('Error fetching blog data:', error)
-    notFound()
+    console.error("Error fetching blog data:", error);
+    notFound();
   }
 
-  const authorName = typeof blog.author === 'string' ? blog.author : blog.author
+  const authorName =
+    typeof blog.author === "string" ? blog.author : blog.author;
 
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": blog.title,
-    "description": blog.excerpt,
-    "image": blog.featuredImage || `${baseUrl}/og-image.png`,
-    "datePublished": new Date(blog.publishDate).toISOString(),
-    "dateModified": blog.lastUpdated ? new Date(blog.lastUpdated).toISOString() : new Date(blog.publishDate).toISOString(),
-    "author": {
+    headline: blog.title,
+    description: blog.excerpt,
+    image: blog.featuredImage || `${baseUrl}/og-image.png`,
+    datePublished: new Date(blog.publishDate).toISOString(),
+    dateModified: blog.lastUpdated
+      ? new Date(blog.lastUpdated).toISOString()
+      : new Date(blog.publishDate).toISOString(),
+    author: {
       "@type": "Person",
-      "name": authorName
+      name: authorName,
     },
-    "publisher": {
+    publisher: {
       "@type": "Organization",
-      "name": "The AI Society at ASU",
-      "logo": {
+      name: "The AI Society at ASU",
+      logo: {
         "@type": "ImageObject",
-        "url": `${baseUrl}/logo.png`
-      }
+        url: `${baseUrl}/logo.png`,
+      },
     },
-    "mainEntityOfPage": {
+    mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `${baseUrl}/blogs/${slug}`
+      "@id": `${baseUrl}/blogs/${slug}`,
     },
-    "keywords": blog.tags.join(", "),
-    "articleSection": blog.category
-  }
+    keywords: blog.tags.join(", "),
+    articleSection: blog.category,
+  };
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "itemListElement": [
+    itemListElement: [
       {
         "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": baseUrl
+        position: 1,
+        name: "Home",
+        item: baseUrl,
       },
       {
         "@type": "ListItem",
-        "position": 2,
-        "name": "Blog",
-        "item": `${baseUrl}/blogs`
+        position: 2,
+        name: "Blog",
+        item: `${baseUrl}/blogs`,
       },
       {
         "@type": "ListItem",
-        "position": 3,
-        "name": blog.title,
-        "item": `${baseUrl}/blogs/${slug}`
-      }
-    ]
-  }
+        position: 3,
+        name: blog.title,
+        item: `${baseUrl}/blogs/${slug}`,
+      },
+    ],
+  };
 
   return (
     <main className="min-h-screen bg-background">
@@ -176,7 +185,10 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
               className="inline-flex items-center gap-2 text-light-gray/80 hover:text-white
                          transition-colors duration-300 group"
             >
-              <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform duration-300" />
+              <ArrowLeft
+                size={20}
+                className="group-hover:-translate-x-1 transition-transform duration-300"
+              />
               <span>Back to Blog</span>
             </Link>
           </div>
@@ -188,17 +200,23 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
         <div className="container mx-auto px-6 lg:px-8 max-w-4xl">
           {/* breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-light-gray/60 mb-8">
-            <Link href="/" className="hover:text-white transition-colors">Home</Link>
+            <Link href="/" className="hover:text-white transition-colors">
+              Home
+            </Link>
             <ChevronRight size={16} />
-            <Link href="/blogs" className="hover:text-white transition-colors">Blog</Link>
+            <Link href="/blogs" className="hover:text-white transition-colors">
+              Blog
+            </Link>
             <ChevronRight size={16} />
             <span className="text-white">{blog.category}</span>
           </nav>
 
           {/* category badge */}
           <div className="mb-6">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                           bg-purple/20 text-purple border border-purple/30">
+            <span
+              className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                           bg-purple/20 text-purple border border-purple/30"
+            >
               {blog.category}
             </span>
           </div>
@@ -217,15 +235,19 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
           <div className="flex flex-wrap items-center gap-6 text-light-gray/60 mb-8">
             <div className="flex items-center gap-2">
               <User size={18} />
-              <span>{typeof blog.author === 'string' ? blog.author : blog.author}</span>
+              <span>
+                {typeof blog.author === "string" ? blog.author : blog.author}
+              </span>
             </div>
             <div className="flex items-center gap-2">
               <Calendar size={18} />
-              <span>{new Date(blog.publishDate).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}</span>
+              <span>
+                {new Date(blog.publishDate).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
             </div>
             <div className="flex items-center gap-2">
               <Clock size={18} />
@@ -249,9 +271,11 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
 
           {/* share button */}
           <div className="flex items-center gap-4 pb-8 border-b border-white/10">
-            <button className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10
+            <button
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10
                               text-light-gray hover:text-white border border-white/10 rounded-lg
-                              transition-all duration-300">
+                              transition-all duration-300"
+            >
               <Share2 size={18} />
               <span>Share Article</span>
             </button>
@@ -301,7 +325,8 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 Related Articles
               </h2>
               <p className="text-light-gray/60 max-w-2xl mx-auto">
-                Continue your learning journey with these related articles from the same category.
+                Continue your learning journey with these related articles from
+                the same category.
               </p>
             </div>
 
@@ -317,10 +342,8 @@ async function BlogDetailPage({ params }: BlogDetailPageProps) {
           </div>
         </section>
       )}
-
-     
     </main>
-  )
+  );
 }
 
-export default BlogDetailPage
+export default BlogDetailPage;

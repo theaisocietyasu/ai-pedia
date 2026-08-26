@@ -1,10 +1,12 @@
-import { Metadata } from "next"
+import type { Metadata } from "next";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aipedia.ais-asu.com/'
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://aipedia.ais-asu.com/";
 
 export const metadata: Metadata = {
   title: "Learn AI & ML",
-  description: "Explore AI algorithms through interactive tutorials, explanations, and visualizations. Learn Machine Learning, Deep Learning, Computer Vision, NLP, and more with hands-on examples.",
+  description:
+    "Explore AI algorithms through interactive tutorials, explanations, and visualizations. Learn Machine Learning, Deep Learning, Computer Vision, NLP, and more with hands-on examples.",
   keywords: [
     "AI learning",
     "machine learning tutorials",
@@ -14,11 +16,12 @@ export const metadata: Metadata = {
     "computer vision learning",
     "NLP tutorials",
     "AI education",
-    "hands-on AI projects"
+    "hands-on AI projects",
   ],
   openGraph: {
     title: "Learn AI & ML | Interactive Tutorials and Visualizations",
-    description: "Explore AI algorithms through interactive tutorials and visualizations. Master ML, Deep Learning, Computer Vision, and NLP.",
+    description:
+      "Explore AI algorithms through interactive tutorials and visualizations. Master ML, Deep Learning, Computer Vision, and NLP.",
     url: `${baseUrl}/learn`,
     type: "website",
     images: [
@@ -26,25 +29,26 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Learn AI & ML - Interactive Tutorials"
-      }
-    ]
+        alt: "Learn AI & ML - Interactive Tutorials",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Learn AI & ML | Interactive Tutorials and Visualizations",
-    description: "Explore AI algorithms through interactive tutorials and visualizations.",
-    images: ["/og-image.png"]
+    description:
+      "Explore AI algorithms through interactive tutorials and visualizations.",
+    images: ["/og-image.png"],
   },
   alternates: {
-    canonical: `${baseUrl}/learn`
-  }
-}
+    canonical: `${baseUrl}/learn`,
+  },
+};
 
 export default function LearnLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  return <>{children}</>
+  return <>{children}</>;
 }

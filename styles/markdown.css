@@ -116,7 +116,9 @@
   display: block;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .markdown-content .markdown-image:hover {
@@ -150,7 +152,9 @@
 /* Override syntax highlighter styles to match our theme */
 .markdown-content .markdown-code-block pre {
   margin: 0 !important;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace !important;
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo,
+    monospace !important;
 }
 
 /* Ensure syntax highlighter container fits our design */
@@ -313,21 +317,23 @@
 }
 
 .markdown-content .markdown-visualization::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     rgba(58, 56, 142, 0.1) 0%,
     rgba(141, 47, 106, 0.05) 50%,
-    rgba(75, 74, 189, 0.1) 100%);
+    rgba(75, 74, 189, 0.1) 100%
+  );
   pointer-events: none;
 }
 
 .markdown-content .markdown-visualization[data-component-id]::after {
-  content: 'Interactive Visualization: ' attr(data-component-id);
+  content: "Interactive Visualization: " attr(data-component-id);
   position: absolute;
   top: 1rem;
   left: 1rem;
@@ -447,7 +453,7 @@
   }
 
   .markdown-content .markdown-link {
-    color: #0000EE;
+    color: #0000ee;
     text-decoration: underline;
   }
 
@@ -648,7 +654,6 @@ html[data-theme="light"] .markdown-content {
   color: #1a1a1a; /* base text color */
 }
 
-
 html[data-theme="light"] .markdown-content .markdown-h1,
 html[data-theme="light"] .markdown-content .markdown-h2,
 html[data-theme="light"] .markdown-content .markdown-h3,
@@ -726,7 +731,9 @@ html[data-theme="light"] .markdown-content .markdown-visualization {
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
-html[data-theme="light"] .markdown-content .markdown-visualization[data-component-id]::after {
+html[data-theme="light"]
+  .markdown-content
+  .markdown-visualization[data-component-id]::after {
   color: rgba(30, 30, 30, 0.6);
 }
 
@@ -747,8 +754,9 @@ html[data-theme="light"] .recharts-cartesian-grid line {
 }
 
 /* Code line numbers */
-html[data-theme="light"] .markdown-content .markdown-code-block .react-syntax-highlighter-line-number {
+html[data-theme="light"] .markdown-content
+  .markdown-code-block
+  .react-syntax-highlighter-line-number {
   color: rgba(255, 255, 255, 0.6) !important;
   border-right: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
-

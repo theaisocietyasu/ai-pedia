@@ -1,26 +1,26 @@
-import { NextResponse } from 'next/server';
-import { requireAuthWithRole } from '@/lib/auth/server';
-import { mongoConnection } from '../../../../utilities/db_connector';
-import { uploadImageToGridFS } from '@/lib/gridfs';
+import { NextResponse } from "next/server";
+import { authErrorResponse, requireAuthWithRole } from "@/lib/auth/server";
+import { mongoConnection } from "@/lib/db/client";
+import { uploadImageToGridFS } from "@/lib/db/gridfs";
 
 export async function GET() {
   try {
-    const collection = await mongoConnection.collection('learn_categories');
+    const collection = await mongoConnection.collection("learn_categories");
 
     const categories = await collection.find({}).toArray();
-    
+
     return NextResponse.json(categories, {
       headers: {
-        'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
-        'CDN-Cache-Control': 'public, s-maxage=3600',
-        'Vercel-CDN-Cache-Control': 'public, s-maxage=3600',
-      }
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+        "CDN-Cache-Control": "public, s-maxage=3600",
+        "Vercel-CDN-Cache-Control": "public, s-maxage=3600",
+      },
     });
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    console.error("Error fetching categories:", error);
     return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 }
+      { error: "Internal Server Error" },
+      { status: 500 },
     );
   }
 }
@@ -30,70 +30,73 @@ export async function POST(request: Request) {
     // Authenticate user and verify Discord role
     const session = await requireAuthWithRole();
     const userId = session.user.discordId;
-    const userName = session.user.name || session.user.email || 'Anonymous';
+    const userName = session.user.name || session.user.email || "Anonymous";
 
     if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const formData = await request.formData();
-    const name = formData.get('name') as string;
-    const description = formData.get('description') as string;
-    const image = formData.get('image') as File;
+    const name = formData.get("name") as string;
+    const description = formData.get("description") as string;
+    const image = formData.get("image") as File;
 
     // Validate required fields
     if (!name || !name.trim()) {
       return NextResponse.json(
-        { error: 'Category name is required' },
-        { status: 400 }
+        { error: "Category name is required" },
+        { status: 400 },
       );
     }
 
     if (!description || !description.trim()) {
       return NextResponse.json(
-        { error: 'Category description is required' },
-        { status: 400 }
+        { error: "Category description is required" },
+        { status: 400 },
       );
     }
 
     if (!image) {
       return NextResponse.json(
-        { error: 'Category image is required' },
-        { status: 400 }
+        { error: "Category image is required" },
+        { status: 400 },
       );
     }
 
     // Validate image file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+    ];
     if (!allowedTypes.includes(image.type)) {
       return NextResponse.json(
-        { error: 'Invalid image type. Please upload JPG, PNG, GIF, or WebP' },
-        { status: 400 }
+        { error: "Invalid image type. Please upload JPG, PNG, GIF, or WebP" },
+        { status: 400 },
       );
     }
 
     // Validate file size (5MB limit)
     if (image.size > 5 * 1024 * 1024) {
       return NextResponse.json(
-        { error: 'File too large. Maximum size: 5MB' },
-        { status: 400 }
+        { error: "File too large. Maximum size: 5MB" },
+        { status: 400 },
       );
     }
 
-    const collection = await mongoConnection.collection('learn_categories');
+    const collection = await mongoConnection.collection("learn_categories");
 
     // Check if category already exists
     const existingCategory = await collection.findOne({
-      name: { $regex: new RegExp(`^${name.trim()}$`, 'i') }
+      name: { $regex: new RegExp(`^${name.trim()}$`, "i") },
     });
 
     if (existingCategory) {
       return NextResponse.json(
-        { error: 'A category with this name already exists' },
-        { status: 409 }
+        { error: "A category with this name already exists" },
+        { status: 409 },
       );
     }
 
@@ -107,7 +110,7 @@ export async function POST(request: Request) {
       image.name,
       image.type,
       userId,
-      userName
+      userName,
     );
 
     // Create new category
@@ -119,8 +122,8 @@ export async function POST(request: Request) {
       createdAt: new Date(),
       createdBy: {
         id: userId,
-        name: userName
-      }
+        name: userName,
+      },
     };
 
     const result = await collection.insertOne(newCategory);
@@ -130,16 +133,18 @@ export async function POST(request: Request) {
         success: true,
         category: {
           _id: result.insertedId,
-          ...newCategory
-        }
+          ...newCategory,
+        },
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
-    console.error('Error creating category:', error);
+    const authResponse = authErrorResponse(error);
+    if (authResponse) return authResponse;
+    console.error("Error creating category:", error);
     return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 }
+      { error: "Internal Server Error" },
+      { status: 500 },
     );
   }
 }

@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import ReactMarkdown from "react-markdown";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 interface CategoryPageClientProps {
   category: string;

@@ -1,36 +1,42 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import MarkdownRenderer from "@/components/MarkdownRenderer"
-import TableOfContents from "@/components/TableOfContents"
-import type { Heading } from "@/lib/markdown-utils"
+import { useEffect, useState } from "react";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
+import TableOfContents from "@/components/TableOfContents";
+import type { Heading } from "@/lib/markdown-utils";
 
 interface LearnModuleClientProps {
-  model: any
-  displayTitle: string
-  headings: Heading[]
+  model: any;
+  displayTitle: string;
+  headings: Heading[];
 }
 
-export function LearnModuleClient({ model, displayTitle, headings: initialHeadings }: LearnModuleClientProps) {
-  const [headings, setHeadings] = useState<Heading[]>(initialHeadings)
+export function LearnModuleClient({
+  model,
+  displayTitle,
+  headings: initialHeadings,
+}: LearnModuleClientProps) {
+  const [headings, setHeadings] = useState<Heading[]>(initialHeadings);
 
   // Fallback: after first paint, if no headings were extracted, scan DOM
   useEffect(() => {
     if (initialHeadings.length === 0) {
       setTimeout(() => {
-        const domHeadings = Array.from(document.querySelectorAll('h2[id], h3[id], h4[id]')) as HTMLElement[]
+        const domHeadings = Array.from(
+          document.querySelectorAll("h2[id], h3[id], h4[id]"),
+        ) as HTMLElement[];
         if (domHeadings.length > 0) {
           const fallback = domHeadings.map((el) => ({
             id: el.id,
-            text: el.textContent || '',
+            text: el.textContent || "",
             level: Number(el.tagName.substring(1)),
-            children: []
-          }))
-          setHeadings(fallback)
+            children: [],
+          }));
+          setHeadings(fallback);
         }
-      }, 100)
+      }, 100);
     }
-  }, [initialHeadings])
+  }, [initialHeadings]);
 
   return (
     <div className="w-full flex justify-between gap-0 relative">
@@ -38,7 +44,9 @@ export function LearnModuleClient({ model, displayTitle, headings: initialHeadin
       <main className="flex flex-col gap-16 w-full lg:w-3/4">
         {/* Markdown Content */}
         <section className="my-16 scroll-mt-24">
-          <MarkdownRenderer content={model.content || 'No content available.'} />
+          <MarkdownRenderer
+            content={model.content || "No content available."}
+          />
 
           {/* Contributors */}
           {model.contributors && model.contributors.length > 0 && (
@@ -82,7 +90,10 @@ export function LearnModuleClient({ model, displayTitle, headings: initialHeadin
             <h2 className="text-2xl font-semibold mb-4">Code Examples</h2>
             <div className="space-y-4">
               {model.code_blocks.map((code: string, idx: number) => (
-                <div key={idx} className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+                <div
+                  key={idx}
+                  className="bg-gray-900 rounded-lg p-4 overflow-x-auto"
+                >
                   <pre className="text-sm text-gray-300">
                     <code>{code}</code>
                   </pre>
@@ -106,7 +117,11 @@ export function LearnModuleClient({ model, displayTitle, headings: initialHeadin
             </h3>
             {model.images && model.images.length > 0 && (
               <button
-                onClick={() => document.querySelector('section:nth-of-type(2)')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() =>
+                  document
+                    .querySelector("section:nth-of-type(2)")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
                 className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
               >
                 📷 Images
@@ -114,7 +129,11 @@ export function LearnModuleClient({ model, displayTitle, headings: initialHeadin
             )}
             {model.code_blocks && model.code_blocks.length > 0 && (
               <button
-                onClick={() => document.querySelector('section:nth-of-type(3)')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() =>
+                  document
+                    .querySelector("section:nth-of-type(3)")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
                 className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer"
               >
                 💻 Code Examples
@@ -124,5 +143,5 @@ export function LearnModuleClient({ model, displayTitle, headings: initialHeadin
         )}
       </aside>
     </div>
-  )
+  );
 }

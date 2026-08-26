@@ -1,40 +1,40 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface EditButtonProps {
-  category: string
-  modelSlug: string
+  category: string;
+  modelSlug: string;
 }
 
 export function EditButton({ category, modelSlug }: EditButtonProps) {
   const [lockStatus, setLockStatus] = useState<{
-    locked: boolean
-    lockedBy?: string
-  } | null>(null)
-  const [isHovering, setIsHovering] = useState(false)
+    locked: boolean;
+    lockedBy?: string;
+  } | null>(null);
+  const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
     // Check lock status when hovering
     if (isHovering && !lockStatus) {
-      checkLockStatus()
+      checkLockStatus();
     }
-  }, [isHovering])
+  }, [isHovering]);
 
   const checkLockStatus = async () => {
     try {
-      const response = await fetch(`/api/learn/content/${modelSlug}/lock`)
+      const response = await fetch(`/api/learn/content/${modelSlug}/lock`);
       if (response.ok) {
-        const data = await response.json()
-        setLockStatus(data)
+        const data = await response.json();
+        setLockStatus(data);
       }
     } catch (error) {
-      console.error('Error checking lock status:', error)
+      console.error("Error checking lock status:", error);
     }
-  }
+  };
 
-  const isLocked = lockStatus?.locked === true
+  const isLocked = lockStatus?.locked === true;
 
   return (
     <div className="mt-6 relative inline-block">
@@ -66,18 +66,23 @@ export function EditButton({ category, modelSlug }: EditButtonProps) {
           <div className="bg-gray-900 border border-yellow-500/50 rounded-lg px-4 py-3 shadow-xl max-w-xs">
             <div className="flex items-center gap-2 mb-1">
               <span className="text-yellow-400">🔒</span>
-              <span className="font-semibold text-yellow-400">Module Locked</span>
+              <span className="font-semibold text-yellow-400">
+                Module Locked
+              </span>
             </div>
             <p className="text-sm text-gray-300">
               Another officer is making edits
             </p>
             <p className="text-xs text-gray-400 mt-1">
-              Currently being edited by: <span className="font-medium text-yellow-300">{lockStatus.lockedBy}</span>
+              Currently being edited by:{" "}
+              <span className="font-medium text-yellow-300">
+                {lockStatus.lockedBy}
+              </span>
             </p>
             <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-yellow-500/50"></div>
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }

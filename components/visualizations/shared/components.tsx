@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { 
-  ControlPanelProps, 
-  SliderControlProps, 
-  CheckboxControlProps, 
-  ButtonGroupProps 
-} from './types';
+import { motion } from "framer-motion";
+import type React from "react";
+import { useState } from "react";
+import type {
+  ButtonGroupProps,
+  CheckboxControlProps,
+  ControlPanelProps,
+  SliderControlProps,
+} from "./types";
 
 /**
  * Reusable control panel for visualization controls with mobile responsiveness
  */
-export const ControlPanel: React.FC<ControlPanelProps> = ({ 
-  children, 
-  title = "Controls", 
-  className = "" 
+export const ControlPanel: React.FC<ControlPanelProps> = ({
+  children,
+  title = "Controls",
+  className = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -25,7 +26,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         className={`
           md:hidden fixed top-4 right-4 z-20 p-3 bg-gray-800/90 border border-white/20 
           rounded-lg text-white shadow-lg backdrop-blur-sm transition-all
-          ${isOpen ? 'bg-purple/20 border-purple' : 'hover:bg-gray-700/90'}
+          ${isOpen ? "bg-purple/20 border-purple" : "hover:bg-gray-700/90"}
         `}
         aria-label="Toggle controls"
       >
@@ -39,9 +40,11 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
       </button>
 
       {/* Desktop Panel */}
-      <div className={`
+      <div
+        className={`
         hidden md:block w-64 p-4 bg-gray-800/50 border-l border-white/10 ${className}
-      `}>
+      `}
+      >
         <h3 className="text-lg font-semibold text-white mb-4">{title}</h3>
         {children}
       </div>
@@ -86,12 +89,13 @@ export const SliderControl: React.FC<SliderControlProps> = ({
   max,
   step,
   onChange,
-  unit = ""
+  unit = "",
 }) => {
   return (
     <div className="space-y-2">
       <label className="block text-sm font-medium text-gray-300">
-        {label}: {value.toFixed(step < 1 ? 1 : 0)}{unit}
+        {label}: {value.toFixed(step < 1 ? 1 : 0)}
+        {unit}
       </label>
       <input
         type="range"
@@ -113,7 +117,7 @@ export const CheckboxControl: React.FC<CheckboxControlProps> = ({
   label,
   checked,
   onChange,
-  id
+  id,
 }) => {
   return (
     <div className="flex items-center">
@@ -138,7 +142,7 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
   options,
   selected,
   onChange,
-  className = ""
+  className = "",
 }) => {
   return (
     <div className={`space-y-2 ${className}`}>
@@ -148,8 +152,8 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
           onClick={() => onChange(option.key)}
           className={`w-full text-left p-3 rounded-lg border transition-all ${
             selected === option.key
-              ? 'bg-purple/20 border-purple text-white'
-              : 'bg-gray-800/50 border-gray-600 text-gray-300 hover:bg-gray-700/50'
+              ? "bg-purple/20 border-purple text-white"
+              : "bg-gray-800/50 border-gray-600 text-gray-300 hover:bg-gray-700/50"
           }`}
         >
           <div className="font-medium text-sm">{option.label}</div>
@@ -165,34 +169,30 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
 /**
  * Error state component for visualizations
  */
-export const VisualizationError: React.FC<{ 
-  componentId: string; 
-  message?: string; 
-  type?: 'not-found' | 'error' | 'invalid-id';
-}> = ({ 
-  componentId, 
-  message, 
-  type = 'not-found' 
-}) => {
+export const VisualizationError: React.FC<{
+  componentId: string;
+  message?: string;
+  type?: "not-found" | "error" | "invalid-id";
+}> = ({ componentId, message, type = "not-found" }) => {
   const getErrorContent = () => {
     switch (type) {
-      case 'invalid-id':
+      case "invalid-id":
         return {
-          title: 'Invalid Component ID',
-          description: 'No valid component ID provided.',
-          icon: 'M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z'
+          title: "Invalid Component ID",
+          description: "No valid component ID provided.",
+          icon: "M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z",
         };
-      case 'error':
+      case "error":
         return {
-          title: 'Component Error',
+          title: "Component Error",
           description: message || `Error rendering "${componentId}" component.`,
-          icon: 'M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z'
+          icon: "M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z",
         };
       default:
         return {
-          title: 'Visualization Not Found',
+          title: "Visualization Not Found",
           description: `Component "${componentId}" is not available in the registry.`,
-          icon: 'M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z'
+          icon: "M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z",
         };
     }
   };
@@ -200,15 +200,23 @@ export const VisualizationError: React.FC<{
   const errorContent = getErrorContent();
 
   return (
-    <div className="w-full h-64 bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-lg p-6
-                    border border-red-500/20 flex items-center justify-center">
+    <div
+      className="w-full h-64 bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-lg p-6
+                    border border-red-500/20 flex items-center justify-center"
+    >
       <div className="text-center">
         <div className="w-16 h-16 mx-auto mb-4 bg-red-500/20 rounded-full flex items-center justify-center">
-          <svg className="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-            <path d={errorContent.icon}/>
+          <svg
+            className="w-8 h-8 text-red-500"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d={errorContent.icon} />
           </svg>
         </div>
-        <h3 className="text-lg font-semibold text-white mb-2">{errorContent.title}</h3>
+        <h3 className="text-lg font-semibold text-white mb-2">
+          {errorContent.title}
+        </h3>
         <p className="text-light-gray/70 text-sm">{errorContent.description}</p>
       </div>
     </div>
@@ -218,8 +226,8 @@ export const VisualizationError: React.FC<{
 /**
  * Loading state component for visualizations
  */
-export const VisualizationLoading: React.FC<{ message?: string }> = ({ 
-  message = "Loading visualization..." 
+export const VisualizationLoading: React.FC<{ message?: string }> = ({
+  message = "Loading visualization...",
 }) => {
   return (
     <motion.div
@@ -230,7 +238,11 @@ export const VisualizationLoading: React.FC<{ message?: string }> = ({
     >
       <div className="text-center">
         <div className="w-16 h-16 mx-auto mb-4 bg-purple/20 rounded-full flex items-center justify-center animate-spin">
-          <svg className="w-8 h-8 text-purple" fill="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="w-8 h-8 text-purple"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
           </svg>
         </div>

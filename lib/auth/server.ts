@@ -1,45 +1,71 @@
-import { getServerSession as getNextAuthSession } from "next-auth"
-import { authOptions } from "@/lib/auth/auth"
-import { hasRequiredDiscordRole } from "./discord-roles"
+import { NextResponse } from "next/server";
+import { getServerSession as getNextAuthSession } from "next-auth";
+import { authOptions } from "@/lib/auth/auth";
+import { hasRequiredDiscordRole } from "./discord-roles";
 
-export async function getServerSession() {
-  const session = await getNextAuthSession(authOptions)
-  return session
-}
+/**
+ * Thrown by the require* helpers so API routes can map auth failures
+ * to proper 401/403 responses (see authErrorResponse).
+ */
+export class AuthError extends Error {
+  status: 401 | 403;
 
-export async function requireAuth() {
-  const session = await getServerSession()
-  
-  if (!session?.user) {
-    throw new Error("Unauthorized")
+  constructor(message: string, status: 401 | 403) {
+    super(message);
+    this.name = "AuthError";
+    this.status = status;
   }
-  
-  return session
 }
 
 /**
- * Require authentication AND Discord admin role
- * This checks if the user has the required admin role in the Discord server
+ * Convert a caught error into a 401/403 JSON response, or null if it
+ * isn't an auth failure. Use at the top of API route catch blocks.
  */
-export async function requireAuthWithRole() {
-  const session = await requireAuth()
-  
-  // Get Discord user ID from the session
-  const discordUserId = (session.user as any).discordId
-  
-  if (!discordUserId) {
-    throw new Error("Unable to verify Discord account")
+export function authErrorResponse(error: unknown): NextResponse | null {
+  if (error instanceof AuthError) {
+    return NextResponse.json(
+      { error: error.message },
+      { status: error.status },
+    );
   }
-  
-  console.log('Checking Discord role for user ID:', discordUserId)
-  
-  // Check if user has the required role via Discord API
-  const hasRole = await hasRequiredDiscordRole(discordUserId)
-  
-  if (!hasRole) {
-    throw new Error("Forbidden - You don't have the required admin role in the Discord server")
-  }
-
-  return session
+  return null;
 }
 
+export async function getServerSession() {
+  const session = await getNextAuthSession(authOptions);
+  return session;
+}
+
+export async function requireAuth() {
+  const session = await getServerSession();
+
+  if (!session?.user) {
+    throw new AuthError("Unauthorized", 401);
+  }
+
+  return session;
+}
+
+/**
+ * Require authentication AND the admin role in the Discord server.
+ */
+export async function requireAuthWithRole() {
+  const session = await requireAuth();
+
+  const discordUserId = (session.user as any).discordId;
+
+  if (!discordUserId) {
+    throw new AuthError("Unable to verify Discord account", 401);
+  }
+
+  const hasRole = await hasRequiredDiscordRole(discordUserId);
+
+  if (!hasRole) {
+    throw new AuthError(
+      "Forbidden - You don't have the required admin role in the Discord server",
+      403,
+    );
+  }
+
+  return session;
+}

@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { mongoConnection } from '../../../../utilities/db_connector';
-import { generateLearnModuleSlug } from '@/lib/slug';
-import { requireAuthWithRole } from '@/lib/auth/server';
+import { type NextRequest, NextResponse } from "next/server";
+import { authErrorResponse, requireAuthWithRole } from "@/lib/auth/server";
+import { mongoConnection } from "@/lib/db/client";
+import { generateLearnModuleSlug } from "@/lib/slug";
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,24 +10,23 @@ export async function POST(request: NextRequest) {
     const userId = session.user.discordId;
 
     if (!userId) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const collection = await mongoConnection.collection('learn_content');
+    const collection = await mongoConnection.collection("learn_content");
 
     // Find all documents without slugs
-    const documentsWithoutSlugs = await collection.find({
-      slug: { $exists: false }
-    }).toArray();
+    const documentsWithoutSlugs = await collection
+      .find({
+        slug: { $exists: false },
+      })
+      .toArray();
 
     if (documentsWithoutSlugs.length === 0) {
       return NextResponse.json({
         success: true,
-        message: 'All documents already have slugs',
-        updated: 0
+        message: "All documents already have slugs",
+        updated: 0,
       });
     }
 
@@ -35,15 +34,12 @@ export async function POST(request: NextRequest) {
     const updatePromises = documentsWithoutSlugs.map(async (doc) => {
       const slug = generateLearnModuleSlug(doc.title, doc._id.toString());
 
-      await collection.updateOne(
-        { _id: doc._id },
-        { $set: { slug: slug } }
-      );
+      await collection.updateOne({ _id: doc._id }, { $set: { slug: slug } });
 
       return {
         _id: doc._id.toString(),
         title: doc.title,
-        slug: slug
+        slug: slug,
       };
     });
 
@@ -53,14 +49,15 @@ export async function POST(request: NextRequest) {
       success: true,
       message: `Successfully added slugs to ${updatedDocuments.length} documents`,
       updated: updatedDocuments.length,
-      documents: updatedDocuments
+      documents: updatedDocuments,
     });
-
   } catch (error) {
-    console.error('Error migrating slugs:', error);
+    const authResponse = authErrorResponse(error);
+    if (authResponse) return authResponse;
+    console.error("Error migrating slugs:", error);
     return NextResponse.json(
-      { error: 'Internal server error while migrating slugs' },
-      { status: 500 }
+      { error: "Internal server error while migrating slugs" },
+      { status: 500 },
     );
   }
 }
@@ -68,24 +65,25 @@ export async function POST(request: NextRequest) {
 // GET endpoint to check migration status
 export async function GET(request: NextRequest) {
   try {
-    const collection = await mongoConnection.collection('learn_content');
+    const collection = await mongoConnection.collection("learn_content");
 
     const totalDocs = await collection.countDocuments();
-    const docsWithSlugs = await collection.countDocuments({ slug: { $exists: true } });
+    const docsWithSlugs = await collection.countDocuments({
+      slug: { $exists: true },
+    });
     const docsWithoutSlugs = totalDocs - docsWithSlugs;
 
     return NextResponse.json({
       total: totalDocs,
       withSlugs: docsWithSlugs,
       withoutSlugs: docsWithoutSlugs,
-      migrationNeeded: docsWithoutSlugs > 0
+      migrationNeeded: docsWithoutSlugs > 0,
     });
-
   } catch (error) {
-    console.error('Error checking migration status:', error);
+    console.error("Error checking migration status:", error);
     return NextResponse.json(
-      { error: 'Internal server error while checking migration status' },
-      { status: 500 }
+      { error: "Internal server error while checking migration status" },
+      { status: 500 },
     );
   }
 }

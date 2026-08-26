@@ -1,31 +1,34 @@
-"use client"
+"use client";
 
-import React from "react"
-import { motion } from "framer-motion"
-import { features } from "@/lib/constants"
-import { GradientText } from "@/components/ui/gradient-text"
-import { Eye, Code, Brain, Layers, Rocket, Users } from "lucide-react"
+import { motion } from "framer-motion";
+import { Brain, Code, Eye, Layers, Rocket, Users } from "lucide-react";
+import type React from "react";
+import { GradientText } from "@/components/ui/gradient-text";
+import { features } from "@/lib/constants";
 
 export function FeaturesGrid() {
   // helper function to get icon component
   const getIcon = (iconName?: string | React.ReactNode) => {
-    if (!iconName) return null
-    if (typeof iconName !== 'string') return iconName
-    
+    if (!iconName) return null;
+    if (typeof iconName !== "string") return iconName;
+
     const icons: Record<string, React.ReactNode> = {
       Eye: <Eye size={24} />,
       Code: <Code size={24} />,
       Brain: <Brain size={24} />,
       Layers: <Layers size={24} />,
       Rocket: <Rocket size={24} />,
-      Users: <Users size={24} />
-    }
-    
-    return icons[iconName] || null
-  }
+      Users: <Users size={24} />,
+    };
+
+    return icons[iconName] || null;
+  };
 
   return (
-    <section id="features" className="my-48 md:my-56 relative overflow-hidden bg-background">
+    <section
+      id="features"
+      className="my-48 md:my-56 relative overflow-hidden bg-background"
+    >
       {/* animated background */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
@@ -35,12 +38,12 @@ export function FeaturesGrid() {
           transition={{
             duration: 20,
             repeat: Infinity,
-            repeatType: "reverse"
+            repeatType: "reverse",
           }}
           className="absolute inset-0 opacity-5"
           style={{
             backgroundImage: `linear-gradient(45deg, transparent 30%, rgba(138, 43, 226, 0.1) 50%, transparent 70%)`,
-            backgroundSize: "200% 200%"
+            backgroundSize: "200% 200%",
           }}
         />
       </div>
@@ -59,76 +62,82 @@ export function FeaturesGrid() {
               Everything You Need to <GradientText>Master AI</GradientText>
             </h2>
             <p className="text-lg text-light-gray/80 max-w-3xl mx-auto">
-              Comprehensive tools and resources designed to accelerate your AI learning journey
+              Comprehensive tools and resources designed to accelerate your AI
+              learning journey
             </p>
           </motion.div>
 
           {/* features grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 max-w-6xl mx-auto">
-          {features.map((feature, index) => (
-            <motion.div
-              key={feature.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
+            {features.map((feature, index) => (
               <motion.div
-                whileHover={{ y: -5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-                className="group h-full relative"
+                key={feature.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
               >
-                {/* card background with gradient border */}
-                <div
-                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100
-                           transition-opacity duration-500"
-                  style={{ background: feature.gradient }}
+                <motion.div
+                  whileHover={{ y: -5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="group h-full relative"
                 >
-                  <div className="absolute inset-[1px] rounded-2xl bg-background" />
-                </div>
-
-                {/* card content */}
-                <div className="relative h-full glass-effect rounded-2xl p-8
-                              border border-white/10 group-hover:border-transparent
-                              transition-all duration-300 space-y-6">
-                  {/* icon */}
-                  <div className="flex justify-center">
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.5 }}
-                      className="w-14 h-14 rounded-lg flex items-center justify-center"
-                      style={{ background: feature.gradient }}
-                    >
-                      <span className="text-dark-gray">{getIcon(feature.icon)}</span>
-                    </motion.div>
+                  {/* card background with gradient border */}
+                  <div
+                    className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100
+                           transition-opacity duration-500"
+                    style={{ background: feature.gradient }}
+                  >
+                    <div className="absolute inset-[1px] rounded-2xl bg-background" />
                   </div>
 
-                  {/* title */}
-                  <h3 className="text-xl font-semibold text-white text-center
-                               group-hover:gradient-text transition-all duration-300">
-                    {feature.title}
-                  </h3>
+                  {/* card content */}
+                  <div
+                    className="relative h-full glass-effect rounded-2xl p-8
+                              border border-white/10 group-hover:border-transparent
+                              transition-all duration-300 space-y-6"
+                  >
+                    {/* icon */}
+                    <div className="flex justify-center">
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ duration: 0.5 }}
+                        className="w-14 h-14 rounded-lg flex items-center justify-center"
+                        style={{ background: feature.gradient }}
+                      >
+                        <span className="text-dark-gray">
+                          {getIcon(feature.icon)}
+                        </span>
+                      </motion.div>
+                    </div>
 
-                  {/* description */}
-                  <p className="text-light-gray/80 text-base leading-relaxed text-center">
-                    {feature.description}
-                  </p>
+                    {/* title */}
+                    <h3
+                      className="text-xl font-semibold text-white text-center
+                               group-hover:gradient-text transition-all duration-300"
+                    >
+                      {feature.title}
+                    </h3>
 
-                  {/* hover effect decoration */}
-                  <motion.div
-                    initial={{ scale: 0, opacity: 0 }}
-                    whileHover={{ scale: 1, opacity: 1 }}
-                    className="absolute top-4 right-4 w-2 h-2 rounded-full"
-                    style={{ background: feature.gradient }}
-                  />
-                </div>
+                    {/* description */}
+                    <p className="text-light-gray/80 text-base leading-relaxed text-center">
+                      {feature.description}
+                    </p>
+
+                    {/* hover effect decoration */}
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      whileHover={{ scale: 1, opacity: 1 }}
+                      className="absolute top-4 right-4 w-2 h-2 rounded-full"
+                      style={{ background: feature.gradient }}
+                    />
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          ))}
-        </div>
-
+            ))}
+          </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

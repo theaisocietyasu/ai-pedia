@@ -1,16 +1,15 @@
-"use client"
-import ReactMarkdown from "react-markdown";
+"use client";
+
+import { motion } from "framer-motion";
+import { desc } from "framer-motion/client";
+import { ArrowLeft, BookOpen } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import { Button } from "@/components/ui/button";
+import { GradientText } from "@/components/ui/gradient-text";
 
-import { motion } from "framer-motion"
-import Link from "next/link"
-import { ArrowLeft, BookOpen } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { GradientText } from "@/components/ui/gradient-text"
-import { desc } from "framer-motion/client"
-
-import { getCategories } from "./categories"
-
+import { getCategories } from "./categories";
 
 export default function LearnPage() {
   const [categories, setCategories] = useState<Record<string, any>>({});
@@ -25,8 +24,8 @@ export default function LearnPage() {
         setCategories(categoriesData);
         // console.log('Loaded categories:', categoriesData);
       } catch (err) {
-        console.error('Error loading categories:', err);
-        setError('Failed to load learning categories. Please try again later.');
+        console.error("Error loading categories:", err);
+        setError("Failed to load learning categories. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -83,105 +82,99 @@ export default function LearnPage() {
 
   return (
     <main className="min-h-screen relative overflow-hidden ">
-    
-
-        <section className="relative pt-32 pb-20 overflow-hidden">
-               {/* animated background */}
-               <div className="absolute inset-0 pointer-events-none">
-                 <motion.div
-                   animate={{
-                     scale: [1, 1.2, 1],
-                     opacity: [0.3, 0.5, 0.3],
-                   }}
-                   transition={{
-                     duration: 8,
-                     repeat: Infinity,
-                     ease: "easeInOut"
-                   }}
-                   className="absolute top-20 left-20 w-96 h-96 bg-purple/30 rounded-full blur-3xl"
-                 />
-                 <motion.div
-                   animate={{
-                     scale: [1, 1.3, 1], 
-                     opacity: [0.3, 0.5, 0.3],
-                   }}
-                   transition={{
-                     duration: 10,
-                     repeat: Infinity,
-                     ease: "easeInOut",
-                     delay: 1
-                   }}
-                   className="absolute bottom-20 right-20 w-96 h-96 bg-pink/30 rounded-full blur-3xl"
-                 />
-               </div>
-       
-               <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
-                 <div className="text-center">
-                   {/* badge */}
-                  
-       
-                   {/* title */}
-                   <motion.h1
-                     initial={{ opacity: 0, y: 20 }}
-                     animate={{ opacity: 1, y: 0 }}
-                     transition={{ duration: 0.5, delay: 0.1 }}
-                     className="text-5xl sm:text-6xl md:text-7xl font-bold mb-8"
-                   >
-                     <GradientText animate={false}>Learn</GradientText>
-                   </motion.h1>
-       
-                   {/* subtitle */}
-                   <motion.p
-                     initial={{ opacity: 0, y: 20 }}
-                     animate={{ opacity: 1, y: 0 }}
-                     transition={{ duration: 0.5, delay: 0.2 }}
-                     className="text-xl text-light-gray/80 max-w-3xl mx-auto leading-relaxed"
-                   >
-                     Explore the beginner and deep dive tutorials in artificial intelligence.
-                   </motion.p>
-                 </div>
-               </div>
-             </section>
-
-          {/* Category Headings */}
+      <section className="relative pt-32 pb-20 overflow-hidden">
+        {/* animated background */}
+        <div className="absolute inset-0 pointer-events-none">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-col mt-12 gap-8 w-full items-center"
-          >
-            {loading ? (
-              // Show skeleton cards while loading
-              Array.from({ length: 3 }).map((_, i) => (
-                <SkeletonCard key={i} index={i} />
-              ))
-            ) : (
-              // Show actual categories when loaded
-              Object.entries(categories).map(([key, cat], i) => (
-                <motion.div
-                  key={key}
-                  transition={{ duration: 0.5, delay: 0.3 + i * 0.2 }}
-                  className="w-full max-w-2xl"
-                >
-                  <Link href={`/learn/${key}`} className="block">
-                    <div className="glass-effect rounded-2xl p-6 hover-glow cursor-pointer transition-all duration-300 border border-purple/20 hover:border-purple/40">
-                      <h2 className="text-2xl sm:text-3xl font-semibold mb-4 capitalize gradient-text">
-                        {key.replace('-', ' ') + " Learning"}
-                      </h2>
-                      <div className="text-base sm:text-lg text-light-gray/80">
-                        <ReactMarkdown>
-                          {cat.description || "Explore algorithms in this category"}
-                        </ReactMarkdown>
-                      </div>
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="absolute top-20 left-20 w-96 h-96 bg-purple/30 rounded-full blur-3xl"
+          />
+          <motion.div
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.3, 0.5, 0.3],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1,
+            }}
+            className="absolute bottom-20 right-20 w-96 h-96 bg-pink/30 rounded-full blur-3xl"
+          />
+        </div>
+
+        <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
+          <div className="text-center">
+            {/* badge */}
+
+            {/* title */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-5xl sm:text-6xl md:text-7xl font-bold mb-8"
+            >
+              <GradientText animate={false}>Learn</GradientText>
+            </motion.h1>
+
+            {/* subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-xl text-light-gray/80 max-w-3xl mx-auto leading-relaxed"
+            >
+              Explore the beginner and deep dive tutorials in artificial
+              intelligence.
+            </motion.p>
+          </div>
+        </div>
+      </section>
+
+      {/* Category Headings */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="flex flex-col mt-12 gap-8 w-full items-center"
+      >
+        {loading
+          ? // Show skeleton cards while loading
+            Array.from({ length: 3 }).map((_, i) => (
+              <SkeletonCard key={i} index={i} />
+            ))
+          : // Show actual categories when loaded
+            Object.entries(categories).map(([key, cat], i) => (
+              <motion.div
+                key={key}
+                transition={{ duration: 0.5, delay: 0.3 + i * 0.2 }}
+                className="w-full max-w-2xl"
+              >
+                <Link href={`/learn/${key}`} className="block">
+                  <div className="glass-effect rounded-2xl p-6 hover-glow cursor-pointer transition-all duration-300 border border-purple/20 hover:border-purple/40">
+                    <h2 className="text-2xl sm:text-3xl font-semibold mb-4 capitalize gradient-text">
+                      {key.replace("-", " ") + " Learning"}
+                    </h2>
+                    <div className="text-base sm:text-lg text-light-gray/80">
+                      <ReactMarkdown>
+                        {cat.description ||
+                          "Explore algorithms in this category"}
+                      </ReactMarkdown>
                     </div>
-                  </Link>
-                </motion.div>
-              ))
-            )}
-          </motion.div>
-
-
-
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+      </motion.div>
     </main>
-  )
+  );
 }
