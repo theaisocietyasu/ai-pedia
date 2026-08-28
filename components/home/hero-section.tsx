@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { heroContent } from "@/lib/constants";
 
 /** Path under public/ for the hero background illustration; leave empty for the plain paper look. */
-const HERO_ART = "";
+const HERO_ART = "/art/map.svg";
 
 const fade = (delay: number) => ({
   initial: { opacity: 0, y: 12 },
@@ -18,25 +18,21 @@ const fade = (delay: number) => ({
 export function HeroSection() {
   return (
     <section className="relative h-[calc(100svh-3rem)] w-full flex items-center justify-center overflow-hidden bg-background">
-      {/* Optional artwork: drop an image at public/art/hero.png (or .webp) and set HERO_ART below. */}
+      {/* Hand-drawn map of the field, printed faintly on the paper; the centre is masked clear for the title. */}
       {HERO_ART && (
         <img
           src={HERO_ART}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover pointer-events-none select-none"
+          className="absolute inset-0 h-full w-full object-cover scale-[1.04] pointer-events-none select-none opacity-[0.16] sm:opacity-[0.22]"
+          style={{
+            maskImage:
+              "radial-gradient(ellipse 34% 40% at 50% 52%, transparent 0%, transparent 55%, black 100%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse 34% 40% at 50% 52%, transparent 0%, transparent 55%, black 100%)",
+          }}
         />
       )}
-
-      {/* a soft lavender wash, top-right, like light through a window */}
-      <div
-        aria-hidden="true"
-        className="absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(198,191,236,0.45) 0%, rgba(250,249,245,0) 65%)",
-        }}
-      />
 
       <div className="relative w-full max-w-3xl mx-auto px-6 sm:px-8 text-center flex flex-col items-center">
         <motion.p {...fade(0)} className="eyebrow mb-10">
