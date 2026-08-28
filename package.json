@@ -2,10 +2,11 @@
   "name": "ai-pedia",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "description": "An interactive encyclopedia of artificial intelligence by The AI Society at ASU",
   "repository": {
     "type": "git",
-    "url": "https://github.com/theaisocietyasu/ml-visualization.git"
+    "url": "https://github.com/theaisocietyasu/ai-pedia.git"
   },
   "type": "module",
   "scripts": {

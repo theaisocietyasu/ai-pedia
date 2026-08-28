@@ -17,8 +17,8 @@ CMS and no login: to add or fix an article you open a pull request.
 ## Getting Started
 
 ```bash
-git clone https://github.com/theaisocietyasu/ml-visualization.git
-cd ml-visualization
+git clone https://github.com/theaisocietyasu/ai-pedia.git
+cd ai-pedia
 npm install
 npm run dev            # http://localhost:3000
 ```
@@ -124,3 +124,8 @@ docs/                     # Map artwork sources
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). The short version: edit a file under
 `content/`, open a pull request, and a maintainer will review it.
+
+## License
+
+[MIT](LICENSE). Articles under `content/` are contributed by their listed
+authors and published under the same license.

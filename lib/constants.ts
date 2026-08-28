@@ -7,7 +7,7 @@ export const siteConfig = {
   url: "https://aipedia.ais-asu.com/",
   author: "The AI Society",
   email: "theaisociety@asu.edu",
-  repoUrl: "https://github.com/theaisocietyasu/ml-visualization",
+  repoUrl: "https://github.com/theaisocietyasu/ai-pedia",
 };
 
 // palette — mirrors the tokens in app/globals.css (single light theme)
