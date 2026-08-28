@@ -41,6 +41,8 @@ export interface ArticleMeta {
 export interface Article extends ArticleMeta {
   content: string;
   headings: Heading[];
+  /** The full source file, frontmatter included. */
+  source: string;
 }
 
 export interface SearchEntry {
@@ -116,12 +118,14 @@ export const getArticle = cache(
     if (!SLUG.test(category) || !SLUG.test(slug)) return null;
     const file = path.join(CONTENT_DIR, category, `${slug}.md`);
     if (!fs.existsSync(file)) return null;
-    const { data, content } = readFrontmatter(file);
+    const raw = fs.readFileSync(file, "utf8");
+    const { data, content } = matter(raw);
     const body = content.replace(/\r\n/g, "\n").trim();
     return {
       ...toMeta(category, slug, data),
       content: body,
       headings: extractHeadings(body),
+      source: raw.replace(/\r\n/g, "\n"),
     };
   },
 );

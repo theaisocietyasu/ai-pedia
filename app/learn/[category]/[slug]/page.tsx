@@ -146,7 +146,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       </header>
 
       <div className="w-full max-w-5xl flex flex-col items-center">
-        <ArticleView article={article} editUrl={editUrl} />
+        <ArticleView
+          article={article}
+          editUrl={editUrl}
+          source={article.source}
+        />
       </div>
     </div>
   );

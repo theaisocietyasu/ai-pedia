@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import type { SearchEntry } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { CommandPalette } from "./command-palette";
+import { PageActionButtons } from "./page-actions";
 
 /** Hairline top bar: wordmark on the left, spotlight search on the right. */
 export function Navbar({ searchIndex }: { searchIndex: SearchEntry[] }) {
@@ -38,7 +39,10 @@ export function Navbar({ searchIndex }: { searchIndex: SearchEntry[] }) {
               AI Pedia
             </span>
           </Link>
-          <CommandPalette index={searchIndex} />
+          <div className="flex items-center gap-2">
+            <PageActionButtons />
+            <CommandPalette index={searchIndex} />
+          </div>
         </nav>
       </header>
       <div className="h-12" aria-hidden="true" />

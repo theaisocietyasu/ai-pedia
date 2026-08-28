@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { EB_Garamond, Geist_Mono, Source_Serif_4 } from "next/font/google";
 import { Navbar } from "@/components/ui/navbar";
+import { PageActionsProvider } from "@/components/ui/page-actions";
 import { getSearchIndex } from "@/lib/content";
 import "./globals.css";
 import "../styles/markdown.css";
@@ -174,8 +175,10 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <Navbar searchIndex={getSearchIndex()} />
-        {children}
+        <PageActionsProvider>
+          <Navbar searchIndex={getSearchIndex()} />
+          {children}
+        </PageActionsProvider>
       </body>
     </html>
   );
