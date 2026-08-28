@@ -20,7 +20,7 @@
     "framer-motion": "^12.23.12",
     "gray-matter": "^4.0.3",
     "katex": "^0.16.22",
-    "lucide-react": "^0.542.0",
+    "lucide-react": "^1.34.0",
     "next": "^15.5.12",
     "react": "19.1.0",
     "react-dom": "19.1.0",
