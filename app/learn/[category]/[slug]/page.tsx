@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { MapVignette } from "@/components/map-vignette";
 import { siteConfig } from "@/lib/constants";
 import {
   articleSourcePath,
@@ -8,6 +9,7 @@ import {
   getArticles,
   getCategory,
 } from "@/lib/content";
+import { mapRegionFor } from "@/lib/map-regions";
 import { ArticleView } from "./ArticleView";
 
 const baseUrl =
@@ -57,6 +59,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   if (!article || !category) notFound();
 
   const url = `${baseUrl}/learn/${categorySlug}/${slug}`;
+  const region = mapRegionFor(categorySlug, category.mapPosition);
   const editUrl = `${siteConfig.repoUrl}/edit/main/${articleSourcePath(categorySlug, slug)}`;
 
   const learningResourceSchema = {
@@ -99,7 +102,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
+    <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12 overflow-x-hidden">
       <script
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data serialized via JSON.stringify, not user HTML
@@ -113,8 +116,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <div className="w-full max-w-5xl flex flex-col items-center gap-16">
-        <header className="relative inline-block mt-16 mb-4 text-center max-w-3xl">
+      <header className="relative w-screen max-w-[100vw] -mx-6 sm:-mx-8 lg:-mx-12 py-20 md:py-24 text-center">
+        <MapVignette position={region.position} zoom={2.3} />
+        <div className="relative max-w-3xl mx-auto px-6">
           <p className="eyebrow mb-5">
             <Link
               href="/learn"
@@ -138,8 +142,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               {article.description}
             </p>
           )}
-        </header>
+        </div>
+      </header>
 
+      <div className="w-full max-w-5xl flex flex-col items-center">
         <ArticleView article={article} editUrl={editUrl} />
       </div>
     </div>

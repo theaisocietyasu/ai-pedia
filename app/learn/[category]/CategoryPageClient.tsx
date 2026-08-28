@@ -119,28 +119,7 @@ export function CategoryPageClient({
   }, []);
 
   return (
-    <div className="w-full max-w-5xl mt-12 flex flex-col items-center gap-16">
-      {/* Title */}
-      <div className="relative inline-block mb-6 text-center max-w-3xl">
-        <p className="eyebrow mb-5">
-          <Link
-            href="/learn"
-            className="hover:text-foreground transition-colors"
-          >
-            Learn
-          </Link>
-        </p>
-        <h1 className="font-display text-4xl md:text-6xl leading-tight relative z-10">
-          {category.title}
-        </h1>
-
-        {category.description && (
-          <p className="mt-5 text-lg text-ink-2 max-w-2xl mx-auto">
-            {category.description}
-          </p>
-        )}
-      </div>
-
+    <div className="w-full max-w-5xl mt-4 flex flex-col items-center gap-16">
       {/* Wrapper for cards + sidebar */}
       <div className="w-full flex justify-between gap-16 relative">
         {/* Cards */}

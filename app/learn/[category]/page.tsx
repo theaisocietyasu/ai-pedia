@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { MapVignette } from "@/components/map-vignette";
 import { getArticles, getCategories, getCategory } from "@/lib/content";
+import { mapRegionFor } from "@/lib/map-regions";
 import { CategoryPageClient } from "./CategoryPageClient";
 
 const baseUrl =
@@ -49,6 +52,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   if (!category) notFound();
 
   const articles = getArticles(slug);
+  const region = mapRegionFor(slug, category.mapPosition);
 
   const collectionSchema = {
     "@context": "https://schema.org",
@@ -92,7 +96,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12">
+    <div className="relative min-h-screen flex flex-col items-center px-6 sm:px-8 lg:px-12 overflow-x-hidden">
       <script
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data serialized via JSON.stringify, not user HTML
@@ -103,6 +107,31 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data serialized via JSON.stringify, not user HTML
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
+      <header className="relative w-screen max-w-[100vw] -mx-6 sm:-mx-8 lg:-mx-12 py-20 md:py-24 text-center">
+        <MapVignette position={region.position} />
+        <div className="relative max-w-3xl mx-auto px-6">
+          <p className="eyebrow mb-5">
+            <Link
+              href="/learn"
+              className="hover:text-foreground transition-colors"
+            >
+              Learn
+            </Link>
+          </p>
+          <h1 className="font-display text-4xl md:text-6xl leading-tight">
+            {category.title}
+          </h1>
+          {category.description && (
+            <p className="mt-5 text-lg text-ink-2 max-w-2xl mx-auto">
+              {category.description}
+            </p>
+          )}
+          <p className="mt-6 text-xs tracking-[0.18em] uppercase text-purple-deep/80">
+            {region.label}
+          </p>
+        </div>
+      </header>
+
       <CategoryPageClient category={category} articles={articles} />
     </div>
   );

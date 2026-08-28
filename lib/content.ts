@@ -8,7 +8,7 @@ import { extractHeadings, type Heading } from "@/lib/markdown-utils";
  * File-based content layer.
  *
  * content/
- *   <category>/_category.md   — frontmatter: title, description, image?, order?
+ *   <category>/_category.md   — frontmatter: title, description, image?, order?, mapPosition?
  *   <category>/<slug>.md      — frontmatter: title, description, thumbnail?,
  *                               createdAt?, updatedAt?, contributors?[]
  *
@@ -23,6 +23,8 @@ export interface Category {
   description: string;
   image?: string;
   order: number;
+  /** Optional "x% y%" override for the map vignette region. */
+  mapPosition?: string;
 }
 
 export interface ArticleMeta {
@@ -80,6 +82,7 @@ export const getCategories = cache((): Category[] => {
         description: str(data.description),
         image: str(data.image) || undefined,
         order: typeof data.order === "number" ? data.order : 99,
+        mapPosition: str(data.mapPosition) || undefined,
       } satisfies Category;
     })
     .sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
