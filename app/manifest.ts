@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "AI Pedia | The AI Society at ASU",
     short_name: "AI Pedia",
     description:
-      "Master artificial intelligence through interactive visualizations and hands-on projects. Join ASU's premier AI learning platform powered by The AI Society.",
+      "Interactive explanations of the algorithms behind modern AI, written by The AI Society at Arizona State University.",
     start_url: "/",
     display: "standalone",
     background_color: "#faf9f5",

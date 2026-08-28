@@ -3,10 +3,8 @@ import type { FooterSection, HeroContent, NavItem, SocialLink } from "./types";
 // site configuration
 export const siteConfig = {
   name: "AI Pedia",
-  description: "Learning Website for AI Enthusiasts",
-  tagline: "Master the Future of Artificial Intelligence",
+  description: "An interactive encyclopedia of artificial intelligence",
   url: "https://aipedia.ais-asu.com/",
-  ogImage: "/og-image.png",
   author: "The AI Society",
   email: "theaisociety@asu.edu",
   repoUrl: "https://github.com/theaisocietyasu/ml-visualization",

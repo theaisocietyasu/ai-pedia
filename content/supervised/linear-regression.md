@@ -293,13 +293,13 @@ Linear regression remains a cornerstone of statistical modeling and machine lear
 
 ### When to Use Linear Regression
 
-✅ **Use when:**
+**Use it when:**
 
   * You need a model that is easy to interpret and explain (e.g., for business stakeholders).
   * The relationship between variables appears to be linear.
   * You need a fast, low-computation baseline to compare against more complex models.
 
-❌ **Avoid when:**
+**Avoid it when:**
 
   * The underlying relationships are clearly and complexly non-linear.
   * The key assumptions (especially independence and homoscedasticity) are severely violated.

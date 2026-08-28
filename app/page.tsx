@@ -7,7 +7,7 @@ const baseUrl =
 export const metadata: Metadata = {
   title: "Home",
   description:
-    "Master artificial intelligence through interactive visualizations and hands-on projects. Learn ML, Deep Learning, Computer Vision, and NLP with The AI Society at ASU.",
+    "Interactive explanations of the algorithms behind modern AI, written by The AI Society at Arizona State University.",
   keywords: [
     "AI learning platform",
     "machine learning tutorials",
@@ -20,26 +20,15 @@ export const metadata: Metadata = {
     "NLP learning",
   ],
   openGraph: {
-    title: "AI Pedia | Interactive AI Learning Platform",
-    description:
-      "Master artificial intelligence through interactive visualizations and hands-on projects. Learn ML, Deep Learning, Computer Vision, and NLP.",
+    title: "AI Pedia",
+    description: "Interactive explanations of the algorithms behind modern AI.",
     url: baseUrl,
     type: "website",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "AI Pedia - Interactive AI Learning Platform",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Pedia | Interactive AI Learning Platform",
-    description:
-      "Master artificial intelligence through interactive visualizations and hands-on projects.",
-    images: ["/og-image.png"],
+    title: "AI Pedia",
+    description: "Interactive explanations of the algorithms behind modern AI.",
   },
   alternates: {
     canonical: baseUrl,

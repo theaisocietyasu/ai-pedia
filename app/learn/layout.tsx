@@ -25,21 +25,12 @@ export const metadata: Metadata = {
       "Explore AI algorithms through interactive tutorials and visualizations. Master ML, Deep Learning, Computer Vision, and NLP.",
     url: `${baseUrl}/learn`,
     type: "website",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Learn AI & ML - Interactive Tutorials",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Learn AI & ML | Interactive Tutorials and Visualizations",
     description:
       "Explore AI algorithms through interactive tutorials and visualizations.",
-    images: ["/og-image.png"],
   },
   alternates: {
     canonical: `${baseUrl}/learn`,

@@ -117,11 +117,10 @@ lib/
   markdown-utils.ts       # Heading extraction for the TOC
   constants.ts, types.ts  # Site constants, shared types
 styles/markdown.css       # Article typography
-docs/proposals/           # Design docs for unbuilt features
+docs/                     # Map artwork sources
 ```
 
 ## Contributing
 
-1. Branch from `main`, add or edit files under `content/`.
-2. Run `npm run lint && npm run build` — the build fails loudly on broken frontmatter.
-3. Open a pull request; CI runs lint, typecheck and build. A maintainer reviews and merges, and the site redeploys automatically.
+See [CONTRIBUTING.md](CONTRIBUTING.md). The short version: edit a file under
+`content/`, open a pull request, and a maintainer will review it.

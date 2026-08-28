@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     template: "%s | AI Pedia",
   },
   description:
-    "Master artificial intelligence through interactive visualizations and hands-on projects. Join ASU's premier AI learning platform powered by The AI Society.",
+    "Interactive explanations of the algorithms behind modern AI, written by The AI Society at Arizona State University.",
   keywords: [
     "AI",
     "Machine Learning",
@@ -61,27 +61,16 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "AI Pedia | The AI Society at ASU",
-    description:
-      "Master artificial intelligence through interactive visualizations and hands-on projects.",
+    description: "Interactive explanations of the algorithms behind modern AI.",
     url: baseUrl,
     siteName: "AI Pedia",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "AI Pedia - Learn AI through Interactive Visualizations",
-      },
-    ],
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "AI Pedia | The AI Society at ASU",
-    description:
-      "Master artificial intelligence through interactive visualizations and hands-on projects.",
-    images: ["/og-image.png"],
+    description: "Interactive explanations of the algorithms behind modern AI.",
     creator: "@theaisocietyasu",
   },
   robots: {
@@ -130,7 +119,7 @@ export default function RootLayout({
     url: baseUrl,
     logo: `${baseUrl}/logo.png`,
     description:
-      "Master artificial intelligence through interactive visualizations and hands-on projects. Join ASU's premier AI learning platform powered by The AI Society.",
+      "Interactive explanations of the algorithms behind modern AI, written by The AI Society at Arizona State University.",
     sameAs: ["https://www.instagram.com/theaisociety.asu/"],
     parentOrganization: {
       "@type": "CollegeOrUniversity",
@@ -143,8 +132,7 @@ export default function RootLayout({
     "@type": "WebSite",
     name: "AI Pedia",
     url: baseUrl,
-    description:
-      "Master artificial intelligence through interactive visualizations and hands-on projects.",
+    description: "Interactive explanations of the algorithms behind modern AI.",
     potentialAction: {
       "@type": "SearchAction",
       target: {

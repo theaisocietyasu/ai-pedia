@@ -1,14 +1,9 @@
-## What does this PR do?
+## Summary
 
-<!-- Short description of the change and why it's needed -->
+<!-- What changed and why. For content changes, name the article. -->
 
 ## Checklist
 
-- [ ] `npm run lint` passes
-- [ ] `npm run typecheck` passes
+- [ ] `npm run lint` and `npm run typecheck` pass
 - [ ] `npm run build` succeeds
-- [ ] Tested manually against a dev database (describe below if relevant)
-
-## Screenshots / notes
-
-<!-- For UI changes, a before/after screenshot helps a lot -->
+- [ ] For UI changes: screenshot attached
