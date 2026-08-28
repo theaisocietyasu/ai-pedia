@@ -24,7 +24,7 @@ export function HeroSection() {
           src={HERO_ART}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover scale-[1.04] pointer-events-none select-none opacity-[0.16] sm:opacity-[0.22]"
+          className="absolute inset-0 h-full w-full object-cover scale-[1.08] pointer-events-none select-none opacity-[0.16] sm:opacity-[0.22]"
           style={{
             maskImage:
               "radial-gradient(ellipse 34% 40% at 50% 52%, transparent 0%, transparent 55%, black 100%)",
