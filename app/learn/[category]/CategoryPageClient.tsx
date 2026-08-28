@@ -122,7 +122,14 @@ export function CategoryPageClient({
     <div className="w-full max-w-5xl mt-12 flex flex-col items-center gap-16">
       {/* Title */}
       <div className="relative inline-block mb-6 text-center max-w-3xl">
-        <p className="eyebrow mb-5">Learn</p>
+        <p className="eyebrow mb-5">
+          <Link
+            href="/learn"
+            className="hover:text-foreground transition-colors"
+          >
+            Learn
+          </Link>
+        </p>
         <h1 className="font-display text-4xl md:text-6xl leading-tight relative z-10">
           {category.title}
         </h1>
@@ -190,7 +197,7 @@ export function CategoryPageClient({
         </motion.div>
 
         {/* Sidebar (sticky, not fixed) */}
-        <div className="hidden lg:flex flex-col lg:w-56 shrink-0 sticky top-28 self-start border-l border-line">
+        <div className="hidden lg:flex flex-col lg:w-56 shrink-0 sticky top-20 self-start border-l border-line">
           <p className="eyebrow mb-3 pl-3">Modules</p>
           {articles.map((item) => {
             const id = item.slug;

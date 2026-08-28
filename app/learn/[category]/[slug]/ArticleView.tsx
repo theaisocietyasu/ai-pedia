@@ -41,7 +41,7 @@ export function ArticleView({ article, editUrl }: ArticleViewProps) {
         </footer>
       </main>
 
-      <aside className="hidden lg:flex flex-col gap-2 lg:w-64 shrink-0 sticky top-28 self-start">
+      <aside className="hidden lg:flex flex-col gap-2 lg:w-64 shrink-0 sticky top-20 self-start">
         <TableOfContents headings={article.headings} />
       </aside>
     </div>

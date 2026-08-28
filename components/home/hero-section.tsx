@@ -1,16 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpen, Eye, Users } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { heroContent } from "@/lib/constants";
 
-const highlights = [
-  { icon: Eye, label: "Interactive visualizations" },
-  { icon: BookOpen, label: "Structured learn modules" },
-  { icon: Users, label: "Written by AIS at ASU" },
-];
+/** Path under public/ for the hero background illustration; leave empty for the plain paper look. */
+const HERO_ART = "";
 
 const fade = (delay: number) => ({
   initial: { opacity: 0, y: 12 },
@@ -20,7 +17,17 @@ const fade = (delay: number) => ({
 
 export function HeroSection() {
   return (
-    <section className="relative h-[calc(100svh-4rem)] w-full flex items-center justify-center overflow-hidden bg-background">
+    <section className="relative h-[calc(100svh-3rem)] w-full flex items-center justify-center overflow-hidden bg-background">
+      {/* Optional artwork: drop an image at public/art/hero.png (or .webp) and set HERO_ART below. */}
+      {HERO_ART && (
+        <img
+          src={HERO_ART}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover pointer-events-none select-none"
+        />
+      )}
+
       {/* a soft lavender wash, top-right, like light through a window */}
       <div
         aria-hidden="true"
@@ -81,23 +88,6 @@ export function HeroSection() {
           </Link>
         </motion.div>
       </div>
-
-      <motion.ul
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.7 }}
-        className="absolute bottom-8 left-0 right-0 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 px-6"
-      >
-        {highlights.map(({ icon: Icon, label }) => (
-          <li
-            key={label}
-            className="flex items-center gap-2 text-sm text-muted"
-          >
-            <Icon size={15} className="text-purple-deep" aria-hidden="true" />
-            {label}
-          </li>
-        ))}
-      </motion.ul>
     </section>
   );
 }

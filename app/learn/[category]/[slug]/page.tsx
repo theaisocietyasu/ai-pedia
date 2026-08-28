@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { siteConfig } from "@/lib/constants";
 import {
@@ -114,7 +115,21 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
       <div className="w-full max-w-5xl flex flex-col items-center gap-16">
         <header className="relative inline-block mt-16 mb-4 text-center max-w-3xl">
-          <p className="eyebrow mb-5">{category.title}</p>
+          <p className="eyebrow mb-5">
+            <Link
+              href="/learn"
+              className="hover:text-foreground transition-colors"
+            >
+              Learn
+            </Link>
+            <span className="mx-2">/</span>
+            <Link
+              href={`/learn/${categorySlug}`}
+              className="hover:text-foreground transition-colors"
+            >
+              {category.title}
+            </Link>
+          </p>
           <h1 className="font-display text-4xl md:text-6xl leading-tight">
             {article.title}
           </h1>
