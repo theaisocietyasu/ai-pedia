@@ -273,9 +273,9 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
 
   return (
     <div
-      className={`bg-gray-800/50 border border-gray-700 rounded-lg p-6 ${className}`}
+      className={`bg-surface border border-line rounded-lg p-6 ${className}`}
     >
-      <h3 className="text-lg font-semibold text-gray-200 mb-4 flex items-center gap-2">
+      <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
         {mode === "create" ? (
           <>
             <BookOpen size={18} aria-hidden="true" />
@@ -294,7 +294,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
         <div>
           <label
             htmlFor="module-title"
-            className="block text-sm font-medium text-gray-300 mb-2"
+            className="block text-sm font-medium text-ink-2 mb-2"
           >
             Title *
           </label>
@@ -303,7 +303,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
             type="text"
             value={formData.title}
             onChange={(e) => handleInputChange("title", e.target.value)}
-            className="w-full p-3 border border-gray-600 rounded-lg bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-purple transition-colors"
+            className="w-full p-3 border border-line rounded-lg bg-surface text-ink-2 placeholder:text-muted focus:outline-none focus:border-purple transition-colors"
             placeholder="Enter module title..."
             required
           />
@@ -313,7 +313,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
         <div>
           <label
             htmlFor="module-description"
-            className="block text-sm font-medium text-gray-300 mb-2"
+            className="block text-sm font-medium text-ink-2 mb-2"
           >
             Description *
           </label>
@@ -322,7 +322,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
             value={formData.description}
             onChange={(e) => handleInputChange("description", e.target.value)}
             rows={3}
-            className="w-full p-3 border border-gray-600 rounded-lg bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-purple transition-colors resize-none"
+            className="w-full p-3 border border-line rounded-lg bg-surface text-ink-2 placeholder:text-muted focus:outline-none focus:border-purple transition-colors resize-none"
             placeholder="Brief description of the learning module..."
             required
           />
@@ -340,7 +340,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
         <div>
           <label
             htmlFor="module-thumbnail"
-            className="block text-sm font-medium text-gray-300 mb-2"
+            className="block text-sm font-medium text-ink-2 mb-2"
           >
             Thumbnail Image *
           </label>
@@ -350,9 +350,9 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
             existingThumbnailUrl &&
             keepExistingThumbnail &&
             !thumbnail && (
-              <div className="mb-3 p-3 bg-gray-700/50 rounded-lg border border-gray-600">
+              <div className="mb-3 p-3 bg-surface rounded-lg border border-line">
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-500">
+                  <div className="w-20 h-20 rounded-lg overflow-hidden border border-line">
                     <img
                       src={existingThumbnailUrl}
                       alt="Current thumbnail"
@@ -360,13 +360,11 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
                     />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm text-gray-300 mb-2">
-                      Current Thumbnail
-                    </p>
+                    <p className="text-sm text-ink-2 mb-2">Current Thumbnail</p>
                     <button
                       type="button"
                       onClick={() => thumbnailInputRef.current?.click()}
-                      className="text-sm text-purple-300 hover:text-purple-200 underline"
+                      className="text-sm text-purple-deep hover:text-purple-deep underline"
                     >
                       Replace with new image
                     </button>
@@ -389,7 +387,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
               <button
                 type="button"
                 onClick={() => thumbnailInputRef.current?.click()}
-                className="w-full p-3 border border-gray-600 rounded-lg bg-gray-800 text-gray-300 hover:border-gray-500 focus:outline-none focus:border-purple transition-colors text-left"
+                className="w-full p-3 border border-line rounded-lg bg-surface text-ink-2 hover:border-line focus:outline-none focus:border-purple transition-colors text-left"
               >
                 {thumbnail
                   ? thumbnail.name
@@ -401,7 +399,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
 
             {thumbnailPreview && (
               <div className="flex items-center gap-2">
-                <div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-600">
+                <div className="w-20 h-20 rounded-lg overflow-hidden border border-line">
                   <img
                     src={thumbnailPreview}
                     alt="New thumbnail preview"
@@ -428,37 +426,37 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
           initialData?.contributors &&
           initialData.contributors.length > 0 && (
             <div>
-              <span className="block text-sm font-medium text-gray-300 mb-2">
+              <span className="block text-sm font-medium text-ink-2 mb-2">
                 Contributors
               </span>
-              <div className="p-3 bg-gray-900/50 border border-gray-600 rounded-lg space-y-2">
+              <div className="p-3 bg-surface border border-line rounded-lg space-y-2">
                 {initialData.contributors.map((contributor) => (
                   <div
                     key={contributor.id}
                     className="flex items-center gap-3 text-sm"
                   >
-                    <div className="w-8 h-8 rounded-full bg-purple/20 border border-purple/30 flex items-center justify-center text-purple-300 font-medium">
+                    <div className="w-8 h-8 rounded-full bg-purple-wash border border-purple-light flex items-center justify-center text-purple-deep font-medium">
                       {contributor.name.charAt(0).toUpperCase()}
                     </div>
                     <div className="flex-1">
-                      <div className="text-gray-300 font-medium">
+                      <div className="text-ink-2 font-medium">
                         {contributor.name}
                       </div>
                       {contributor.email && (
-                        <div className="text-gray-500 text-xs">
+                        <div className="text-muted text-xs">
                           {contributor.email}
                         </div>
                       )}
                     </div>
                     {contributor.addedAt && (
-                      <div className="text-gray-600 text-xs">
+                      <div className="text-muted/70 text-xs">
                         {new Date(contributor.addedAt).toLocaleDateString()}
                       </div>
                     )}
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs text-muted mt-2">
                 Contributors are automatically added when someone edits this
                 module.
               </p>
@@ -467,7 +465,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
 
         {/* Action Buttons */}
         <div>
-          <span className="block text-sm font-medium text-gray-300 mb-2">
+          <span className="block text-sm font-medium text-ink-2 mb-2">
             Action Buttons (Optional)
           </span>
 
@@ -478,9 +476,9 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
                 <div
                   // biome-ignore lint/suspicious/noArrayIndexKey: action buttons have no stable unique id and name/link pairs may repeat
                   key={index}
-                  className="flex items-center gap-2 p-2 bg-gray-700/50 rounded border border-gray-600"
+                  className="flex items-center gap-2 p-2 bg-surface rounded border border-line"
                 >
-                  <span className="flex-1 text-sm text-gray-300">
+                  <span className="flex-1 text-sm text-ink-2">
                     <strong>{button.name}</strong> → {button.link}
                   </span>
                   <button
@@ -507,7 +505,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
                   name: e.target.value,
                 }))
               }
-              className="flex-1 p-2 border border-gray-600 rounded bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-purple text-sm"
+              className="flex-1 p-2 border border-line rounded bg-surface text-ink-2 placeholder:text-muted focus:outline-none focus:border-purple text-sm"
             />
             <input
               type="url"
@@ -519,7 +517,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
                   link: e.target.value,
                 }))
               }
-              className="flex-1 p-2 border border-gray-600 rounded bg-gray-800 text-gray-300 placeholder-gray-500 focus:outline-none focus:border-purple text-sm"
+              className="flex-1 p-2 border border-line rounded bg-surface text-ink-2 placeholder:text-muted focus:outline-none focus:border-purple text-sm"
             />
             <button
               type="button"
@@ -527,7 +525,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
               disabled={
                 !newActionButton.name.trim() || !newActionButton.link.trim()
               }
-              className="px-3 py-2 bg-purple/20 text-purple-300 rounded border border-purple/30 hover:bg-purple/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+              className="px-3 py-2 bg-purple-wash text-purple-deep rounded border border-purple-light hover:bg-purple-wash transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
             >
               Add
             </button>
@@ -536,10 +534,10 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
 
         {/* Content Preview */}
         <div>
-          <span className="block text-sm font-medium text-gray-300 mb-2">
+          <span className="block text-sm font-medium text-ink-2 mb-2">
             Content Preview
           </span>
-          <div className="p-3 bg-gray-900/50 border border-gray-600 rounded-lg text-sm text-gray-400">
+          <div className="p-3 bg-surface border border-line rounded-lg text-sm text-muted">
             {markdownContent.trim() ? (
               <div>
                 <div>Characters: {markdownContent.length}</div>
@@ -561,7 +559,7 @@ export const MarkdownUploadForm: React.FC<MarkdownUploadFormProps> = ({
 
         {/* Error Display */}
         {error && (
-          <div className="p-3 bg-white/5 border border-purple-deep/60 rounded-lg text-white text-sm">
+          <div className="p-3 bg-surface border border-purple-deep/60 rounded-lg text-foreground text-sm">
             {error}
           </div>
         )}

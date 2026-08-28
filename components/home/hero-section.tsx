@@ -12,92 +12,69 @@ const highlights = [
   { icon: Users, label: "Written by AIS at ASU" },
 ];
 
+const fade = (delay: number) => ({
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
+});
+
 export function HeroSection() {
   return (
-    <section className="relative h-[100svh] w-full flex items-center justify-center overflow-hidden bg-background">
-      {/* background: single quiet violet glow + fine grid */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full opacity-25 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(109, 40, 217, 0.5) 0%, transparent 65%)",
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-[0.05]"
-          style={{
-            backgroundImage: `linear-gradient(rgba(255,255,255,.25) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(255,255,255,.25) 1px, transparent 1px)`,
-            backgroundSize: "56px 56px",
-            maskImage:
-              "radial-gradient(ellipse at center, black 30%, transparent 75%)",
-          }}
-        />
-      </div>
+    <section className="relative h-[calc(100svh-4rem)] w-full flex items-center justify-center overflow-hidden bg-background">
+      {/* a soft lavender wash, top-right, like light through a window */}
+      <div
+        aria-hidden="true"
+        className="absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(198,191,236,0.45) 0%, rgba(250,249,245,0) 65%)",
+        }}
+      />
 
-      <div className="relative w-full max-w-4xl mx-auto px-6 sm:px-8 text-center flex flex-col items-center">
-        {/* eyebrow */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-xs sm:text-sm tracking-[0.35em] uppercase text-light-gray/70 mb-8"
-        >
+      <div className="relative w-full max-w-3xl mx-auto px-6 sm:px-8 text-center flex flex-col items-center">
+        <motion.p {...fade(0)} className="eyebrow mb-10">
           The AI Society · Arizona State University
         </motion.p>
 
-        {/* title */}
         <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="font-display text-6xl sm:text-7xl md:text-8xl font-semibold tracking-tight mb-6"
+          {...fade(0.1)}
+          className="font-display text-6xl sm:text-7xl md:text-[6.5rem] leading-none mb-8"
         >
           {heroContent.title}
         </motion.h1>
 
-        {/* rule */}
         <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          animate={{ opacity: 1, scaleX: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="h-px w-24 bg-purple mb-8"
-        />
+          {...fade(0.2)}
+          className="flex items-center gap-4 mb-8 text-purple"
+          aria-hidden="true"
+        >
+          <span className="h-px w-16 bg-current" />
+          <span className="text-xs">✦</span>
+          <span className="h-px w-16 bg-current" />
+        </motion.div>
 
-        {/* subtitle */}
         <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.25 }}
-          className="font-display italic text-xl sm:text-2xl text-light-gray mb-5"
+          {...fade(0.25)}
+          className="font-display italic text-2xl sm:text-3xl text-ink-2 mb-5"
         >
           {heroContent.subtitle}
         </motion.p>
 
-        {/* description */}
         <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.35 }}
-          className="text-base sm:text-lg text-light-gray/75 max-w-xl leading-relaxed mb-10"
+          {...fade(0.35)}
+          className="text-base sm:text-lg text-muted max-w-xl leading-relaxed mb-10"
         >
           {heroContent.description}
         </motion.p>
 
-        {/* cta */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.45 }}
-        >
+        <motion.div {...fade(0.45)}>
           <Link href={heroContent.ctaLink}>
             <Button
               size="lg"
               variant="primary"
-              icon={<ArrowRight size={20} />}
+              icon={<ArrowRight size={18} />}
               iconPosition="right"
-              className="rounded-full px-8"
+              className="rounded-full px-7"
             >
               {heroContent.ctaText}
             </Button>
@@ -105,7 +82,6 @@ export function HeroSection() {
         </motion.div>
       </div>
 
-      {/* highlights, pinned inside the single screen */}
       <motion.ul
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -115,9 +91,9 @@ export function HeroSection() {
         {highlights.map(({ icon: Icon, label }) => (
           <li
             key={label}
-            className="flex items-center gap-2 text-sm text-light-gray/60"
+            className="flex items-center gap-2 text-sm text-muted"
           >
-            <Icon size={15} className="text-purple" aria-hidden="true" />
+            <Icon size={15} className="text-purple-deep" aria-hidden="true" />
             {label}
           </li>
         ))}

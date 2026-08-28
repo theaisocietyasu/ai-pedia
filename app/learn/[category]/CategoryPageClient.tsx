@@ -124,27 +124,28 @@ export function CategoryPageClient({
   return (
     <div className="w-full max-w-5xl mt-12 flex flex-col items-center gap-16">
       {/* Title */}
-      <div className="relative inline-block mb-10 text-center">
-        <h1 className="text-2xl md:text-5xl font-bold  italic relative z-10 capitalize">
-          {category} Learning
+      <div className="relative inline-block mb-6 text-center max-w-3xl">
+        <p className="eyebrow mb-5">Learn</p>
+        <h1 className="font-display text-4xl md:text-6xl leading-tight relative z-10 capitalize">
+          {category.replace(/-/g, " ")}
         </h1>
 
         {/* Category Description */}
         {categoryDescription && (
-          <div className="mt-4 text-base md:text-lg text-light-gray/80 max-w-2xl mx-auto">
+          <div className="mt-5 text-lg text-ink-2 max-w-2xl mx-auto">
             <ReactMarkdown>{categoryDescription}</ReactMarkdown>
           </div>
         )}
       </div>
 
       {/* Wrapper for cards + sidebar */}
-      <div className="w-full flex justify-between gap-20 relative">
+      <div className="w-full flex justify-between gap-16 relative">
         {/* Cards */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex flex-col gap-12 w-full "
+          className="flex flex-col gap-6 w-full min-w-0"
         >
           {models.map((item, index) => {
             const id = item.slug;
@@ -156,30 +157,26 @@ export function CategoryPageClient({
                 ref={(el) => {
                   cardRefs.current[index] = el;
                 }}
-                className={`cursor-pointer group  flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl     ${
-                  index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                }`}
+                className="w-full"
               >
                 <Link
                   key={id}
                   href={`/learn/${category}/${item.slug}`}
-                  className={`group flex flex-col md:flex-row items-center gap-6 md:gap-10 p-6 rounded-xl glass-effect  ${
-                    index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                  }`}
+                  className="group flex flex-col md:flex-row items-center gap-6 md:gap-10 p-5 rounded-lg bg-surface border border-line hover:border-purple transition-colors"
                 >
                   {/* Image */}
                   <img
                     src={item.imgPath}
                     alt={item.name}
-                    className="w-full md:w-1/3 md:min-w-[200px] h-48 md:h-56 rounded-lg shadow-lg object-cover flex-shrink-0"
+                    className="w-full md:w-1/3 md:min-w-[200px] h-48 md:h-52 rounded-md border border-line object-cover flex-shrink-0"
                   />
 
                   {/* Text */}
                   <div className="flex-1 text-center md:text-left min-w-0">
-                    <h2 className="text-xl md:text-2xl font-semibold text-light-gray mb-3 line-clamp-2">
+                    <h2 className="font-display text-2xl md:text-3xl mb-2 line-clamp-2 group-hover:text-purple-deep transition-colors">
                       {item.name}
                     </h2>
-                    <p className="text-sm md:text-base text-light-gray/80 line-clamp-4">
+                    <p className="text-base text-ink-2 line-clamp-4">
                       {item.description}
                     </p>
                   </div>
@@ -190,7 +187,8 @@ export function CategoryPageClient({
         </motion.div>
 
         {/* Sidebar (sticky, not fixed) */}
-        <div className="hidden lg:flex flex-col gap-2 lg:w-1/4 sticky top-32 self-start">
+        <div className="hidden lg:flex flex-col lg:w-56 shrink-0 sticky top-28 self-start border-l border-line">
+          <p className="eyebrow mb-3 pl-3">Modules</p>
           {models.map((item) => {
             const id = item.slug;
             const isActive = activeId === id;
@@ -199,10 +197,10 @@ export function CategoryPageClient({
                 type="button"
                 key={id}
                 onClick={() => scrollToCenter(id)}
-                className={`text-sm font-medium transition-colors py-1 px-2 text-left ${
+                className={`text-sm transition-colors py-1 pl-3 -ml-px border-l text-left ${
                   isActive
-                    ? "text-purple-light"
-                    : "text-gray-400 hover:text-gray-200 cursor-pointer"
+                    ? "border-purple-deep text-foreground"
+                    : "border-transparent text-muted hover:text-foreground cursor-pointer"
                 }`}
               >
                 {item.name}

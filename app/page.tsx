@@ -48,7 +48,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="h-[100svh] overflow-hidden bg-background">
+    <main className="h-[calc(100svh-4rem)] overflow-hidden bg-background">
       <HeroSection />
     </main>
   );

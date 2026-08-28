@@ -243,9 +243,7 @@ export default function EditPage() {
               aria-hidden="true"
             />
           </div>
-          <div className="text-xl text-gray-400">
-            Checking authentication...
-          </div>
+          <div className="text-xl text-muted">Checking authentication...</div>
         </div>
       </div>
     );
@@ -262,7 +260,7 @@ export default function EditPage() {
               aria-hidden="true"
             />
           </div>
-          <div className="text-xl text-gray-400">Loading module data...</div>
+          <div className="text-xl text-muted">Loading module data...</div>
         </div>
       </div>
     );
@@ -278,9 +276,9 @@ export default function EditPage() {
           <h2 className="text-2xl font-bold text-purple-light mb-4">
             Module is Locked
           </h2>
-          <div className="text-lg text-gray-300 mb-2">{lockError}</div>
+          <div className="text-lg text-ink-2 mb-2">{lockError}</div>
           {lockedBy && (
-            <div className="text-sm text-gray-400 mb-6">
+            <div className="text-sm text-muted mb-6">
               Currently being edited by:{" "}
               <span className="font-semibold text-purple-light">
                 {lockedBy}
@@ -293,14 +291,14 @@ export default function EditPage() {
               onClick={() =>
                 router.push(`/learn/${params.category}/${modelSlug}`)
               }
-              className="px-6 py-3 bg-purple text-white rounded-lg hover:bg-purple/80 transition-colors"
+              className="px-6 py-3 bg-foreground text-background rounded-md hover:bg-ink-2 transition-colors"
             >
               View Module
             </button>
             <button
               type="button"
               onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+              className="px-6 py-3 bg-surface text-foreground rounded-lg hover:bg-surface-2 transition-colors"
             >
               Try Again
             </button>
@@ -321,11 +319,11 @@ export default function EditPage() {
               aria-hidden="true"
             />
           </div>
-          <div className="text-xl text-white mb-4">{error}</div>
+          <div className="text-xl text-foreground mb-4">{error}</div>
           <button
             type="button"
             onClick={() => router.push(`/learn/${params.category}`)}
-            className="px-6 py-3 bg-purple text-white rounded-lg hover:bg-purple/80 transition-colors"
+            className="px-6 py-3 bg-foreground text-background rounded-md hover:bg-ink-2 transition-colors"
           >
             Back to Learning
           </button>
@@ -339,7 +337,7 @@ export default function EditPage() {
       <RoleGuard>
         <div className="bg-background">
           {/* Header/Navbar */}
-          <div className="border-b border-gray-800 bg-dark-gray">
+          <div className="border-b border-line bg-surface">
             <header className="flex items-center justify-between px-6 py-4">
               <div className="flex items-center w-full">
                 {/* Logo or Title */}
@@ -348,14 +346,14 @@ export default function EditPage() {
                 </h1>
                 {/* Mode Toggle */}
                 <div className="flex items-center gap-4 ml-auto">
-                  <div className="flex bg-gray-800 rounded-lg p-1 border border-gray-700">
+                  <div className="flex bg-surface rounded-lg p-1 border border-line">
                     <button
                       type="button"
                       onClick={() => setMode("preview")}
                       className={`px-4 py-2 text-sm rounded-md transition-colors ${
                         mode === "preview"
-                          ? "bg-purple text-white"
-                          : "text-gray-400 hover:text-gray-200"
+                          ? "bg-foreground text-background"
+                          : "text-muted hover:text-foreground"
                       }`}
                     >
                       <Eye
@@ -370,8 +368,8 @@ export default function EditPage() {
                       onClick={() => setMode("edit")}
                       className={`px-4 py-2 text-sm rounded-md transition-colors ${
                         mode === "edit"
-                          ? "bg-purple text-white"
-                          : "text-gray-400 hover:text-gray-200"
+                          ? "bg-foreground text-background"
+                          : "text-muted hover:text-foreground"
                       }`}
                     >
                       <Pencil
@@ -385,7 +383,7 @@ export default function EditPage() {
                   <button
                     type="button"
                     onClick={() => setShowDeleteConfirm(true)}
-                    className="px-4 py-2 text-sm bg-purple-deep hover:bg-purple text-white rounded-md transition-colors inline-flex items-center gap-1.5"
+                    className="px-4 py-2 text-sm bg-foreground hover:bg-ink-2 text-background rounded-md transition-colors inline-flex items-center gap-1.5"
                     disabled={isDeleting}
                   >
                     <Trash2 size={16} aria-hidden="true" />
@@ -396,14 +394,14 @@ export default function EditPage() {
                     onClick={() =>
                       router.push(`/learn/${params.category}/${modelSlug}`)
                     }
-                    className="px-4 py-2 text-sm bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600 transition-colors"
+                    className="px-4 py-2 text-sm bg-surface text-ink-2 rounded-md hover:bg-surface-2 transition-colors"
                   >
                     ← Cancel & Go Back
                   </button>
                 </div>
               </div>
             </header>
-            <p className="text-gray-400 mt-1 px-6 pb-4">
+            <p className="text-muted mt-1 px-6 pb-4">
               {mode === "preview"
                 ? "Edit markdown on the left and see the live preview on the right"
                 : "Update the module details and content"}
@@ -412,7 +410,7 @@ export default function EditPage() {
 
           {/* Success Message */}
           {updateSuccess && (
-            <div className="flex items-center gap-2 bg-purple/10 border border-purple/40 text-purple-light px-6 py-4">
+            <div className="flex items-center gap-2 bg-purple-wash border border-purple-light text-purple-light px-6 py-4">
               <CheckCircle2 size={16} aria-hidden="true" />
               Learning module updated successfully! Redirecting...
             </div>
@@ -420,7 +418,7 @@ export default function EditPage() {
 
           {/* Delete Error Message */}
           {deleteError && (
-            <div className="flex items-center gap-2 bg-white/5 border border-purple-deep/60 text-white px-6 py-4">
+            <div className="flex items-center gap-2 bg-surface border border-purple-deep/60 text-foreground px-6 py-4">
               <AlertCircle
                 size={16}
                 className="text-purple-light"
@@ -432,7 +430,7 @@ export default function EditPage() {
 
           {/* Deleting Message */}
           {isDeleting && (
-            <div className="flex items-center gap-2 bg-purple/10 border border-purple/40 text-purple-light px-6 py-4">
+            <div className="flex items-center gap-2 bg-purple-wash border border-purple-light text-purple-light px-6 py-4">
               <Trash2 size={16} aria-hidden="true" />
               Deleting module... Please wait.
             </div>
@@ -443,16 +441,16 @@ export default function EditPage() {
             {mode === "preview" ? (
               <>
                 {/* Editor Panel */}
-                <div className="w-1/2 border-r border-gray-800 bg-dark-gray split-separator">
+                <div className="w-1/2 border-r border-line bg-surface split-separator">
                   <div className="h-full flex flex-col">
                     {/* Editor Header */}
-                    <div className="border-b border-gray-800 px-4 py-2 bg-background">
+                    <div className="border-b border-line px-4 py-2 bg-background">
                       <div className="flex items-center justify-between">
-                        <h2 className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+                        <h2 className="text-sm font-medium text-ink-2 flex items-center gap-1.5">
                           <FileText size={14} aria-hidden="true" />
                           Markdown Editor
                         </h2>
-                        <div className="flex items-center space-x-4 text-xs text-gray-500">
+                        <div className="flex items-center space-x-4 text-xs text-muted">
                           <span>Lines: {markdown.split("\n").length}</span>
                           <span>
                             Words:{" "}
@@ -468,7 +466,7 @@ export default function EditPage() {
                     </div>
 
                     {/* Image Upload Section */}
-                    <div className="border-b border-gray-800 px-4 py-3 bg-background/50">
+                    <div className="border-b border-line px-4 py-3 bg-background/50">
                       <ImageUploadButton />
                     </div>
 
@@ -497,7 +495,7 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                       />
 
                       {/* Editor Guidelines Overlay */}
-                      <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm rounded-lg p-3 text-xs text-gray-400 max-w-xs opacity-60 hover:opacity-100 transition-opacity pointer-events-auto">
+                      <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm rounded-lg p-3 text-xs text-muted max-w-xs opacity-60 hover:opacity-100 transition-opacity pointer-events-auto">
                         <div className="font-medium mb-2 text-purple-light flex items-center gap-1.5">
                           <Sparkles size={14} aria-hidden="true" />
                           Quick Reference
@@ -511,17 +509,17 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                           <div>code block</div>
                           <div>```</div>
                           <div>$$math equation$$</div>
-                          <div className="text-purple-300 mt-2 mb-1 font-normal flex items-center gap-1.5">
+                          <div className="text-purple-deep mt-2 mb-1 font-normal flex items-center gap-1.5">
                             <BarChart3 size={14} aria-hidden="true" />
                             Visualizations:
                           </div>
-                          <div className="text-purple-200 text-[10px]">
+                          <div className="text-purple-deep text-[10px]">
                             &lt;div id="VZ-linear-equation"&gt;&lt;/div&gt;
                           </div>
-                          <div className="text-purple-200 text-[10px]">
+                          <div className="text-purple-deep text-[10px]">
                             &lt;div id="VZ-assumptions-plots"&gt;&lt;/div&gt;
                           </div>
-                          <div className="text-purple-200 text-[10px]">
+                          <div className="text-purple-deep text-[10px]">
                             &lt;div id="VZ-model-evaluation"&gt;&lt;/div&gt;
                           </div>
                         </div>
@@ -534,10 +532,10 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                 <div className="w-1/2 bg-background">
                   <div className="h-full flex flex-col">
                     {/* Preview Header */}
-                    <div className="border-b border-gray-800 px-4 py-2 bg-dark-gray">
+                    <div className="border-b border-line px-4 py-2 bg-surface">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <h2 className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+                          <h2 className="text-sm font-medium text-ink-2 flex items-center gap-1.5">
                             <Eye size={14} aria-hidden="true" />
                             Live Preview
                           </h2>
@@ -546,7 +544,7 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                         <button
                           type="button"
                           onClick={() => setMarkdown("")}
-                          className="px-3 py-1 text-xs bg-gray-700 text-gray-300 rounded border border-gray-600 hover:bg-gray-600 transition-colors inline-flex items-center gap-1.5"
+                          className="px-3 py-1 text-xs bg-surface text-ink-2 rounded border border-line hover:bg-surface-2 transition-colors inline-flex items-center gap-1.5"
                         >
                           <Trash2 size={12} aria-hidden="true" />
                           Clear All
@@ -559,7 +557,7 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                       {markdown.trim() ? (
                         <MarkdownRenderer content={markdown} />
                       ) : (
-                        <div className="flex items-center justify-center h-full text-gray-500">
+                        <div className="flex items-center justify-center h-full text-muted">
                           <div className="text-center max-w-md">
                             <div className="mb-4 flex justify-center">
                               <FileText
@@ -568,10 +566,10 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                                 aria-hidden="true"
                               />
                             </div>
-                            <div className="text-lg mb-2 text-gray-400">
+                            <div className="text-lg mb-2 text-muted">
                               No content to preview
                             </div>
-                            <div className="text-sm text-gray-500 leading-relaxed">
+                            <div className="text-sm text-muted leading-relaxed">
                               Start typing markdown in the editor to see the
                               live preview.
                             </div>
@@ -587,7 +585,7 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
               <div className="w-full bg-background">
                 <div className="h-full flex">
                   {/* Edit Form Panel */}
-                  <div className="w-1/2 border-r border-gray-800 overflow-y-auto">
+                  <div className="w-1/2 border-r border-line overflow-y-auto">
                     <div className="p-6">
                       <MarkdownUploadForm
                         mode="edit"
@@ -604,9 +602,9 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                   <div className="w-1/2 bg-background">
                     <div className="h-full flex flex-col">
                       {/* Preview Header */}
-                      <div className="border-b border-gray-800 px-4 py-2 bg-dark-gray">
+                      <div className="border-b border-line px-4 py-2 bg-surface">
                         <div className="flex items-center gap-4">
-                          <h2 className="text-sm font-medium text-gray-300 flex items-center gap-1.5">
+                          <h2 className="text-sm font-medium text-ink-2 flex items-center gap-1.5">
                             <Eye size={14} aria-hidden="true" />
                             Content Preview
                           </h2>
@@ -619,7 +617,7 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                         {markdown.trim() ? (
                           <MarkdownRenderer content={markdown} />
                         ) : (
-                          <div className="flex items-center justify-center h-full text-gray-500">
+                          <div className="flex items-center justify-center h-full text-muted">
                             <div className="text-center max-w-md">
                               <div className="mb-4 flex justify-center">
                                 <BookOpen
@@ -628,10 +626,10 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                                   aria-hidden="true"
                                 />
                               </div>
-                              <div className="text-lg mb-2 text-gray-400">
+                              <div className="text-lg mb-2 text-muted">
                                 No content available
                               </div>
-                              <div className="text-sm text-gray-500 leading-relaxed">
+                              <div className="text-sm text-muted leading-relaxed">
                                 The module content is empty. Switch to Preview
                                 Mode to edit the markdown content.
                               </div>
@@ -648,8 +646,8 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
 
           {/* Delete Confirmation Modal */}
           {showDeleteConfirm && (
-            <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-              <div className="bg-dark-gray border border-gray-700 rounded-lg max-w-md w-full p-6">
+            <div className="fixed inset-0 bg-foreground/30 flex items-center justify-center z-50 p-4">
+              <div className="bg-surface border border-line rounded-lg max-w-md w-full p-6">
                 <div className="text-center mb-6">
                   <div className="mb-4 flex justify-center">
                     <AlertTriangle
@@ -661,14 +659,14 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                   <h2 className="text-2xl font-bold text-purple-light mb-2">
                     Delete Learning Module?
                   </h2>
-                  <p className="text-gray-300 mb-1">
+                  <p className="text-ink-2 mb-1">
                     Are you sure you want to delete{" "}
-                    <span className="font-semibold text-white">
+                    <span className="font-semibold text-foreground">
                       {initialData?.title}
                     </span>
                     ?
                   </p>
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-muted">
                     This action cannot be undone. All content will be
                     permanently deleted.
                   </p>
@@ -678,7 +676,7 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                   <button
                     type="button"
                     onClick={() => setShowDeleteConfirm(false)}
-                    className="flex-1 px-4 py-3 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors font-medium"
+                    className="flex-1 px-4 py-3 bg-surface text-ink-2 rounded-lg hover:bg-surface-2 transition-colors font-medium"
                     disabled={isDeleting}
                   >
                     Cancel
@@ -689,7 +687,7 @@ $$x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$$
                       setShowDeleteConfirm(false);
                       handleDelete();
                     }}
-                    className="flex-1 px-4 py-3 bg-purple-deep hover:bg-purple text-white rounded-lg transition-colors font-medium"
+                    className="flex-1 px-4 py-3 bg-foreground hover:bg-ink-2 text-background rounded-lg transition-colors font-medium"
                     disabled={isDeleting}
                   >
                     {isDeleting ? "Deleting..." : "Yes, Delete"}

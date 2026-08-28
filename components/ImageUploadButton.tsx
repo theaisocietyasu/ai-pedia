@@ -114,7 +114,7 @@ export const ImageUploadButton: React.FC = () => {
 
       {/* Error Message */}
       {error && (
-        <div className="flex items-center gap-2 text-xs text-white bg-white/5 border border-purple-deep/60 rounded px-3 py-2">
+        <div className="flex items-center gap-2 text-xs text-foreground bg-surface border border-purple-deep/60 rounded px-3 py-2">
           <AlertCircle
             size={14}
             className="text-purple-light shrink-0"
@@ -127,13 +127,11 @@ export const ImageUploadButton: React.FC = () => {
       {/* Uploaded Images */}
       {uploadedImages.length > 0 && (
         <div className="space-y-2">
-          <div className="text-xs text-gray-400 font-medium">
-            Uploaded Images:
-          </div>
+          <div className="text-xs text-muted font-medium">Uploaded Images:</div>
           {uploadedImages.map((image) => (
             <div
               key={image.id}
-              className="bg-dark-gray/50 border border-gray-700 rounded p-2 space-y-2"
+              className="bg-surface border border-line rounded p-2 space-y-2"
             >
               {/* Image Preview */}
               <div className="flex items-center gap-2">
@@ -143,7 +141,7 @@ export const ImageUploadButton: React.FC = () => {
                   className="w-12 h-12 object-cover rounded"
                 />
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs text-gray-300 truncate">
+                  <div className="text-xs text-ink-2 truncate">
                     {image.fileName}
                   </div>
                 </div>
@@ -151,13 +149,13 @@ export const ImageUploadButton: React.FC = () => {
 
               {/* Markdown Code */}
               <div className="flex items-center gap-2">
-                <code className="flex-1 text-xs bg-background/50 px-2 py-1 rounded font-mono text-purple-300 truncate">
+                <code className="flex-1 text-xs bg-background/50 px-2 py-1 rounded font-mono text-purple-deep truncate">
                   {image.markdownCode}
                 </code>
                 <button
                   type="button"
                   onClick={() => copyToClipboard(image.markdownCode)}
-                  className="text-xs px-2 py-1 bg-purple/20 text-purple-300 rounded border border-purple/30 hover:bg-purple/30 transition-colors"
+                  className="text-xs px-2 py-1 bg-purple-wash text-purple-deep rounded border border-purple-light hover:bg-purple-wash transition-colors"
                   title="Copy markdown code"
                 >
                   Copy

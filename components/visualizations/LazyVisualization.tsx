@@ -19,11 +19,11 @@ const LoadingSpinner = () => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
-    className="w-full h-64 bg-gradient-to-br from-purple/10 to-pink/10 rounded-lg border border-white/10 flex items-center justify-center"
+    className="w-full h-64 bg-surface rounded-lg border border-line flex items-center justify-center"
   >
     <div className="text-center">
       <div className="w-8 h-8 border-2 border-purple border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-      <p className="text-gray-300 text-sm">Loading visualization...</p>
+      <p className="text-muted text-sm">Loading visualization…</p>
     </div>
   </motion.div>
 );
@@ -35,12 +35,12 @@ const ErrorFallback = ({
   <motion.div
     initial={{ opacity: 0, scale: 0.9 }}
     animate={{ opacity: 1, scale: 1 }}
-    className="w-full h-64 bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-lg border border-red-500/20 flex items-center justify-center"
+    className="w-full h-64 bg-red-50 rounded-lg border border-red-200 flex items-center justify-center"
   >
     <div className="text-center">
-      <div className="w-16 h-16 mx-auto mb-4 bg-red-500/20 rounded-full flex items-center justify-center">
+      <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
         <svg
-          className="w-8 h-8 text-red-500"
+          className="w-8 h-8 text-red-700"
           fill="currentColor"
           viewBox="0 0 24 24"
           aria-hidden="true"
@@ -48,13 +48,11 @@ const ErrorFallback = ({
           <path d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
         </svg>
       </div>
-      <h3 className="text-lg font-semibold text-white mb-2">
+      <h3 className="text-lg font-semibold text-foreground mb-2">
         Visualization Error
       </h3>
-      <p className="text-gray-300 text-sm mb-2">
-        Failed to load "{componentId}"
-      </p>
-      <p className="text-gray-400 text-xs">
+      <p className="text-ink-2 text-sm mb-2">Failed to load "{componentId}"</p>
+      <p className="text-muted text-xs">
         {fallbackTitle || "Interactive Visualization"}
       </p>
     </div>

@@ -1,7 +1,7 @@
 import type React from "react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
@@ -126,19 +126,20 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
                 <div className="markdown-code-block" data-language={language}>
                   <SyntaxHighlighter
                     language={language}
-                    style={vscDarkPlus}
+                    style={oneLight}
                     showLineNumbers={true}
                     customStyle={{
                       margin: 0,
-                      borderRadius: "8px",
-                      background: "rgba(17, 24, 39, 0.8)", // Dark background with transparency
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      padding: "1rem 1.25rem",
+                      borderRadius: "6px",
+                      background: "var(--surface)",
+                      border: "1px solid var(--line)",
                     }}
                     codeTagProps={{
                       style: {
                         fontFamily:
-                          'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
-                        fontSize: "14px",
+                          "var(--font-geist-mono), ui-monospace, monospace",
+                        fontSize: "0.875rem",
                       },
                     }}
                   >

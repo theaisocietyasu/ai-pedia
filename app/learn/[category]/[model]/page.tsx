@@ -179,14 +179,17 @@ async function LearnModulePage({ params }: LearnModulePageProps) {
 
       <div className="w-full max-w-5xl flex flex-col items-center gap-16">
         {/* Title */}
-        <div className="relative inline-block mb-10 text-center">
-          <h1 className="text-2xl mt-12 md:text-5xl font-bold  italic relative z-10">
+        <div className="relative inline-block mt-16 mb-4 text-center max-w-3xl">
+          <p className="eyebrow mb-5 capitalize">
+            {category.replace(/-/g, " ")}
+          </p>
+          <h1 className="font-display text-4xl md:text-6xl leading-tight relative z-10">
             {displayTitle}
           </h1>
 
           {/* Model Description */}
           {model?.description && (
-            <div className="mt-4 text-base md:text-lg text-light-gray/80 max-w-2xl mx-auto">
+            <div className="mt-5 text-lg md:text-xl text-ink-2 font-display italic max-w-2xl mx-auto">
               <ReactMarkdown>{model.description}</ReactMarkdown>
             </div>
           )}

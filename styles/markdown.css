@@ -1,86 +1,75 @@
 /*
- * Comprehensive Markdown CSS Template for Technical Officers
+ * Markdown reading styles for learn modules.
  *
- * This CSS file provides consistent styling for all markdown content
- * across the learn modules. It covers all edge cases and can be used
- * as a template in online readme editors.
- *
- * Color Scheme: Dark theme with black-white-violet accents
- * Typography: Geist Sans with proper hierarchy and readability
- *
- * Usage: Apply the 'markdown-content' class to any container with markdown content
+ * Tuned for long-form technical reading on the ivory page: measured line
+ * length, generous leading, restrained accent colour. Apply the
+ * `markdown-content` class to any container that renders markdown.
  */
 
-/* Root container for all markdown content */
 .markdown-content {
-  color: #ffffff;
+  color: var(--foreground);
+  font-size: 1.0625rem; /* ~18px */
   line-height: 1.7;
-  font-size: 16px;
   max-width: none;
-  word-wrap: break-word;
-  padding: 1rem;
+  overflow-wrap: break-word;
 }
 
 /* Headings */
 .markdown-content .markdown-heading {
-  font-weight: 700;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  line-height: 1.3;
-  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #6d28d9 100%);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-family: var(--font-display), Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  color: var(--foreground);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-top: 2.5rem;
+  margin-bottom: 0.9rem;
 }
 
 .markdown-content .markdown-h1 {
   font-size: 2.5rem;
   margin-top: 0;
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--line);
 }
 
 .markdown-content .markdown-h2 {
-  font-size: 2rem;
-  margin-top: 3rem;
-  margin-bottom: 1.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding-bottom: 0.25rem;
+  font-size: 1.875rem;
+  margin-top: 3.25rem;
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--line);
 }
 
 .markdown-content .markdown-h3 {
   font-size: 1.5rem;
   margin-top: 2.5rem;
-  margin-bottom: 1rem;
 }
 
 .markdown-content .markdown-h4 {
   font-size: 1.25rem;
   margin-top: 2rem;
-  margin-bottom: 0.75rem;
 }
 
 .markdown-content .markdown-h5 {
   font-size: 1.125rem;
+  font-style: italic;
   margin-top: 1.75rem;
-  margin-bottom: 0.5rem;
 }
 
 .markdown-content .markdown-h6 {
-  font-size: 1rem;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
+  font-family: var(--font-body), Georgia, serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-top: 1.5rem;
 }
 
 /* Paragraphs */
 .markdown-content .markdown-paragraph {
-  margin-bottom: 1.5rem;
-  color: rgba(224, 224, 224, 0.9);
-  line-height: 1.7;
+  margin-bottom: 1.35rem;
+  color: var(--foreground);
 }
 
 .markdown-content .markdown-paragraph:last-child {
@@ -89,97 +78,77 @@
 
 /* Links */
 .markdown-content .markdown-link {
-  color: #8b5cf6;
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: all 0.3s ease;
-  position: relative;
+  color: var(--purple-deep);
+  text-decoration: underline;
+  text-decoration-color: var(--purple-light);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color var(--transition-default);
 }
 
 .markdown-content .markdown-link:hover {
-  color: #a78bfa;
-  border-bottom-color: #a78bfa;
-}
-
-.markdown-content .markdown-link:focus {
-  outline: 2px solid #8b5cf6;
-  outline-offset: 2px;
-  border-radius: 2px;
+  text-decoration-color: var(--purple-deep);
 }
 
 /* Images */
 .markdown-content .markdown-image {
   max-width: 100%;
   height: auto;
-  border-radius: 12px;
-  margin: 2rem 0;
   display: block;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.markdown-content .markdown-image:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  margin: 2rem auto;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface);
 }
 
 /* Code blocks */
 .markdown-content .markdown-code-block {
-  margin: 2rem 0;
+  margin: 1.75rem 0;
   position: relative;
 }
 
-/* Language label for syntax highlighted code blocks */
 .markdown-content .markdown-code-block[data-language]::before {
   content: attr(data-language);
   position: absolute;
   top: 0.5rem;
-  right: 1rem;
-  font-size: 0.75rem;
-  color: rgba(224, 224, 224, 0.8);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  right: 0.75rem;
   z-index: 10;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  backdrop-filter: blur(5px);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
-/* Override syntax highlighter styles to match our theme */
 .markdown-content .markdown-code-block pre {
   margin: 0 !important;
-  font-family:
-    ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo,
-    monospace !important;
+  font-family: var(--font-geist-mono), ui-monospace, monospace !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
 }
 
-/* Ensure syntax highlighter container fits our design */
 .markdown-content .markdown-code-block > div {
-  border-radius: 8px !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  backdrop-filter: blur(10px);
+  border-radius: 6px !important;
+  border: 1px solid var(--line) !important;
+  background: var(--surface) !important;
 }
 
 /* Inline code */
 .markdown-content .markdown-inline-code {
-  background: rgba(255, 255, 255, 0.1);
-  color: #e0e0e0;
-  padding: 0.2em 0.4em;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.85em;
+  color: var(--foreground);
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: 4px;
-  font-size: 0.875em;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.1em 0.35em;
 }
 
 /* Lists */
 .markdown-content ul,
 .markdown-content ol {
-  margin: 1.5rem 0;
-  padding-left: 2rem;
-  color: rgba(224, 224, 224, 0.9);
+  margin: 1.25rem 0;
+  padding-left: 1.75rem;
 }
 
 .markdown-content ul {
@@ -191,20 +160,18 @@
 }
 
 .markdown-content li {
-  margin-bottom: 0.5rem;
-  line-height: 1.6;
+  margin-bottom: 0.4rem;
 }
 
 .markdown-content li::marker {
-  color: #8b5cf6;
+  color: var(--purple-deep);
 }
 
 .markdown-content li > ul,
 .markdown-content li > ol {
-  margin: 0.5rem 0;
+  margin: 0.4rem 0;
 }
 
-/* Nested list styles */
 .markdown-content ul ul {
   list-style-type: circle;
 }
@@ -215,24 +182,11 @@
 
 /* Blockquotes */
 .markdown-content blockquote {
-  border-left: 4px solid #8b5cf6;
-  background: rgba(255, 255, 255, 0.05);
-  margin: 2rem 0;
-  padding: 1rem 1.5rem;
-  border-radius: 0 8px 8px 0;
+  margin: 1.75rem 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 2px solid var(--purple);
+  color: var(--ink-2);
   font-style: italic;
-  color: rgba(224, 224, 224, 0.9);
-  position: relative;
-}
-
-.markdown-content blockquote::before {
-  content: '"';
-  font-size: 3rem;
-  color: rgba(139, 92, 246, 0.3);
-  position: absolute;
-  top: -0.5rem;
-  left: 1rem;
-  line-height: 1;
 }
 
 .markdown-content blockquote p {
@@ -247,67 +201,61 @@
 .markdown-content table {
   width: 100%;
   border-collapse: collapse;
-  margin: 2rem 0;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 1.75rem 0;
+  font-size: 0.95rem;
+  border-top: 1px solid var(--foreground);
+  border-bottom: 1px solid var(--foreground);
 }
 
 .markdown-content th,
 .markdown-content td {
-  padding: 0.75rem 1rem;
+  padding: 0.6rem 0.9rem;
   text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
 }
 
 .markdown-content th {
-  background: rgba(139, 92, 246, 0.2);
+  font-family: var(--font-body), Georgia, serif;
   font-weight: 600;
-  color: #ffffff;
-  border-bottom-color: rgba(255, 255, 255, 0.2);
+  color: var(--foreground);
+  border-bottom: 1px solid var(--foreground);
 }
 
-.markdown-content td {
-  color: rgba(224, 224, 224, 0.9);
+.markdown-content tr:last-child td {
+  border-bottom: none;
 }
 
-.markdown-content tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.markdown-content tr:hover {
-  background: rgba(255, 255, 255, 0.05);
+.markdown-content tr:hover td {
+  background: var(--surface);
 }
 
 /* Horizontal rule */
 .markdown-content hr {
   border: none;
-  height: 2px;
-  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #6d28d9 100%);
-  margin: 3rem 0;
-  border-radius: 1px;
-  opacity: 0.6;
+  height: 1px;
+  background: var(--line);
+  margin: 3rem auto;
+  width: 40%;
 }
 
-/* Strong and emphasis */
+/* Emphasis */
 .markdown-content .markdown-bold {
-  font-weight: 700;
-  color: #ffffff;
+  font-weight: 600;
+  color: var(--foreground);
 }
 
 .markdown-content .markdown-italic {
   font-style: italic;
-  color: rgba(224, 224, 224, 0.95);
 }
 
-/* React visualization components */
+/* Visualization containers */
 .markdown-content .markdown-visualization {
-  margin: 3rem 0;
-  padding: 2rem;
-  background: rgba(19, 19, 22, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
+  margin: 2.5rem 0;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
   min-height: 200px;
   display: flex;
   align-items: center;
@@ -316,38 +264,10 @@
   overflow: hidden;
 }
 
-.markdown-content .markdown-visualization::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(139, 92, 246, 0.1) 0%,
-    rgba(167, 139, 250, 0.05) 50%,
-    rgba(109, 40, 217, 0.1) 100%
-  );
-  pointer-events: none;
-}
-
-.markdown-content .markdown-visualization[data-component-id]::after {
-  content: "Interactive Visualization: " attr(data-component-id);
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  font-size: 0.75rem;
-  color: rgba(224, 224, 224, 0.6);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  z-index: 1;
-}
-
-/* Responsive design */
+/* Responsive */
 @media (max-width: 768px) {
   .markdown-content {
-    font-size: 15px;
+    font-size: 1rem;
   }
 
   .markdown-content .markdown-h1 {
@@ -355,30 +275,16 @@
   }
 
   .markdown-content .markdown-h2 {
-    font-size: 1.75rem;
+    font-size: 1.6rem;
   }
 
   .markdown-content .markdown-h3 {
-    font-size: 1.375rem;
-  }
-
-  .markdown-content .markdown-h4 {
-    font-size: 1.125rem;
+    font-size: 1.3rem;
   }
 
   .markdown-content ul,
   .markdown-content ol {
-    padding-left: 1.5rem;
-  }
-
-  .markdown-content .markdown-code-block {
-    padding: 1rem;
-    font-size: 0.8rem;
-  }
-
-  .markdown-content blockquote {
-    padding: 0.75rem 1rem;
-    margin: 1.5rem 0;
+    padding-left: 1.4rem;
   }
 
   .markdown-content table {
@@ -387,7 +293,7 @@
 
   .markdown-content th,
   .markdown-content td {
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 0.6rem;
   }
 
   .markdown-content .markdown-visualization {
@@ -396,107 +302,20 @@
   }
 }
 
-@media (max-width: 480px) {
-  .markdown-content {
-    font-size: 14px;
-  }
-
-  .markdown-content .markdown-h1 {
-    font-size: 1.75rem;
-  }
-
-  .markdown-content .markdown-h2 {
-    font-size: 1.5rem;
-  }
-
-  .markdown-content .markdown-image {
-    margin: 1.5rem 0;
-  }
-
-  .markdown-content .markdown-code-block {
-    margin: 1.5rem 0;
-    overflow-x: scroll;
-  }
-}
-
-/* Animation keyframes */
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Focus and accessibility */
-.markdown-content *:focus {
-  outline: 2px solid #8b5cf6;
-  outline-offset: 2px;
-}
-
-/* Print styles */
+/* Print */
 @media print {
   .markdown-content {
-    color: #000000;
-    font-size: 12pt;
-    line-height: 1.4;
-  }
-
-  .markdown-content .markdown-heading {
-    color: #000000;
-    background: none;
-    -webkit-text-fill-color: initial;
+    color: #000;
+    font-size: 11pt;
+    line-height: 1.45;
   }
 
   .markdown-content .markdown-link {
-    color: #0000ee;
-    text-decoration: underline;
-  }
-
-  .markdown-content .markdown-code-block {
-    background: #f5f5f5;
-    border: 1px solid #cccccc;
-  }
-
-  .markdown-content blockquote {
-    border-left-color: #666666;
-    background: #f9f9f9;
-    color: #333333;
+    color: #000;
   }
 }
 
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .markdown-content {
-    color: #ffffff;
-  }
-
-  .markdown-content .markdown-heading {
-    color: #ffffff;
-    background: none;
-    -webkit-text-fill-color: initial;
-  }
-
-  .markdown-content .markdown-link {
-    color: #00ffff;
-  }
-
-  .markdown-content .markdown-code-block {
-    background: #000000;
-    border-color: #ffffff;
-  }
-
-  .markdown-content .markdown-inline-code {
-    background: #000000;
-    border-color: #ffffff;
-  }
-}
-
-/* Custom slider styles for visualization controls */
+/* Slider controls used by visualizations */
 .slider {
   -webkit-appearance: none;
   appearance: none;
@@ -505,258 +324,102 @@
 }
 
 .slider::-webkit-slider-track {
-  background: #374151;
-  height: 6px;
-  border-radius: 3px;
+  background: var(--line);
+  height: 4px;
+  border-radius: 2px;
 }
 
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  background: #8b5cf6;
-  height: 18px;
-  width: 18px;
+  background: var(--purple-deep);
+  height: 16px;
+  width: 16px;
   border-radius: 50%;
+  border: 2px solid var(--background);
+  box-shadow: 0 1px 3px rgba(25, 25, 24, 0.2);
   cursor: pointer;
-  border: 2px solid #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-.slider::-webkit-slider-thumb:hover {
-  background: #7c3aed;
-  transform: scale(1.1);
+  margin-top: -6px;
 }
 
 .slider::-moz-range-track {
-  background: #374151;
-  height: 6px;
-  border-radius: 3px;
+  background: var(--line);
+  height: 4px;
+  border-radius: 2px;
   border: none;
 }
 
 .slider::-moz-range-thumb {
-  background: #8b5cf6;
-  height: 18px;
-  width: 18px;
+  background: var(--purple-deep);
+  height: 16px;
+  width: 16px;
   border-radius: 50%;
+  border: 2px solid var(--background);
+  box-shadow: 0 1px 3px rgba(25, 25, 24, 0.2);
   cursor: pointer;
-  border: 2px solid #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Enhanced visualization container styles */
-.markdown-content .markdown-visualization {
-  margin: 2rem 0;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  background: rgba(19, 19, 22, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.markdown-content .markdown-visualization:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease;
-}
-
-/* Loading and error states */
+/* Visualization states */
 .viz-loading {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 200px;
-  background: rgba(19, 19, 22, 0.5);
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .viz-error {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #fca5a5;
+  background: #fdf2f2;
+  border: 1px solid #f3c6c6;
+  color: #9b2c2c;
 }
 
-/* Interactive controls styling */
 .viz-controls {
-  background: rgba(55, 65, 81, 0.5);
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  background: var(--surface);
+  border-left: 1px solid var(--line);
 }
 
 .viz-control-button {
-  transition: all 0.3s ease;
+  transition: all var(--transition-default);
   border: 1px solid transparent;
 }
 
 .viz-control-button:hover {
-  background: rgba(107, 114, 128, 0.5);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: var(--surface-2);
+  border-color: var(--line);
 }
 
 .viz-control-button.active {
-  background: rgba(139, 92, 246, 0.2);
-  border-color: #8b5cf6;
-  color: #ffffff;
+  background: var(--purple-wash);
+  border-color: var(--purple);
+  color: var(--purple-deep);
 }
 
-/* Chart and visualization specific styles */
+/* Recharts */
 .recharts-wrapper {
   background: transparent !important;
 }
 
 .recharts-cartesian-grid line {
-  stroke: #374151 !important;
+  stroke: var(--line) !important;
 }
 
 .recharts-text {
-  fill: #9ca3af !important;
+  fill: var(--muted) !important;
   font-size: 12px !important;
 }
 
 .recharts-tooltip-wrapper {
-  border-radius: 8px !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  border-radius: 6px !important;
 }
 
-/* Syntax highlighting enhancements */
+/* Syntax highlighter line numbers */
 .markdown-content .markdown-code-block .react-syntax-highlighter-line-number {
-  color: rgba(156, 163, 175, 0.6) !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
-  padding-right: 1rem !important;
-  margin-right: 1rem !important;
-}
-
-/* Scrollbar styling for code blocks */
-.markdown-content .markdown-code-block pre::-webkit-scrollbar {
-  height: 8px;
-}
-
-.markdown-content .markdown-code-block pre::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-}
-
-.markdown-content .markdown-code-block pre::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.3);
-  border-radius: 4px;
-}
-
-.markdown-content .markdown-code-block pre::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 92, 246, 0.5);
-}
-
-/* =========================================================
-   ☀️ Light Mode Overrides for Markdown Content
-   ========================================================= */
-html[data-theme="light"] .markdown-content {
-  color: #1a1a1a; /* base text color */
-}
-
-html[data-theme="light"] .markdown-content .markdown-h1,
-html[data-theme="light"] .markdown-content .markdown-h2,
-html[data-theme="light"] .markdown-content .markdown-h3,
-html[data-theme="light"] .markdown-content .markdown-h4,
-html[data-theme="light"] .markdown-content .markdown-h5,
-html[data-theme="light"] .markdown-content .markdown-h6 {
-  border-bottom-color: rgba(0, 0, 0, 0.1);
-}
-
-/* Paragraphs & Lists */
-html[data-theme="light"] .markdown-content .markdown-paragraph,
-html[data-theme="light"] .markdown-content ul,
-html[data-theme="light"] .markdown-content ol {
-  color: rgba(30, 30, 30, 0.9);
-}
-
-/* Links */
-html[data-theme="light"] .markdown-content .markdown-link {
-  color: #6d28d9;
-}
-html[data-theme="light"] .markdown-content .markdown-link:hover {
-  color: #a78bfa;
-  border-bottom-color: #a78bfa;
-}
-
-/* Images */
-html[data-theme="light"] .markdown-content .markdown-image {
-  border-color: rgba(0, 0, 0, 0.1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-/* Code blocks & inline code */
-html[data-theme="light"] .markdown-content .markdown-code-block > div {
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-  background: rgba(245, 245, 245, 0.8);
-}
-html[data-theme="light"] .markdown-content .markdown-inline-code {
-  background: rgba(0, 0, 0, 0.05);
-  color: #222;
-  border-color: rgba(0, 0, 0, 0.1);
-}
-
-/* Blockquotes */
-html[data-theme="light"] .markdown-content blockquote {
-  color: rgba(30, 30, 30, 0.9);
-  background: rgba(0, 0, 0, 0.05);
-  border-left-color: #8b5cf6;
-}
-
-/* Tables */
-html[data-theme="light"] .markdown-content table {
-  border-color: rgba(0, 0, 0, 0.1);
-}
-html[data-theme="light"] .markdown-content th,
-html[data-theme="light"] .markdown-content td {
-  border-bottom-color: rgba(0, 0, 0, 0.1);
-}
-html[data-theme="light"] .markdown-content th {
-  background: rgba(139, 92, 246, 0.05);
-  color: #111;
-}
-html[data-theme="light"] .markdown-content td {
-  color: #222;
-}
-html[data-theme="light"] .markdown-content tr:nth-child(even) {
-  background: rgba(0, 0, 0, 0.02);
-}
-html[data-theme="light"] .markdown-content tr:hover {
-  background: rgba(0, 0, 0, 0.04);
-}
-
-/* Visualizations / glassy containers */
-html[data-theme="light"] .markdown-content .markdown-visualization {
-  background: rgba(215, 215, 215, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-html[data-theme="light"]
-  .markdown-content
-  .markdown-visualization[data-component-id]::after {
-  color: rgba(30, 30, 30, 0.6);
-}
-
-/* Inline strong/emphasis */
-html[data-theme="light"] .markdown-content .markdown-bold {
-  color: #000;
-}
-html[data-theme="light"] .markdown-content .markdown-italic {
-  color: rgba(30, 30, 30, 0.9);
-}
-
-/* Chart axes & tooltips */
-html[data-theme="light"] .recharts-text {
-  fill: #555 !important;
-}
-html[data-theme="light"] .recharts-cartesian-grid line {
-  stroke: #ddd !important;
-}
-
-/* Code line numbers */
-html[data-theme="light"] .markdown-content
-  .markdown-code-block
-  .react-syntax-highlighter-line-number {
-  color: rgba(255, 255, 255, 0.6) !important;
-  border-right: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: var(--muted) !important;
+  opacity: 0.6;
+  border-right: 1px solid var(--line) !important;
+  padding-right: 0.75rem !important;
+  margin-right: 0.75rem !important;
 }

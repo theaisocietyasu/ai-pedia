@@ -183,19 +183,19 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
   // Get result type badge
   const getTypeBadge = (type: string) => {
     const badges = {
-      page: { label: "Page", color: "bg-blue-500/20 text-blue-300" },
+      page: { label: "Page", color: "bg-surface-2 text-ink-2" },
       category: {
         label: "Category",
-        color: "bg-purple-500/20 text-purple-300",
+        color: "bg-purple-wash text-purple-deep",
       },
-      model: { label: "Model", color: "bg-purple/20 text-purple-light" },
+      model: { label: "Module", color: "bg-purple-wash text-purple-deep" },
     };
 
     const badge = badges[type as keyof typeof badges];
     return (
       <span
         className={cn(
-          "px-2 py-1 rounded-full text-xs font-medium",
+          "px-2 py-0.5 rounded-full text-[0.7rem] font-medium",
           badge.color,
         )}
       >
@@ -207,7 +207,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
   return (
     <div className="relative" ref={dropdownRef}>
       <div className="flex items-center">
-        <Search size={18} className="absolute left-3 text-light-gray/60 z-10" />
+        <Search size={16} className="absolute left-3 text-muted z-10" />
         <input
           ref={inputRef}
           type="text"
@@ -221,12 +221,12 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
             }
           }}
           className={cn(
-            "pl-10 pr-4 py-2 rounded-lg text-sm",
-            "bg-dark-gray/50 border border-white/10",
-            "text-white placeholder-light-gray/60",
-            "focus:outline-none focus:ring-2 focus:ring-purple/50 focus:border-transparent",
+            "pl-9 pr-4 py-2 rounded-full text-sm",
+            "bg-surface border border-line",
+            "text-foreground placeholder:text-muted",
+            "focus:outline-none focus:border-purple focus:bg-background",
             "transition-all duration-300",
-            isMobile ? "w-full py-3" : "w-64",
+            isMobile ? "w-full py-3" : "w-56",
           )}
         />
       </div>
@@ -241,7 +241,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
             transition={{ duration: 0.15 }}
             className={cn(
               "absolute top-full left-0 right-0 mt-2 z-50",
-              "bg-dark-gray/95 backdrop-blur-xl border border-white/10 rounded-lg shadow-xl",
+              "bg-background border border-line rounded-lg shadow-lg shadow-foreground/5",
               "max-h-96 overflow-y-auto",
             )}
           >
@@ -256,8 +256,8 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
                   className={cn(
                     "flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all duration-200",
                     selectedIndex === index
-                      ? "bg-purple/20 text-white"
-                      : "hover:bg-white/5 text-light-gray",
+                      ? "bg-purple-wash text-foreground"
+                      : "hover:bg-surface text-ink-2",
                   )}
                 >
                   <div className="flex-1 min-w-0">
@@ -267,7 +267,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
                     </div>
                     {result.description && (
                       <p
-                        className="text-xs text-light-gray/60 overflow-hidden text-ellipsis line-clamp-2"
+                        className="text-xs text-muted overflow-hidden text-ellipsis line-clamp-2"
                         style={{
                           display: "-webkit-box",
                           WebkitLineClamp: 2,
@@ -278,14 +278,14 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
                       </p>
                     )}
                     {result.category && (
-                      <p className="text-xs text-purple-300 mt-1">
+                      <p className="text-xs text-purple-deep mt-1">
                         in {result.category}
                       </p>
                     )}
                   </div>
                   <ChevronRight
                     size={16}
-                    className="text-light-gray/40 ml-2 flex-shrink-0"
+                    className="text-muted ml-2 flex-shrink-0"
                   />
                 </motion.div>
               ))}
@@ -303,10 +303,10 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
             exit={{ opacity: 0, y: -10 }}
             className={cn(
               "absolute top-full left-0 right-0 mt-2 z-50",
-              "bg-dark-gray/95 backdrop-blur-xl border border-white/10 rounded-lg shadow-xl",
+              "bg-background border border-line rounded-lg shadow-lg shadow-foreground/5",
             )}
           >
-            <div className="p-4 text-center text-light-gray/60">
+            <div className="p-4 text-center text-muted">
               <Search size={24} className="mx-auto mb-2 opacity-50" />
               <p className="text-sm">No results found for "{query}"</p>
             </div>

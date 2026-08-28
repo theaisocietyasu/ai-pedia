@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Playfair_Display, Source_Serif_4 } from "next/font/google";
+import { EB_Garamond, Geist_Mono, Source_Serif_4 } from "next/font/google";
 import { NextAuthProvider } from "@/components/auth/NextAuthProvider";
 import { Navbar } from "@/components/ui/navbar";
 import "./globals.css";
 import "../styles/markdown.css";
 import "katex/dist/katex.min.css";
 
-const displayFont = Playfair_Display({
+const displayFont = EB_Garamond({
   variable: "--font-display",
   subsets: ["latin"],
 });
@@ -109,7 +109,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     title: "AI Pedia",
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
   },
   formatDetection: {
     telephone: false,

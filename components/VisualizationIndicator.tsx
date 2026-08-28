@@ -21,8 +21,8 @@ export const VisualizationIndicator: React.FC<VisualizationIndicatorProps> = ({
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <div className="flex items-center gap-1 text-xs text-purple-300">
-        <span className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></span>
+      <div className="flex items-center gap-1 text-xs text-purple-deep">
+        <span className="w-2 h-2 bg-purple rounded-full"></span>
         <span>
           {vizComponents.length} visualization
           {vizComponents.length !== 1 ? "s" : ""}
@@ -34,19 +34,19 @@ export const VisualizationIndicator: React.FC<VisualizationIndicatorProps> = ({
         <button
           type="button"
           aria-label="Visualization details"
-          className="text-xs text-gray-400 hover:text-gray-200 transition-colors"
+          className="text-xs text-muted hover:text-foreground transition-colors"
         >
           <Info size={14} aria-hidden="true" />
         </button>
-        <div className="absolute bottom-full left-0 mb-2 w-64 bg-gray-800 border border-gray-600 rounded-lg p-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-xl">
-          <div className="text-xs font-medium text-purple-300 mb-2">
+        <div className="absolute bottom-full left-0 mb-2 w-64 bg-background border border-line rounded-lg p-3 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-xl">
+          <div className="text-xs font-medium text-purple-deep mb-2">
             Interactive Visualizations Found:
           </div>
           <div className="space-y-1">
             {vizComponents.map((viz) => (
-              <div key={viz.id} className="text-xs text-gray-300">
-                <span className="font-mono text-purple-200">{viz.id}</span>
-                <div className="text-gray-400 ml-2">• {viz.placeholder}</div>
+              <div key={viz.id} className="text-xs text-ink-2">
+                <span className="font-mono text-purple-deep">{viz.id}</span>
+                <div className="text-muted ml-2">{viz.placeholder}</div>
               </div>
             ))}
           </div>

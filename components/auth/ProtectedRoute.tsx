@@ -26,10 +26,8 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="text-6xl mb-4">⏳</div>
-          <div className="text-xl text-gray-400">
-            Checking authentication...
-          </div>
+          <div className="w-8 h-8 border-2 border-purple-deep border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="text-ink-2">Checking authentication…</div>
         </div>
       </div>
     );

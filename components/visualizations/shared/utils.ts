@@ -130,14 +130,14 @@ export const formatNumber = (num: number, decimals: number = 2): string => {
  */
 export const generateColorPalette = (count: number): string[] => {
   const baseColors = [
-    "#8b5cf6", // purple
-    "#ec4899", // pink
-    "#10b981", // emerald
-    "#f59e0b", // amber
-    "#ef4444", // red
-    "#3b82f6", // blue
-    "#06b6d4", // cyan
-    "#84cc16", // lime
+    "#5b4fb3", // purple-deep
+    "#8f84d6", // purple
+    "#c6bfec", // purple-light
+    "#191918", // ink
+    "#6f6d66", // muted
+    "#b45309", // amber (contrast series)
+    "#15803d", // green (contrast series)
+    "#b91c1c", // red (contrast series)
   ];
 
   const colors = [];

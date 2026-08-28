@@ -41,11 +41,11 @@ export function LearnModuleClient({
   }, [initialHeadings]);
 
   return (
-    <div className="w-full flex justify-between gap-0 relative">
+    <div className="w-full flex justify-between gap-12 relative">
       {/* Main Content */}
-      <main className="flex flex-col gap-16 w-full lg:w-3/4">
+      <main className="flex flex-col gap-16 w-full min-w-0 max-w-3xl">
         {/* Markdown Content */}
-        <section className="my-16 scroll-mt-24">
+        <section className="my-8 scroll-mt-24">
           <MarkdownRenderer
             content={model.content || "No content available."}
           />
@@ -59,7 +59,7 @@ export function LearnModuleClient({
                 {model.contributors.map((contributor: ModuleContributor) => (
                   <div
                     key={contributor.id}
-                    className="px-3 py-1.5 bg-purple/20 border border-purple/30 rounded-lg text-sm text-white"
+                    className="px-3 py-1 bg-purple-wash border border-purple-light rounded-full text-sm text-purple-deep"
                   >
                     {contributor.name}
                   </div>
@@ -72,7 +72,7 @@ export function LearnModuleClient({
         {/* Images */}
         {model.images && model.images.length > 0 && (
           <section className="my-16">
-            <h2 className="text-2xl font-semibold mb-4">Images</h2>
+            <h2 className="font-display text-3xl mb-4">Images</h2>
             <div className="grid gap-6">
               {model.images.map((image: string, idx: number) => (
                 <img
@@ -90,15 +90,15 @@ export function LearnModuleClient({
         {/* Code Blocks */}
         {model.code_blocks && model.code_blocks.length > 0 && (
           <section className="my-16">
-            <h2 className="text-2xl font-semibold mb-4">Code Examples</h2>
+            <h2 className="font-display text-3xl mb-4">Code Examples</h2>
             <div className="space-y-4">
               {model.code_blocks.map((code: string, idx: number) => (
                 <div
                   // biome-ignore lint/suspicious/noArrayIndexKey: code blocks have no stable id; list is static per render
                   key={idx}
-                  className="bg-gray-900 rounded-lg p-4 overflow-x-auto"
+                  className="bg-surface border border-line rounded-md p-4 overflow-x-auto"
                 >
-                  <pre className="text-sm text-gray-300">
+                  <pre className="text-sm text-foreground">
                     <code>{code}</code>
                   </pre>
                 </div>
@@ -109,17 +109,15 @@ export function LearnModuleClient({
       </main>
 
       {/* Sidebar - Table of Contents */}
-      <aside className="hidden lg:flex flex-col gap-2 lg:w-3/4 sticky top-32 self-start">
+      <aside className="hidden lg:flex flex-col gap-2 lg:w-64 shrink-0 sticky top-28 self-start">
         <TableOfContents headings={headings} />
 
         {/* Additional navigation items */}
         {((model.images?.length ?? 0) > 0 ||
           (model.code_blocks?.length ?? 0) > 0) && (
           <>
-            <div className="border-t border-gray-700 mt-4 pt-4" />
-            <h3 className="font-semibold mb-2 text-gray-200 text-sm uppercase tracking-wide">
-              Additional Sections
-            </h3>
+            <div className="border-t border-line mt-4 pt-4" />
+            <h3 className="eyebrow mb-2">Additional Sections</h3>
             {model.images && model.images.length > 0 && (
               <button
                 type="button"
@@ -128,7 +126,7 @@ export function LearnModuleClient({
                     .querySelector("section:nth-of-type(2)")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer inline-flex items-center gap-2"
+                className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-muted hover:text-foreground cursor-pointer inline-flex items-center gap-2"
               >
                 <ImageIcon size={16} aria-hidden="true" />
                 Images
@@ -142,7 +140,7 @@ export function LearnModuleClient({
                     .querySelector("section:nth-of-type(3)")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-gray-400 hover:text-gray-200 cursor-pointer inline-flex items-center gap-2"
+                className="text-sm font-medium transition-colors py-1.5 px-2 text-left text-muted hover:text-foreground cursor-pointer inline-flex items-center gap-2"
               >
                 <Code2 size={16} aria-hidden="true" />
                 Code Examples

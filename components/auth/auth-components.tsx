@@ -61,31 +61,29 @@ export function SignInButton({ redirectTo = "/" }: SignInButtonProps) {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[400px] p-8">
-      <div className="max-w-md w-full bg-dark-gray/50 backdrop-blur-sm border border-purple/20 rounded-2xl p-8 text-center">
-        <h2 className="text-2xl font-bold mb-4 gradient-text">
-          Sign In Required
-        </h2>
-        <p className="text-light-gray mb-2">
+      <div className="max-w-md w-full bg-surface border border-line rounded-lg p-8 text-center">
+        <h2 className="font-display text-3xl mb-3">Sign In Required</h2>
+        <p className="text-ink-2 mb-2">
           Please sign in with Discord to access this feature
         </p>
-        <p className="text-sm text-light-gray/60 mb-6">
+        <p className="text-sm text-muted mb-6">
           Note: You must have the admin role in the AI Society Discord server
         </p>
         {error && (
-          <div className="mb-4 p-3 bg-white/5 border border-purple-deep/60 rounded-lg">
-            <p className="text-white text-sm">{error}</p>
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-red-700 text-sm">{error}</p>
           </div>
         )}
         <button
           type="button"
           onClick={handleSignIn}
           disabled={isLoading}
-          className="w-full px-6 py-3 bg-[#5865F2] hover:bg-[#4752C4] disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+          className="w-full px-6 py-3 bg-foreground hover:bg-ink-2 disabled:opacity-50 disabled:cursor-not-allowed text-background font-medium rounded-md transition-colors flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-              <span>Signing in...</span>
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-background"></div>
+              <span>Signing in…</span>
             </>
           ) : (
             <>

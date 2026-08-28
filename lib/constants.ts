@@ -11,21 +11,16 @@ export const siteConfig = {
   email: "theaisociety@asu.edu",
 };
 
-// color scheme — black, white, violet only (mirrors app/globals.css tokens)
+// palette — mirrors the tokens in app/globals.css (single light theme)
 export const colors = {
-  background: "#09090b",
-  purple: "#8b5cf6",
-  purpleLight: "#a78bfa",
-  purpleDeep: "#6d28d9",
-  darkGray: "#131316",
-  lightGray: "#d4d4d8",
-  white: "#ffffff",
-  gradients: {
-    primary: "linear-gradient(135deg, #a78bfa 0%, #8b5cf6 50%, #6d28d9 100%)",
-    secondary: "linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)",
-    accent: "linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%)",
-    dark: "linear-gradient(180deg, #09090b 0%, #131316 100%)",
-  },
+  background: "#faf9f5",
+  surface: "#f3f1ea",
+  line: "#e3e0d6",
+  foreground: "#191918",
+  muted: "#6f6d66",
+  purple: "#8f84d6",
+  purpleLight: "#c6bfec",
+  purpleDeep: "#5b4fb3",
 };
 
 // navigation items

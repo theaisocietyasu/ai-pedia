@@ -20,9 +20,10 @@ export default async function Image() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#0a0a0a",
+        backgroundColor: "#faf9f5",
         backgroundImage:
-          "radial-gradient(circle at 25% 25%, rgba(139, 92, 246, 0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(236, 72, 153, 0.3) 0%, transparent 50%)",
+          "radial-gradient(circle at 85% 15%, rgba(198, 191, 236, 0.55) 0%, transparent 55%)",
+        fontFamily: "Georgia, 'Times New Roman', serif",
       }}
     >
       <div
@@ -36,13 +37,11 @@ export default async function Image() {
       >
         <div
           style={{
-            fontSize: 72,
-            fontWeight: "bold",
-            background: "linear-gradient(to right, #8b5cf6, #ec4899)",
-            backgroundClip: "text",
-            WebkitBackgroundClip: "text",
-            color: "transparent",
-            marginBottom: "20px",
+            fontSize: 96,
+            fontWeight: 500,
+            color: "#191918",
+            letterSpacing: "-0.02em",
+            marginBottom: "16px",
             textAlign: "center",
           }}
         >
@@ -50,25 +49,28 @@ export default async function Image() {
         </div>
         <div
           style={{
-            fontSize: 32,
-            color: "#d1d5db",
+            fontSize: 34,
+            fontStyle: "italic",
+            color: "#3f3e3a",
             textAlign: "center",
             maxWidth: "800px",
             marginBottom: "30px",
           }}
         >
-          Master AI through Interactive Visualizations
+          An interactive encyclopedia of artificial intelligence
         </div>
         <div
           style={{
             display: "flex",
             alignItems: "center",
             gap: "12px",
-            fontSize: 24,
-            color: "#9ca3af",
+            fontSize: 22,
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color: "#6f6d66",
           }}
         >
-          <span>The AI Society at ASU</span>
+          <span>The AI Society · Arizona State University</span>
         </div>
       </div>
     </div>,

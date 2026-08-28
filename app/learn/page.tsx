@@ -1,12 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowLeft, BookOpen } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
-import { GradientText } from "@/components/ui/gradient-text";
 
 import { getCategories, type LearnCategoryUI } from "./categories";
 
@@ -21,9 +20,7 @@ export default function LearnPage() {
     const loadCategories = async () => {
       try {
         setLoading(true);
-        const categoriesData = await getCategories();
-        setCategories(categoriesData);
-        // console.log('Loaded categories:', categoriesData);
+        setCategories(await getCategories());
       } catch (err) {
         console.error("Error loading categories:", err);
         setError("Failed to load learning categories. Please try again later.");
@@ -35,148 +32,103 @@ export default function LearnPage() {
     loadCategories();
   }, []);
 
-  // Skeleton component for loading state
-  const SkeletonCard = ({ index }: { index: number }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.3 + index * 0.2 }}
-      className="w-full max-w-2xl"
-    >
-      <div className="glass-effect rounded-2xl p-6 border border-purple/20">
-        <div className="h-8 bg-dark-gray/50 rounded-lg mb-4 animate-pulse"></div>
-        <div className="space-y-2">
-          <div className="h-4 bg-dark-gray/30 rounded animate-pulse"></div>
-          <div className="h-4 bg-dark-gray/30 rounded w-3/4 animate-pulse"></div>
-        </div>
-      </div>
-    </motion.div>
-  );
-
   if (error) {
     return (
-      <main className="min-h-screen relative overflow-hidden">
-        <div className="relative min-h-screen flex flex-col items-center justify-center px-3 sm:px-8 lg:px-12">
-          <div className="w-full max-w-4xl text-center">
-            <div className="w-20 h-20 rounded-2xl gradient-bg shadow-2xl shadow-purple/30 flex items-center justify-center mx-auto mb-6">
-              <BookOpen size={40} className="text-white" />
-            </div>
-            <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-              <GradientText>Error Loading Content</GradientText>
-            </h1>
-            <p className="text-lg text-light-gray/80 mb-6">{error}</p>
-            <Link href="/">
-              <Button
-                variant="outline"
-                icon={<ArrowLeft size={18} />}
-                iconPosition="left"
-                className="rounded-full"
-              >
-                Back to Home
-              </Button>
-            </Link>
-          </div>
-        </div>
+      <main className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center">
+        <p className="eyebrow mb-4">Learn</p>
+        <h1 className="font-display text-4xl mb-4">Something went wrong</h1>
+        <p className="text-ink-2 mb-8 max-w-md">{error}</p>
+        <Link href="/">
+          <Button
+            variant="outline"
+            icon={<ArrowLeft size={16} />}
+            iconPosition="left"
+            className="rounded-full"
+          >
+            Back to home
+          </Button>
+        </Link>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen relative overflow-hidden ">
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        {/* animated background */}
-        <div className="absolute inset-0 pointer-events-none">
-          <motion.div
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="absolute top-20 left-20 w-96 h-96 bg-purple/30 rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{
-              scale: [1, 1.3, 1],
-              opacity: [0.3, 0.5, 0.3],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1,
-            }}
-            className="absolute bottom-20 right-20 w-96 h-96 bg-purple-light/30 rounded-full blur-3xl"
-          />
-        </div>
-
-        <div className="container mx-auto px-6 lg:px-8 max-w-7xl">
-          <div className="text-center">
-            {/* badge */}
-
-            {/* title */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-5xl sm:text-6xl md:text-7xl font-bold mb-8"
-            >
-              <GradientText animate={false}>Learn</GradientText>
-            </motion.h1>
-
-            {/* subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-xl text-light-gray/80 max-w-3xl mx-auto leading-relaxed"
-            >
-              Explore the beginner and deep dive tutorials in artificial
-              intelligence.
-            </motion.p>
-          </div>
+    <main className="min-h-screen">
+      <section className="container pt-24 pb-12">
+        <div className="max-w-3xl mx-auto text-center">
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="eyebrow mb-5"
+          >
+            The AI Society · Arizona State University
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="font-display text-5xl sm:text-6xl md:text-7xl mb-6"
+          >
+            Learn
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="font-display italic text-xl sm:text-2xl text-ink-2"
+          >
+            Beginner and deep-dive tutorials in artificial intelligence.
+          </motion.p>
         </div>
       </section>
 
-      {/* Category Headings */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-        className="flex flex-col mt-12 gap-8 w-full items-center"
-      >
-        {loading
-          ? // Show skeleton cards while loading
-            Array.from({ length: 3 }).map((_, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: fixed-length static skeleton placeholders
-              <SkeletonCard key={i} index={i} />
-            ))
-          : // Show actual categories when loaded
-            Object.entries(categories).map(([key, cat], i) => (
-              <motion.div
-                key={key}
-                transition={{ duration: 0.5, delay: 0.3 + i * 0.2 }}
-                className="w-full max-w-2xl"
-              >
-                <Link href={`/learn/${key}`} className="block">
-                  <div className="glass-effect rounded-2xl p-6 hover-glow cursor-pointer transition-all duration-300 border border-purple/20 hover:border-purple/40">
-                    <h2 className="text-2xl sm:text-3xl font-semibold mb-4 capitalize gradient-text">
-                      {`${key.replace("-", " ")} Learning`}
-                    </h2>
-                    <div className="text-base sm:text-lg text-light-gray/80">
+      <section className="container pb-24">
+        <div className="max-w-2xl mx-auto border-t border-line">
+          {loading
+            ? Array.from({ length: 3 }).map((_, i) => (
+                <div
+                  // biome-ignore lint/suspicious/noArrayIndexKey: fixed-length static skeleton placeholders
+                  key={i}
+                  className="py-8 border-b border-line animate-pulse"
+                >
+                  <div className="h-7 w-1/2 bg-surface-2 rounded mb-4" />
+                  <div className="h-4 bg-surface-2 rounded mb-2" />
+                  <div className="h-4 w-3/4 bg-surface-2 rounded" />
+                </div>
+              ))
+            : Object.entries(categories).map(([key, cat], i) => (
+                <motion.div
+                  key={key}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
+                >
+                  <Link
+                    href={`/learn/${key}`}
+                    className="group block py-8 border-b border-line"
+                  >
+                    <div className="flex items-baseline justify-between gap-6">
+                      <h2 className="font-display text-3xl capitalize group-hover:text-purple-deep transition-colors">
+                        {key.replace(/-/g, " ")}
+                      </h2>
+                      <ArrowRight
+                        size={18}
+                        className="shrink-0 text-muted group-hover:text-purple-deep group-hover:translate-x-1 transition-all"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div className="mt-3 text-base text-ink-2 leading-relaxed">
                       <ReactMarkdown>
                         {cat.description ||
                           "Explore algorithms in this category"}
                       </ReactMarkdown>
                     </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-      </motion.div>
+                  </Link>
+                </motion.div>
+              ))}
+        </div>
+      </section>
     </main>
   );
 }

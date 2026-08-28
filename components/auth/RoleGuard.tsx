@@ -52,9 +52,9 @@ export function RoleGuard({ children, fallback }: RoleGuardProps) {
   if (hasRole === null) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] p-8">
-        <div className="max-w-md w-full bg-dark-gray/50 backdrop-blur-sm border border-purple/20 rounded-2xl p-8 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4"></div>
-          <p className="text-light-gray">Verifying Discord role...</p>
+        <div className="max-w-md w-full bg-surface border border-line rounded-lg p-8 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-deep mx-auto mb-4"></div>
+          <p className="text-ink-2">Verifying Discord role…</p>
         </div>
       </div>
     );
@@ -65,21 +65,19 @@ export function RoleGuard({ children, fallback }: RoleGuardProps) {
     return (
       fallback || (
         <div className="flex flex-col items-center justify-center min-h-[400px] p-8">
-          <div className="max-w-md w-full bg-dark-gray/50 backdrop-blur-sm border border-purple-deep/60 rounded-2xl p-8 text-center">
+          <div className="max-w-md w-full bg-surface border border-line rounded-lg p-8 text-center">
             <div className="mb-4 flex justify-center">
-              <Ban size={48} className="text-purple-light" aria-hidden="true" />
+              <Ban size={40} className="text-purple-deep" aria-hidden="true" />
             </div>
-            <h2 className="text-2xl font-bold mb-4 text-purple-light">
-              Access Denied
-            </h2>
-            <p className="text-light-gray mb-6">
+            <h2 className="font-display text-3xl mb-3">Access Denied</h2>
+            <p className="text-ink-2 mb-6">
               {error ||
                 "You must have the admin role in the Discord server to access this feature."}
             </p>
             <button
               type="button"
               onClick={() => router.push("/")}
-              className="px-6 py-3 bg-purple/20 hover:bg-purple/30 text-purple-300 rounded-lg border border-purple/30 transition-colors"
+              className="px-5 py-2.5 bg-foreground hover:bg-ink-2 text-background rounded-md transition-colors"
             >
               Return Home
             </button>

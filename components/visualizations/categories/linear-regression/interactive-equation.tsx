@@ -50,13 +50,13 @@ export const LinearEquationVisualization: React.FC = () => {
     return (
       <group ref={groupRef}>
         {/* Regression line */}
-        <Line points={linePoints} color="#8b5cf6" lineWidth={3} />
+        <Line points={linePoints} color="#5B4FB3" lineWidth={3} />
 
         {/* Data points */}
         {dataPoints.map((point) => (
           <group key={point.x}>
             <Sphere position={[point.x, point.y, 0]} args={[0.08]}>
-              <meshBasicMaterial color="#ec4899" />
+              <meshBasicMaterial color="#8F84D6" />
             </Sphere>
             {showResiduals && (
               <Line
@@ -64,7 +64,7 @@ export const LinearEquationVisualization: React.FC = () => {
                   new THREE.Vector3(point.x, point.y, 0),
                   new THREE.Vector3(point.x, point.predicted, 0),
                 ]}
-                color="#fbbf24"
+                color="#B45309"
                 lineWidth={2}
               />
             )}
@@ -74,12 +74,12 @@ export const LinearEquationVisualization: React.FC = () => {
         {/* Coordinate axes */}
         <Line
           points={[new THREE.Vector3(-6, 0, 0), new THREE.Vector3(6, 0, 0)]}
-          color="#64748b"
+          color="#6F6D66"
           lineWidth={1}
         />
         <Line
           points={[new THREE.Vector3(0, -6, 0), new THREE.Vector3(0, 6, 0)]}
-          color="#64748b"
+          color="#6F6D66"
           lineWidth={1}
         />
 
@@ -87,7 +87,7 @@ export const LinearEquationVisualization: React.FC = () => {
         <Text
           position={[0, 4.5, 0]}
           fontSize={0.3}
-          color="#ffffff"
+          color="#191918"
           anchorX="center"
           anchorY="middle"
         >
@@ -100,7 +100,7 @@ export const LinearEquationVisualization: React.FC = () => {
   return (
     <motion.div
       {...animationVariants.scaleIn}
-      className="w-full h-80 md:h-96 bg-gradient-to-br from-purple/10 to-pink/10 rounded-lg border border-white/10 overflow-hidden relative"
+      className="w-full h-80 md:h-96 bg-surface rounded-lg border border-line overflow-hidden relative"
     >
       <div className="flex flex-col lg:flex-row h-full">
         {/* 3D Visualization */}
@@ -154,16 +154,16 @@ export const LinearEquationVisualization: React.FC = () => {
             />
           </div>
 
-          <div className="mt-6 p-3 bg-gray-700/50 rounded">
-            <h4 className="text-sm font-medium text-white mb-2">
+          <div className="mt-6 p-3 bg-surface border border-line rounded">
+            <h4 className="text-sm font-medium text-foreground mb-2">
               Equation Components:
             </h4>
-            <ul className="text-xs text-gray-300 space-y-1">
+            <ul className="text-xs text-ink-2 space-y-1">
               <li>• β₀ (intercept): {intercept.toFixed(1)}</li>
               <li>• β₁ (slope): {slope.toFixed(1)}</li>
-              <li>• Pink dots: Data points</li>
+              <li>• Lavender dots: Data points</li>
               <li>• Purple line: Regression line</li>
-              <li>• Yellow lines: Residuals</li>
+              <li>• Amber lines: Residuals</li>
             </ul>
           </div>
         </ControlPanel>

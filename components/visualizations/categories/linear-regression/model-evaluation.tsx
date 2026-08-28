@@ -55,12 +55,12 @@ export const ModelEvaluationVisualization: React.FC = () => {
     {
       name: "Explained Variance",
       value: currentData.r2 * 100,
-      fill: "#8b5cf6",
+      fill: "#5B4FB3",
     },
     {
       name: "Unexplained Variance",
       value: (1 - currentData.r2) * 100,
-      fill: "#374151",
+      fill: "#E3E0D6",
     },
   ];
 
@@ -75,10 +75,10 @@ export const ModelEvaluationVisualization: React.FC = () => {
   return (
     <motion.div
       {...animationVariants.slideUp}
-      className="w-full h-auto min-h-[400px] md:h-96 bg-gradient-to-br from-gray-900/50 to-purple/10 rounded-lg border border-white/10 p-4 md:p-6"
+      className="w-full h-auto min-h-[400px] md:h-96 bg-surface rounded-lg border border-line p-4 md:p-6"
     >
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
-        <h3 className="text-base md:text-lg font-semibold text-white">
+        <h3 className="text-base md:text-lg font-semibold text-foreground">
           Model Performance Dashboard
         </h3>
 
@@ -91,8 +91,8 @@ export const ModelEvaluationVisualization: React.FC = () => {
               onClick={() => setSelectedDataset(size as DatasetSize)}
               className={`px-3 py-1 rounded text-sm transition-all ${
                 selectedDataset === size
-                  ? "bg-purple text-white"
-                  : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                  ? "bg-purple-wash text-purple-deep border border-purple"
+                  : "bg-surface text-ink-2 border border-line hover:bg-surface-2"
               }`}
             >
               {size.charAt(0).toUpperCase() + size.slice(1)} Dataset
@@ -104,36 +104,36 @@ export const ModelEvaluationVisualization: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 min-h-[320px] lg:h-80">
         {/* Metrics Cards */}
         <div className="space-y-3">
-          <div className="bg-gray-800/50 rounded-lg p-3 md:p-4">
-            <h4 className="text-purple-400 text-sm font-medium mb-2">
+          <div className="bg-surface border border-line rounded-lg p-3 md:p-4">
+            <h4 className="text-purple-deep text-sm font-medium mb-2">
               Mean Squared Error
             </h4>
-            <div className="text-xl md:text-2xl font-bold text-white">
+            <div className="text-xl md:text-2xl font-bold text-foreground">
               {formatNumber(currentData.mse, 1)}
             </div>
-            <div className="text-xs text-gray-400">Lower is better</div>
+            <div className="text-xs text-muted">Lower is better</div>
           </div>
 
-          <div className="bg-gray-800/50 rounded-lg p-3 md:p-4">
-            <h4 className="text-pink-400 text-sm font-medium mb-2">RMSE</h4>
-            <div className="text-xl md:text-2xl font-bold text-white">
+          <div className="bg-surface border border-line rounded-lg p-3 md:p-4">
+            <h4 className="text-purple text-sm font-medium mb-2">RMSE</h4>
+            <div className="text-xl md:text-2xl font-bold text-foreground">
               {formatNumber(currentData.rmse, 2)}
             </div>
-            <div className="text-xs text-gray-400">Same units as target</div>
+            <div className="text-xs text-muted">Same units as target</div>
           </div>
 
-          <div className="bg-gray-800/50 rounded-lg p-3 md:p-4">
-            <h4 className="text-blue-400 text-sm font-medium mb-2">MAE</h4>
-            <div className="text-xl md:text-2xl font-bold text-white">
+          <div className="bg-surface border border-line rounded-lg p-3 md:p-4">
+            <h4 className="text-purple text-sm font-medium mb-2">MAE</h4>
+            <div className="text-xl md:text-2xl font-bold text-foreground">
               {formatNumber(currentData.mae, 2)}
             </div>
-            <div className="text-xs text-gray-400">Robust to outliers</div>
+            <div className="text-xs text-muted">Robust to outliers</div>
           </div>
         </div>
 
         {/* R² Pie Chart */}
-        <div className="bg-gray-800/50 rounded-lg p-3 md:p-4">
-          <h4 className="text-green-400 text-sm font-medium mb-2">
+        <div className="bg-surface border border-line rounded-lg p-3 md:p-4">
+          <h4 className="text-green-700 text-sm font-medium mb-2">
             R² Score: {formatNumber(currentData.r2 * 100, 1)}%
           </h4>
           <div className="h-32 md:h-40">
@@ -155,10 +155,10 @@ export const ModelEvaluationVisualization: React.FC = () => {
                 <Tooltip
                   formatter={(value) => [`${Number(value).toFixed(1)}%`, ""]}
                   contentStyle={{
-                    backgroundColor: "#1f2937",
-                    border: "1px solid #374151",
-                    borderRadius: "8px",
-                    color: "#ffffff",
+                    background: "#FAF9F5",
+                    border: "1px solid #E3E0D6",
+                    borderRadius: 6,
+                    color: "#191918",
                     fontSize: "14px",
                   }}
                 />
@@ -166,30 +166,30 @@ export const ModelEvaluationVisualization: React.FC = () => {
             </ResponsiveContainer>
           </div>
           <div className="text-center mt-2">
-            <div className="text-xs text-gray-400">Variance Explained</div>
-            <div className="text-sm text-gray-300">
+            <div className="text-xs text-muted">Variance Explained</div>
+            <div className="text-sm text-ink-2">
               Adj. R²: {formatNumber(currentData.adj_r2 * 100, 1)}%
             </div>
           </div>
         </div>
 
         {/* Metric Comparison */}
-        <div className="bg-gray-800/50 rounded-lg p-3 md:p-4">
-          <h4 className="text-yellow-400 text-sm font-medium mb-2">
+        <div className="bg-surface border border-line rounded-lg p-3 md:p-4">
+          <h4 className="text-amber-700 text-sm font-medium mb-2">
             Normalized Metrics
           </h4>
           <div className="space-y-3">
             {metricComparison.map((item) => (
               <div key={item.metric}>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-300">{item.metric}</span>
-                  <span className="text-white">
+                  <span className="text-ink-2">{item.metric}</span>
+                  <span className="text-foreground">
                     {formatNumber(item.value, item.metric === "R²" ? 1 : 2)}
                   </span>
                 </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
+                <div className="w-full bg-surface-2 rounded-full h-2">
                   <div
-                    className="h-2 rounded-full bg-gradient-to-r from-purple to-pink"
+                    className="h-2 rounded-full bg-gradient-to-r from-purple-deep to-purple-light"
                     style={{
                       width: `${(item.value / item.max) * 100}%`,
                       transition: "width 0.5s ease-in-out",
@@ -200,7 +200,7 @@ export const ModelEvaluationVisualization: React.FC = () => {
             ))}
           </div>
 
-          <div className="mt-4 text-xs text-gray-400">
+          <div className="mt-4 text-xs text-muted">
             Dataset size: {currentData.samples.toLocaleString()} samples
           </div>
         </div>

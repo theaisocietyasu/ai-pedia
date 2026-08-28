@@ -48,7 +48,7 @@ export function EditButton({ category, modelSlug }: EditButtonProps) {
           <button
             type="button"
             disabled
-            className="px-6 py-2 bg-gray-800/50 text-gray-500 rounded-lg border border-gray-700 cursor-not-allowed inline-flex items-center gap-2"
+            className="px-6 py-2 bg-surface text-muted rounded-lg border border-line cursor-not-allowed inline-flex items-center gap-2"
           >
             <Lock size={16} aria-hidden="true" />
             <span>Edit This Module</span>
@@ -57,7 +57,7 @@ export function EditButton({ category, modelSlug }: EditButtonProps) {
           <Link href={`/learn/${category}/${modelSlug}/edit`}>
             <button
               type="button"
-              className="px-6 py-2 bg-purple/20 text-purple-300 rounded-lg border border-purple/30 hover:bg-purple/30 transition-colors inline-flex items-center gap-2"
+              className="px-6 py-2 bg-purple-wash text-purple-deep rounded-lg border border-purple-light hover:bg-purple-wash transition-colors inline-flex items-center gap-2"
             >
               <Pencil size={16} aria-hidden="true" />
               <span>Edit This Module</span>
@@ -69,7 +69,7 @@ export function EditButton({ category, modelSlug }: EditButtonProps) {
       {/* Tooltip */}
       {isHovering && isLocked && lockStatus?.lockedBy && (
         <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 z-50">
-          <div className="bg-gray-900 border border-purple/40 rounded-lg px-4 py-3 shadow-xl max-w-xs">
+          <div className="bg-surface border border-purple-light rounded-lg px-4 py-3 shadow-xl max-w-xs">
             <div className="flex items-center gap-2 mb-1">
               <Lock
                 size={16}
@@ -80,10 +80,10 @@ export function EditButton({ category, modelSlug }: EditButtonProps) {
                 Module Locked
               </span>
             </div>
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-ink-2">
               Another officer is making edits
             </p>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-muted mt-1">
               Currently being edited by:{" "}
               <span className="font-medium text-purple-light">
                 {lockStatus.lockedBy}

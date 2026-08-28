@@ -6,34 +6,26 @@ import { cn } from "@/lib/utils";
 interface GradientTextProps {
   children: React.ReactNode;
   className?: string;
-  gradient?: string;
   animate?: boolean;
   delay?: number;
 }
 
+/**
+ * Accent heading text. Kept under its historical name; renders in the
+ * deep lavender ink rather than a gradient so it reads cleanly on paper.
+ */
 export function GradientText({
   children,
   className,
-  gradient = "from-purple-light via-purple to-purple-deep",
   animate = true,
   delay = 0,
 }: GradientTextProps) {
   return (
     <motion.span
-      initial={animate ? { opacity: 0, y: 20 } : undefined}
+      initial={animate ? { opacity: 0, y: 12 } : undefined}
       animate={animate ? { opacity: 1, y: 0 } : undefined}
       transition={{ duration: 0.5, delay }}
-      className={cn(
-        "inline-block bg-gradient-to-r bg-clip-text text-transparent",
-        "bg-[length:200%_auto] animate-gradient-shift",
-        gradient,
-        className,
-      )}
-      style={{
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-        backgroundClip: "text",
-      }}
+      className={cn("inline-block text-purple-deep", className)}
     >
       {children}
     </motion.span>

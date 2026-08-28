@@ -25,9 +25,9 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`
-          md:hidden fixed top-4 right-4 z-20 p-3 bg-gray-800/90 border border-white/20 
-          rounded-lg text-white shadow-lg backdrop-blur-sm transition-all
-          ${isOpen ? "bg-purple/20 border-purple" : "hover:bg-gray-700/90"}
+          md:hidden fixed top-4 right-4 z-20 p-3 bg-surface border border-line 
+          rounded-lg text-foreground shadow-lg backdrop-blur-sm transition-all
+          ${isOpen ? "bg-purple-wash border-purple text-purple-deep" : "hover:bg-surface-2"}
         `}
         aria-label="Toggle controls"
       >
@@ -48,10 +48,10 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
       {/* Desktop Panel */}
       <div
         className={`
-        hidden md:block w-64 p-4 bg-gray-800/50 border-l border-white/10 ${className}
+        hidden md:block w-64 p-4 bg-surface border-l border-line ${className}
       `}
       >
-        <h3 className="text-lg font-semibold text-white mb-4">{title}</h3>
+        <h3 className="text-lg font-semibold text-foreground mb-4">{title}</h3>
         {children}
       </div>
 
@@ -63,12 +63,14 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
           exit={{ opacity: 0, x: 300 }}
           className="
             md:hidden fixed inset-y-0 right-0 z-10 w-80 max-w-[90vw] 
-            bg-gray-800/95 backdrop-blur-md border-l border-white/10 
+            bg-background border-l border-line 
             shadow-2xl overflow-y-auto
           "
         >
           <div className="p-4 pt-16">
-            <h3 className="text-lg font-semibold text-white mb-4">{title}</h3>
+            <h3 className="text-lg font-semibold text-foreground mb-4">
+              {title}
+            </h3>
             {children}
           </div>
         </motion.div>
@@ -79,7 +81,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         <button
           type="button"
           aria-label="Close controls"
-          className="md:hidden fixed inset-0 z-5 bg-black/50 backdrop-blur-sm"
+          className="md:hidden fixed inset-0 z-5 bg-foreground/30"
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -104,7 +106,7 @@ export const SliderControl: React.FC<SliderControlProps> = ({
     <div className="space-y-2">
       <label
         htmlFor={sliderId}
-        className="block text-sm font-medium text-gray-300"
+        className="block text-sm font-medium text-ink-2"
       >
         {label}: {value.toFixed(step < 1 ? 1 : 0)}
         {unit}
@@ -117,7 +119,7 @@ export const SliderControl: React.FC<SliderControlProps> = ({
         step={step}
         value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+        className="w-full h-2 bg-surface-2 rounded-lg appearance-none cursor-pointer slider"
       />
     </div>
   );
@@ -141,7 +143,7 @@ export const CheckboxControl: React.FC<CheckboxControlProps> = ({
         onChange={(e) => onChange(e.target.checked)}
         className="mr-2"
       />
-      <label htmlFor={id} className="text-sm text-gray-300">
+      <label htmlFor={id} className="text-sm text-ink-2">
         {label}
       </label>
     </div>
@@ -166,8 +168,8 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
           onClick={() => onChange(option.key)}
           className={`w-full text-left p-3 rounded-lg border transition-all ${
             selected === option.key
-              ? "bg-purple/20 border-purple text-white"
-              : "bg-gray-800/50 border-gray-600 text-gray-300 hover:bg-gray-700/50"
+              ? "bg-purple-wash border-purple text-purple-deep"
+              : "bg-surface border-line text-ink-2 hover:bg-surface-2"
           }`}
         >
           <div className="font-medium text-sm">{option.label}</div>
@@ -215,13 +217,13 @@ export const VisualizationError: React.FC<{
 
   return (
     <div
-      className="w-full h-64 bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-lg p-6
-                    border border-red-500/20 flex items-center justify-center"
+      className="w-full h-64 bg-red-50 rounded-lg p-6
+                    border border-red-200 flex items-center justify-center"
     >
       <div className="text-center">
-        <div className="w-16 h-16 mx-auto mb-4 bg-red-500/20 rounded-full flex items-center justify-center">
+        <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
           <svg
-            className="w-8 h-8 text-red-500"
+            className="w-8 h-8 text-red-700"
             fill="currentColor"
             viewBox="0 0 24 24"
             aria-hidden="true"
@@ -229,10 +231,10 @@ export const VisualizationError: React.FC<{
             <path d={errorContent.icon} />
           </svg>
         </div>
-        <h3 className="text-lg font-semibold text-white mb-2">
+        <h3 className="text-lg font-semibold text-foreground mb-2">
           {errorContent.title}
         </h3>
-        <p className="text-light-gray/70 text-sm">{errorContent.description}</p>
+        <p className="text-muted text-sm">{errorContent.description}</p>
       </div>
     </div>
   );
@@ -248,11 +250,11 @@ export const VisualizationLoading: React.FC<{ message?: string }> = ({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="w-full h-64 bg-gradient-to-br from-purple/10 to-pink/10 rounded-lg p-6
-                 border border-white/10 flex items-center justify-center"
+      className="w-full h-64 bg-surface rounded-lg p-6
+                 border border-line flex items-center justify-center"
     >
       <div className="text-center">
-        <div className="w-16 h-16 mx-auto mb-4 bg-purple/20 rounded-full flex items-center justify-center animate-spin">
+        <div className="w-16 h-16 mx-auto mb-4 bg-purple-wash rounded-full flex items-center justify-center animate-spin">
           <svg
             className="w-8 h-8 text-purple"
             fill="currentColor"
@@ -262,7 +264,7 @@ export const VisualizationLoading: React.FC<{ message?: string }> = ({
             <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
           </svg>
         </div>
-        <p className="text-light-gray/70 text-sm">{message}</p>
+        <p className="text-muted text-sm">{message}</p>
       </div>
     </motion.div>
   );

@@ -42,21 +42,21 @@ export const RegressionComparisonVisualization: React.FC = () => {
       mse: 45.2,
       r2: 0.847,
       time: 0.023,
-      color: "#8b5cf6",
+      color: "#5B4FB3",
     },
     {
       method: "From Scratch (Gradient Desc.)",
       mse: 45.8,
       r2: 0.843,
       time: 0.156,
-      color: "#ec4899",
+      color: "#8F84D6",
     },
     {
       method: "Scikit-learn",
       mse: 44.9,
       r2: 0.851,
       time: 0.008,
-      color: "#10b981",
+      color: "#C6BFEC",
     },
   ];
 
@@ -85,9 +85,9 @@ export const RegressionComparisonVisualization: React.FC = () => {
   return (
     <motion.div
       {...animationVariants.scaleIn}
-      className="w-full h-80 md:h-96 bg-gradient-to-br from-blue-purple/10 to-pink/10 rounded-lg border border-white/10 p-4 md:p-6"
+      className="w-full h-80 md:h-96 bg-surface rounded-lg border border-line p-4 md:p-6"
     >
-      <h3 className="text-base md:text-lg font-semibold text-white mb-2 md:mb-4">
+      <h3 className="text-base md:text-lg font-semibold text-foreground mb-2 md:mb-4">
         Implementation Comparison
       </h3>
 
@@ -100,23 +100,23 @@ export const RegressionComparisonVisualization: React.FC = () => {
                 data={comparisonData}
                 margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E3E0D6" />
                 <XAxis
                   dataKey="method"
-                  stroke="#9ca3af"
+                  stroke="#6F6D66"
                   angle={-45}
                   textAnchor="end"
                   height={60}
                   interval={0}
                   tick={{ fontSize: 10 }}
                 />
-                <YAxis stroke="#9ca3af" tick={{ fontSize: 12 }} />
+                <YAxis stroke="#6F6D66" tick={{ fontSize: 12 }} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#1f2937",
-                    border: "1px solid #374151",
-                    borderRadius: "8px",
-                    color: "#ffffff",
+                    background: "#FAF9F5",
+                    border: "1px solid #E3E0D6",
+                    borderRadius: 6,
+                    color: "#191918",
                     fontSize: "14px",
                   }}
                   formatter={(value) => [
@@ -140,7 +140,7 @@ export const RegressionComparisonVisualization: React.FC = () => {
 
         {/* Controls and Info */}
         <div className="lg:w-56 lg:ml-6 mt-4 lg:mt-0">
-          <h4 className="text-sm md:text-md font-medium text-white mb-3">
+          <h4 className="text-sm md:text-md font-medium text-foreground mb-3">
             Metrics
           </h4>
 
@@ -153,8 +153,8 @@ export const RegressionComparisonVisualization: React.FC = () => {
                 onClick={() => setSelectedMetric(option.key as MetricKey)}
                 className={`text-center p-2 rounded-lg border transition-all text-xs ${
                   selectedMetric === option.key
-                    ? "bg-purple/20 border-purple text-white"
-                    : "bg-gray-800/50 border-gray-600 text-gray-300 hover:bg-gray-700/50"
+                    ? "bg-purple-wash border-purple text-purple-deep"
+                    : "bg-surface border-line text-ink-2 hover:bg-surface-2"
                 }`}
               >
                 <div className="font-medium">{option.label}</div>
@@ -174,18 +174,20 @@ export const RegressionComparisonVisualization: React.FC = () => {
             />
           </div>
 
-          <div className="p-3 bg-gray-800/50 rounded-lg">
-            <h5 className="text-sm font-medium text-white mb-2">Trade-offs:</h5>
-            <ul className="text-xs text-gray-300 space-y-1">
+          <div className="p-3 bg-surface border border-line rounded-lg">
+            <h5 className="text-sm font-medium text-foreground mb-2">
+              Trade-offs:
+            </h5>
+            <ul className="text-xs text-ink-2 space-y-1">
               <li>
-                <span className="text-purple-400">•</span> Normal Eq: Fast,
+                <span className="text-purple-deep">•</span> Normal Eq: Fast,
                 exact
               </li>
               <li>
-                <span className="text-pink-400">•</span> Gradient Desc: Scalable
+                <span className="text-purple">•</span> Gradient Desc: Scalable
               </li>
               <li>
-                <span className="text-green-400">•</span> Scikit-learn:
+                <span className="text-purple-light">•</span> Scikit-learn:
                 Optimized
               </li>
             </ul>
