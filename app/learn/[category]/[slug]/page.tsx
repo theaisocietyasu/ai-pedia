@@ -10,10 +10,8 @@ import {
   getCategory,
 } from "@/lib/content";
 import { mapRegionFor } from "@/lib/map-regions";
+import { SITE_URL as baseUrl } from "@/lib/site";
 import { ArticleView } from "./ArticleView";
-
-const baseUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://aipedia.ais-asu.com/";
 
 interface ArticlePageProps {
   params: Promise<{ category: string; slug: string }>;

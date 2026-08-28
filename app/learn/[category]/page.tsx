@@ -4,10 +4,8 @@ import { notFound } from "next/navigation";
 import { MapVignette } from "@/components/map-vignette";
 import { getArticles, getCategories, getCategory } from "@/lib/content";
 import { mapRegionFor } from "@/lib/map-regions";
+import { SITE_URL as baseUrl } from "@/lib/site";
 import { CategoryPageClient } from "./CategoryPageClient";
-
-const baseUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://aipedia.ais-asu.com/";
 
 interface CategoryPageProps {
   params: Promise<{ category: string }>;

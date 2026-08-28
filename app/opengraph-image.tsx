@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "AI Pedia - Learn AI through Interactive Visualizations";
+export const alt = "AI Pedia";
 export const size = {
   width: 1200,
   height: 630,

@@ -3,6 +3,11 @@ import { EB_Garamond, Geist_Mono, Source_Serif_4 } from "next/font/google";
 import { Navbar } from "@/components/ui/navbar";
 import { PageActionsProvider } from "@/components/ui/page-actions";
 import { getSearchIndex } from "@/lib/content";
+import {
+  SITE_URL as baseUrl,
+  SITE_DESCRIPTION,
+  SITE_DESCRIPTION_SHORT,
+} from "@/lib/site";
 import "./globals.css";
 import "../styles/markdown.css";
 import "katex/dist/katex.min.css";
@@ -22,46 +27,29 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const baseUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://aipedia.ais-asu.com/";
-
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "AI Pedia | The AI Society at ASU",
-    template: "%s | AI Pedia",
+    default: "AI Pedia",
+    template: "%s · AI Pedia",
   },
-  description:
-    "Interactive explanations of the algorithms behind modern AI, written by The AI Society at Arizona State University.",
+  description: SITE_DESCRIPTION,
   keywords: [
-    "AI",
-    "Machine Learning",
-    "Deep Learning",
-    "ASU",
-    "Arizona State University",
+    "artificial intelligence",
+    "machine learning",
+    "deep learning",
+    "statistics",
+    "encyclopedia",
     "The AI Society",
-    "AI Education",
-    "AI Visualization",
-    "Neural Networks",
-    "Computer Vision",
-    "Natural Language Processing",
-    "AI Tutorials",
-    "Interactive Learning",
+    "Arizona State University",
   ],
-  authors: [
-    {
-      name: "The AI Society",
-      url: "https://www.instagram.com/theaisociety.asu/",
-    },
-  ],
+  authors: [{ name: "The AI Society at ASU", url: "https://www.ais-asu.com/" }],
   creator: "The AI Society at ASU",
   publisher: "The AI Society at ASU",
-  alternates: {
-    canonical: baseUrl,
-  },
+  alternates: { canonical: baseUrl },
   openGraph: {
-    title: "AI Pedia | The AI Society at ASU",
-    description: "Interactive explanations of the algorithms behind modern AI.",
+    title: "AI Pedia",
+    description: SITE_DESCRIPTION_SHORT,
     url: baseUrl,
     siteName: "AI Pedia",
     locale: "en_US",
@@ -69,41 +57,29 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Pedia | The AI Society at ASU",
-    description: "Interactive explanations of the algorithms behind modern AI.",
+    title: "AI Pedia",
+    description: SITE_DESCRIPTION_SHORT,
     creator: "@theaisocietyasu",
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
   icons: {
     icon: [{ url: "/favicon.ico" }, { url: "/logo.png", type: "image/png" }],
     shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
-  manifest: "/manifest.json",
+  manifest: "/manifest.webmanifest",
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION,
     yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION,
   },
   category: "education",
   applicationName: "AI Pedia",
-  appleWebApp: {
-    capable: true,
-    title: "AI Pedia",
-    statusBarStyle: "default",
-  },
-  formatDetection: {
-    telephone: false,
-  },
+  appleWebApp: { capable: true, title: "AI Pedia", statusBarStyle: "default" },
+  formatDetection: { telephone: false },
 };
 
 export default function RootLayout({
@@ -115,12 +91,14 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
     name: "The AI Society at ASU",
-    alternateName: "AI Pedia",
-    url: baseUrl,
+    url: "https://www.ais-asu.com/",
     logo: `${baseUrl}/logo.png`,
-    description:
-      "Interactive explanations of the algorithms behind modern AI, written by The AI Society at Arizona State University.",
-    sameAs: ["https://www.instagram.com/theaisociety.asu/"],
+    description: SITE_DESCRIPTION,
+    sameAs: [
+      "https://www.instagram.com/theaisociety.asu/",
+      "https://www.linkedin.com/company/theaisocietyasu",
+      "https://github.com/theaisocietyasu",
+    ],
     parentOrganization: {
       "@type": "CollegeOrUniversity",
       name: "Arizona State University",
@@ -132,7 +110,7 @@ export default function RootLayout({
     "@type": "WebSite",
     name: "AI Pedia",
     url: baseUrl,
-    description: "Interactive explanations of the algorithms behind modern AI.",
+    description: SITE_DESCRIPTION_SHORT,
     potentialAction: {
       "@type": "SearchAction",
       target: {

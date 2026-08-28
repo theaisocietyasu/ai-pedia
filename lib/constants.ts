@@ -4,7 +4,7 @@ import type { FooterSection, HeroContent, NavItem, SocialLink } from "./types";
 export const siteConfig = {
   name: "AI Pedia",
   description: "An interactive encyclopedia of artificial intelligence",
-  url: "https://aipedia.ais-asu.com/",
+  url: "https://ai-pedia.ais-asu.com",
   author: "The AI Society",
   email: "theaisociety@asu.edu",
   repoUrl: "https://github.com/theaisocietyasu/ai-pedia",

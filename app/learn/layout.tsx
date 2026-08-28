@@ -1,39 +1,24 @@
 import type { Metadata } from "next";
 import { Footer } from "@/components/ui/footer";
+import { SITE_URL as baseUrl } from "@/lib/site";
 
-const baseUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://aipedia.ais-asu.com/";
+const description =
+  "Articles on machine learning, statistics, and artificial intelligence, organized by topic.";
 
 export const metadata: Metadata = {
-  title: "Learn AI & ML",
-  description:
-    "Explore AI algorithms through interactive tutorials, explanations, and visualizations. Learn Machine Learning, Deep Learning, Computer Vision, NLP, and more with hands-on examples.",
-  keywords: [
-    "AI learning",
-    "machine learning tutorials",
-    "deep learning courses",
-    "AI algorithms",
-    "interactive ML visualizations",
-    "computer vision learning",
-    "NLP tutorials",
-    "AI education",
-    "hands-on AI projects",
-  ],
+  title: { default: "Learn", template: "%s · AI Pedia" },
+  description,
+  alternates: { canonical: `${baseUrl}/learn` },
   openGraph: {
-    title: "Learn AI & ML | Interactive Tutorials and Visualizations",
-    description:
-      "Explore AI algorithms through interactive tutorials and visualizations. Master ML, Deep Learning, Computer Vision, and NLP.",
+    title: "Learn · AI Pedia",
+    description,
     url: `${baseUrl}/learn`,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Learn AI & ML | Interactive Tutorials and Visualizations",
-    description:
-      "Explore AI algorithms through interactive tutorials and visualizations.",
-  },
-  alternates: {
-    canonical: `${baseUrl}/learn`,
+    title: "Learn · AI Pedia",
+    description,
   },
 };
 
