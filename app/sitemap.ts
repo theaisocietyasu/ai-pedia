@@ -1,69 +1,34 @@
 import type { MetadataRoute } from "next";
-import { getCategories, getModulesForCategory } from "./learn/categories";
+import { getArticles, getCategories } from "@/lib/content";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://aipedia.ais-asu.com/";
+  const now = new Date();
 
-  // Static pages
   const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 1,
-    },
+    { url: baseUrl, lastModified: now, changeFrequency: "weekly", priority: 1 },
     {
       url: `${baseUrl}/learn`,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.9,
     },
   ];
 
-  // Dynamic learning pages
-  const learningPages: MetadataRoute.Sitemap = [];
-  try {
-    const categories = await getCategories();
+  const categoryPages: MetadataRoute.Sitemap = getCategories().map((c) => ({
+    url: `${baseUrl}/learn/${c.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.8,
+  }));
 
-    for (const [categorySlug] of Object.entries(categories)) {
-      // Add category page
-      learningPages.push({
-        url: `${baseUrl}/learn/${categorySlug}`,
-        lastModified: new Date(),
-        changeFrequency: "weekly",
-        priority: 0.8,
-      });
+  const articlePages: MetadataRoute.Sitemap = getArticles().map((a) => ({
+    url: `${baseUrl}/learn/${a.category}/${a.slug}`,
+    lastModified: a.updatedAt ? new Date(a.updatedAt) : now,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
 
-      // Add individual model/module pages
-      try {
-        const modules = await getModulesForCategory(categorySlug);
-        for (const module of modules) {
-          // Use updatedAt if available, otherwise fall back to createdAt or current date
-          let lastModifiedDate = new Date();
-          if (module.updatedAt) {
-            lastModifiedDate = new Date(module.updatedAt);
-          } else if (module.createdAt) {
-            lastModifiedDate = new Date(module.createdAt);
-          }
-
-          learningPages.push({
-            url: `${baseUrl}/learn/${categorySlug}/${module.slug}`,
-            lastModified: lastModifiedDate,
-            changeFrequency: "weekly",
-            priority: 0.7,
-          });
-        }
-      } catch (error) {
-        console.error(
-          `Error fetching modules for category ${categorySlug}:`,
-          error,
-        );
-      }
-    }
-  } catch (error) {
-    console.error("Error generating learning sitemap entries:", error);
-  }
-
-  return [...staticPages, ...learningPages];
+  return [...staticPages, ...categoryPages, ...articlePages];
 }

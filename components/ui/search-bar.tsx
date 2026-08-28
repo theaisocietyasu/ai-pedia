@@ -4,101 +4,45 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ChevronRight, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
-import { fetchAllCategories, fetchModulesByCategory } from "@/lib/api/learn";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { navItems } from "@/lib/constants";
+import type { SearchEntry } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
-interface SearchResult {
-  title: string;
-  description?: string;
-  path: string;
-  type: "page" | "category" | "model";
-  category?: string;
-}
+type SearchResult = SearchEntry;
 
 interface SearchDropdownProps {
+  index: SearchEntry[];
   isMobile?: boolean;
   onClose?: () => void;
 }
 
-export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
+export function SearchBar({
+  index,
+  isMobile = false,
+  onClose,
+}: SearchDropdownProps) {
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [searchableData, setSearchableData] = useState<SearchResult[]>([]);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Fetch searchable data from MongoDB
-  useEffect(() => {
-    const loadSearchableData = async () => {
-      try {
-        const data: SearchResult[] = [];
-
-        // Add main navigation pages
-        navItems.forEach((item) => {
-          data.push({
-            title: item.name,
-            description: item.description,
-            path: item.link,
-            type: "page",
-          });
-        });
-
-        // Fetch categories from MongoDB
-        const categories = await fetchAllCategories();
-
-        // Process each category
-        for (const category of categories) {
-          const categorySlug = category.name.toLowerCase().replace(/\s+/g, "-");
-
-          // Add category itself
-          data.push({
-            title: category.name,
-            description: category.description,
-            path: `/learn/${categorySlug}`,
-            type: "category",
-          });
-
-          // Fetch modules for this category
-          try {
-            const modules = await fetchModulesByCategory(categorySlug);
-
-            // Add each module
-            modules.forEach((module) => {
-              data.push({
-                title: module.title,
-                description: module.description,
-                path: `/learn/${categorySlug}/${module.slug}`,
-                type: "model",
-                category: category.name,
-              });
-            });
-          } catch (error) {
-            console.error(`Error loading modules for ${categorySlug}:`, error);
-          }
-        }
-
-        setSearchableData(data);
-      } catch (error) {
-        console.error("Error loading search data:", error);
-
-        // Fallback to just nav items if MongoDB fails
-        const fallbackData: SearchResult[] = navItems.map((item) => ({
-          title: item.name,
-          description: item.description,
-          path: item.link,
-          type: "page",
-        }));
-        setSearchableData(fallbackData);
-      }
-    };
-
-    loadSearchableData();
-  }, []);
+  // nav pages first, then the build-time content index
+  const searchableData = useMemo<SearchResult[]>(
+    () => [
+      ...navItems.map((item) => ({
+        title: item.name,
+        description: item.description,
+        path: item.link,
+        type: "page" as const,
+      })),
+      ...index,
+    ],
+    [index],
+  );
 
   // Search function
   const searchContent = (searchQuery: string): SearchResult[] => {
@@ -181,17 +125,17 @@ export function SearchBar({ isMobile = false, onClose }: SearchDropdownProps) {
   }, []);
 
   // Get result type badge
-  const getTypeBadge = (type: string) => {
+  const getTypeBadge = (type: SearchResult["type"]) => {
     const badges = {
       page: { label: "Page", color: "bg-surface-2 text-ink-2" },
       category: {
         label: "Category",
         color: "bg-purple-wash text-purple-deep",
       },
-      model: { label: "Module", color: "bg-purple-wash text-purple-deep" },
+      article: { label: "Article", color: "bg-purple-wash text-purple-deep" },
     };
 
-    const badge = badges[type as keyof typeof badges];
+    const badge = badges[type];
     return (
       <span
         className={cn(

@@ -1,155 +1,73 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  getCategories,
-  getModulesForCategory,
-  type LearnModuleUI,
-} from "../categories";
+import { getArticles, getCategories, getCategory } from "@/lib/content";
 import { CategoryPageClient } from "./CategoryPageClient";
 
 const baseUrl =
   process.env.NEXT_PUBLIC_SITE_URL || "https://aipedia.ais-asu.com/";
 
 interface CategoryPageProps {
-  params: Promise<{
-    category: string;
-  }>;
+  params: Promise<{ category: string }>;
 }
+
+export function generateStaticParams() {
+  return getCategories().map((c) => ({ category: c.slug }));
+}
+
+export const dynamicParams = false;
 
 export async function generateMetadata({
   params,
 }: CategoryPageProps): Promise<Metadata> {
-  const { category } = await params;
-
-  try {
-    // Fetch category data and modules
-    const [categoriesData, modules] = await Promise.all([
-      getCategories(),
-      getModulesForCategory(category),
-    ]);
-
-    const categoryData = categoriesData[category];
-
-    if (!categoryData) {
-      return {
-        title: "Category Not Found",
-        description: "The requested learning category could not be found.",
-      };
-    }
-
-    // Extract keywords from modules
-    const keywords = [
-      category.replace(/-/g, " "),
-      ...modules.slice(0, 5).map((m) => m.name),
-    ];
-
-    // Create a comprehensive description
-    const description =
-      categoryData.description ||
-      `Explore ${
-        modules.length
-      } comprehensive tutorials and guides about ${category.replace(
-        /-/g,
-        " ",
-      )}. Master key concepts with our interactive learning modules.`;
-
-    return {
-      title: `${
-        category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, " ")
-      } Learning`,
-      description: description,
-      keywords: keywords,
-      openGraph: {
-        title: `${
-          category.charAt(0).toUpperCase() +
-          category.slice(1).replace(/-/g, " ")
-        } Learning | AI Pedia`,
-        description: description,
-        url: `${baseUrl}/learn/${category}`,
-        type: "website",
-        images: [
-          {
-            url: categoryData.imgPath || "/og-image.png",
-            width: 1200,
-            height: 630,
-            alt: `${category.replace(/-/g, " ")} learning resources`,
-          },
-        ],
-      },
-      twitter: {
-        card: "summary_large_image",
-        title: `${
-          category.charAt(0).toUpperCase() +
-          category.slice(1).replace(/-/g, " ")
-        } Learning`,
-        description: description,
-        images: [categoryData.imgPath || "/og-image.png"],
-      },
-      alternates: {
-        canonical: `${baseUrl}/learn/${category}`,
-      },
-    };
-  } catch (error) {
-    console.error(`Error generating metadata for category ${category}:`, error);
-    return {
-      title: "Category Not Found",
-      description: "The requested learning category could not be found.",
-    };
+  const { category: slug } = await params;
+  const category = getCategory(slug);
+  if (!category) {
+    return { title: "Category Not Found" };
   }
+  const articles = getArticles(slug);
+  const description =
+    category.description ||
+    `${articles.length} tutorials about ${category.title.toLowerCase()}.`;
+
+  return {
+    title: category.title,
+    description,
+    keywords: [category.title, ...articles.slice(0, 5).map((a) => a.title)],
+    openGraph: {
+      title: `${category.title} | AI Pedia`,
+      description,
+      url: `${baseUrl}/learn/${slug}`,
+      type: "website",
+    },
+    alternates: { canonical: `${baseUrl}/learn/${slug}` },
+  };
 }
 
-async function CategoryPage({ params }: CategoryPageProps) {
-  const { category } = await params;
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { category: slug } = await params;
+  const category = getCategory(slug);
+  if (!category) notFound();
 
-  let models: LearnModuleUI[] = [];
-  let categoryDescription: string = "";
+  const articles = getArticles(slug);
 
-  try {
-    // Load both models and categories data in parallel
-    const [modelsData, categoriesData] = await Promise.all([
-      getModulesForCategory(category),
-      getCategories(),
-    ]);
-
-    models = modelsData;
-
-    // Get the description for this specific category
-    const categoryData = categoriesData[category];
-    if (categoryData?.description) {
-      categoryDescription = categoryData.description;
-    }
-
-    // if (!models.length) {
-    //   notFound();
-    // }
-  } catch (err) {
-    console.error(`Error loading data for category ${category}:`, err);
-    notFound();
-  }
-
-  // Structured data for collection page
   const collectionSchema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: `${
-      category.charAt(0).toUpperCase() + category.slice(1).replace(/-/g, " ")
-    } Learning`,
-    description:
-      categoryDescription ||
-      `Learning resources about ${category.replace(/-/g, " ")}`,
-    url: `${baseUrl}/learn/${category}`,
+    name: category.title,
+    description: category.description,
+    url: `${baseUrl}/learn/${slug}`,
     provider: {
       "@type": "Organization",
       name: "The AI Society at ASU",
       url: baseUrl,
     },
-    numberOfItems: models.length,
-    hasPart: models.slice(0, 10).map((model) => ({
+    numberOfItems: articles.length,
+    hasPart: articles.slice(0, 10).map((a) => ({
       "@type": "LearningResource",
-      name: model.name,
-      description: model.description,
-      url: `${baseUrl}/learn/${category}/${model.slug}`,
-      image: model.imgPath,
+      name: a.title,
+      description: a.description,
+      url: `${baseUrl}/learn/${slug}/${a.slug}`,
+      image: a.thumbnail,
     })),
   };
 
@@ -157,12 +75,7 @@ async function CategoryPage({ params }: CategoryPageProps) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: baseUrl,
-      },
+      { "@type": "ListItem", position: 1, name: "Home", item: baseUrl },
       {
         "@type": "ListItem",
         position: 2,
@@ -172,10 +85,8 @@ async function CategoryPage({ params }: CategoryPageProps) {
       {
         "@type": "ListItem",
         position: 3,
-        name:
-          category.charAt(0).toUpperCase() +
-          category.slice(1).replace(/-/g, " "),
-        item: `${baseUrl}/learn/${category}`,
+        name: category.title,
+        item: `${baseUrl}/learn/${slug}`,
       },
     ],
   };
@@ -192,15 +103,7 @@ async function CategoryPage({ params }: CategoryPageProps) {
         // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD structured data serialized via JSON.stringify, not user HTML
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-
-      {/* Pass data to client component for interactive features */}
-      <CategoryPageClient
-        category={category}
-        models={models}
-        categoryDescription={categoryDescription}
-      />
+      <CategoryPageClient category={category} articles={articles} />
     </div>
   );
 }
-
-export default CategoryPage;

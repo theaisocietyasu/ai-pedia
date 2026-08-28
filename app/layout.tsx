@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { EB_Garamond, Geist_Mono, Source_Serif_4 } from "next/font/google";
-import { NextAuthProvider } from "@/components/auth/NextAuthProvider";
 import { Navbar } from "@/components/ui/navbar";
+import { getSearchIndex } from "@/lib/content";
 import "./globals.css";
 import "../styles/markdown.css";
 import "katex/dist/katex.min.css";
@@ -174,10 +174,8 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <NextAuthProvider>
-          <Navbar />
-          {children}
-        </NextAuthProvider>
+        <Navbar searchIndex={getSearchIndex()} />
+        {children}
       </body>
     </html>
   );

@@ -3,19 +3,16 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import type { LearnModuleUI } from "../categories";
+import type { ArticleMeta, Category } from "@/lib/content";
 
 interface CategoryPageClientProps {
-  category: string;
-  models: LearnModuleUI[];
-  categoryDescription: string;
+  category: Category;
+  articles: ArticleMeta[];
 }
 
 export function CategoryPageClient({
   category,
-  models,
-  categoryDescription,
+  articles,
 }: CategoryPageClientProps) {
   const [activeId, setActiveId] = useState<string>("");
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -43,7 +40,7 @@ export function CategoryPageClient({
   };
 
   // raf-throttled scroll handler
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally re-runs only when models change; adding activeId/computeClosestId would re-register the scroll listener on every scroll update
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally re-runs only when articles change; adding activeId/computeClosestId would re-register the scroll listener on every scroll update
   useEffect(() => {
     let ticking = false;
     const onScroll = () => {
@@ -73,7 +70,7 @@ export function CategoryPageClient({
       if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [models]); // re-run if models change
+  }, [articles]); // re-run if articles change
 
   // Programmatic scroll to center + watch until centered
   const scrollToCenter = (id: string) => {
@@ -126,15 +123,14 @@ export function CategoryPageClient({
       {/* Title */}
       <div className="relative inline-block mb-6 text-center max-w-3xl">
         <p className="eyebrow mb-5">Learn</p>
-        <h1 className="font-display text-4xl md:text-6xl leading-tight relative z-10 capitalize">
-          {category.replace(/-/g, " ")}
+        <h1 className="font-display text-4xl md:text-6xl leading-tight relative z-10">
+          {category.title}
         </h1>
 
-        {/* Category Description */}
-        {categoryDescription && (
-          <div className="mt-5 text-lg text-ink-2 max-w-2xl mx-auto">
-            <ReactMarkdown>{categoryDescription}</ReactMarkdown>
-          </div>
+        {category.description && (
+          <p className="mt-5 text-lg text-ink-2 max-w-2xl mx-auto">
+            {category.description}
+          </p>
         )}
       </div>
 
@@ -147,7 +143,13 @@ export function CategoryPageClient({
           transition={{ duration: 0.5, delay: 0.4 }}
           className="flex flex-col gap-6 w-full min-w-0"
         >
-          {models.map((item, index) => {
+          {articles.length === 0 && (
+            <p className="text-muted">
+              No articles in this category yet. Add a markdown file under{" "}
+              <code>content/{category.slug}/</code>.
+            </p>
+          )}
+          {articles.map((item, index) => {
             const id = item.slug;
             return (
               <motion.div
@@ -161,20 +163,21 @@ export function CategoryPageClient({
               >
                 <Link
                   key={id}
-                  href={`/learn/${category}/${item.slug}`}
+                  href={`/learn/${category.slug}/${item.slug}`}
                   className="group flex flex-col md:flex-row items-center gap-6 md:gap-10 p-5 rounded-lg bg-surface border border-line hover:border-purple transition-colors"
                 >
-                  {/* Image */}
-                  <img
-                    src={item.imgPath}
-                    alt={item.name}
-                    className="w-full md:w-1/3 md:min-w-[200px] h-48 md:h-52 rounded-md border border-line object-cover flex-shrink-0"
-                  />
+                  {item.thumbnail && (
+                    <img
+                      src={item.thumbnail}
+                      alt=""
+                      className="w-full md:w-1/3 md:min-w-[200px] h-48 md:h-52 rounded-md border border-line object-cover flex-shrink-0"
+                    />
+                  )}
 
                   {/* Text */}
                   <div className="flex-1 text-center md:text-left min-w-0">
                     <h2 className="font-display text-2xl md:text-3xl mb-2 line-clamp-2 group-hover:text-purple-deep transition-colors">
-                      {item.name}
+                      {item.title}
                     </h2>
                     <p className="text-base text-ink-2 line-clamp-4">
                       {item.description}
@@ -189,7 +192,7 @@ export function CategoryPageClient({
         {/* Sidebar (sticky, not fixed) */}
         <div className="hidden lg:flex flex-col lg:w-56 shrink-0 sticky top-28 self-start border-l border-line">
           <p className="eyebrow mb-3 pl-3">Modules</p>
-          {models.map((item) => {
+          {articles.map((item) => {
             const id = item.slug;
             const isActive = activeId === id;
             return (
@@ -203,7 +206,7 @@ export function CategoryPageClient({
                     : "border-transparent text-muted hover:text-foreground cursor-pointer"
                 }`}
               >
-                {item.name}
+                {item.title}
               </button>
             );
           })}

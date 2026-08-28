@@ -1,80 +1,127 @@
 # AI Pedia
 
+An interactive encyclopedia of artificial intelligence, written and maintained by
+[The AI Society](https://www.ais-asu.com/) at Arizona State University.
+
+Articles are plain Markdown files in this repository. There is no database, no
+CMS and no login: to add or fix an article you open a pull request.
+
 ## Tech Stack
 
-## Project Overview
-A modern web-based learning platform built by The AI Society at ASU to help students visualize and understand machine learning concepts through interactive experiences.A modern web-based learning platform built by The AI Society at ASU to help students visualize and understand machine learning concepts through interactive experiences.
+- Next.js 15 (App Router, fully static export at build time) · React 19 · TypeScript
+- Tailwind CSS 4 with a single light "paper" theme (tokens in `app/globals.css`)
+- `react-markdown` + `remark-gfm` / `remark-math` / `rehype-katex` for articles
+- Recharts, three.js and Framer Motion for the interactive visualizations
+- Biome for lint/format · GitHub Actions CI · Dependabot
 
 ## Getting Started
 
-### Prerequisites
-
-## Tech Stack
-
-### Setup
-
 ```bash
-git clone <repository-url>
-cd ai-pedia
+git clone https://github.com/theaisocietyasu/ml-visualization.git
+cd ml-visualization
 npm install
-cp .env.example .env   # then fill in the values
 npm run dev            # http://localhost:3000
 ```
 
-### Scripts
+No environment variables are required for local development. `NEXT_PUBLIC_SITE_URL`
+(see `.env.example`) sets the canonical URL used in the sitemap and metadata.
 
 | Command | Purpose |
 |---|---|
 | `npm run dev` | Start the dev server |
-| `npm run build` | Production build |
+| `npm run build` | Production build (prerenders every article) |
 | `npm start` | Serve the production build |
 | `npm run lint` | Biome check |
+| `npm run typecheck` | `tsc --noEmit` |
 | `npm run format` | Biome format (writes) |
 
-## Environment Variables
+## Writing Content
 
-See `.env.example` for the full list. In short:
+Everything under `content/` is the encyclopedia:
 
-- `MONGODB_URI`, `MONGODB_DB_NAME` — database connection
-- `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET` — Discord OAuth app
-- `NEXTAUTH_SECRET`, `NEXTAUTH_URL` — NextAuth
-- `DISCORD_BOT_TOKEN`, `DISCORD_GUILD_ID`, `ADMIN_ROLE_ID` — server-side admin role verification
-- `NEXT_PUBLIC_SITE_URL` — canonical site URL (SEO, sitemap)
+```
+content/
+  supervised/
+    _category.md                # category title, description, order
+    linear-regression.md        # one article
+  statistics/
+    _category.md
+    sampling-foundations-for-statistical-inference.md
+public/images/                  # images referenced from articles
+```
+
+### Add a category
+
+Create a folder named with a URL-safe slug (`lowercase-with-hyphens`) and put a
+`_category.md` in it:
+
+```md
+---
+title: "Supervised"
+description: "Regression, classification, and the algorithms behind them."
+order: 1
+---
+```
+
+### Add an article
+
+Create `content/<category>/<slug>.md`. The file name becomes the URL:
+`/learn/<category>/<slug>`.
+
+```md
+---
+title: "Linear Regression"
+description: "One-paragraph summary shown on the category page and in search."
+thumbnail: "/images/linear-regression.png"   # optional
+createdAt: "2025-10-13"                      # optional, YYYY-MM-DD
+updatedAt: "2026-02-02"                      # optional, YYYY-MM-DD
+contributors:                                # optional
+  - "Your Name"
+---
+
+# Your article
+
+Standard Markdown, GitHub tables, and LaTeX math (`$x^2$`, `$$ ... $$`) all work.
+```
+
+- Use `#`, `##`, `###` headings — they build the "On this page" navigation.
+- Put images in `public/images/` and reference them as `/images/<file>`.
+- Embed an interactive visualization by placing its placeholder on its own line:
+
+  ```html
+  <div id="VZ-linear-equation" data-placeholder="Interactive Linear Equation"></div>
+  ```
+
+  The id must match an entry in
+  `components/visualizations/visualization-registry.tsx`. To add a new
+  visualization, create a component under `components/visualizations/categories/`
+  and register it there.
+
+Every article page has an "Edit this page on GitHub" link that opens the source
+file directly, so small fixes can be made from the browser as a PR.
 
 ## Project Structure
 
 ```
-app/                      # App Router pages + API routes
-  learn/                  # Category listing, module viewer, editor, authoring
-  auth/signin/            # Discord sign-in page
-  api/
-    learn/                # Learn content CRUD, categories, edit locks, slug migration
-    upload/image/         # Image upload (GridFS)
-    images/[id]/          # Image streaming from GridFS
-    auth/                 # NextAuth + role verification
+app/                      # App Router pages (all statically generated)
+  learn/                  # Category index, category page, article page
+  sitemap.ts, robots.ts   # Generated from content/
 components/
-  visualizations/         # Interactive demos + registry (embedded in markdown)
-  home/, auth/            # Page-specific components
-  ui/                     # Shared UI (navbar, footer, buttons, ...)
+  MarkdownRenderer.tsx    # Markdown → HTML, swaps VZ placeholders for React
+  TableOfContents.tsx     # "On this page" rail
+  visualizations/         # Interactive demos + registry
+  home/, ui/              # Hero, navbar, footer, search, buttons
+content/                  # The encyclopedia (Markdown)
 lib/
-  db/                     # Mongo client (raw driver), GridFS
-  api/                    # Client-side API helpers (learn.ts)
-  auth/                   # NextAuth config, Discord role checks, server guards
-  markdown-utils.ts       # Heading extraction, content normalization
-  slug.ts                 # Slug generation/parsing
-  constants.ts, types.ts  # Site content constants, shared types
-styles/                   # Markdown + editor CSS
-types/                    # Ambient type declarations
+  content.ts              # Reads content/ at build time (categories, articles, search index)
+  markdown-utils.ts       # Heading extraction for the TOC
+  constants.ts, types.ts  # Site constants, shared types
+styles/markdown.css       # Article typography
 docs/proposals/           # Design docs for unbuilt features
 ```
 
-## How Content Works
-
-- **Learn modules** are markdown documents stored in MongoDB with a slug of the form `<title-slug>_<objectId>`. Officers with the admin Discord role can create (`/learn/new`), edit, and delete modules in-app.
-- **Interactive visualizations** are embedded by placing `<div id="VZ-..."></div>` (or a registered component name) in the markdown; the renderer swaps it for the matching React component from `components/visualizations/visualization-registry.tsx`.
-- **Concurrent editing** is prevented with a per-module edit lock (5-minute TTL, heartbeat refresh); a second editor gets `423 Locked`.
-- **Images** are uploaded to GridFS and served from `/api/images/[id]` with immutable caching.
-
 ## Contributing
 
-Run `npm run lint` before pushing. There is no test suite yet — manual verification against a dev database is the current workflow.
+1. Branch from `main`, add or edit files under `content/`.
+2. Run `npm run lint && npm run build` — the build fails loudly on broken frontmatter.
+3. Open a pull request; CI runs lint, typecheck and build. A maintainer reviews and merges, and the site redeploys automatically.

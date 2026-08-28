@@ -38,15 +38,7 @@ jobs:
     name: Build (Next.js)
     runs-on: ubuntu-latest
     env:
-      # Dummy values so config validation passes; the build never
-      # connects to a real database (DB errors are handled gracefully
-      # during static generation).
-      MONGODB_URI: mongodb://localhost:27017/ci
-      MONGODB_DB_NAME: ci
-      DISCORD_CLIENT_ID: ci
-      DISCORD_CLIENT_SECRET: ci
-      NEXTAUTH_SECRET: ci-only-secret
-      NEXTAUTH_URL: http://localhost:3000
+      # Content is read from the repo at build time; no secrets needed.
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4

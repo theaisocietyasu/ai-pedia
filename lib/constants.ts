@@ -9,6 +9,7 @@ export const siteConfig = {
   ogImage: "/og-image.png",
   author: "The AI Society",
   email: "theaisociety@asu.edu",
+  repoUrl: "https://github.com/theaisocietyasu/ml-visualization",
 };
 
 // palette — mirrors the tokens in app/globals.css (single light theme)

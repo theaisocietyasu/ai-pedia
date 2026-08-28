@@ -87,14 +87,12 @@ const nextConfig: NextConfig = {
   /* Redirects */
   async redirects() {
     return [
-      // Add any redirects here if needed
-    ];
-  },
-
-  /* Rewrites for better SEO URLs if needed */
-  async rewrites() {
-    return [
-      // Add any rewrites here if needed
+      // Legacy database-era article URLs carried a `_<objectId>` suffix.
+      {
+        source: "/learn/:category/:slug([a-z0-9-]+)_:id([a-f0-9]{24})",
+        destination: "/learn/:category/:slug",
+        permanent: true,
+      },
     ];
   },
 

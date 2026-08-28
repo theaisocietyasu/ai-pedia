@@ -1,25 +1,20 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { LogOut, Menu, User, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { signOut, useSession } from "@/lib/auth/auth-client";
 import { navItems } from "@/lib/constants";
+import type { SearchEntry } from "@/lib/content";
 import type { NavItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { SearchBar } from "./search-bar";
 
-export function Navbar() {
+export function Navbar({ searchIndex }: { searchIndex: SearchEntry[] }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-  const { data: session } = useSession();
-
-  const handleSignOut = async () => {
-    await signOut();
-  };
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 8);
@@ -96,33 +91,7 @@ export function Navbar() {
             </div>
 
             <div className="hidden md:flex items-center gap-3">
-              <SearchBar />
-              {session?.user && (
-                <div className="flex items-center gap-1">
-                  <div className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-line bg-surface">
-                    {session.user.image ? (
-                      <img
-                        src={session.user.image}
-                        alt={session.user.name || "User"}
-                        className="w-6 h-6 rounded-full"
-                      />
-                    ) : (
-                      <User size={16} className="text-muted" />
-                    )}
-                    <span className="text-sm text-ink-2 max-w-[10rem] truncate">
-                      {session.user.name || session.user.email}
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleSignOut}
-                    className="p-2 rounded-md text-muted hover:text-foreground hover:bg-surface transition-colors"
-                    title="Sign out"
-                  >
-                    <LogOut size={17} />
-                  </button>
-                </div>
-              )}
+              <SearchBar index={searchIndex} />
             </div>
 
             <button
@@ -170,6 +139,7 @@ export function Navbar() {
 
                 <div className="p-5 border-b border-line">
                   <SearchBar
+                    index={searchIndex}
                     isMobile
                     onClose={() => setIsMobileMenuOpen(false)}
                   />
@@ -186,15 +156,6 @@ export function Navbar() {
                       )}
                     </div>
                   ))}
-                  {session?.user && (
-                    <button
-                      type="button"
-                      onClick={handleSignOut}
-                      className="mt-6 inline-flex items-center gap-2 text-sm text-muted hover:text-foreground"
-                    >
-                      <LogOut size={16} /> Sign out
-                    </button>
-                  )}
                 </nav>
 
                 <div className="p-5 border-t border-line text-sm text-muted">
