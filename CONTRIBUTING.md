@@ -64,6 +64,27 @@ The id must exist in `components/visualizations/visualization-registry.tsx`.
 To add a new one, create a component under `components/visualizations/categories/`,
 register it, and use its id in the article.
 
+## Embeds
+
+Articles can embed external pages with a plain `<iframe>` on its own line,
+surrounded by blank lines:
+
+```html
+<iframe src="https://www.youtube.com/watch?v=VIDEO_ID" title="What the video shows"></iframe>
+```
+
+Notes:
+
+- Paste the normal share URL. YouTube and Vimeo links are rewritten to their
+  embed form automatically.
+- The frame is responsive and defaults to a 16:9 box. Override it with
+  `data-ratio="4/3"`, or give a fixed pixel height with `height="480"`.
+- Add `data-caption="..."` for a caption below the frame.
+- Always set `title` — screen readers announce it.
+- Only hosts on the allowlist in `lib/embeds.ts` render. Anything else is
+  replaced with a link to the source. To support a new provider, add its
+  hostname to that file in the same pull request.
+
 ## Code changes
 
 Run `npm run lint`, `npm run typecheck` and `npm run build` before opening a

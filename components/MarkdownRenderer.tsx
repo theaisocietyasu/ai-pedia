@@ -7,6 +7,7 @@ import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
+import { parseRatio, resolveEmbedSrc } from "@/lib/embeds";
 import { LazyVisualization } from "./visualizations/LazyVisualization";
 
 interface MarkdownRendererProps {
@@ -154,6 +155,75 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
               <table {...props}>{children}</table>
             </div>
           ),
+          iframe: ({
+            node: _node,
+            src,
+            title,
+            width,
+            height,
+            ...props
+          }: React.ComponentPropsWithoutRef<"iframe"> & {
+            node?: unknown;
+            "data-ratio"?: string;
+            "data-caption"?: string;
+          }) => {
+            const resolved = resolveEmbedSrc(
+              typeof src === "string" ? src : undefined,
+            );
+            const caption = props["data-caption"];
+
+            if (!resolved) {
+              return (
+                <p className="markdown-embed-blocked">
+                  This embed was not rendered because its source is not on the
+                  allowed host list.
+                  {typeof src === "string" ? (
+                    <>
+                      {" "}
+                      <a
+                        className="markdown-link"
+                        href={src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Open it in a new tab
+                      </a>
+                      .
+                    </>
+                  ) : null}
+                </p>
+              );
+            }
+
+            const w = Number(width);
+            const h = Number(height);
+            const ratio =
+              parseRatio(props["data-ratio"]) ??
+              (w && h ? `${w} / ${h}` : h ? null : "16 / 9");
+
+            return (
+              <figure className="markdown-embed">
+                <div
+                  className="markdown-embed-frame"
+                  style={ratio ? { aspectRatio: ratio } : { height: `${h}px` }}
+                >
+                  <iframe
+                    src={resolved}
+                    title={title || "Embedded content"}
+                    loading="lazy"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allow="accelerometer; clipboard-write; encrypted-media; fullscreen; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+                {caption ? (
+                  <figcaption className="markdown-embed-caption">
+                    {caption}
+                  </figcaption>
+                ) : null}
+              </figure>
+            );
+          },
           div: ({
             node: _node,
             className,
