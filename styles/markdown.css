@@ -464,3 +464,91 @@
   border: 1px dashed var(--line);
   border-radius: 8px;
 }
+
+/* Notebooks (.ipynb articles) */
+.notebook {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.notebook-cell-markdown .markdown-content > *:first-child {
+  margin-top: 0;
+}
+
+.notebook-cell-markdown .markdown-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.notebook-cell-code {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.notebook-source pre {
+  margin: 0 !important;
+  max-height: 40rem;
+}
+
+.notebook-outputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--line);
+}
+
+.notebook-output-text {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+  max-height: 28rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  white-space: pre;
+  background: var(--background);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.notebook-output-text.is-error {
+  color: #8c2f2f;
+  background: #fdf3f2;
+  border-color: #f0d8d5;
+}
+
+.notebook-output-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.notebook-output-html {
+  overflow-x: auto;
+  font-size: 0.85rem;
+}
+
+.notebook-output-html table {
+  width: auto;
+  min-width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.8125rem;
+}
+
+.notebook-output-html th,
+.notebook-output-html td {
+  padding: 0.4rem 0.75rem;
+  text-align: right;
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.notebook-output-html th {
+  background: var(--surface);
+  font-weight: 600;
+}

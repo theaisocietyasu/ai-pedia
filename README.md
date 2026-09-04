@@ -44,6 +44,7 @@ content/
   supervised/
     _category.md                # category title, description, order
     linear-regression.md        # one article
+    gradient-descent.ipynb      # a Jupyter notebook, also an article
   statistics/
     _category.md
     sampling-foundations-for-statistical-inference.md
@@ -66,7 +67,8 @@ order: 1
 ### Add an article
 
 Create `content/<category>/<slug>.md`. The file name becomes the URL:
-`/learn/<category>/<slug>`.
+`/learn/<category>/<slug>`. A `.ipynb` file works the same way and is rendered
+as a notebook; see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```md
 ---
@@ -111,9 +113,11 @@ components/
   TableOfContents.tsx     # "On this page" rail
   visualizations/         # Interactive demos + registry
   home/, ui/              # Hero, navbar, footer, search, buttons
-content/                  # The encyclopedia (Markdown)
+content/                  # The encyclopedia (Markdown and notebooks)
 lib/
   content.ts              # Reads content/ at build time (categories, articles, search index)
+  notebook.ts             # Parses .ipynb files into renderable cells
+  embeds.ts               # iframe allowlist and URL normalization
   markdown-utils.ts       # Heading extraction for the TOC
   constants.ts, types.ts  # Site constants, shared types
 styles/markdown.css       # Article typography

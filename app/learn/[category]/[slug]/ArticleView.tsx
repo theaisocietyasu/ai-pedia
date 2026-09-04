@@ -1,4 +1,5 @@
 import MarkdownRenderer from "@/components/MarkdownRenderer";
+import NotebookRenderer from "@/components/NotebookRenderer";
 import TableOfContents from "@/components/TableOfContents";
 import { RegisterPageActions } from "@/components/ui/page-actions";
 import type { Article } from "@/lib/content";
@@ -16,7 +17,11 @@ export function ArticleView({ article, editUrl, source }: ArticleViewProps) {
       <RegisterPageActions editUrl={editUrl} markdown={source} />
       <main className="flex flex-col gap-12 w-full min-w-0 max-w-3xl">
         <article className="my-8 scroll-mt-24">
-          <MarkdownRenderer content={article.content} />
+          {article.notebook ? (
+            <NotebookRenderer notebook={article.notebook} />
+          ) : (
+            <MarkdownRenderer content={article.content} />
+          )}
         </article>
 
         <footer className="border-t border-line pt-8 pb-16 text-sm text-muted space-y-4">

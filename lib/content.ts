@@ -3,6 +3,14 @@ import path from "node:path";
 import matter from "gray-matter";
 import { cache } from "react";
 import { extractHeadings, type Heading } from "@/lib/markdown-utils";
+import {
+  type Notebook,
+  notebookHeadings,
+  notebookTitle,
+  notebookToMarkdown,
+  parseNotebook,
+  withoutLeadingTitle,
+} from "@/lib/notebook";
 
 /**
  * File-based content layer.
@@ -11,6 +19,10 @@ import { extractHeadings, type Heading } from "@/lib/markdown-utils";
  *   <category>/_category.md   — frontmatter: title, description, image?, order?, mapPosition?
  *   <category>/<slug>.md      — frontmatter: title, description, thumbnail?,
  *                               createdAt?, updatedAt?, contributors?[]
+ *   <category>/<slug>.ipynb   — a Jupyter notebook, rendered as an article.
+ *                               The same fields may be set on the notebook's
+ *                               `metadata["ai-pedia"]` object; the title falls
+ *                               back to the notebook's first `# heading`.
  *
  * Everything is read at build time; there is no database.
  */
@@ -39,10 +51,17 @@ export interface ArticleMeta {
 }
 
 export interface Article extends ArticleMeta {
+  /** Markdown body. For notebooks, a markdown rendering of the cells. */
   content: string;
   headings: Heading[];
-  /** The full source file, frontmatter included. */
+  /**
+   * Markdown source for the copy action: the file itself for `.md` articles,
+   * a markdown rendering of the cells for notebooks.
+   */
   source: string;
+  format: "markdown" | "notebook";
+  /** Set when `format` is "notebook". */
+  notebook?: Notebook;
 }
 
 export interface SearchEntry {
@@ -103,11 +122,26 @@ export const getArticles = cache((category?: string): ArticleMeta[] => {
   for (const cat of categories) {
     const dir = path.join(CONTENT_DIR, cat.slug);
     for (const entry of fs.readdirSync(dir)) {
-      if (!entry.endsWith(".md") || entry.startsWith("_")) continue;
-      const slug = entry.slice(0, -3);
+      if (entry.startsWith("_")) continue;
+      const ext = path.extname(entry);
+      if (ext !== ".md" && ext !== ".ipynb") continue;
+      const slug = entry.slice(0, -ext.length);
       if (!SLUG.test(slug)) continue;
-      const { data } = readFrontmatter(path.join(dir, entry));
-      articles.push(toMeta(cat.slug, slug, data));
+      const file = path.join(dir, entry);
+
+      if (ext === ".md") {
+        articles.push(toMeta(cat.slug, slug, readFrontmatter(file).data));
+        continue;
+      }
+
+      const notebook = parseNotebook(fs.readFileSync(file, "utf8"));
+      if (!notebook) continue;
+      articles.push(
+        toMeta(cat.slug, slug, {
+          title: notebookTitle(notebook),
+          ...notebook.meta,
+        }),
+      );
     }
   }
   return articles.sort((a, b) => a.title.localeCompare(b.title));
@@ -116,17 +150,41 @@ export const getArticles = cache((category?: string): ArticleMeta[] => {
 export const getArticle = cache(
   (category: string, slug: string): Article | null => {
     if (!SLUG.test(category) || !SLUG.test(slug)) return null;
-    const file = path.join(CONTENT_DIR, category, `${slug}.md`);
-    if (!fs.existsSync(file)) return null;
-    const raw = fs.readFileSync(file, "utf8");
-    const { data, content } = matter(raw);
-    const body = content.replace(/\r\n/g, "\n").trim();
-    return {
-      ...toMeta(category, slug, data),
-      content: body,
-      headings: extractHeadings(body),
-      source: raw.replace(/\r\n/g, "\n"),
-    };
+
+    const markdownFile = path.join(CONTENT_DIR, category, `${slug}.md`);
+    if (fs.existsSync(markdownFile)) {
+      const raw = fs.readFileSync(markdownFile, "utf8");
+      const { data, content } = matter(raw);
+      const body = content.replace(/\r\n/g, "\n").trim();
+      return {
+        ...toMeta(category, slug, data),
+        content: body,
+        headings: extractHeadings(body),
+        source: raw.replace(/\r\n/g, "\n"),
+        format: "markdown",
+      };
+    }
+
+    const notebookFile = path.join(CONTENT_DIR, category, `${slug}.ipynb`);
+    if (fs.existsSync(notebookFile)) {
+      const parsed = parseNotebook(fs.readFileSync(notebookFile, "utf8"));
+      if (!parsed) return null;
+      const notebook = withoutLeadingTitle(parsed);
+      const markdown = notebookToMarkdown(notebook);
+      return {
+        ...toMeta(category, slug, {
+          title: notebookTitle(parsed),
+          ...parsed.meta,
+        }),
+        content: markdown,
+        headings: notebookHeadings(notebook),
+        source: markdown,
+        format: "notebook",
+        notebook,
+      };
+    }
+
+    return null;
   },
 );
 
@@ -154,7 +212,10 @@ export const getSearchIndex = cache((): SearchEntry[] => {
 
 /** Path of the article source in the repo, for "edit on GitHub" links. */
 export function articleSourcePath(category: string, slug: string): string {
-  return `content/${category}/${slug}.md`;
+  const ext = fs.existsSync(path.join(CONTENT_DIR, category, `${slug}.md`))
+    ? "md"
+    : "ipynb";
+  return `content/${category}/${slug}.${ext}`;
 }
 
 function toMeta(

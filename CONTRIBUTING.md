@@ -40,6 +40,39 @@ To preview locally: `npm install`, then `npm run dev` and open
 http://localhost:3000. `npm run build` checks that every article's frontmatter
 is valid.
 
+## Add a Jupyter notebook
+
+A notebook can be an article on its own. Drop it in as
+`content/<category>/<slug>.ipynb` and it gets a page at
+`/learn/<category>/<slug>`, rendered the way GitHub renders one: markdown cells
+as prose, code cells with syntax highlighting, and saved outputs below each
+cell (text, images, dataframe tables, tracebacks).
+
+Outputs are read from the file as committed, so run the notebook and save it
+before committing. Clear any output you do not want published.
+
+The page title comes from the notebook's first `# heading`. Set the remaining
+article fields under an `ai-pedia` key in the notebook's own metadata
+(Edit > Notebook Metadata in Jupyter, or edit the JSON directly):
+
+```json
+"metadata": {
+  "ai-pedia": {
+    "description": "One sentence shown under the title and in search.",
+    "updatedAt": "2026-09-03",
+    "contributors": ["your-github-username"]
+  }
+}
+```
+
+Notes:
+
+- HTML outputs are sanitized when the site builds. Scripts and styles are
+  removed, so a widget that needs JavaScript will not work; export it as an
+  image or use an embed instead.
+- Notebooks with large embedded images make for large files. Keep them under a
+  few megabytes.
+
 ## Add a category
 
 Create a folder under `content/` and put a `_category.md` in it:
