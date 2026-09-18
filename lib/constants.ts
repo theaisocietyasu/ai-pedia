@@ -1,4 +1,4 @@
-import type { FooterSection, HeroContent, NavItem, SocialLink } from "./types";
+import type { FooterSection, NavItem, SocialLink } from "./types";
 
 // site configuration
 export const siteConfig = {
@@ -37,14 +37,6 @@ export const navItems: NavItem[] = [
 ];
 
 // hero content
-export const heroContent: HeroContent = {
-  title: "AI Pedia",
-  subtitle: "An interactive encyclopedia of artificial intelligence",
-  description:
-    "Rigorous, visual explanations of the algorithms shaping modern AI — written and maintained by The AI Society at Arizona State University.",
-  ctaText: "Start Learning",
-  ctaLink: "/learn",
-};
 
 // footer sections
 export const footerSections: FooterSection[] = [

@@ -1,0 +1,229 @@
+/*
+ * The map of the field: an ink-on-paper network drawn over the same tokens as
+ * the rest of the site.
+ *
+ * Two visual channels are kept apart on purpose, because both animate:
+ *   - `opacity` belongs to level-of-detail. The camera writes `data-zoom` on
+ *     the <svg>, and each depth fades in when the zoom reaches it.
+ *   - `stroke-opacity` / `fill-opacity` belong to highlighting, so lighting a
+ *     lineage never fights with whatever the zoom level is doing.
+ */
+
+.ngraph {
+  cursor: grab;
+  transition: opacity 0.4s ease;
+}
+
+.ngraph:active {
+  cursor: grabbing;
+}
+
+/* ---------------------------------------------------------- level of detail */
+
+.ngraph [data-depth="2"],
+.ngraph [data-depth="3"],
+.ngraph [data-depth="4"] {
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.45s ease,
+    stroke-opacity 0.25s ease;
+}
+
+.ngraph[data-zoom="1"] [data-depth="2"],
+.ngraph[data-zoom="2"] [data-depth="2"],
+.ngraph[data-zoom="2"] [data-depth="3"],
+.ngraph[data-zoom="2"] [data-depth="4"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ------------------------------------------------------------------- edges */
+
+/* Structural edges are drawn in ink, not in the hairline grey the ambient mesh
+   uses, so the real shape of the library stays legible over the field. */
+.ngraph-edges path {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.25;
+  stroke-opacity: 0.45;
+  vector-effect: non-scaling-stroke;
+  transition:
+    stroke 0.25s ease,
+    stroke-opacity 0.25s ease;
+}
+
+/* Ring links between categories belong to the overview, not to any depth, so
+   they opt back out of the level-of-detail fade above. */
+.ngraph-edges path[data-kind="ring"] {
+  opacity: 1;
+  stroke-dasharray: 2 9;
+  stroke-opacity: 0.3;
+}
+
+.ngraph-edges path[data-lit="true"] {
+  stroke: var(--purple);
+  stroke-opacity: 1;
+}
+
+.ngraph[data-dimmed="true"] .ngraph-edges path:not([data-lit="true"]) {
+  stroke-opacity: 0.4;
+}
+
+/* ------------------------------------------------------------------- nodes */
+
+.ngraph-halo-in {
+  stop-color: var(--background);
+  stop-opacity: 0.92;
+}
+
+.ngraph-halo-out {
+  stop-color: var(--background);
+  stop-opacity: 0;
+}
+
+/* Only the hit circle takes pointer events; everything drawn on top of it —
+   the dot itself included — would otherwise swallow the click. */
+.ngraph-halo,
+.ngraph-dot,
+.ngraph-label,
+.ngraph-sublabel {
+  pointer-events: none;
+}
+
+.ngraph-hit {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.ngraph-dot {
+  fill: var(--foreground);
+  transition:
+    fill 0.25s ease,
+    fill-opacity 0.25s ease,
+    stroke 0.25s ease;
+}
+
+.ngraph [data-kind="root"] .ngraph-dot,
+.ngraph [data-kind="category"] .ngraph-dot {
+  fill: var(--background);
+  stroke: var(--foreground);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.ngraph [data-kind="heading"] .ngraph-dot {
+  fill: var(--muted);
+}
+
+.ngraph [data-lit="true"] .ngraph-dot {
+  fill: var(--purple-deep);
+  stroke: var(--purple-deep);
+}
+
+.ngraph [data-active="true"] .ngraph-dot {
+  fill: var(--purple-deep);
+  stroke: var(--purple-deep);
+}
+
+/* A soft wash marks the node whose article the panel is showing. */
+.ngraph [data-active="true"] .ngraph-hit {
+  fill: var(--purple-wash);
+  fill-opacity: 0.55;
+}
+
+/* ------------------------------------------------------------------ labels */
+
+.ngraph-label {
+  fill: var(--ink-2);
+  text-anchor: middle;
+  font-family: var(--font-display), Georgia, "Times New Roman", serif;
+  paint-order: stroke;
+  stroke: var(--background);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  transition:
+    fill 0.25s ease,
+    fill-opacity 0.25s ease;
+}
+
+.ngraph-sublabel {
+  fill: var(--muted);
+  text-anchor: middle;
+  font-family: var(--font-body), Georgia, serif;
+  paint-order: stroke;
+  stroke: var(--background);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  transition: fill-opacity 0.25s ease;
+}
+
+.ngraph[data-zoom="2"] .ngraph-sublabel {
+  fill-opacity: 0;
+}
+
+.ngraph [data-kind="heading"] .ngraph-label {
+  fill: var(--muted);
+}
+
+.ngraph [data-lit="true"] .ngraph-label,
+.ngraph [data-active="true"] .ngraph-label {
+  fill: var(--purple-deep);
+}
+
+.ngraph[data-dimmed="true"]
+  .ngraph-nodes
+  > g:not([data-lit="true"])
+  .ngraph-label,
+.ngraph[data-dimmed="true"]
+  .ngraph-nodes
+  > g:not([data-lit="true"])
+  .ngraph-dot {
+  fill-opacity: 0.32;
+}
+
+/* Once you are reading inside a cluster, the outer names are just noise. */
+.ngraph[data-zoom="1"] [data-kind="root"] .ngraph-label {
+  fill-opacity: 0.4;
+}
+
+.ngraph[data-zoom="2"] [data-kind="root"] .ngraph-label,
+.ngraph[data-zoom="2"] [data-kind="category"] .ngraph-label {
+  fill-opacity: 0;
+}
+
+/* ------------------------------------------------------------------- panel */
+
+.ngraph-panel {
+  box-shadow: -28px 0 64px -34px rgb(25 25 24 / 0.35);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ngraph-panel {
+    animation: ngraph-panel-in 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ngraph-edges path[data-lit="true"] {
+    stroke-dasharray: 3 9;
+    animation: ngraph-signal 1.4s linear infinite;
+  }
+}
+
+@keyframes ngraph-panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(2.5%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ngraph-signal {
+  to {
+    stroke-dashoffset: -24;
+  }
+}

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Footer } from "@/components/ui/footer";
 import { SITE_URL as baseUrl } from "@/lib/site";
 
 const description =
@@ -27,12 +26,7 @@ export default function LearnLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      {children}
-      <div className="mt-32">
-        <Footer />
-      </div>
-    </>
-  );
+  // The footer lives on the category and article layouts; /learn itself is the
+  // full-viewport map and has nothing to scroll past.
+  return <>{children}</>;
 }
