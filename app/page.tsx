@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { HeroSection } from "@/components/home/hero-section";
+import { GraphStage } from "@/components/graph/graph-stage";
+import { getGraph } from "@/lib/graph";
 import { SITE_URL as baseUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main className="h-[calc(100svh-3rem)] overflow-hidden bg-background">
-      <HeroSection />
+      <GraphStage graph={getGraph()} />
     </main>
   );
 }

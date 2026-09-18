@@ -9,17 +9,6 @@ export interface NavItem {
   external?: boolean;
 }
 
-// hero section types
-export interface HeroContent {
-  title: string;
-  subtitle: string;
-  description: string;
-  ctaText: string;
-  ctaLink: string;
-  secondaryCtaText?: string;
-  secondaryCtaLink?: string;
-}
-
 // footer link types
 export interface FooterLink {
   label: string;

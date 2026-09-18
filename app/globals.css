@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../styles/markdown.css";
+@import "../styles/graph.css";
 
 /*
  * Design tokens — a single light theme.
