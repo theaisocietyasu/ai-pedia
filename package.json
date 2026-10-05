@@ -23,7 +23,7 @@
     "@types/react-syntax-highlighter": "^15.5.13",
     "@types/three": "^0.180.0",
     "clsx": "^2.1.1",
-    "framer-motion": "^12.23.12",
+    "framer-motion": "^13.5.0",
     "gray-matter": "^4.0.3",
     "hast-util-sanitize": "^5.0.2",
     "hast-util-to-html": "^9.0.5",
